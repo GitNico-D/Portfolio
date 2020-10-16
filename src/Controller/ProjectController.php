@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Project;
-use App\Repository\ProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,9 +16,11 @@ class ProjectController extends AbstractController
     /**
      * @Route("/projects", name="get_project_list", methods={"GET"})
      */
-    public function getProjectList(ProjectRepository $projectRepository, SerializerInterface $serializer)
+    public function readProjectList(SerializerInterface $serializer)
     {
-        $projects = $projectRepository->findall();
+        $projects = $this->getDoctrine()
+            ->getRepository(Project::class)
+            ->findAll();
         $data = $serializer->serialize($projects, 'json');
 
         $response = new Response($data);
@@ -32,9 +33,11 @@ class ProjectController extends AbstractController
     /**
      * @Route("/projects/{id}", name="get_project", methods={"GET"})
      */
-    public function getProject(Project $project, ProjectRepository $projectRepository, SerializerInterface $serializer)
+    public function readProject($id, SerializerInterface $serializer)
     {
-        $project = $projectRepository->find($project->getId());
+        $project = $this->getDoctrine()
+            ->getRepository(Project::class)
+            ->find($id);
         $data = $serializer->serialize($project, 'json');
 
         $response = new Response($data);
