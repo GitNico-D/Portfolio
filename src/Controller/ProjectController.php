@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ class ProjectController extends AbstractController
         $data = $serializer->serialize($projects, 'json');
 
         $response = new Response($data);
-        $response->setStatusCode(200);
+        $response->setStatusCode(Response::HTTP_OK);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
@@ -40,8 +41,16 @@ class ProjectController extends AbstractController
             ->find($id);
         $data = $serializer->serialize($project, 'json');
 
+        if(!$project)
+        {
+            $error = ['Message' => 'Resource Project id ' . $id . ' not found'];
+            $data = $serializer->serialize($error, 'json');
+            $response = new Response($data, Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
+            return $response;
+        }
+
         $response = new Response($data);
-        $response->setStatusCode(200);
+        $response->setStatusCode(Response::HTTP_OK);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
