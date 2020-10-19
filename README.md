@@ -8,21 +8,11 @@ Api based on Symfony
 
 Symfony, composer
 
-### Install
+### DATABASE CONFIG
 
-```
-composer -install
-```
-# Bundle Symfony required
+Copy .env to .env.local and set DATABASE_URL with yout infos
 
+### Installation commands
 ```
-composer require serializer
+composer install
 ```
-
-```
-composer require orm
-``` 
-
-```
-composer require annotations
-``` 
