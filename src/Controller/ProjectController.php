@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Project;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -26,11 +28,7 @@ class ProjectController extends AbstractController
             ->findAll();
         $data = $serializer->serialize($projects, 'json');
 
-        $response = new Response($data);
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 
     /**
@@ -47,15 +45,10 @@ class ProjectController extends AbstractController
         {
             $error = ['Message' => 'Resource Project id ' . $id . ' not found'];
             $data = $serializer->serialize($error, 'json');
-            $response = new Response($data, Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
-            return $response;
+            return  new Response($data, Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
         }
 
-        $response = new Response($data);
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 
     /**
@@ -67,19 +60,30 @@ class ProjectController extends AbstractController
         UrlGeneratorInterface $urlGenerator
         ): Response
     {
-        $project = $serializer->deserialize($request->getContent(), Project::class, 'json');
-        
-        $entityManager = $this->getDoctrine()->getManager();
+        // Try and catch is used to check Json syntax
+        try { 
+            $project = $serializer->deserialize($request->getContent(), Project::class, 'json');
+    
+            $entityManager = $this->getDoctrine()->getManager();
 
-        $entityManager->persist($project);
-        $entityManager->flush();
+            // Validations contraints missing at this time
 
-        $response = new Response(
-            $serializer->serialize($project, 'json'), 
-            Response::HTTP_CREATED,
-            ["Location" => $urlGenerator->generate("get_project", ["id" => $project->getId()])]
-        );
+            $entityManager->persist($project);
+            $entityManager->flush();
 
-        return $response;
+            return new Response(
+                $serializer->serialize($project, 'json'), 
+                Response::HTTP_CREATED,
+                ["Location" => $urlGenerator->generate("get_project", ["id" => $project->getId()]), // Returning location needed on successful creation
+                "Content-Type" => "application/json"]
+            );
+        } catch(NotEncodableValueException $error)
+        {
+            $error = ['Status Code' => Response::HTTP_BAD_REQUEST, 'Message' => $error->getMessage()];
+
+            return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, 
+                ['Content-Type' => 'application/json']
+            );
+        }
     }
 }
