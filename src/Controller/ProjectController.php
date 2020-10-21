@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Exception\ExtraAttributesException;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -19,6 +20,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class ProjectController extends AbstractController
 {
+    CONST CONTENT_TYPE = 'application/json';
     /**
      * @Route("/projects", name="get_project_list", methods={"GET"})
      */
@@ -29,7 +31,7 @@ class ProjectController extends AbstractController
             ->findAll();
         $data = $serializer->serialize($projects, 'json');
 
-        return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        return new Response($data, Response::HTTP_OK, ['Content-Type' => self::CONTENT_TYPE]);
     }
 
     /**
@@ -46,10 +48,10 @@ class ProjectController extends AbstractController
         {
             $error = ['Message' => 'Resource Project id ' . $id . ' not found'];
             $data = $serializer->serialize($error, 'json');
-            return  new Response($data, Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
+            return  new Response($data, Response::HTTP_NOT_FOUND, ['Content-Type' => self::CONTENT_TYPE]);
         }
 
-        return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        return new Response($data, Response::HTTP_OK, ['Content-Type' => self::CONTENT_TYPE]);
     }
 
     /**
@@ -76,14 +78,16 @@ class ProjectController extends AbstractController
                 $serializer->serialize($project, 'json'), 
                 Response::HTTP_CREATED,
                 ["Location" => $urlGenerator->generate("get_project", ["id" => $project->getId()]), // Returning location needed on successful creation
-                "Content-Type" => "application/json"]
+                'Content-Type' => self::CONTENT_TYPE]
             );
         } catch(NotEncodableValueException $error)
         {
-            $error = ['Status Code' => Response::HTTP_BAD_REQUEST, 'Message' => $error->getMessage()];
-
+            $error = [
+                'Status Code' => Response::HTTP_BAD_REQUEST, 
+                'Message' => $error->getMessage()
+            ];
             return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, 
-                ['Content-Type' => 'application/json']
+                ['Content-Type' => self::CONTENT_TYPE]
             );
         }
     }
@@ -93,14 +97,39 @@ class ProjectController extends AbstractController
      */
     public function updateProject($id, Request $request, SerializerInterface $serializer)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $project = $this->getDoctrine()->getRepository(Project::class)->find($id);
-        $serializer->deserialize($request->getContent(), Project::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $project]);
-        
-        $entityManager->flush($project); 
-
-        $response = new Response($serializer->serialize($project, 'json'), Response::HTTP_NO_CONTENT);
-
-        return $response;
+        try {
+            $project = $this->getDoctrine()->getRepository(Project::class)->find($id);
+            if(!$project)
+            {
+                $error = [
+                    'Status Code' => Response::HTTP_NOT_FOUND,
+                    'Message' => 'Resource Project id ' . $id . ' not found'
+                ];
+                return new Response($serializer->serialize($error, 'json'), Response::HTTP_NOT_FOUND,['Content-Type' => self::CONTENT_TYPE]);
+            }
+            // Deserializing an existing object
+            $serializer->deserialize($request->getContent(), Project::class, 'json',
+                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false, //Verifying the presence of an extra attibutes in Json content PUT 
+                AbstractNormalizer::OBJECT_TO_POPULATE => $project] 
+            );            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush($project); 
+            return new Response(null, Response::HTTP_OK);
+        } 
+        catch(ExtraAttributesException $error) // Throw exception if an extra attributes not exist
+        {
+                $error = [
+                    'Status Code' => Response::HTTP_BAD_REQUEST,
+                    'Message' => $error->getMessage()
+                ];
+                return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, ['Content-Type' => self::CONTENT_TYPE]);
+        }
+        catch(NotEncodableValueException $error)  // Throw exception if Json syntax error
+        {
+            $error = [
+                'Status Code' => Response::HTTP_BAD_REQUEST,
+                'Message' => $error->getMessage()];
+            return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, ['Content-Type' => self::CONTENT_TYPE]);
+        }
     }
 }
