@@ -118,18 +118,17 @@ class ProjectController extends AbstractController
         } 
         catch(ExtraAttributesException $error) // Throw exception if an extra attributes not exist
         {
-                $error = [
-                    'Status Code' => Response::HTTP_BAD_REQUEST,
-                    'Message' => $error->getMessage()
-                ];
-                return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, ['Content-Type' => self::CONTENT_TYPE]);
+            $error = [
+                'Status Code' => Response::HTTP_BAD_REQUEST,
+                'Message' => $error->getMessage()
+            ];
         }
         catch(NotEncodableValueException $error)  // Throw exception if Json syntax error
         {
             $error = [
                 'Status Code' => Response::HTTP_BAD_REQUEST,
                 'Message' => $error->getMessage()];
-            return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, ['Content-Type' => self::CONTENT_TYPE]);
         }
+        return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, ['Content-Type' => self::CONTENT_TYPE]);
     }
 }
