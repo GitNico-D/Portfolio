@@ -7,6 +7,7 @@
 /public/bundles/
 /var/
 /vendor/
-/DOC/
 ###< symfony/framework-bundle ###
 /DOC/
+#idea
+.idea/
