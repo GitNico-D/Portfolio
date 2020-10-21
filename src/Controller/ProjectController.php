@@ -131,4 +131,27 @@ class ProjectController extends AbstractController
         }
         return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, ['Content-Type' => self::CONTENT_TYPE]);
     }
+
+    /**
+     * @Route("/projects/{id}", name="delete_project", methods={"DELETE"})
+     */
+    public function deleteProject($id, SerializerInterface $serializer)
+    {
+        $project = $this->getDoctrine()->getRepository(Project::class)->find($id);
+
+        if(!$project)
+        {
+            $error = [
+                'Status Code' => Response::HTTP_NOT_FOUND,
+                'Message' => 'Project id ' . $id . ' not found'
+            ];
+            return new Response($serializer->serialize($error, 'json'), Response::HTTP_NOT_FOUND,['Content-Type' => self::CONTENT_TYPE]);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($project);
+        $entityManager->flush();
+
+        return new Response(null, Response::HTTP_OK);
+    }
 }
