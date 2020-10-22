@@ -90,5 +90,45 @@ class ExperienceController extends AbstractController
                 ['Content-Type' => self::CONTENT_TYPE]
             );
         }
+    }    
+
+    /**
+     * @Route("/experiences/{id}", name="update_experience", methods={"PUT"})
+     */
+    public function updateExperience($id, Request $request, SerializerInterface $serializer)
+    {       
+        try {
+            $experience = $this->getDoctrine()->getRepository(Experience::class)->find($id);
+            if(!$experience)
+            {
+                $error = [
+                    'Status Code' => Response::HTTP_NOT_FOUND,
+                    'Message' => 'Resource Project id ' . $id . ' not found'
+                ];
+                return new Response($serializer->serialize($error, 'json'), Response::HTTP_NOT_FOUND,['Content-Type' => self::CONTENT_TYPE]);
+            }
+            // Deserializing an existing object
+            $serializer->deserialize($request->getContent(), Project::class, 'json',
+                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false, //Verifying the presence of an extra attibutes in Json content PUT 
+                AbstractNormalizer::OBJECT_TO_POPULATE => $experience] 
+            );            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush($experience); 
+            return new Response(null, Response::HTTP_OK);
+        } 
+        catch(ExtraAttributesException $error) // Throw exception if an extra attributes not exist
+        { 
+            $error = [
+                'Status Code' => Response::HTTP_BAD_REQUEST,
+                'Message' => $error->getMessage()
+            ];
+        }
+        catch(NotEncodableValueException $error)  // Throw exception if Json syntax error
+        {
+            $error = [
+                'Status Code' => Response::HTTP_BAD_REQUEST,
+                'Message' => $error->getMessage()];
+        }
+        return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, ['Content-Type' => self::CONTENT_TYPE]);
     }
 }
