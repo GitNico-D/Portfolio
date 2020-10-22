@@ -52,4 +52,43 @@ class ExperienceController extends AbstractController
         }            
         return $this->json($experience, Response::HTTP_OK);
     }
+    
+
+    /**
+     * @Route("/experiences", name="create_experiences", methods={"POST"})
+     */
+    public function createExperience(
+        Request $request, 
+        SerializerInterface $serializer, 
+        UrlGeneratorInterface $urlGenerator
+        ): Response
+    {
+        // Try and catch is used to check Json syntax
+        try { 
+            $experience = $serializer->deserialize($request->getContent(), Experience::class, 'json');
+    
+            $entityManager = $this->getDoctrine()->getManager();
+
+            // Validations contraints missing at this time
+
+            $entityManager->persist($experience);
+            $entityManager->flush();
+
+            return new Response(
+                $serializer->serialize($experience, 'json'), 
+                Response::HTTP_CREATED,
+                ["Location" => $urlGenerator->generate("get_experience", ["id" => $experience->getId()]), // Returning location needed on successful creation
+                'Content-Type' => self::CONTENT_TYPE]
+            );
+        } catch(NotEncodableValueException $error)
+        {
+            $error = [
+                'Status Code' => Response::HTTP_BAD_REQUEST, 
+                'Message' => $error->getMessage()
+            ];
+            return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, 
+                ['Content-Type' => self::CONTENT_TYPE]
+            );
+        }
+    }
 }
