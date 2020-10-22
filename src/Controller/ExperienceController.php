@@ -131,4 +131,27 @@ class ExperienceController extends AbstractController
         }
         return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, ['Content-Type' => self::CONTENT_TYPE]);
     }
+    
+    /**
+     * @Route("/experiences/{id}", name="delete_experience", methods={"DELETE"})
+     */
+    public function deleteExperience($id, SerializerInterface $serializer)
+    {
+        $experience = $this->getDoctrine()->getRepository(Experience::class)->find($id);
+
+        if(!$experience)
+        {
+            $error = [
+                'Status Code' => Response::HTTP_NOT_FOUND,
+                'Message' => 'Project id ' . $id . ' not found'
+            ];
+            return new Response($serializer->serialize($error, 'json'), Response::HTTP_NOT_FOUND,['Content-Type' => self::CONTENT_TYPE]);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($experience);
+        $entityManager->flush();
+
+        return new Response(null, Response::HTTP_OK);
+    }
 }
