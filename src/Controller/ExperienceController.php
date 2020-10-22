@@ -12,26 +12,33 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Exception\ExtraAttributesException;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route("/api")
  */
 class ExperienceController extends AbstractController
 {
+    CONST CONTENT_TYPE = 'application/json';
     /**
-     * @Route("/experiences", name="get_experience_list")
+     * @Route("/experiences", name="get_experience_list", methods={"GET"})
      */
-    public function readExperienceList()
+    public function readExperienceList(SerializerInterface $serializer)
     {
         $experiences = $this->getDoctrine()
             ->getRepository(Experience::class)
             ->findAll();
 
-        return $this->json($experiences, Response::HTTP_OK);
+        $data = $serializer->serialize($experiences, 'json');
+
+        return new Response($data, Response::HTTP_OK, ['Content-Type' => self::CONTENT_TYPE]);
+        
+        // return $this->json($experiences, Response::HTTP_OK); // "json" function  
     }
 
     /**
-     * @Route("/experiences/{id}", name="get_experience_list")
+     * @Route("/experiences/{id}", name="get_experience", methods={"GET"})
      */
     public function readExperience($id)
     {
