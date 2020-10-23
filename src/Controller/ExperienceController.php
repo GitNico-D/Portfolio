@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Experience;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -12,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Exception\ExtraAttributesException;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -33,24 +31,25 @@ class ExperienceController extends AbstractController
         $data = $serializer->serialize($experiences, 'json');
 
         return new Response($data, Response::HTTP_OK, ['Content-Type' => self::CONTENT_TYPE]);
-        
         // return $this->json($experiences, Response::HTTP_OK); // "json" function  
     }
 
     /**
      * @Route("/experiences/{id}", name="get_experience", methods={"GET"})
      */
-    public function readExperience($id)
+    public function readExperience($id, SerializerInterface $serializer)
     {
         $experience = $this->getDoctrine()
             ->getRepository(Experience::class)
             ->findOneBy(['id' => $id]);
+        $data = $serializer->serialize($experience, 'json');
         if(!$experience)
         {
-            $error = ['Message' => 'Resource Experience id ' . $id . ' not found'];
-            return $this->json($error, Response::HTTP_NOT_FOUND);
+            $error = ['Message' => 'Resource Project id ' . $id . ' not found'];
+            $data = $serializer->serialize($error, 'json');
+            return  new Response($data, Response::HTTP_NOT_FOUND, ['Content-Type' => self::CONTENT_TYPE]);
         }            
-        return $this->json($experience, Response::HTTP_OK);
+        return new Response($data, Response::HTTP_OK, ['Content-Type' => self::CONTENT_TYPE]);
     }
     
 
