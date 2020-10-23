@@ -107,7 +107,7 @@ class SoftwareController extends AbstractController
     }
 
     /**
-     * @Route("/softwares/{id}", name="delete_softwares", methods={"DELETE"})
+     * @Route("/softwares/{id}", name="delete_software", methods={"DELETE"})
      */
     public function deleteSoftware($id, EntityManagerInterface $em)
     {
