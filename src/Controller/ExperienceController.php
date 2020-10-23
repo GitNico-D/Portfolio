@@ -51,7 +51,6 @@ class ExperienceController extends AbstractController
         }            
         return new Response($data, Response::HTTP_OK, ['Content-Type' => self::CONTENT_TYPE]);
     }
-    
 
     /**
      * @Route("/experiences", name="create_experiences", methods={"POST"})
