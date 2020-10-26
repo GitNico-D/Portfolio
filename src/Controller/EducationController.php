@@ -3,14 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Education;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Exception\ExtraAttributesException;
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -18,135 +16,108 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class EducationController extends AbstractController
 {
-    CONST CONTENT_TYPE = 'application/json';
     /**
      * @Route("/educations", name="get_education_list", methods={"GET"})
      */
-    public function readEducationlist(SerializerInterface $serializer)
+    public function readEducationlist()
     {
         $educations = $this->getDoctrine()
             ->getRepository(Education::class)
             ->findAll();
-        $data = $serializer->serialize($educations, 'json');
-        return new Response($data, Response::HTTP_OK, ['Content-Type' => self::CONTENT_TYPE]);
+            return $this->json($educations, JsonResponse::HTTP_OK);
     }
 
     /**
      * @Route("/educations/{id}", name="get_education", methods={"GET"})
      */
-    public function readEducation($id, SerializerInterface $serializer)
+    public function readEducation($id)
     {
-        $education = $this->getDoctrine()
-            ->getRepository(Education::class)
-            ->findOneBy(['id' => $id]);
-        $data = $serializer->serialize($education, 'json');
+        $education = $this->getDoctrine()->getRepository(Education::class)->findOneBy(['id' => $id]);
         if(!$education)
         {
-            $error = ['Message' => 'Resource Project id ' . $id . ' not found'];
-            $data = $serializer->serialize($error, 'json');
-            return  new Response($data, Response::HTTP_NOT_FOUND, ['Content-Type' => self::CONTENT_TYPE]);
+            return $this->json(
+                ['Message' => 'Resource \'Education\' id ' . $id . ' not found'], 
+                JsonResponse::HTTP_NOT_FOUND
+            );
         }            
-        return new Response($data, Response::HTTP_OK, ['Content-Type' => self::CONTENT_TYPE]);
+        return $this->json($education, JsonResponse::HTTP_OK);
     }
 
     /**
-     * @Route("/educations", name="create_educations", methods={"POST"})
+     * @Route("/educations", name="create_education", methods={"POST"})
      */
     public function createEducation(
         Request $request, 
         SerializerInterface $serializer, 
-        UrlGeneratorInterface $urlGenerator
-        ): Response
+        EntityManagerInterface $em
+        ): JsonResponse
     {
         // Try and catch is used to check Json syntax
         try { 
-            $education = $serializer->deserialize($request->getContent(), Education::class, 'json');
-    
-            $entityManager = $this->getDoctrine()->getManager();
-
-            // Validations contraints missing at this time
-
-            $entityManager->persist($education);
-            $entityManager->flush();
-
-            return new Response(
-                $serializer->serialize($education, 'json'), 
-                Response::HTTP_CREATED,
-                ["Location" => $urlGenerator->generate("get_experience", ["id" => $education->getId()]), // Returning location needed on successful creation
-                'Content-Type' => self::CONTENT_TYPE]
+            $education = $serializer->deserialize(
+                $request->getContent(), 
+                Education::class, 
+                'json',
+                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
+            $em->persist($education);
+            $em->flush();
+            return $this->json($education, JsonResponse::HTTP_CREATED,
+                ["Location" => $this->generateUrl("get_experience", ["id" => $education->getId()])]
             );
-        } catch(NotEncodableValueException $error)
+        } catch(\Exception $error)
         {
-            $error = [
-                'Status Code' => Response::HTTP_BAD_REQUEST, 
-                'Message' => $error->getMessage()
-            ];
-            return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, 
-                ['Content-Type' => self::CONTENT_TYPE]
-            );
-        }
+            $error = ['Message' => $error->getMessage()];
+            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
+        }        
     }
     
-    /**
+/**
      * @Route("/educations/{id}", name="update_education", methods={"PUT"})
      */
-    public function updateEducation($id, Request $request, SerializerInterface $serializer)
+    public function updateEducation(
+        $id, 
+        Request $request, 
+        SerializerInterface $serializer,
+        EntityManagerInterface $em
+        ): JsonResponse
     {       
         try {
-            $education = $this->getDoctrine()->getRepository(Education::class)->find($id);
+            $education = $this->getDoctrine()->getRepository(Education::class)->findOneBy(['id' => $id]);
             if(!$education)
             {
-                $error = [
-                    'Status Code' => Response::HTTP_NOT_FOUND,
-                    'Message' => 'Resource Education id ' . $id . ' not found'
-                ];
-                return new Response($serializer->serialize($error, 'json'), Response::HTTP_NOT_FOUND,['Content-Type' => self::CONTENT_TYPE]);
+                return $this->json(
+                    ['Message' => 'Resource \'Education\' id ' . $id . ' not found'],
+                    JsonResponse::HTTP_NOT_FOUND
+                );
             }
-            // Deserializing an existing object
-            $serializer->deserialize($request->getContent(), Education::class, 'json',
-                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false, //Verifying the presence of an extra attibutes in Json content PUT 
+            $serializer->deserialize($request->getContent(), Category::class, 'json',
+                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
                 AbstractNormalizer::OBJECT_TO_POPULATE => $education] 
             );            
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush($education); 
-            return new Response(null, Response::HTTP_OK);
+            $em->flush($education); 
+            return $this->json($education, JsonResponse::HTTP_OK);
         } 
-        catch(ExtraAttributesException $error) // Throw exception if an extra attributes not exist
+        catch(\Exception $error)
         { 
-            $error = [
-                'Status Code' => Response::HTTP_BAD_REQUEST,
-                'Message' => $error->getMessage()
-            ];
+            $error = ['Message' => $error->getMessage()];
+            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
-        catch(NotEncodableValueException $error)  // Throw exception if Json syntax error
-        {
-            $error = [
-                'Status Code' => Response::HTTP_BAD_REQUEST,
-                'Message' => $error->getMessage()];
-        }
-        return new Response($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST, ['Content-Type' => self::CONTENT_TYPE]);
-    }
-    
-     /**
+    } 
+
+    /**
      * @Route("/educations/{id}", name="delete_education", methods={"DELETE"})
      */
-    public function deleteEducation($id, SerializerInterface $serializer)
+    public function deleteEducation($id, EntityManagerInterface $em)
     {
-        $education = $this->getDoctrine()->getRepository(Education::class)->find($id);
-
+        $education = $this->getDoctrine()->getRepository(Education::class)->findOneBy(['id' => $id]);
         if(!$education)
         {
-            $error = [
-                'Status Code' => Response::HTTP_NOT_FOUND,
-                'Message' => 'Resource \'Education\' id ' . $id . ' not found'
-            ];
-            return new Response($serializer->serialize($error, 'json'), Response::HTTP_NOT_FOUND,['Content-Type' => self::CONTENT_TYPE]);
+            return $this->json(
+                ['Message' => 'Resource \'Education\' id ' . $id . ' not found'],
+                JsonResponse::HTTP_NOT_FOUND
+            );
         }
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($education);
-        $entityManager->flush();
-
-        return new Response(null, Response::HTTP_OK);
-    }
-}
+        $em->remove($education);
+        $em->flush();
+        return $this->json(['Message' => 'Project id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
+    }}

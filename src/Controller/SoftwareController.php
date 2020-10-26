@@ -5,11 +5,10 @@ namespace App\Controller;
 use App\Entity\Software;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -25,7 +24,7 @@ class SoftwareController extends AbstractController
         $softwares = $this->getDoctrine()
             ->getRepository(Software::class)
             ->findAll();
-        return $this->json($softwares, Response::HTTP_OK);
+        return $this->json($softwares, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -38,34 +37,35 @@ class SoftwareController extends AbstractController
         {
             return  $this->json(
                 ['Message' => 'Resource \'Software\' id ' . $id . ' not found'], 
-                Response::HTTP_NOT_FOUND
+                JsonResponse::HTTP_NOT_FOUND
             );
         } 
-        return $this->json($software, Response::HTTP_OK);
+        return $this->json($software, JsonResponse::HTTP_OK);
     }
 
     /**
      * @Route("/softwares", name="create_software", methods={"POST"})
      */
-    public function createSkill(Request $request, 
+    public function createSoftware(Request $request, 
         SerializerInterface $serializer, 
         EntityManagerInterface $em
         ): JsonResponse
     {
         try { 
-            $software = $serializer->deserialize($request->getContent(), Software::class, 'json');
+            $software = $serializer->deserialize(
+                $request->getContent(), 
+                Software::class, 
+                'json',
+                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
             $em->persist($software);
             $em->flush();
-            return $this->json($software, Response::HTTP_CREATED, // Serialize and return a JsonResponse
+            return $this->json($software, JsonResponse::HTTP_CREATED, // Serialize and return a JsonResponse
                 ["Location" => $this->generateUrl("get_software", ["id" => $software->getId()])]
             );
         } catch(\Exception $error)
         {
-            $error = [
-                'Status Code' => Response::HTTP_BAD_REQUEST,
-                'Message' => $error->getMessage()
-            ];
-            return $this->json($error, Response::HTTP_BAD_REQUEST);
+            $error = ['Message' => $error->getMessage()];
+            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -77,16 +77,15 @@ class SoftwareController extends AbstractController
         Request $request, 
         SerializerInterface $serializer,
         EntityManagerInterface $em
-        )
+        ): JsonResponse
     {       
         try {
             $software = $this->getDoctrine()->getRepository(Software::class)->findOneBy(['id' => $id]);
             if(!$software)
             {
                 return $this->json(
-                    ['Message' => 'Resource \'Software\' id ' . $id . ' not found', 
-                    'Status Code' => Response::HTTP_NOT_FOUND],
-                    Response::HTTP_NOT_FOUND
+                    ['Message' => 'Resource \'Software\' id ' . $id . ' not found'],
+                    JsonResponse::HTTP_NOT_FOUND
                 );
             }
             $serializer->deserialize($request->getContent(), Software::class, 'json',
@@ -94,15 +93,12 @@ class SoftwareController extends AbstractController
                 AbstractNormalizer::OBJECT_TO_POPULATE => $software] 
             );            
             $em->flush($software); 
-            return new Response(null, Response::HTTP_OK);
+            return $this->json($software, JsonResponse::HTTP_OK);
         } 
         catch(\Exception $error)
         { 
-            $error = [
-                'Status Code' => Response::HTTP_BAD_REQUEST,
-                'Message' => $error->getMessage()
-            ];
-            return $this->json($error, Response::HTTP_BAD_REQUEST);
+            $error = ['Message' => $error->getMessage()];
+            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -115,13 +111,12 @@ class SoftwareController extends AbstractController
         if(!$software)
         {
             return $this->json(
-                ['Status Code' => Response::HTTP_NOT_FOUND,
-                'Message' => 'Resource \'Software\' id ' . $id . ' not found'],
-                Response::HTTP_NOT_FOUND
+                ['Message' => 'Resource \'Software\' id ' . $id . ' not found'],
+                JsonResponse::HTTP_NOT_FOUND
             );
         }
         $em->remove($software);
         $em->flush();
-        return new Response(null, Response::HTTP_OK);
+        return $this->json(['Message' => 'Software id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
     }
 }

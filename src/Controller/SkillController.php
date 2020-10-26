@@ -5,11 +5,10 @@ namespace App\Controller;
 use App\Entity\Skill;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -25,7 +24,7 @@ class SkillController extends AbstractController
         $skills = $this->getDoctrine()
             ->getRepository(Skill::class)
             ->findAll();
-        return $this->json($skills, Response::HTTP_OK);
+        return $this->json($skills, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -38,10 +37,10 @@ class SkillController extends AbstractController
         {
             return  $this->json(
                 ['Message' => 'Resource \'Skill\' id ' . $id . ' not found'], 
-                Response::HTTP_NOT_FOUND
+                JsonResponse::HTTP_NOT_FOUND
             );
         } 
-        return $this->json($skill, Response::HTTP_OK);
+        return $this->json($skill, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -53,19 +52,20 @@ class SkillController extends AbstractController
         ): JsonResponse
     {
         try { 
-            $skill = $serializer->deserialize($request->getContent(), Skill::class, 'json');
+            $skill = $serializer->deserialize(
+                $request->getContent(), 
+                Skill::class, 
+                'json',
+                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
             $em->persist($skill);
             $em->flush();
-            return $this->json($skill, Response::HTTP_CREATED, // Serialize and return a JsonResponse
+            return $this->json($skill, JsonResponse::HTTP_CREATED, // Serialize and return a JsonResponse
                 ["Location" => $this->generateUrl("get_skill", ["id" => $skill->getId()])]
             );
         } catch(\Exception $error)
         {
-            $error = [
-                'Status Code' => Response::HTTP_BAD_REQUEST,
-                'Message' => $error->getMessage()
-            ];
-            return $this->json($error, Response::HTTP_BAD_REQUEST);
+            $error = ['Message' => $error->getMessage()];
+            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -84,9 +84,8 @@ class SkillController extends AbstractController
             if(!$skill)
             {
                 return $this->json(
-                    ['Message' => 'Resource \'Skill\' id ' . $id . ' not found', 
-                    'Status Code' => Response::HTTP_NOT_FOUND],
-                    Response::HTTP_NOT_FOUND
+                    ['Message' => 'Resource \'Skill\' id ' . $id . ' not found'], 
+                    JsonResponse::HTTP_NOT_FOUND
                 );
             }
             $serializer->deserialize($request->getContent(), Skill::class, 'json',
@@ -94,15 +93,12 @@ class SkillController extends AbstractController
                 AbstractNormalizer::OBJECT_TO_POPULATE => $skill] 
             );            
             $em->flush($skill); 
-            return new Response(null, Response::HTTP_OK);
+            return $this->json($skill, JsonResponse::HTTP_OK);
         } 
         catch(\Exception $error)
         { 
-            $error = [
-                'Status Code' => Response::HTTP_BAD_REQUEST,
-                'Message' => $error->getMessage()
-            ];
-            return $this->json($error, Response::HTTP_BAD_REQUEST);
+            $error = ['Message' => $error->getMessage()];
+            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -115,13 +111,12 @@ class SkillController extends AbstractController
         if(!$skill)
         {
             return $this->json(
-                ['Status Code' => Response::HTTP_NOT_FOUND,
-                'Message' => 'Resource \'Skill\' id ' . $id . ' not found'],
-                Response::HTTP_NOT_FOUND
+                ['Message' => 'Resource \'Skill\' id ' . $id . ' not found'],
+                JsonResponse::HTTP_NOT_FOUND
             );
         }
         $em->remove($skill);
         $em->flush();
-        return new Response(null, Response::HTTP_OK);
+        return $this->json(['Message' => 'Skill id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
     }
 }
