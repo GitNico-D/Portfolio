@@ -21,10 +21,10 @@ class ExperienceController extends AbstractController
      */
     public function readExperienceList()
     {
-        $categories = $this->getDoctrine()
+        $experiences = $this->getDoctrine()
             ->getRepository(Experience::class)
             ->findAll();
-        return $this->json($categories, JsonResponse::HTTP_OK);
+        return $this->json($experiences, JsonResponse::HTTP_OK);
     }
 
     /**

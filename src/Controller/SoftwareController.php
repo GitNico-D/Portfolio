@@ -19,7 +19,7 @@ class SoftwareController extends AbstractController
     /**
      * @Route("/softwares", name="get_software_list", methods={"GET"})
      */
-    public function readCategoryList()
+    public function readSoftwareList()
     {
         $softwares = $this->getDoctrine()
             ->getRepository(Software::class)

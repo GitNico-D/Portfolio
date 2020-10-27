@@ -19,7 +19,7 @@ class SkillController extends AbstractController
     /**
      * @Route("/skills", name="get_skill_list", methods={"GET"})
      */
-    public function readCategoryList()
+    public function readSkillList()
     {
         $skills = $this->getDoctrine()
             ->getRepository(Skill::class)
@@ -30,7 +30,7 @@ class SkillController extends AbstractController
     /**
      * @Route("/skills/{id}", name="get_skill", methods={"GET"})
      */
-    public function readCategory($id)
+    public function readSkill($id)
     {
         $skill = $this->getDoctrine()->getRepository(Skill::class)->findOneBy(['id' => $id]);
         if(!$skill)
@@ -59,7 +59,7 @@ class SkillController extends AbstractController
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
             $em->persist($skill);
             $em->flush();
-            return $this->json($skill, JsonResponse::HTTP_CREATED, // Serialize and return a JsonResponse
+            return $this->json($skill, JsonResponse::HTTP_CREATED,
                 ["Location" => $this->generateUrl("get_skill", ["id" => $skill->getId()])]
             );
         } catch(\Exception $error)
@@ -105,7 +105,7 @@ class SkillController extends AbstractController
     /**
      * @Route("/skills/{id}", name="delete_skills", methods={"DELETE"})
      */
-    public function deleteCategory($id, EntityManagerInterface $em)
+    public function deleteSkill($id, EntityManagerInterface $em)
     {
         $skill = $this->getDoctrine()->getRepository(Skill::class)->findOneBy(['id' => $id]);
         if(!$skill)

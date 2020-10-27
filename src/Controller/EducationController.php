@@ -62,7 +62,7 @@ class EducationController extends AbstractController
             $em->persist($education);
             $em->flush();
             return $this->json($education, JsonResponse::HTTP_CREATED,
-                ["Location" => $this->generateUrl("get_experience", ["id" => $education->getId()])]
+                ["Location" => $this->generateUrl("get_education", ["id" => $education->getId()])]
             );
         } catch(\Exception $error)
         {
@@ -90,7 +90,7 @@ class EducationController extends AbstractController
                     JsonResponse::HTTP_NOT_FOUND
                 );
             }
-            $serializer->deserialize($request->getContent(), Category::class, 'json',
+            $serializer->deserialize($request->getContent(), Education::class, 'json',
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
                 AbstractNormalizer::OBJECT_TO_POPULATE => $education] 
             );            
@@ -119,5 +119,5 @@ class EducationController extends AbstractController
         }
         $em->remove($education);
         $em->flush();
-        return $this->json(['Message' => 'Project id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
+        return $this->json(['Message' => 'Education id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
     }}

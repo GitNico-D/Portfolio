@@ -60,7 +60,7 @@ class CategoryController extends AbstractController
             $em->persist($category);
             $em->flush();
             return $this->json($category, JsonResponse::HTTP_CREATED,
-                ["Location" => $this->generateUrl("get_experience", ["id" => $category->getId()])]
+                ["Location" => $this->generateUrl("get_category", ["id" => $category->getId()])]
             );
         } catch(\Exception $error)
         {
