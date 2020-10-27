@@ -89,7 +89,7 @@ class ProjectController extends AbstractController
                     JsonResponse::HTTP_NOT_FOUND
                 );
             }
-            $serializer->deserialize($request->getContent(), project::class, 'json',
+            $serializer->deserialize($request->getContent(), Project::class, 'json',
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
                 AbstractNormalizer::OBJECT_TO_POPULATE => $project] 
             );            
@@ -108,7 +108,7 @@ class ProjectController extends AbstractController
      */
     public function deleteProject($id, EntityManagerInterface $em)
     {
-        $project = $this->getDoctrine()->getRepository(project::class)->findOneBy(['id' => $id]);
+        $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
         if(!$project)
         {
             return $this->json(
