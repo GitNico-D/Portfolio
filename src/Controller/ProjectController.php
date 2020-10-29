@@ -35,9 +35,10 @@ class ProjectController extends AbstractController
         $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
         if(!$project)
         {
+            // hr
             return $this->json(
-                ['Message' => 'Resource \'Project\' id ' . $id . ' not found'], 
-                JsonResponse::HTTP_NOT_FOUND
+                    ['Message' => 'Resource \'Project\' id ' . $id . ' not found'], 
+                    JsonResponse::HTTP_NOT_FOUND
             );
         } 
         return $this->json($project, JsonResponse::HTTP_OK);
@@ -52,7 +53,8 @@ class ProjectController extends AbstractController
         EntityManagerInterface $em
         ): JsonResponse
     {
-        try { 
+        try 
+        { 
             $project = $serializer->deserialize(
                 $request->getContent(), 
                 Project::class, 
