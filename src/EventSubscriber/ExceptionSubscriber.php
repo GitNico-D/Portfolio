@@ -12,10 +12,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
+        // dump($exception);
         if ($exception instanceof NotFoundHttpException) {
             $error = [
                 'status' => $exception->getStatusCode(),
-                'message' => 'Resource not found'
+                'message' => $exception->getMessage()
             ];
         $response = new JsonResponse($error); 
         $event->setResponse($response);

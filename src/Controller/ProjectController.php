@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
-
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * @Route("/api")
  */
@@ -35,7 +37,6 @@ class ProjectController extends AbstractController
         $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
         if(!$project)
         {
-            // hr
             return $this->json(
                     ['Message' => 'Resource \'Project\' id ' . $id . ' not found'], 
                     JsonResponse::HTTP_NOT_FOUND
@@ -50,7 +51,8 @@ class ProjectController extends AbstractController
     public function createProject(
         Request $request, 
         SerializerInterface $serializer, 
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ValidatorInterface $validator
         ): JsonResponse
     {
         try 
@@ -60,6 +62,11 @@ class ProjectController extends AbstractController
                 Project::class, 
                 'json',
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
+            $violations = $validator->validate($project);
+            if(count($violations) > 0) {
+                // dd($violations[0]);
+                return $this->json($violations, JsonResponse::HTTP_BAD_REQUEST);
+            }
             $em->persist($project);
             $em->flush();
             return $this->json($project, JsonResponse::HTTP_CREATED,
@@ -79,11 +86,12 @@ class ProjectController extends AbstractController
         $id, 
         Request $request, 
         SerializerInterface $serializer,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ValidatorInterface $validator
         ): JsonResponse
-    {       
+    {        
         try {
-            $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
+            $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);                     
             if(!$project)
             {
                 return $this->json(
@@ -91,10 +99,18 @@ class ProjectController extends AbstractController
                     JsonResponse::HTTP_NOT_FOUND
                 );
             }
+            else
             $serializer->deserialize($request->getContent(), Project::class, 'json',
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
                 AbstractNormalizer::OBJECT_TO_POPULATE => $project] 
-            );            
+            );
+            $violations = $validator->validate($project);
+            if(count($violations) > 0) {
+                // $constraint = new ConstraintViolationInterface();
+                // $message = $constraint->getTemplateMessage($violations);
+                // $v
+                return $this->json((string)$violations, JsonResponse::HTTP_BAD_REQUEST);
+            }            
             $em->flush($project); 
             return $this->json($project, JsonResponse::HTTP_OK);
         } 
