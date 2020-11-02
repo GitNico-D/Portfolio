@@ -6,21 +6,23 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\Serializer\Exception\ExtraAttributesException;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
     public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
-        // dump($exception);
         if ($exception instanceof NotFoundHttpException) {
             $error = [
                 'status' => $exception->getStatusCode(),
                 'message' => $exception->getMessage()
-            ];
-        $response = new JsonResponse($error); 
+            ];            
+        $response = new JsonResponse($error);
         $event->setResponse($response);
         }
+    
     }
 
     public static function getSubscribedEvents()

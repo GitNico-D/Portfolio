@@ -64,7 +64,6 @@ class ProjectController extends AbstractController
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
             $violations = $validator->validate($project);
             if(count($violations) > 0) {
-                // dd($violations[0]);
                 return $this->json($violations, JsonResponse::HTTP_BAD_REQUEST);
             }
             $em->persist($project);
@@ -106,9 +105,6 @@ class ProjectController extends AbstractController
             );
             $violations = $validator->validate($project);
             if(count($violations) > 0) {
-                // $constraint = new ConstraintViolationInterface();
-                // $message = $constraint->getTemplateMessage($violations);
-                // $v
                 return $this->json((string)$violations, JsonResponse::HTTP_BAD_REQUEST);
             }            
             $em->flush($project); 
@@ -116,7 +112,6 @@ class ProjectController extends AbstractController
         } 
         catch(\Exception $error)
         { 
-            $error = ['Message' => $error->getMessage()];
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }    
     }
