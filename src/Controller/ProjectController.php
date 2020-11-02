@@ -4,14 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * @Route("/api")
@@ -20,8 +19,9 @@ class ProjectController extends AbstractController
 {
     /**
      * @Route("/projects", name="get_project_list", methods={"GET"})
+     * @return JsonResponse
      */
-    public function readProjectList()
+    public function readProjectList(): JsonResponse
     {
         $projects = $this->getDoctrine()
             ->getRepository(Project::class)
@@ -31,48 +31,62 @@ class ProjectController extends AbstractController
 
     /**
      * @Route("/projects/{id}", name="get_project", methods={"GET"})
+     * @param $id
+     * @return JsonResponse
      */
-    public function readProject($id)
+    public function readProject($id): JsonResponse
     {
         $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
-        if(!$project)
-        {
+        if (!$project) {
             return $this->json(
-                    ['Message' => 'Resource \'Project\' id ' . $id . ' not found'], 
-                    JsonResponse::HTTP_NOT_FOUND
+                ['Message' => 'Resource \'Project\' id ' . $id . ' not found'],
+                JsonResponse::HTTP_NOT_FOUND
             );
-        } 
+        }
         return $this->json($project, JsonResponse::HTTP_OK);
     }
 
     /**
      * @Route("/projects", name="create_project", methods={"POST"})
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @param EntityManagerInterface $em
+     * @param ValidatorInterface $validator
+     * @return JsonResponse
      */
     public function createProject(
-        Request $request, 
-        SerializerInterface $serializer, 
+        Request $request,
+        SerializerInterface $serializer,
         EntityManagerInterface $em,
         ValidatorInterface $validator
-        ): JsonResponse
-    {
-        try 
-        { 
+    ): JsonResponse {
+        try {
             $project = $serializer->deserialize(
-                $request->getContent(), 
-                Project::class, 
+                $request->getContent(),
+                Project::class,
                 'json',
-                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
+                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]
+            );
             $violations = $validator->validate($project);
-            if(count($violations) > 0) {
-                return $this->json($violations, JsonResponse::HTTP_BAD_REQUEST);
+            $errorViolation = [];
+            if (count($violations) > 0) {
+                foreach ($violations as $violation) {
+                    $errorViolation [] = [
+                        'property' => $violation->getPropertyPath(),
+                        'message' => $violation->getMessage(),
+                        'type' => $violation->getConstraint()
+                    ];
+                }
+                return $this->json($errorViolation, JsonResponse::HTTP_BAD_REQUEST);
             }
             $em->persist($project);
             $em->flush();
-            return $this->json($project, JsonResponse::HTTP_CREATED,
+            return $this->json(
+                $project,
+                JsonResponse::HTTP_CREATED,
                 ["Location" => $this->generateUrl("get_project", ["id" => $project->getId()])]
             );
-        } catch(\Exception $error)
-        {
+        } catch (Exception $error) {
             $error = ['Message' => $error->getMessage()];
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
@@ -80,50 +94,67 @@ class ProjectController extends AbstractController
 
     /**
      * @Route("/projects/{id}", name="update_project", methods={"PUT"})
+     * @param $id
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @param EntityManagerInterface $em
+     * @param ValidatorInterface $validator
+     * @return JsonResponse
      */
     public function updateProject(
-        $id, 
-        Request $request, 
+        $id,
+        Request $request,
         SerializerInterface $serializer,
         EntityManagerInterface $em,
         ValidatorInterface $validator
-        ): JsonResponse
-    {        
+    ): JsonResponse {
         try {
-            $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);                     
-            if(!$project)
-            {
+            $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
+            if (!$project) {
                 return $this->json(
                     ['Message' => 'Resource \'Project\' id ' . $id . ' not found'],
                     JsonResponse::HTTP_NOT_FOUND
                 );
+            } else {
+                $serializer->deserialize(
+                    $request->getContent(),
+                    Project::class,
+                    'json',
+                    [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
+                AbstractNormalizer::OBJECT_TO_POPULATE => $project]
+                );
             }
-            else
-            $serializer->deserialize($request->getContent(), Project::class, 'json',
-                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
-                AbstractNormalizer::OBJECT_TO_POPULATE => $project] 
-            );
             $violations = $validator->validate($project);
-            if(count($violations) > 0) {
-                return $this->json((string)$violations, JsonResponse::HTTP_BAD_REQUEST);
-            }            
-            $em->flush($project); 
+            $errorViolation = [];
+            if (count($violations) > 0) {
+                foreach ($violations as $violation) {
+                    $errorViolation [] = [
+                        'property' => $violation->getPropertyPath(),
+                        'message' => $violation->getMessage()
+                    ];
+                }
+                return $this->json($errorViolation, JsonResponse::HTTP_BAD_REQUEST);
+                // return $this->json($violations, JsonResponse::HTTP_BAD_REQUEST);
+                // return $this->json((string)$violations, JsonResponse::HTTP_BAD_REQUEST);
+            }
+            $em->flush();
             return $this->json($project, JsonResponse::HTTP_OK);
-        } 
-        catch(\Exception $error)
-        { 
+        } catch (Exception $error) {
+            $error = ['Message' => $error->getMessage()];
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
-        }    
+        }
     }
 
     /**
      * @Route("/projects/{id}", name="delete_project", methods={"DELETE"})
+     * @param $id
+     * @param EntityManagerInterface $em
+     * @return JsonResponse
      */
     public function deleteProject($id, EntityManagerInterface $em)
     {
         $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
-        if(!$project)
-        {
+        if (!$project) {
             return $this->json(
                 ['Message' => 'Resource \'Project\' id ' . $id . ' not found'],
                 JsonResponse::HTTP_NOT_FOUND

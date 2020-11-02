@@ -33,12 +33,12 @@ class Education
     private $city;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="dateTime")
      */
     private $start_date;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="dateTime")
      */
     private $end_date;
 

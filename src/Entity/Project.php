@@ -20,56 +20,56 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=150)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @Assert\Length(min="2", max="150")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @Assert\Length(min="2", max="150")
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @Assert\Length(min="2", max="255")
      */
     private $url;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @Assert\Length(min="2", max="255")
      */
     private $img_static;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @Assert\Length(min="2", max="255")
      */
     private $img_hover;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @Assert\Length(min="2", max="100")
      */
     private $alt_static;
 
     /**
      * @ORM\Column(type="string", length=100)
-    //  * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @Assert\Length(min="2", max="100")
      */
     private $alt_hover;
 
     /**
-     * @ORM\Column(type="datetime")
-    //  * @Assert\NotBlank()
+     * @ORM\Column(type="date")
+     * @Assert\NotBlank
      */
     private $create_at;
 
