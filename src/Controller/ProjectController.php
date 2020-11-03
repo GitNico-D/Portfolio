@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -86,7 +85,7 @@ class ProjectController extends AbstractController
                 JsonResponse::HTTP_CREATED,
                 ["Location" => $this->generateUrl("get_project", ["id" => $project->getId()])]
             );
-        } catch (Exception $error) {
+        } catch (\Exception $error) {
             $error = ['Message' => $error->getMessage()];
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
@@ -139,7 +138,7 @@ class ProjectController extends AbstractController
             }
             $em->flush();
             return $this->json($project, JsonResponse::HTTP_OK);
-        } catch (Exception $error) {
+        } catch (\Exception $error) {
             $error = ['Message' => $error->getMessage()];
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
