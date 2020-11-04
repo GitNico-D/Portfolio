@@ -71,7 +71,7 @@ class Project
      * @ORM\Column(type="date")
      * @Assert\NotBlank
      */
-    private $date_creation;
+    private $create_at;
 
     public function getId(): ?int
     {
@@ -162,14 +162,14 @@ class Project
         return $this;
     }
 
-    public function getDateCreation(): ?\DateTimeInterface
+    public function getCreateAt(): ?\DateTimeInterface
     {
-        return $this->date_creation;
+        return $this->create_at;
     }
 
-    public function setDateCreation(\DateTimeInterface $date_creation): self
+    public function setCreateAt(\DateTimeInterface $create_at): self
     {
-        $this->date_creation = $date_creation;
+        $this->create_at = $create_at;
 
         return $this;
     }

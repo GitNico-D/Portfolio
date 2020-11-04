@@ -20,7 +20,6 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $response = new JsonResponse($error);
         $event->setResponse($response);
         }
-    
     }
 
     public static function getSubscribedEvents()

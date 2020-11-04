@@ -11,11 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Services\ErrorValidator;
 /**
  * @Route("/api")
  */
 class ProjectController extends AbstractController
 {
+    CONST RESOURCE = 'Resource \'Project\' id ';
+    CONST NOT_FOUND = ' not found';
     /**
      * @Route("/projects", name="get_project_list", methods={"GET"})
      * @return JsonResponse
@@ -38,7 +41,7 @@ class ProjectController extends AbstractController
         $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
         if (!$project) {
             return $this->json(
-                ['Message' => 'Resource \'Project\' id ' . $id . ' not found'],
+                ['Message' => self::RESOURCE . $id . self::NOT_FOUND],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -57,7 +60,7 @@ class ProjectController extends AbstractController
         Request $request,
         SerializerInterface $serializer,
         EntityManagerInterface $em,
-        ValidatorInterface $validator
+        ErrorValidator $errorValidator
     ): JsonResponse {
         try {
             $project = $serializer->deserialize(
@@ -66,25 +69,18 @@ class ProjectController extends AbstractController
                 'json',
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]
             );
-            $violations = $validator->validate($project);
-            $errorViolation = [];
-            if (count($violations) > 0) {
-                foreach ($violations as $violation) {
-                    $errorViolation [] = [
-                        'property' => $violation->getPropertyPath(),
-                        'message' => $violation->getMessage(),
-                        'type' => $violation->getConstraint()
-                    ];
-                }
-                return $this->json($errorViolation, JsonResponse::HTTP_BAD_REQUEST);
+            $errors = $errorValidator->errorsViolations($project);
+            if ($errors) {
+                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+            } else {
+                $em->persist($project);
+                $em->flush();
+                return $this->json(
+                    $project,
+                    JsonResponse::HTTP_CREATED,
+                    ["Location" => $this->generateUrl("get_project", ["id" => $project->getId()])]
+                );
             }
-            $em->persist($project);
-            $em->flush();
-            return $this->json(
-                $project,
-                JsonResponse::HTTP_CREATED,
-                ["Location" => $this->generateUrl("get_project", ["id" => $project->getId()])]
-            );
         } catch (\Exception $error) {
             $error = ['Message' => $error->getMessage()];
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
