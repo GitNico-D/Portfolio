@@ -36,13 +36,13 @@ class ProjectController extends AbstractController
         if(!$project)
         {
             return $this->json(
-                ['Message' => 'Resource \'Project\' id ' . $id . ' not found'], 
-                JsonResponse::HTTP_NOT_FOUND
+                    ['Message' => 'Resource \'Project\' id ' . $id . ' not found'], 
+                    JsonResponse::HTTP_NOT_FOUND
             );
-        } 
+        }
         return $this->json($project, JsonResponse::HTTP_OK);
     }
-
+    
     /**
      * @Route("/projects", name="create_project", methods={"POST"})
      */
@@ -52,7 +52,8 @@ class ProjectController extends AbstractController
         EntityManagerInterface $em
         ): JsonResponse
     {
-        try { 
+        try 
+        { 
             $project = $serializer->deserialize(
                 $request->getContent(), 
                 Project::class, 
