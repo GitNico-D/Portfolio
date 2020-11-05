@@ -15,6 +15,11 @@ class ErrorValidator
         $this->serializer = $serializer;
     }
 
+    /**
+     * Return all validation errors when an entity is Created or Updated
+     * 
+     * @param $entity 
+     */
     public function errorsViolations($entity)
     {
         $violations = $this->validator->validate($entity);
