@@ -23,8 +23,6 @@ class ProjectController extends AbstractController
      * GET a Project resources list
      * 
      * @Route("/projects", name="get_project_list", methods={"GET"})
-     * 
-     * @return JsonResponse
      */
     public function readProjectList(): JsonResponse
     {
@@ -38,9 +36,6 @@ class ProjectController extends AbstractController
      * GET a Project resource
      * 
      * @Route("/projects/{id}", name="get_project", methods={"GET"})
-     * 
-     * @param $id
-     * @return JsonResponse
      */
     public function readProject($id): JsonResponse
     {
@@ -58,12 +53,6 @@ class ProjectController extends AbstractController
      * CREATE a new Project resource
      * 
      * @Route("/projects", name="create_project", methods={"POST"})
-     * 
-     * @param Request $request
-     * @param SerializerInterface $serializer
-     * @param EntityManagerInterface $em
-     * @param ErrorValidator $errorValidator
-     * @return JsonResponse
      */
     public function createProject(
         Request $request,
@@ -99,14 +88,7 @@ class ProjectController extends AbstractController
     /**
      * UPDATE a existing Project resource
      * 
-     * @Route("/projects/{id}", name="update_project", methods={"PUT"})
-     * 
-     * @param $id
-     * @param Request $request
-     * @param SerializerInterface $serializer
-     * @param EntityManagerInterface $em
-     * @param ErrorValidator $errorValidator
-     * @return JsonResponse
+     * @Route("/projects/{id}", name="update_project", methods={"PUT"}) 
      */
     public function updateProject(
         $id,
@@ -148,10 +130,6 @@ class ProjectController extends AbstractController
      * DELETE an existing Project resource
      * 
      * @Route("/projects/{id}", name="delete_project", methods={"DELETE"})
-     * 
-     * @param $id
-     * @param EntityManagerInterface $em
-     * @return JsonResponse
      */
     public function deleteProject($id, EntityManagerInterface $em)
     {

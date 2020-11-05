@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
-
+use App\Services\ErrorValidator;
 /**
  * @Route("/api")
  */
@@ -49,7 +49,8 @@ class ExperienceController extends AbstractController
     public function createExperience(
         Request $request, 
         SerializerInterface $serializer, 
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ErrorValidator $errorValidator
         ): JsonResponse
     {
         try { 
@@ -58,11 +59,18 @@ class ExperienceController extends AbstractController
                 Experience::class, 
                 'json',
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
-            $em->persist($experience);
-            $em->flush();
-            return $this->json($experience, JsonResponse::HTTP_CREATED,
-                ["Location" => $this->generateUrl("get_experience", ["id" => $experience->getId()])]
-            );
+            $errors = $errorValidator->errorsViolations($experience);
+            if ($errors) {
+                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+            } else {
+                $em->persist($experience);
+                $em->flush();
+                return $this->json(
+                    $experience,
+                    JsonResponse::HTTP_CREATED,
+                    ["Location" => $this->generateUrl("get_experience", ["id" => $experience->getId()])]
+                );
+            }
         } catch(\Exception $error)
         {
             $error = ['Message' => $error->getMessage()];
@@ -77,25 +85,33 @@ class ExperienceController extends AbstractController
         $id, 
         Request $request, 
         SerializerInterface $serializer,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ErrorValidator $errorValidator
         ): JsonResponse
     {       
         try {
             $experience = $this->getDoctrine()->getRepository(Experience::class)->findOneBy(['id' => $id]);
-            if(!$experience)
-            {
+            if (!$experience) {
                 return $this->json(
                     ['Message' => 'Resource \'Experience\' id ' . $id . ' not found'],
                     JsonResponse::HTTP_NOT_FOUND
                 );
             }
-            $serializer->deserialize($request->getContent(), Experience::class, 'json',
+            $serializer->deserialize(
+                $request->getContent(),
+                Experience::class,
+                'json',
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
-                AbstractNormalizer::OBJECT_TO_POPULATE => $experience] 
-            );            
-            $em->flush($experience); 
-            return $this->json($experience, JsonResponse::HTTP_OK);
-        } 
+                AbstractNormalizer::OBJECT_TO_POPULATE => $experience]
+            );
+            $errors = $errorValidator->errorsViolations($experience);
+            if ($errors) {
+                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+            } else {
+                $em->flush($experience);
+                return $this->json($experience, JsonResponse::HTTP_OK);
+            }
+        }
         catch(\Exception $error)
         { 
             $error = ['Message' => $error->getMessage()];

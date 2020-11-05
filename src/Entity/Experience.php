@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ExperienceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ExperienceRepository::class)
@@ -19,31 +20,42 @@ class Experience
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank
+     * @Assert\Length(min="2", max="100")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * @Assert\Length(min="2")
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank
+     * @Assert\Length(min="2", max="50")
      */
     private $company;
 
     /**
      * @ORM\Column(type="string", length=150)
+     * @Assert\NotBlank
+     * @Assert\Length(min="2", max="150")
      */
     private $logo_company;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
+     * @Assert\DateTime
      */
     private $start_date;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
      */
     private $end_date;
 
