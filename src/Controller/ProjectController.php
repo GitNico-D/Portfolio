@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,14 +11,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
-use App\Services\ErrorValidator;
 /**
  * @Route("/api")
  */
 class ProjectController extends AbstractController
 {
-    CONST RESOURCE = 'Resource \'Project\' id ';
-    CONST NOT_FOUND = ' not found';
+    const RESOURCE = 'Resource \'Project\' id ';
+    const NOT_FOUND = ' not found';
 
     /**
      * GET a Project resources list
@@ -110,15 +110,15 @@ class ProjectController extends AbstractController
                     Project::class,
                     'json',
                     [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
-                AbstractNormalizer::OBJECT_TO_POPULATE => $project]
+                    AbstractNormalizer::OBJECT_TO_POPULATE => $project]
                 );
-            }
-            $errors = $errorValidator->errorsViolations($project);
-            if ($errors) {
-                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
-            } else {
-                $em->flush();
-                return $this->json($project, JsonResponse::HTTP_OK);
+                $errors = $errorValidator->errorsViolations($project);
+                if ($errors) {
+                    return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+                } else {
+                    $em->flush();
+                    return $this->json($project, JsonResponse::HTTP_OK);
+                }
             }
         } catch (\Exception $error) {
             $error = ['Message' => $error->getMessage()];
@@ -130,6 +130,10 @@ class ProjectController extends AbstractController
      * DELETE an existing Project resource
      * 
      * @Route("/projects/{id}", name="delete_project", methods={"DELETE"})
+     * 
+     * @param $id
+     * @param EntityManagerInterface $em
+     * @return JsonResponse
      */
     public function deleteProject($id, EntityManagerInterface $em)
     {

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +49,8 @@ class CategoryController extends AbstractController
      */
     public function createCategory(Request $request, 
         SerializerInterface $serializer, 
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ErrorValidator $errorValidator
         ): JsonResponse
     {
         try { 
@@ -57,11 +59,18 @@ class CategoryController extends AbstractController
                 Category::class, 
                 'json',
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
-            $em->persist($category);
-            $em->flush();
-            return $this->json($category, JsonResponse::HTTP_CREATED,
-                ["Location" => $this->generateUrl("get_category", ["id" => $category->getId()])]
-            );
+            $errors = $errorValidator->errorsViolations($category);
+            if ($errors) {
+                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+            } else {
+                $em->persist($category);
+                $em->flush();
+                return $this->json(
+                    $category,
+                    JsonResponse::HTTP_CREATED,
+                    ["Location" => $this->generateUrl("get_category", ["id" => $category->getId()])]
+                );
+            }
         } catch(\Exception $error)
         {
             $error = ['Message' => $error->getMessage()];
@@ -76,27 +85,35 @@ class CategoryController extends AbstractController
         $id, 
         Request $request, 
         SerializerInterface $serializer,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ErrorValidator $errorValidator
         ): JsonResponse
     {       
         try {
             $category = $this->getDoctrine()->getRepository(Category::class)->findOneBy(['id' => $id]);
-            if(!$category)
-            {
+            if(!$category) {
                 return $this->json(
                     ['Message' => 'Resource \'Category\' id ' . $id . ' not found'],
                     JsonResponse::HTTP_NOT_FOUND
                 );
+            } else {
+                $serializer->deserialize(
+                    $request->getContent(),
+                    Category::class,
+                    'json',
+                    [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
+                AbstractNormalizer::OBJECT_TO_POPULATE => $category]
+                );
+                $errors = $errorValidator->errorsViolations($category);
+                if ($errors) {
+                    return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+                } else {
+                    $em->flush($category);
+                    return $this->json($category, JsonResponse::HTTP_OK);
+                }
             }
-            $serializer->deserialize($request->getContent(), Category::class, 'json',
-                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
-                AbstractNormalizer::OBJECT_TO_POPULATE => $category] 
-            );            
-            $em->flush($category); 
-            return $this->json($category, JsonResponse::HTTP_OK);
         } 
-        catch(\Exception $error)
-        { 
+        catch(\Exception $error) { 
             $error = ['Message' => $error->getMessage()];
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }

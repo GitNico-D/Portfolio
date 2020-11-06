@@ -96,20 +96,21 @@ class ExperienceController extends AbstractController
                     ['Message' => 'Resource \'Experience\' id ' . $id . ' not found'],
                     JsonResponse::HTTP_NOT_FOUND
                 );
-            }
-            $serializer->deserialize(
-                $request->getContent(),
-                Experience::class,
-                'json',
-                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
-                AbstractNormalizer::OBJECT_TO_POPULATE => $experience]
-            );
-            $errors = $errorValidator->errorsViolations($experience);
-            if ($errors) {
-                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
             } else {
-                $em->flush($experience);
-                return $this->json($experience, JsonResponse::HTTP_OK);
+                $serializer->deserialize(
+                    $request->getContent(),
+                    Experience::class,
+                    'json',
+                    [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
+                    AbstractNormalizer::OBJECT_TO_POPULATE => $experience]
+                );
+                $errors = $errorValidator->errorsViolations($experience);
+                if ($errors) {
+                    return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+                } else {
+                    $em->flush($experience);
+                    return $this->json($experience, JsonResponse::HTTP_OK);
+                }
             }
         }
         catch(\Exception $error)

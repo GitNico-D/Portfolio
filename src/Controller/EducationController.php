@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Education;
+use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +50,8 @@ class EducationController extends AbstractController
     public function createEducation(
         Request $request, 
         SerializerInterface $serializer, 
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ErrorValidator $errorValidator
         ): JsonResponse
     {
         // Try and catch is used to check Json syntax
@@ -59,11 +61,18 @@ class EducationController extends AbstractController
                 Education::class, 
                 'json',
                 [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
-            $em->persist($education);
-            $em->flush();
-            return $this->json($education, JsonResponse::HTTP_CREATED,
-                ["Location" => $this->generateUrl("get_education", ["id" => $education->getId()])]
-            );
+            $errors = $errorValidator->errorsViolations($education);
+            if ($errors) {
+                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+            } else {
+                $em->persist($education);
+                $em->flush();
+                return $this->json(
+                    $education,
+                    JsonResponse::HTTP_CREATED,
+                    ["Location" => $this->generateUrl("get_education", ["id" => $education->getId()])]
+                );
+            }
         } catch(\Exception $error)
         {
             $error = ['Message' => $error->getMessage()];
@@ -78,27 +87,34 @@ class EducationController extends AbstractController
         $id, 
         Request $request, 
         SerializerInterface $serializer,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ErrorValidator $errorValidator
         ): JsonResponse
     {       
         try {
             $education = $this->getDoctrine()->getRepository(Education::class)->findOneBy(['id' => $id]);
-            if(!$education)
-            {
+            if(!$education) {
                 return $this->json(
                     ['Message' => 'Resource \'Education\' id ' . $id . ' not found'],
                     JsonResponse::HTTP_NOT_FOUND
                 );
+            } else {
+                $serializer->deserialize(
+                    $request->getContent(),
+                    Education::class,
+                    'json',
+                    [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
+                    AbstractNormalizer::OBJECT_TO_POPULATE => $education]
+                );
+                $errors = $errorValidator->errorsViolations($education);
+                if ($errors) {
+                    return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+                } else {
+                    $em->flush($education);
+                    return $this->json($education, JsonResponse::HTTP_OK);
+                }
             }
-            $serializer->deserialize($request->getContent(), Education::class, 'json',
-                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
-                AbstractNormalizer::OBJECT_TO_POPULATE => $education] 
-            );            
-            $em->flush($education); 
-            return $this->json($education, JsonResponse::HTTP_OK);
-        } 
-        catch(\Exception $error)
-        { 
+        } catch(\Exception $error) { 
             $error = ['Message' => $error->getMessage()];
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
