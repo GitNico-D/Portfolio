@@ -114,11 +114,12 @@ class ProjectController extends AbstractController
                 );
                 $errors = $errorValidator->errorsViolations($project);
                 if ($errors) {
-                    return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+                    $jsonResponse = $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
                 } else {
                     $em->flush();
-                    return $this->json($project, JsonResponse::HTTP_OK);
+                    $jsonResponse = $this->json($project, JsonResponse::HTTP_OK);
                 }
+                return $jsonResponse;
             }
         } catch (\Exception $error) {
             $error = ['Message' => $error->getMessage()];

@@ -109,11 +109,12 @@ class CategoryController extends AbstractController
                 );
                 $errors = $errorValidator->errorsViolations($category);
                 if ($errors) {
-                    return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+                    $jsonResponse = $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
                 } else {
                     $em->flush($category);
-                    return $this->json($category, JsonResponse::HTTP_OK);
+                    $jsonResponse = $this->json($category, JsonResponse::HTTP_OK);
                 }
+                return $jsonResponse;
             }
         } 
         catch(\Exception $error) { 

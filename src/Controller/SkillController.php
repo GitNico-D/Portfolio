@@ -108,11 +108,12 @@ class SkillController extends AbstractController
                 );
                 $errors = $errorValidator->errorsViolations($skill);
                 if ($errors) {
-                    return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+                    $jsonResponse = $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
                 } else {                    
                     $em->flush($skill);
-                    return $this->json($skill, JsonResponse::HTTP_OK);
+                    $jsonResponse = $this->json($skill, JsonResponse::HTTP_OK);
                 }
+                return $jsonResponse;
             }
         } catch(\Exception $error) { 
             $error = ['Message' => $error->getMessage()];

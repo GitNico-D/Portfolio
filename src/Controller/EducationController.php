@@ -111,11 +111,12 @@ class EducationController extends AbstractController
                 );
                 $errors = $errorValidator->errorsViolations($education);
                 if ($errors) {
-                    return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+                    $jsonresponse = $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
                 } else {
                     $em->flush($education);
-                    return $this->json($education, JsonResponse::HTTP_OK);
+                    $jsonresponse = $this->json($education, JsonResponse::HTTP_OK);
                 }
+                return $jsonresponse;
             }
         } catch(\Exception $error) { 
             $error = ['Message' => $error->getMessage()];

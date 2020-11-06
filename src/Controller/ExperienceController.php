@@ -110,11 +110,12 @@ class ExperienceController extends AbstractController
                 );
                 $errors = $errorValidator->errorsViolations($experience);
                 if ($errors) {
-                    return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+                    $jsonResponse = $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
                 } else {
                     $em->flush($experience);
-                    return $this->json($experience, JsonResponse::HTTP_OK);
+                    $jsonResponse = $this->json($experience, JsonResponse::HTTP_OK);
                 }
+                return $jsonResponse;
             }
         }
         catch(\Exception $error)

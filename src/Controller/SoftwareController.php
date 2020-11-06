@@ -109,11 +109,12 @@ class SoftwareController extends AbstractController
                 );
                 $errors = $errorValidator->errorsViolations($software);
                 if ($errors) {
-                    return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+                    $jsonResponse = $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
                 } else {
                     $em->flush($software);
-                    return $this->json($software, JsonResponse::HTTP_OK);
+                    $jsonResponse = $this->json($software, JsonResponse::HTTP_OK);
                 }
+                return $jsonResponse;
             }
         } catch(\Exception $error){ 
             $error = ['Message' => $error->getMessage()];
