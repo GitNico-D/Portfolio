@@ -3,16 +3,14 @@
 namespace App\Services;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class ErrorValidator
 {
     private $errorsViolations = [];
 
-    public function __construct(ValidatorInterface $validator, SerializerInterface $serializer)
+    public function __construct(ValidatorInterface $validator)
     {
         $this->validator = $validator;
-        $this->serializer = $serializer;
     }
 
     /**
