@@ -17,6 +17,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class SoftwareController extends AbstractController
 {
+    const SOFTWARE = 'Resource \'Software\' id ';
+    const NOT_FOUND = ' not found';
+
     /**
      * @Route("/softwares", name="get_software_list", methods={"GET"})
      */
@@ -37,7 +40,7 @@ class SoftwareController extends AbstractController
         if(!$software)
         {
             return  $this->json(
-                ['Message' => 'Resource \'Software\' id ' . $id . ' not found'], 
+                ['Message' => self::SOFTWARE . $id . self::NOT_FOUND], 
                 JsonResponse::HTTP_NOT_FOUND
             );
         } 
@@ -93,7 +96,7 @@ class SoftwareController extends AbstractController
             $software = $this->getDoctrine()->getRepository(Software::class)->findOneBy(['id' => $id]);
             if (!$software) {
                 return $this->json(
-                    ['Message' => 'Resource \'Software\' id ' . $id . ' not found'],
+                    ['Message' => self::SOFTWARE . $id . self::NOT_FOUND],
                     JsonResponse::HTTP_NOT_FOUND
                 );
             } else {
@@ -127,7 +130,7 @@ class SoftwareController extends AbstractController
         if(!$software)
         {
             return $this->json(
-                ['Message' => 'Resource \'Software\' id ' . $id . ' not found'],
+                ['Message' => self::SOFTWARE . $id . self::NOT_FOUND],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }

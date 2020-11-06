@@ -17,6 +17,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class EducationController extends AbstractController
 {
+    const EDUCATION = 'Resource \'Education\' id ';
+    const NOT_FOUND = ' not found';
+
     /**
      * @Route("/educations", name="get_education_list", methods={"GET"})
      */
@@ -37,7 +40,7 @@ class EducationController extends AbstractController
         if(!$education)
         {
             return $this->json(
-                ['Message' => 'Resource \'Education\' id ' . $id . ' not found'], 
+                ['Message' => self::EDUCATION . $id . self::NOT_FOUND], 
                 JsonResponse::HTTP_NOT_FOUND
             );
         }            
@@ -95,7 +98,7 @@ class EducationController extends AbstractController
             $education = $this->getDoctrine()->getRepository(Education::class)->findOneBy(['id' => $id]);
             if(!$education) {
                 return $this->json(
-                    ['Message' => 'Resource \'Education\' id ' . $id . ' not found'],
+                    ['Message' => self::EDUCATION . $id . self::NOT_FOUND],
                     JsonResponse::HTTP_NOT_FOUND
                 );
             } else {
@@ -129,7 +132,7 @@ class EducationController extends AbstractController
         if(!$education)
         {
             return $this->json(
-                ['Message' => 'Resource \'Education\' id ' . $id . ' not found'],
+                ['Message' => self::EDUCATION . $id . self::NOT_FOUND],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }

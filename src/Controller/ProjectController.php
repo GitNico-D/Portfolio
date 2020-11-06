@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class ProjectController extends AbstractController
 {
-    const RESOURCE = 'Resource \'Project\' id ';
+    const PROJECT = 'Resource \'Project\' id ';
     const NOT_FOUND = ' not found';
 
     /**
@@ -42,7 +42,7 @@ class ProjectController extends AbstractController
         $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
         if (!$project) {
             return $this->json(
-                ['Message' => self::RESOURCE . $id . self::NOT_FOUND],
+                ['Message' => self::PROJECT . $id . self::NOT_FOUND],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -101,7 +101,7 @@ class ProjectController extends AbstractController
             $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
             if (!$project) {
                 return $this->json(
-                    ['Message' => self::RESOURCE . $id . self::NOT_FOUND],
+                    ['Message' => self::PROJECT . $id . self::NOT_FOUND],
                     JsonResponse::HTTP_NOT_FOUND
                 );
             } else {
@@ -140,7 +140,7 @@ class ProjectController extends AbstractController
         $project = $this->getDoctrine()->getRepository(Project::class)->findOneBy(['id' => $id]);
         if (!$project) {
             return $this->json(
-                ['Message' => self::RESOURCE . $id . self::NOT_FOUND],
+                ['Message' => self::PROJECT . $id . self::NOT_FOUND],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }

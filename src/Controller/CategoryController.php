@@ -17,6 +17,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class CategoryController extends AbstractController
 {
+    const CATEGORY = 'Resource \'Categogy\' id ';
+    const NOT_FOUND = ' not found';
+
     /**
      * @Route("/categories", name="get_category_list", methods={"GET"})
      */
@@ -37,7 +40,7 @@ class CategoryController extends AbstractController
         if(!$category)
         {
             return $this->json(
-                ['Message' => 'Resource \'Category\' id ' . $id . ' not found'], 
+                ['Message' => self::CATEGORY . $id . self::NOT_FOUND], 
                 JsonResponse::HTTP_NOT_FOUND
             );
         } 
@@ -93,7 +96,7 @@ class CategoryController extends AbstractController
             $category = $this->getDoctrine()->getRepository(Category::class)->findOneBy(['id' => $id]);
             if(!$category) {
                 return $this->json(
-                    ['Message' => 'Resource \'Category\' id ' . $id . ' not found'],
+                    ['Message' => self::CATEGORY . $id . self::NOT_FOUND],
                     JsonResponse::HTTP_NOT_FOUND
                 );
             } else {
@@ -128,7 +131,7 @@ class CategoryController extends AbstractController
         if(!$category)
         {
             return $this->json(
-                ['Message' => 'Resource \'Category\' id ' . $id . ' not found'],
+                ['Message' => self::CATEGORY . $id . self::NOT_FOUND],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }

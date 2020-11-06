@@ -11,11 +11,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Services\ErrorValidator;
+
 /**
  * @Route("/api")
  */
 class ExperienceController extends AbstractController
 {
+    const EXPERIENCE = 'Resource \'Experience\' id ';
+    const NOT_FOUND = ' not found';
+
     /**
      * @Route("/experiences", name="get_experience_list", methods={"GET"})
      */
@@ -36,7 +40,7 @@ class ExperienceController extends AbstractController
         if(!$experience)
         {
             return $this->json(
-                ['Message' => 'Resource \'Experience\' id ' . $id . ' not found'], 
+                ['Message' => self::EXPERIENCE . $id . self::NOT_FOUND], 
                 JsonResponse::HTTP_NOT_FOUND
             );
         } 
@@ -93,7 +97,7 @@ class ExperienceController extends AbstractController
             $experience = $this->getDoctrine()->getRepository(Experience::class)->findOneBy(['id' => $id]);
             if (!$experience) {
                 return $this->json(
-                    ['Message' => 'Resource \'Experience\' id ' . $id . ' not found'],
+                    ['Message' => self::EXPERIENCE . $id . self::NOT_FOUND],
                     JsonResponse::HTTP_NOT_FOUND
                 );
             } else {
@@ -129,7 +133,7 @@ class ExperienceController extends AbstractController
         if(!$experience)
         {
             return $this->json(
-                ['Message' => 'Resource \'Experience\' id ' . $id . ' not found'],
+                ['Message' => self::EXPERIENCE . $id . self::NOT_FOUND],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
