@@ -21,6 +21,8 @@ class SoftwareController extends AbstractController
     const NOT_FOUND = ' not found';
 
     /**
+     * GET a Software resources list
+     * 
      * @Route("/softwares", name="get_software_list", methods={"GET"})
      */
     public function readSoftwareList()
@@ -32,6 +34,8 @@ class SoftwareController extends AbstractController
     }
 
     /**
+     * GET a Software resource
+     * 
      * @Route("/softwares/{id}", name="get_software", methods={"GET"})
      */
     public function readSoftware($id)
@@ -47,7 +51,9 @@ class SoftwareController extends AbstractController
         return $this->json($software, JsonResponse::HTTP_OK);
     }
 
-    /**
+    /** 
+     * CREATE a new Software resource
+     * 
      * @Route("/softwares", name="create_software", methods={"POST"})
      */
     public function createSoftware(Request $request, 
@@ -82,6 +88,8 @@ class SoftwareController extends AbstractController
     }
 
     /**
+     * UPDATE an existing Software resource
+     * 
      * @Route("/softwares/{id}", name="update_software", methods={"PUT"})
      */
     public function updateSoftware(
@@ -123,6 +131,8 @@ class SoftwareController extends AbstractController
     }
 
     /**
+     * DELETE an existing Software resource
+     * 
      * @Route("/softwares/{id}", name="delete_software", methods={"DELETE"})
      */
     public function deleteSoftware($id, EntityManagerInterface $em)

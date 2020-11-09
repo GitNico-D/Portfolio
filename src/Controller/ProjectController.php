@@ -86,7 +86,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * UPDATE a existing Project resource
+     * UPDATE an existing Project resource
      * 
      * @Route("/projects/{id}", name="update_project", methods={"PUT"}) 
      */

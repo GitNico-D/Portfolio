@@ -50,7 +50,6 @@ class Experience
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank
-     * @Assert\DateTime
      */
     private $start_date;
 
@@ -60,7 +59,13 @@ class Experience
      */
     private $end_date;
 
-    
+    /**
+     * @var \DateTime $created_at
+     * 
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $created_at;
 
     public function getId(): ?int
     {
@@ -136,6 +141,18 @@ class Experience
     {
         $this->end_date = $end_date;
 
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
+        
         return $this;
     }
 }

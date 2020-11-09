@@ -19,7 +19,10 @@ class SkillController extends AbstractController
 {
     const SKILL = 'Resource \'Skill\' id ';
     const NOT_FOUND = ' not found';
+
     /**
+     * GET a Skill resources list
+     * 
      * @Route("/skills", name="get_skill_list", methods={"GET"})
      */
     public function readSkillList()
@@ -31,6 +34,8 @@ class SkillController extends AbstractController
     }
 
     /**
+     * GET a Skill resource
+     * 
      * @Route("/skills/{id}", name="get_skill", methods={"GET"})
      */
     public function readSkill($id)
@@ -47,6 +52,8 @@ class SkillController extends AbstractController
     }
 
     /**
+     * CREATE a new Skill resource
+     * 
      * @Route("/skills", name="create_skill", methods={"POST"})
      */
     public function createSkill(Request $request, 
@@ -81,6 +88,8 @@ class SkillController extends AbstractController
     }
 
     /**
+     * UPDATE an existing Skill resource
+     * 
      * @Route("/skills/{id}", name="update_skill", methods={"PUT"})
      */
     public function updateSkill(
@@ -122,6 +131,8 @@ class SkillController extends AbstractController
     }
 
     /**
+     * DELETE an existing Skill resource
+     * 
      * @Route("/skills/{id}", name="delete_skills", methods={"DELETE"})
      */
     public function deleteSkill($id, EntityManagerInterface $em)

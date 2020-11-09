@@ -16,6 +16,8 @@ use Symfony\Component\Serializer\SerializerInterface;
  */class UserController extends AbstractController
 {
     /**
+     * GET a User resources list
+     * 
      * @Route("/users", name="get_user_list", methods={"GET"})
      */
     public function readUserList()
@@ -27,6 +29,8 @@ use Symfony\Component\Serializer\SerializerInterface;
     }
 
     /**
+     * GET a User resource
+     * 
      * @Route("/users/{id}", name="get_users", methods={"GET"})
      */
     public function readUser($id)
@@ -43,6 +47,8 @@ use Symfony\Component\Serializer\SerializerInterface;
     }
 
     /**
+     * CREATE a new User resource
+     * 
      * @Route("/users", name="create_user", methods={"POST"})
      */
     public function createUser(Request $request, 
@@ -69,6 +75,8 @@ use Symfony\Component\Serializer\SerializerInterface;
     }
 
     /**
+     * UPDATE an existing User resource
+     * 
      * @Route("/users/{id}", name="update_user", methods={"PUT"})
      */
     public function updateUser(
@@ -102,6 +110,8 @@ use Symfony\Component\Serializer\SerializerInterface;
     }
 
     /**
+     * DELETE an existing User resource
+     * 
      * @Route("/users/{id}", name="delete_user", methods={"DELETE"})
      */
     public function deleteUser($id, EntityManagerInterface $em)
