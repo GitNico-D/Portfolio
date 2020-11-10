@@ -62,10 +62,18 @@ class Experience
     /**
      * @var \DateTime $created_at
      * 
+     * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime", nullable=true)
      */
     private $created_at;
+
+    /**
+     * @var \DateTime $updated_at
+     * 
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated_at;
 
     public function getId(): ?int
     {
@@ -149,10 +157,8 @@ class Experience
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        $this->created_at = $created_at;
-        
-        return $this;
+        return $this->updated_at;
     }
 }

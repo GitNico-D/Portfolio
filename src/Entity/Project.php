@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
  */
@@ -72,6 +72,14 @@ class Project
      * @Assert\NotBlank
      */
     private $create_at;
+
+    /**
+     * @var \DateTime $updated_at
+     * 
+     * @ORM\Column(type="datetime_immutable")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated_at;
 
     public function getId(): ?int
     {
@@ -167,10 +175,8 @@ class Project
         return $this->create_at;
     }
 
-    public function setCreateAt(\DateTimeInterface $create_at): self
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        $this->create_at = $create_at;
-
-        return $this;
+        return $this->updated_at;
     }
 }
