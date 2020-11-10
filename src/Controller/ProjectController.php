@@ -55,22 +55,17 @@ class ProjectController extends AbstractController
         EntityManagerInterface $em,
         ErrorValidator $errorValidator
     ): JsonResponse {
-        try {
-            $errors = $errorValidator->errorsViolations($project);
-            if ($errors) {
-                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
-            } else {
-                $em->persist($project);
-                $em->flush();
-                return $this->json(
-                    $project,
-                    JsonResponse::HTTP_CREATED,
-                    ["Location" => $this->generateUrl("get_project", ["id" => $project->getId()])]
-                );
-            }
-        } catch (\Exception $error) {
-            $error = ['Message' => $error->getMessage()];
-            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
+        $errors = $errorValidator->errorsViolations($project);
+        if ($errors) {
+            return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+        } else {
+            $em->persist($project);
+            $em->flush();
+            return $this->json(
+                $project,
+                JsonResponse::HTTP_CREATED,
+                ["Location" => $this->generateUrl("get_project", ["id" => $project->getId()])]
+            );
         }
     }
 

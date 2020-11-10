@@ -64,28 +64,17 @@ class ExperienceController extends AbstractController
         ErrorValidator $errorValidator
         ): JsonResponse
     {
-        try { 
-            // $experience = $serializer->deserialize(
-            //     $request->getContent(), 
-            //     Experience::class, 
-            //     'json',
-            //     [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
-            $errors = $errorValidator->errorsViolations($experience);
-            if ($errors) {
-                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
-            } else {
-                $em->persist($experience);
-                $em->flush();
-                return $this->json(
-                    $experience,
-                    JsonResponse::HTTP_CREATED,
-                    ["Location" => $this->generateUrl("get_experience", ["id" => $experience->getId()])]
-                );
-            }
-        } catch(\Exception $error)
-        {
-            $error = ['Message' => $error->getMessage()];
-            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
+        $errors = $errorValidator->errorsViolations($experience);
+        if ($errors) {
+            return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+        } else {
+            $em->persist($experience);
+            $em->flush();
+            return $this->json(
+                $experience,
+                JsonResponse::HTTP_CREATED,
+                ["Location" => $this->generateUrl("get_experience", ["id" => $experience->getId()])]
+            );
         }
     }    
 
