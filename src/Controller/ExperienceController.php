@@ -56,7 +56,7 @@ class ExperienceController extends AbstractController
      * CREATE a new Experience resource
      * 
      * @Route("/experiences", name="create_experiences", methods={"POST"})
-     * @ParamConverter("experience", converter="entity_converter")
+     * @ParamConverter("experience", converter="CreateEntityConverter")
      */
     public function createExperience(
         Experience $experience,

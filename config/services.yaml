@@ -32,4 +32,4 @@ services:
     App\Request\ParamConverter\:
         resource: '../src/Request/ParamConverter'
         tags: 
-            - { name: 'request.param_converter', converter: 'entity_converter'}
+            - { name: 'request.param_converter', converter: 'CreateEntityConverter'}
