@@ -17,8 +17,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $error = [
                 'status' => $exception->getStatusCode(),
                 'message' => $exception->getMessage()
-            ];            
-        $response = new JsonResponse($error);
+            ];
+        $response = new JsonResponse($error); 
         $event->setResponse($response);
         }
     }
