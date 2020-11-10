@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SoftwareRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SoftwareRepository::class)
@@ -19,16 +20,23 @@ class Software
 
     /**
      * @ORM\Column(type="string", length=75)
+     * @Assert\NotBlank
+     * @Assert\Length(min="2", max="75")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank
+     * @Assert\Length(min="2", max="100")
      */
     private $icon;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
+     * @Assert\Positive
+     * @Assert\Type("integer")
      */
     private $mastery_of;
 

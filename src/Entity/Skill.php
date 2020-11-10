@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SkillRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SkillRepository::class)
@@ -19,21 +20,30 @@ class Skill
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank
+     * @Assert\Length(min="2", max="100")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=150)
+     * @Assert\NotBlank
+     * @Assert\Length(min="2", max="150")
      */
     private $icon;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * @Assert\Length(min="2")
      */
     private $description;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
+     * @Assert\Positive
+     * @Assert\Type("integer")
      */
     private $knowledge_level;
 

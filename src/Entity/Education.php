@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\EducationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=EducationRepository::class)
@@ -19,26 +20,34 @@ class Education
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank
+     * @Assert\Length(min="2", max="100")
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=75)
+     * @Assert\NotBlank
+     * @Assert\Length(min="2", max="75")
      */
     private $school;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank
+     * @Assert\Length(min="2", max="50")
      */
     private $city;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
      */
     private $start_date;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
      */
     private $end_date;
 
