@@ -22,28 +22,31 @@ class CreateEntityConverter implements ParamConverterInterface
     }
 
     /**
+     * Try to find the name of the converter
      * 
+     * @param ParamConverter $configuration
+     * @return bool
      */
     function supports(ParamConverter $configuration)
-    {        
-        $class = $configuration->getClass();
-        $entity = strtolower((str_replace('App\Entity\\', '', $class)));
+    {    
+        $entity = strtolower((str_replace('App\Entity\\', '', $configuration->getClass())));
         return $configuration->getName() === $entity;
     }
 
+    /**
+     * Add request attributes depending of the entity 
+     * 
+     * @param Request $request
+     * @param ParamConverter $configuration
+     */
     function apply(Request $request, ParamConverter $configuration)
     {
-        try {
-            $entity = $this->serializer->deserialize(
-                $request->getContent(), 
-                $configuration->getClass(), 
-                'json',
-                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]
-            );
-            $request->attributes->set($configuration->getName(), $entity);
-        } catch (\Exception $error) {
-            $error = ['Message' => $error->getMessage()];
-            return new JsonResponse($error, JsonResponse::HTTP_BAD_REQUEST);
-        }
+        $entity = $this->serializer->deserialize(
+            $request->getContent(), 
+            $configuration->getClass(), 
+            'json',
+            [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]
+        );
+        $request->attributes->set($configuration->getName(), $entity);
     }
 }
