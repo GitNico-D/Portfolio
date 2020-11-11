@@ -60,16 +60,12 @@ class Experience
     private $end_date;
 
     /**
-     * @var \DateTime $created_at
-     * 
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
     private $created_at;
 
     /**
-     * @var \DateTime $updated_at
-     * 
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
      */
