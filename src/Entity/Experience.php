@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\ExperienceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=ExperienceRepository::class)
@@ -58,14 +57,6 @@ class Experience
      * @Assert\NotBlank
      */
     private $end_date;
-
-    /**
-     * @var \DateTime $created_at
-     * 
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $created_at;
 
     public function getId(): ?int
     {
@@ -141,18 +132,6 @@ class Experience
     {
         $this->end_date = $end_date;
 
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
-        
         return $this;
     }
 }
