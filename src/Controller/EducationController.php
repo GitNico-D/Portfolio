@@ -21,6 +21,8 @@ class EducationController extends AbstractController
     const NOT_FOUND = ' not found';
 
     /**
+     * GET an Education resources list
+     * 
      * @Route("/educations", name="get_education_list", methods={"GET"})
      */
     public function readEducationlist()
@@ -32,6 +34,8 @@ class EducationController extends AbstractController
     }
 
     /**
+     * GET an Education resource
+     * 
      * @Route("/educations/{id}", name="get_education", methods={"GET"})
      */
     public function readEducation($id)
@@ -48,6 +52,8 @@ class EducationController extends AbstractController
     }
 
     /**
+     * CREATE a new Education resource
+     * 
      * @Route("/educations", name="create_education", methods={"POST"})
      */
     public function createEducation(
@@ -82,8 +88,10 @@ class EducationController extends AbstractController
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }        
     }
-    
-/**
+        
+    /**
+     * UPDATE an existing Education resource
+     * 
      * @Route("/educations/{id}", name="update_education", methods={"PUT"})
      */
     public function updateEducation(
@@ -125,6 +133,8 @@ class EducationController extends AbstractController
     } 
 
     /**
+     * DELETE an Education Project resource
+     * 
      * @Route("/educations/{id}", name="delete_education", methods={"DELETE"})
      */
     public function deleteEducation($id, EntityManagerInterface $em)

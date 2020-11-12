@@ -21,6 +21,8 @@ class ExperienceController extends AbstractController
     const NOT_FOUND = ' not found';
 
     /**
+     * GET an Experience resources list
+     * 
      * @Route("/experiences", name="get_experience_list", methods={"GET"})
      */
     public function readExperienceList()
@@ -32,6 +34,8 @@ class ExperienceController extends AbstractController
     }
 
     /**
+     * GET an Experience resource
+     * 
      * @Route("/experiences/{id}", name="get_experience", methods={"GET"})
      */
     public function readExperience($id)
@@ -48,6 +52,8 @@ class ExperienceController extends AbstractController
     }
 
     /**
+     * CREATE a new Experience resource
+     * 
      * @Route("/experiences", name="create_experiences", methods={"POST"})
      */
     public function createExperience(
@@ -83,6 +89,8 @@ class ExperienceController extends AbstractController
     }    
 
     /**
+     * UPDATE an existing Experience resource
+     * 
      * @Route("/experiences/{id}", name="update_experience", methods={"PUT"})
      */
     public function updateExperience(
@@ -126,6 +134,8 @@ class ExperienceController extends AbstractController
     }
     
     /**
+     * DELETE an existing Experience resource
+     * 
      * @Route("/experiences/{id}", name="delete_experience", methods={"DELETE"})
      */
     public function deleteExperience($id, EntityManagerInterface $em)

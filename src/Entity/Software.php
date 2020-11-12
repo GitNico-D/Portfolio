@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SoftwareRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -11,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Software
 {
+    use TimestampableEntity;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -39,7 +41,6 @@ class Software
      * @Assert\Type("integer")
      */
     private $mastery_of;
-
     /**
      * @ORM\Column(type="integer")
      */

@@ -21,6 +21,8 @@ class CategoryController extends AbstractController
     const NOT_FOUND = ' not found';
 
     /**
+     * GET a Category resource List
+     * 
      * @Route("/categories", name="get_category_list", methods={"GET"})
      */
     public function readCategoryList()
@@ -32,6 +34,8 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * GET a Category resource
+     *  
      * @Route("/categories/{id}", name="get_category", methods={"GET"})
      */
     public function readCategory($id)
@@ -48,6 +52,8 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * CREATE a new Category resource
+     * 
      * @Route("/categories", name="create_category", methods={"POST"})
      */
     public function createCategory(Request $request, 
@@ -82,6 +88,8 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * UPDATE an existing Category resource
+     * 
      * @Route("/categories/{id}", name="update_category", methods={"PUT"})
      */
     public function updateCategory(
@@ -124,6 +132,8 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * DELETE an existing Category resource
+     * 
      * @Route("/categories/{id}", name="delete_category", methods={"DELETE"})
      */
     public function deleteCategory($id, EntityManagerInterface $em)
