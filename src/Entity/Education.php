@@ -4,13 +4,15 @@ namespace App\Entity;
 
 use App\Repository\EducationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
+
 /**
  * @ORM\Entity(repositoryClass=EducationRepository::class)
  */
 class Education
 {
+    use TimestampableEntity;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -50,22 +52,6 @@ class Education
      * @Assert\NotBlank
      */
     private $end_date;
-
-    /**
-     * @var \DateTime $created_at
-     * 
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $created_at;
-
-    /**
-     * @var \DateTime $updated_at
-     * 
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated_at;
 
     public function getId(): ?int
     {
@@ -130,15 +116,5 @@ class Education
         $this->end_date = $end_date;
 
         return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updated_at;
     }
 }

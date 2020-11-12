@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
  */
 class Project
 {
+    use TimestampableEntity;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -71,15 +72,7 @@ class Project
      * @ORM\Column(type="date")
      * @Assert\NotBlank
      */
-    private $create_at;
-
-    /**
-     * @var \DateTime $updated_at
-     * 
-     * @ORM\Column(type="datetime_immutable")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated_at;
+    private $creation_date;
 
     public function getId(): ?int
     {
@@ -170,13 +163,15 @@ class Project
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeInterface
+    public function getCreationDate(): ?\DateTimeInterface
     {
-        return $this->create_at;
+        return $this->creation_date;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function setCreationDate(\DateTimeInterface $creation_date): self
     {
-        return $this->updated_at;
+        $this->creation_date = $creation_date;
+
+        return $this;
     }
 }
