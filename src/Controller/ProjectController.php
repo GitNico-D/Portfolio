@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+
 /**
  * @Route("/api")
  */
@@ -42,7 +43,7 @@ class ProjectController extends AbstractController
      * CREATE a new Project resource
      * 
      * @Route("/projects", name="create_project", methods={"POST"})
-     * @ParamConverter("project", converter="entity_converter")
+     * @ParamConverter("project", converter="create_entity_Converter")
      */
     public function createProject(
         Project $project,
@@ -67,7 +68,7 @@ class ProjectController extends AbstractController
      * UPDATE an existing Project resource
      * 
      * @Route("/projects/{id}", name="update_project", methods={"PUT"}) 
-     * @ParamConverter("project", converter="UpdateEntityConverter")
+     * @ParamConverter("project", converter="update_entity_converter")
      */
     public function updateProject(
         Project $project,
