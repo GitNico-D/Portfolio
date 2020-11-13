@@ -12,15 +12,15 @@ use Symfony\Component\Serializer\SerializerInterface;
 class UpdateEntityConverter implements ParamConverterInterface
 {
     protected $serializer;
-    protected $em;
+    protected $entityManager;
     
     /**
      * @param SerializerInterface $serializer
      */
-    public function __construct(SerializerInterface $serializer, EntityManagerInterface $em)
+    public function __construct(SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
         $this->serializer = $serializer;
-        $this->em = $em;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -43,7 +43,7 @@ class UpdateEntityConverter implements ParamConverterInterface
      */
     function apply(Request $request, ParamConverter $configuration)
     {
-        $entity = $this->em
+        $entity = $this->entityManager
             ->getRepository($configuration->getClass())
             ->findOneBy(['id' => $request->attributes->get('id')]
         );
