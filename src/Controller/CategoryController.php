@@ -6,20 +6,15 @@ use App\Entity\Category;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route("/api")
  */
 class CategoryController extends AbstractController
 {
-    const CATEGORY = 'Resource \'Categogy\' id ';
-    const NOT_FOUND = ' not found';
-
     /**
      * GET a Category resource List
      * 
@@ -37,17 +32,10 @@ class CategoryController extends AbstractController
      * GET a Category resource
      *  
      * @Route("/categories/{id}", name="get_category", methods={"GET"})
+     * @ParamConverter("category", class="App:category")
      */
-    public function readCategory($id)
+    public function readCategory(Category $category)
     {
-        $category = $this->getDoctrine()->getRepository(Category::class)->findOneBy(['id' => $id]);
-        if(!$category)
-        {
-            return $this->json(
-                ['Message' => self::CATEGORY . $id . self::NOT_FOUND], 
-                JsonResponse::HTTP_NOT_FOUND
-            );
-        } 
         return $this->json($category, JsonResponse::HTTP_OK);
     }
 
@@ -55,35 +43,24 @@ class CategoryController extends AbstractController
      * CREATE a new Category resource
      * 
      * @Route("/categories", name="create_category", methods={"POST"})
+     * @ParamConverter("category", converter="create_entity_Converter")
      */
-    public function createCategory(Request $request, 
-        SerializerInterface $serializer, 
+    public function createCategory(
+        Category $category,
         EntityManagerInterface $em,
         ErrorValidator $errorValidator
-        ): JsonResponse
-    {
-        try { 
-            $category = $serializer->deserialize(
-                $request->getContent(), 
-                Category::class, 
-                'json',
-                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
-            $errors = $errorValidator->errorsViolations($category);
-            if ($errors) {
-                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
-            } else {
-                $em->persist($category);
-                $em->flush();
-                return $this->json(
-                    $category,
-                    JsonResponse::HTTP_CREATED,
-                    ["Location" => $this->generateUrl("get_category", ["id" => $category->getId()])]
-                );
-            }
-        } catch(\Exception $error)
-        {
-            $error = ['Message' => $error->getMessage()];
-            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
+    ): JsonResponse {
+        $errors = $errorValidator->errorsViolations($category);
+        if ($errors) {
+            return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+        } else {
+            $em->persist($category);
+            $em->flush();
+            return $this->json(
+                $category,
+                JsonResponse::HTTP_CREATED,
+                ["Location" => $this->generateUrl("get_category", ["id" => $category->getId()])]
+            );
         }
     }
 
@@ -91,43 +68,19 @@ class CategoryController extends AbstractController
      * UPDATE an existing Category resource
      * 
      * @Route("/categories/{id}", name="update_category", methods={"PUT"})
+     * @ParamConverter("category", converter="update_entity_converter")
      */
     public function updateCategory(
-        $id, 
-        Request $request, 
-        SerializerInterface $serializer,
+        Category $category,
         EntityManagerInterface $em,
         ErrorValidator $errorValidator
-        ): JsonResponse
-    {       
-        try {
-            $category = $this->getDoctrine()->getRepository(Category::class)->findOneBy(['id' => $id]);
-            if(!$category) {
-                return $this->json(
-                    ['Message' => self::CATEGORY . $id . self::NOT_FOUND],
-                    JsonResponse::HTTP_NOT_FOUND
-                );
-            } else {
-                $serializer->deserialize(
-                    $request->getContent(),
-                    Category::class,
-                    'json',
-                    [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
-                AbstractNormalizer::OBJECT_TO_POPULATE => $category]
-                );
-                $errors = $errorValidator->errorsViolations($category);
-                if ($errors) {
-                    $jsonResponse = $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
-                } else {
-                    $em->flush($category);
-                    $jsonResponse = $this->json($category, JsonResponse::HTTP_OK);
-                }
-                return $jsonResponse;
-            }
-        } 
-        catch(\Exception $error) { 
-            $error = ['Message' => $error->getMessage()];
-            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
+    ): JsonResponse {
+        $errors = $errorValidator->errorsViolations($category);
+        if ($errors) {
+           return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+        } else {
+            $em->flush($category);
+           return$this->json($category, JsonResponse::HTTP_OK);
         }
     }
 
@@ -135,17 +88,11 @@ class CategoryController extends AbstractController
      * DELETE an existing Category resource
      * 
      * @Route("/categories/{id}", name="delete_category", methods={"DELETE"})
+     * @ParamConverter("category", class="App:category")
      */
-    public function deleteCategory($id, EntityManagerInterface $em)
+    public function deleteCategory(Category $category, EntityManagerInterface $em)
     {
-        $category = $this->getDoctrine()->getRepository(Category::class)->findOneBy(['id' => $id]);
-        if(!$category)
-        {
-            return $this->json(
-                ['Message' => self::CATEGORY . $id . self::NOT_FOUND],
-                JsonResponse::HTTP_NOT_FOUND
-            );
-        }
+        $id = $category->getId();
         $em->remove($category);
         $em->flush();
         return $this->json(['Message' => 'Category id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
