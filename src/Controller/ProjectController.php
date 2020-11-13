@@ -48,7 +48,7 @@ class ProjectController extends AbstractController
      * CREATE a new Project resource
      * 
      * @Route("/projects", name="create_project", methods={"POST"})
-     * @ParamConverter("project", converter="entity_converter")
+     * @ParamConverter("project", converter="CreateEntityConverter")
      */
     public function createProject(
         Project $project,
