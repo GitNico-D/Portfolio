@@ -20,7 +20,6 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
-        // dd($exception);
         if (($exception instanceof NotFoundHttpException) || ($exception instanceof MethodNotAllowedHttpException)){
             $error = [
                 'status' => $exception->getStatusCode(),
