@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Experience;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,36 +56,25 @@ class ExperienceController extends AbstractController
      * CREATE a new Experience resource
      * 
      * @Route("/experiences", name="create_experiences", methods={"POST"})
+     * @ParamConverter("experience", converter="CreateEntityConverter")
      */
     public function createExperience(
-        Request $request, 
-        SerializerInterface $serializer, 
+        Experience $experience,
         EntityManagerInterface $em,
         ErrorValidator $errorValidator
         ): JsonResponse
     {
-        try { 
-            $experience = $serializer->deserialize(
-                $request->getContent(), 
-                Experience::class, 
-                'json',
-                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]);
-            $errors = $errorValidator->errorsViolations($experience);
-            if ($errors) {
-                return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
-            } else {
-                $em->persist($experience);
-                $em->flush();
-                return $this->json(
-                    $experience,
-                    JsonResponse::HTTP_CREATED,
-                    ["Location" => $this->generateUrl("get_experience", ["id" => $experience->getId()])]
-                );
-            }
-        } catch(\Exception $error)
-        {
-            $error = ['Message' => $error->getMessage()];
-            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
+        $errors = $errorValidator->errorsViolations($experience);
+        if ($errors) {
+            return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+        } else {
+            $em->persist($experience);
+            $em->flush();
+            return $this->json(
+                $experience,
+                JsonResponse::HTTP_CREATED,
+                ["Location" => $this->generateUrl("get_experience", ["id" => $experience->getId()])]
+            );
         }
     }    
 

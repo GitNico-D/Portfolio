@@ -10,6 +10,13 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
+    /**
+     * Return JsonResponse depending of the Exception catch
+     * An error 404 for no Route found
+     * An error 400 for specific Exception like 'Json Syntax error'
+     * 
+     * @param Exception $event
+     */
     public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
@@ -17,10 +24,12 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $error = [
                 'status' => $exception->getStatusCode(),
                 'message' => $exception->getMessage()
-            ];
-        $response = new JsonResponse($error); 
-        $event->setResponse($response);
+            ];            
+            $response = new JsonResponse($error, JsonResponse::HTTP_NOT_FOUND);
+        } else {
+            $response = new JsonResponse(['message' => $exception->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
+        $event->setResponse($response);
     }
 
     public static function getSubscribedEvents()
