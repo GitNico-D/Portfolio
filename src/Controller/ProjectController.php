@@ -43,7 +43,7 @@ class ProjectController extends AbstractController
     {
         return $this->json($project, JsonResponse::HTTP_OK);
     }
-
+    
     /**
      * CREATE a new Project resource
      * 
