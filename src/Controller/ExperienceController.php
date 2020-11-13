@@ -3,30 +3,24 @@
 namespace App\Controller;
 
 use App\Entity\Experience;
+use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
-use App\Services\ErrorValidator;
 
 /**
  * @Route("/api")
  */
 class ExperienceController extends AbstractController
 {
-    const EXPERIENCE = 'Resource \'Experience\' id ';
-    const NOT_FOUND = ' not found';
-
     /**
      * GET an Experience resources list
      * 
      * @Route("/experiences", name="get_experience_list", methods={"GET"})
      */
-    public function readExperienceList()
+    public function readExperienceList(): JsonResponse
     {
         $experiences = $this->getDoctrine()
             ->getRepository(Experience::class)
@@ -38,17 +32,10 @@ class ExperienceController extends AbstractController
      * GET an Experience resource
      * 
      * @Route("/experiences/{id}", name="get_experience", methods={"GET"})
+     * @ParamConverter("experience", class="App:experience")
      */
-    public function readExperience($id)
-    {
-        $experience = $this->getDoctrine()->getRepository(Experience::class)->findOneBy(['id' => $id]);
-        if(!$experience)
-        {
-            return $this->json(
-                ['Message' => self::EXPERIENCE . $id . self::NOT_FOUND], 
-                JsonResponse::HTTP_NOT_FOUND
-            );
-        } 
+    public function readExperience(Experience $experience): JsonResponse
+    { 
         return $this->json($experience, JsonResponse::HTTP_OK);
     }
 
@@ -56,14 +43,13 @@ class ExperienceController extends AbstractController
      * CREATE a new Experience resource
      * 
      * @Route("/experiences", name="create_experiences", methods={"POST"})
-     * @ParamConverter("experience", converter="CreateEntityConverter")
+     * @ParamConverter("experience", converter="create_entity_Converter")
      */
     public function createExperience(
         Experience $experience,
         EntityManagerInterface $em,
         ErrorValidator $errorValidator
-        ): JsonResponse
-    {
+    ): JsonResponse {
         $errors = $errorValidator->errorsViolations($experience);
         if ($errors) {
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
@@ -82,13 +68,10 @@ class ExperienceController extends AbstractController
      * UPDATE an existing Experience resource
      * 
      * @Route("/experiences/{id}", name="update_experience", methods={"PUT"})
-     * @ParamConverter("experience", converter="UpdateEntityConverter")
+     * @ParamConverter("experience", converter="update_entity_converter")
      */
     public function updateExperience(
         Experience $experience,
-        // $id, 
-        // Request $request, 
-        // SerializerInterface $serializer,
         EntityManagerInterface $em,
         ErrorValidator $errorValidator
         ): JsonResponse
@@ -107,17 +90,11 @@ class ExperienceController extends AbstractController
      * DELETE an existing Experience resource
      * 
      * @Route("/experiences/{id}", name="delete_experience", methods={"DELETE"})
+     * @ParamConverter("experience", class="App:experience")
      */
-    public function deleteExperience($id, EntityManagerInterface $em)
+    public function deleteExperience(Experience $experience, EntityManagerInterface $em): JsonResponse
     {
-        $experience = $this->getDoctrine()->getRepository(Experience::class)->findOneBy(['id' => $id]);
-        if(!$experience)
-        {
-            return $this->json(
-                ['Message' => self::EXPERIENCE . $id . self::NOT_FOUND],
-                JsonResponse::HTTP_NOT_FOUND
-            );
-        }
+        $id = $experience->getId();
         $em->remove($experience);
         $em->flush();
         return $this->json(['Message' => 'Experience id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
