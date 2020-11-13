@@ -82,45 +82,25 @@ class ExperienceController extends AbstractController
      * UPDATE an existing Experience resource
      * 
      * @Route("/experiences/{id}", name="update_experience", methods={"PUT"})
+     * @ParamConverter("experience", converter="UpdateEntityConverter")
      */
     public function updateExperience(
-        $id, 
-        Request $request, 
-        SerializerInterface $serializer,
+        Experience $experience,
+        // $id, 
+        // Request $request, 
+        // SerializerInterface $serializer,
         EntityManagerInterface $em,
         ErrorValidator $errorValidator
         ): JsonResponse
     {       
-        try {
-            $experience = $this->getDoctrine()->getRepository(Experience::class)->findOneBy(['id' => $id]);
-            if (!$experience) {
-                return $this->json(
-                    ['Message' => self::EXPERIENCE . $id . self::NOT_FOUND],
-                    JsonResponse::HTTP_NOT_FOUND
-                );
-            } else {
-                $serializer->deserialize(
-                    $request->getContent(),
-                    Experience::class,
-                    'json',
-                    [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
-                    AbstractNormalizer::OBJECT_TO_POPULATE => $experience]
-                );
-                $errors = $errorValidator->errorsViolations($experience);
-                if ($errors) {
-                    $jsonResponse = $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
-                } else {
-                    $em->flush($experience);
-                    $jsonResponse = $this->json($experience, JsonResponse::HTTP_OK);
-                }
-                return $jsonResponse;
-            }
+        $errors = $errorValidator->errorsViolations($experience);
+        if ($errors) {
+            $jsonResponse = $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+        } else {
+            $em->flush($experience);
+            $jsonResponse = $this->json($experience, JsonResponse::HTTP_OK);
         }
-        catch(\Exception $error)
-        { 
-            $error = ['Message' => $error->getMessage()];
-            return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
-        }    
+        return $jsonResponse; 
     }
     
     /**
