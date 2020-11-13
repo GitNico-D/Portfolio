@@ -5,6 +5,7 @@ namespace App\Request\ParamConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -48,7 +49,7 @@ class UpdateEntityConverter implements ParamConverterInterface
             ->findOneBy(['id' => $request->attributes->get('id')]
         );
         if(!$entity) {
-            throw new \Exception(ucfirst($configuration->getName()) . ' ' . $request->attributes->get('id') . ' not found');
+            throw new NotFoundHttpException(ucfirst($configuration->getName()) . ' ' . $request->attributes->get('id') . ' not found');
         } 
         $this->serializer->deserialize(
             $request->getContent(),
