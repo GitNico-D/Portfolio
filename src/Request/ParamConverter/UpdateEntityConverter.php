@@ -48,7 +48,7 @@ class UpdateEntityConverter implements ParamConverterInterface
             ->findOneBy(['id' => $request->attributes->get('id')]
         );
         if(!$entity) {
-            throw new \Exception($configuration->getName() . ' ' . $request->attributes->get('id') . ' not found');
+            throw new \Exception(ucfirst($configuration->getName()) . ' ' . $request->attributes->get('id') . ' not found');
         } 
         $this->serializer->deserialize(
             $request->getContent(),
