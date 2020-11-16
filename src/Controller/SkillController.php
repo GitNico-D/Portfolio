@@ -68,7 +68,7 @@ class SkillController extends AbstractController
      * UPDATE an existing Skill resource
      * 
      * @Route("/skills/{id}", name="update_skill", methods={"PUT"})
-     * @ParamConverter("project", converter="update_entity_converter")
+     * @ParamConverter("skill", converter="update_entity_converter")
      */
     public function updateSkill(
         Skill $skill,
