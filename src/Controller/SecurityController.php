@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 // use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -22,7 +21,7 @@ class SecurityController extends AbstractController
 {
     // public EntityManagerInterface $entityManager;
     // public UserPasswordEncoderInterface $passwordEncoder;
-
+    
     /**
      * @Route("/register", name="register", methods={"POST"})
      */
@@ -60,10 +59,14 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("login", name="login", methods={"POST"})
+     * @Route("/login", name="login", methods={"POST"})
      */
     public function login()
     {
-
+        $user = $this->getUser();
+        return $this->json([
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles()
+        ]);
     }
 }
