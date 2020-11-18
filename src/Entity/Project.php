@@ -67,7 +67,7 @@ class Project
      * @Assert\Length(min="2", max="100")
      */
     private $alt_hover;
-
+  
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank
