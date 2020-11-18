@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,6 +45,7 @@ class ProjectController extends AbstractController
      * 
      * @Route("/projects", name="create_project", methods={"POST"})
      * @ParamConverter("project", converter="create_entity_Converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function createProject(
         Project $project,
@@ -69,6 +71,7 @@ class ProjectController extends AbstractController
      * 
      * @Route("/projects/{id}", name="update_project", methods={"PUT"}) 
      * @ParamConverter("project", converter="update_entity_converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function updateProject(
         Project $project,
@@ -89,6 +92,7 @@ class ProjectController extends AbstractController
      * 
      * @Route("/projects/{id}", name="delete_project", methods={"DELETE"})
      * @ParamConverter("project", class="App:project")
+     * @IsGranted("ROLE_ADMIN")
      * 
      * @param Project $project
      * @param EntityManagerInterface $em
