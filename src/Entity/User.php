@@ -38,11 +38,11 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
-     * @ORM\Column(type="string", length=100, unique=true)
-     * @Assert\NotBlank
-     */
-    private $username;
+    // /**
+    //  * @ORM\Column(type="string", length=100, unique=true)
+    //  * @Assert\NotBlank
+    //  */
+    // private $username;
 
     public function getId(): ?int
     {
@@ -68,7 +68,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string) $this->email;
     }
 
     /**
@@ -122,10 +122,10 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
+    // public function setUsername(string $username): self
+    // {
+    //     $this->username = $username;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }
