@@ -44,6 +44,7 @@ class EducationController extends AbstractController
      * 
      * @Route("/educations", name="create_education", methods={"POST"})
      * @ParamConverter("education", converter="create_entity_Converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function createEducation(
         Education $education,
@@ -69,6 +70,7 @@ class EducationController extends AbstractController
      * 
      * @Route("/educations/{id}", name="update_education", methods={"PUT"})
      * @ParamConverter("education", converter="update_entity_converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function updateEducation(
         Education $education,
@@ -89,6 +91,7 @@ class EducationController extends AbstractController
      * 
      * @Route("/educations/{id}", name="delete_education", methods={"DELETE"})
      * @ParamConverter("education", class="App:education")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function deleteEducation(Education $education, EntityManagerInterface $em)
     {

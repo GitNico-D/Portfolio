@@ -44,6 +44,7 @@ class ExperienceController extends AbstractController
      * 
      * @Route("/experiences", name="create_experiences", methods={"POST"})
      * @ParamConverter("experience", converter="create_entity_Converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function createExperience(
         Experience $experience,
@@ -69,6 +70,7 @@ class ExperienceController extends AbstractController
      * 
      * @Route("/experiences/{id}", name="update_experience", methods={"PUT"})
      * @ParamConverter("experience", converter="update_entity_converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function updateExperience(
         Experience $experience,
@@ -90,6 +92,7 @@ class ExperienceController extends AbstractController
      * 
      * @Route("/experiences/{id}", name="delete_experience", methods={"DELETE"})
      * @ParamConverter("experience", class="App:experience")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function deleteExperience(Experience $experience, EntityManagerInterface $em): JsonResponse
     {

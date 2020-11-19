@@ -44,6 +44,7 @@ class SkillController extends AbstractController
      * 
      * @Route("/skills", name="create_skill", methods={"POST"})
      * @ParamConverter("skill", converter="create_entity_Converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function createSkill(
         Skill $skill, 
@@ -69,6 +70,7 @@ class SkillController extends AbstractController
      * 
      * @Route("/skills/{id}", name="update_skill", methods={"PUT"})
      * @ParamConverter("project", converter="update_entity_converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function updateSkill(
         Skill $skill,
@@ -89,6 +91,7 @@ class SkillController extends AbstractController
      * 
      * @Route("/skills/{id}", name="delete_skills", methods={"DELETE"})
      * @ParamConverter("skill", class="App:skill")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function deleteSkill(Skill $skill, EntityManagerInterface $em)
     {

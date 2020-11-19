@@ -44,6 +44,7 @@ class CategoryController extends AbstractController
      * 
      * @Route("/categories", name="create_category", methods={"POST"})
      * @ParamConverter("category", converter="create_entity_Converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function createCategory(
         Category $category,
@@ -69,6 +70,7 @@ class CategoryController extends AbstractController
      * 
      * @Route("/categories/{id}", name="update_category", methods={"PUT"})
      * @ParamConverter("category", converter="update_entity_converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function updateCategory(
         Category $category,
@@ -89,6 +91,7 @@ class CategoryController extends AbstractController
      * 
      * @Route("/categories/{id}", name="delete_category", methods={"DELETE"})
      * @ParamConverter("category", class="App:category")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function deleteCategory(Category $category, EntityManagerInterface $em)
     {
