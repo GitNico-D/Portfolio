@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @Route("/api")
  */
 class SecurityController extends AbstractController
-{
+{    
     /**
      * @Route("/register", name="register", methods={"POST"})
      * @IsGranted("ROLE_ADMIN")
@@ -61,6 +61,10 @@ class SecurityController extends AbstractController
      */
     public function login()
     {
-
+        $user = $this->getUser();
+        return $this->json([
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles()
+        ]);
     }
 }
