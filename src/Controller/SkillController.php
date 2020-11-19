@@ -6,6 +6,7 @@ use App\Entity\Skill;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,6 +45,7 @@ class SkillController extends AbstractController
      * 
      * @Route("/skills", name="create_skill", methods={"POST"})
      * @ParamConverter("skill", converter="create_entity_Converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function createSkill(
         Skill $skill, 
@@ -68,7 +70,8 @@ class SkillController extends AbstractController
      * UPDATE an existing Skill resource
      * 
      * @Route("/skills/{id}", name="update_skill", methods={"PUT"})
-     * @ParamConverter("skill", converter="update_entity_converter")
+     * @ParamConverter("project", converter="update_entity_converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function updateSkill(
         Skill $skill,
@@ -89,6 +92,7 @@ class SkillController extends AbstractController
      * 
      * @Route("/skills/{id}", name="delete_skills", methods={"DELETE"})
      * @ParamConverter("skill", class="App:skill")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function deleteSkill(Skill $skill, EntityManagerInterface $em)
     {

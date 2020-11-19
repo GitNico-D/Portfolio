@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,6 +21,7 @@ class SecurityController extends AbstractController
 {    
     /**
      * @Route("/register", name="register", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function register(
         Request $request,
@@ -56,6 +58,7 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/login", name="login", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function login()
     {

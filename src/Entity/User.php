@@ -37,7 +37,7 @@ class User implements UserInterface
      * @Assert\NotBlank
      */
     private $password;
-
+  
     public function getId(): ?int
     {
         return $this->id;

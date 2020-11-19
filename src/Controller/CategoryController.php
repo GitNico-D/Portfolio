@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,6 +45,7 @@ class CategoryController extends AbstractController
      * 
      * @Route("/categories", name="create_category", methods={"POST"})
      * @ParamConverter("category", converter="create_entity_Converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function createCategory(
         Category $category,
@@ -69,6 +71,7 @@ class CategoryController extends AbstractController
      * 
      * @Route("/categories/{id}", name="update_category", methods={"PUT"})
      * @ParamConverter("category", converter="update_entity_converter")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function updateCategory(
         Category $category,
@@ -89,6 +92,7 @@ class CategoryController extends AbstractController
      * 
      * @Route("/categories/{id}", name="delete_category", methods={"DELETE"})
      * @ParamConverter("category", class="App:category")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function deleteCategory(Category $category, EntityManagerInterface $em)
     {

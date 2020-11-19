@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
@@ -26,6 +27,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
                 'message' => $exception->getMessage()
             ];            
             $response = new JsonResponse($error, JsonResponse::HTTP_NOT_FOUND);
+        } elseif ($exception instanceof AccessDeniedHttpException) {
+            $response = new JsonResponse(['message' => 'Access denied'], JsonResponse::HTTP_BAD_REQUEST);
         } else {
             $response = new JsonResponse(['message' => $exception->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
