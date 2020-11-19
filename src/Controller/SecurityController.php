@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-// use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,10 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @Route("/api")
  */
 class SecurityController extends AbstractController
-{
-    // public EntityManagerInterface $entityManager;
-    // public UserPasswordEncoderInterface $passwordEncoder;
-    
+{    
     /**
      * @Route("/register", name="register", methods={"POST"})
      */
