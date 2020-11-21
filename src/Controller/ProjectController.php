@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Project;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -35,9 +37,17 @@ class ProjectController extends AbstractController
      * @Route("/projects/{id}", name="get_project", methods={"GET"})
      * @ParamConverter("project", class="App:project")
      */
-    public function readProject(Project $project): JsonResponse
+    public function readProject(Project $project, SerializerInterface $serializer): JsonResponse
     {
-        return $this->json($project, JsonResponse::HTTP_OK);
+        $project = $serializer->serialize($project, 'json');
+        // $response = new Response($project);
+        // $response->headers->set('Content-Type', 'application/json');
+        return new JsonResponse(
+            $project, 
+            JsonResponse::HTTP_OK,
+            [],
+            true);
+        // return $this->json($project, JsonResponse::HTTP_OK);
     }
     
     /**
@@ -103,6 +113,12 @@ class ProjectController extends AbstractController
         $id = $project->getId();
         $em->remove($project);
         $em->flush();
-        return $this->json(['Message' => 'Project id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
+        // $message = 'Project id ' . $id . ' deleted';
+        return new JsonResponse(
+            json_encode(['Message' => 'Project id ' . $id . ' deleted']), 
+            JsonResponse::HTTP_OK, 
+            [], 
+            true);
+        // return $this->json(['Message' => 'Project id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
     }
 }
