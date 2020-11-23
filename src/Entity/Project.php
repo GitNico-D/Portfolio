@@ -41,12 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          parameters = { "id" = "expr(object.getId())" },
  *          absolute = true
  *      )
- * )
- * @Hateoas\Relation(
- *     "author",
- *     embedded = @Hateoas\Embedded("expr(object.getAuthor())")
- * )
- * 
+ * ) 
  */
 class Project
 {
