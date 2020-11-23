@@ -5,18 +5,31 @@ namespace App\Entity;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=ExperienceRepository::class)
- *  
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
+ * 
  * @Hateoas\Relation(
  *      "self",
  *      href = @Hateoas\Route(
  *          "get_project",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ * * @Hateoas\Relation(
+ *      "create",
+ *      href = @Hateoas\Route(
+ *          "create_project",
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "update",
+ *      href = @Hateoas\Route(
+ *          "update_project",
  *          parameters = { "id" = "expr(object.getId())" },
  *          absolute = true
  *      )
@@ -29,6 +42,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          absolute = true
  *      )
  * )
+ * @Hateoas\Relation(
+ *     "author",
+ *     embedded = @Hateoas\Embedded("expr(object.getAuthor())")
+ * )
+ * 
  */
 class Project
 {

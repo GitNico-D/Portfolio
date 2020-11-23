@@ -23,12 +23,14 @@ class ProjectController extends AbstractController
      * 
      * @Route("/projects", name="get_project_list", methods={"GET"})
      */
-    public function readProjectList(): JsonResponse
+    public function readProjectList(SerializerInterface $serializer): JsonResponse
     {
         $projects = $this->getDoctrine()
             ->getRepository(Project::class)
             ->findAll();
-        return $this->json($projects, JsonResponse::HTTP_OK);
+        $projectList = $serializer->serialize($projects, 'json');
+        return new JsonResponse($projectList, JsonResponse::HTTP_OK, [], true);
+        // return $this->json($projects, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -40,14 +42,11 @@ class ProjectController extends AbstractController
     public function readProject(Project $project, SerializerInterface $serializer): JsonResponse
     {
         $project = $serializer->serialize($project, 'json');
-        // $response = new Response($project);
-        // $response->headers->set('Content-Type', 'application/json');
         return new JsonResponse(
             $project, 
             JsonResponse::HTTP_OK,
             [],
             true);
-        // return $this->json($project, JsonResponse::HTTP_OK);
     }
     
     /**
