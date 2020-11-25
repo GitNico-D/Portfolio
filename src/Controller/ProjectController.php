@@ -11,7 +11,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing;
+use App\Hateoas\CustomLink;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @Route("/api")
@@ -23,13 +28,19 @@ class ProjectController extends AbstractController
      * 
      * @Route("/projects", name="get_project_list", methods={"GET"})
      */
-    public function readProjectList(SerializerInterface $serializer): JsonResponse
+    public function readProjectList(SerializerInterface $serializer, CustomLink $customLink, RouterInterface $router)
     {
         $projects = $this->getDoctrine()
             ->getRepository(Project::class)
             ->findAll();
+        // dd($projects);
+        // $route = $router->getRouteCollection()->all();
+        // dd($route);
         $projectList = $serializer->serialize($projects, 'json');
-        return new JsonResponse($projectList, JsonResponse::HTTP_OK, [], true);
+        $customLink->createLink($projects, $router);
+        return $projectList;
+        // $entity = $request;
+        // return new JsonResponse($projectList, JsonResponse::HTTP_OK, [], true);
         // return $this->json($projects, JsonResponse::HTTP_OK);
     }
 
