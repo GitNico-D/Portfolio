@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Experience;
+use App\Hateoas\CustomLink;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/api")
@@ -21,11 +23,12 @@ class ExperienceController extends AbstractController
      * 
      * @Route("/experiences", name="get_experience_list", methods={"GET"})
      */
-    public function readExperienceList(): JsonResponse
+    public function readExperienceList(Request $request, CustomLink $customLink): JsonResponse
     {
         $experiences = $this->getDoctrine()
             ->getRepository(Experience::class)
             ->findAll();
+        $customLink->createLink($request, $experiences);
         return $this->json($experiences, JsonResponse::HTTP_OK);
     }
 
@@ -35,8 +38,9 @@ class ExperienceController extends AbstractController
      * @Route("/experiences/{id}", name="get_experience", methods={"GET"})
      * @ParamConverter("experience", class="App:experience")
      */
-    public function readExperience(Experience $experience): JsonResponse
+    public function readExperience(Experience $experience, Request $request, CustomLink $customLink): JsonResponse
     { 
+        $customLink->createLink($request, $experience);
         return $this->json($experience, JsonResponse::HTTP_OK);
     }
 

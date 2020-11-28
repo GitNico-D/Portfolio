@@ -3,21 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Hateoas\CustomLink;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
-use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing;
-use App\Hateoas\CustomLink;
-use Symfony\Component\Routing\Router;
-use Symfony\Component\Routing\RouterInterface;
-
 /**
  * @Route("/api")
  */
@@ -28,20 +22,13 @@ class ProjectController extends AbstractController
      * 
      * @Route("/projects", name="get_project_list", methods={"GET"})
      */
-    public function readProjectList(SerializerInterface $serializer, CustomLink $customLink, RouterInterface $router)
+    public function readProjectList(CustomLink $customLink): JsonResponse
     {
         $projects = $this->getDoctrine()
             ->getRepository(Project::class)
             ->findAll();
-        // dd($projects);
-        // $route = $router->getRouteCollection()->all();
-        // dd($route);
-        $projectList = $serializer->serialize($projects, 'json');
-        $customLink->createLink($projects, $router);
-        return $projectList;
-        // $entity = $request;
-        // return new JsonResponse($projectList, JsonResponse::HTTP_OK, [], true);
-        // return $this->json($projects, JsonResponse::HTTP_OK);
+        $links = $customLink->createLink($projects);
+        return $this->json([$projects, $links], JsonResponse::HTTP_OK);
     }
 
     /**
@@ -50,14 +37,10 @@ class ProjectController extends AbstractController
      * @Route("/projects/{id}", name="get_project", methods={"GET"})
      * @ParamConverter("project", class="App:project")
      */
-    public function readProject(Project $project, SerializerInterface $serializer): JsonResponse
+    public function readProject(Project $project, CustomLink $customLink): JsonResponse
     {
-        $project = $serializer->serialize($project, 'json');
-        return new JsonResponse(
-            $project, 
-            JsonResponse::HTTP_OK,
-            [],
-            true);
+        $links = $customLink->createLink($project);
+        return $this->json([$project, $links], JsonResponse::HTTP_OK);
     }
     
     /**
@@ -118,17 +101,11 @@ class ProjectController extends AbstractController
      * @param EntityManagerInterface $em
      * @return JsonResponse
      */
-    public function deleteProject(Project $project, EntityManagerInterface $em)
+    public function deleteProject(Project $project, EntityManagerInterface $em): JsonResponse
     {
         $id = $project->getId();
         $em->remove($project);
         $em->flush();
-        // $message = 'Project id ' . $id . ' deleted';
-        return new JsonResponse(
-            json_encode(['Message' => 'Project id ' . $id . ' deleted']), 
-            JsonResponse::HTTP_OK, 
-            [], 
-            true);
-        // return $this->json(['Message' => 'Project id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
+        return $this->json(['Message' => 'Project id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
     }
 }

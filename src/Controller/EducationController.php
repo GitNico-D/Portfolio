@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Education;
+use App\Hateoas\CustomLink;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -21,7 +23,7 @@ class EducationController extends AbstractController
      * 
      * @Route("/educations", name="get_education_list", methods={"GET"})
      */
-    public function readEducationlist()
+    public function readEducationList()
     {
         $educations = $this->getDoctrine()
             ->getRepository(Education::class)
@@ -35,8 +37,9 @@ class EducationController extends AbstractController
      * @Route("/educations/{id}", name="get_education", methods={"GET"})
      * @ParamConverter("education", class="App:education")
      */
-    public function readEducation(Education $education)
-    {          
+    public function readEducation(Education $education, Request $request, CustomLink $customLink)
+    {     
+        $customLink->createLink($request, $education);     
         return $this->json($education, JsonResponse::HTTP_OK);
     }
 
