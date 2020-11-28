@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Annotation\Link;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -11,37 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
  * 
- * @Hateoas\Relation(
- *      "self",
- *      href = @Hateoas\Route(
- *          "get_project",
- *          parameters = { "id" = "expr(object.getId())" },
- *          absolute = true
- *      )
- * )
- * * @Hateoas\Relation(
- *      "create",
- *      href = @Hateoas\Route(
- *          "create_project",
- *          absolute = true
- *      )
- * )
- * @Hateoas\Relation(
- *      "update",
- *      href = @Hateoas\Route(
- *          "update_project",
- *          parameters = { "id" = "expr(object.getId())" },
- *          absolute = true
- *      )
- * )
- * @Hateoas\Relation(
- *      "delete",
- *      href = @Hateoas\Route(
- *          "delete_project",
- *          parameters = { "id" = "expr(object.getId())" },
- *          absolute = true
- *      )
- * ) 
+ * 
  */
 class Project
 {
