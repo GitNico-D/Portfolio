@@ -40,9 +40,13 @@ class CustomLink
             $entityName = strtolower($reflectionEntity->getShortName()); 
         }
         if ($entityName === "project") {
-            $hrefLinks = $this->generateHrefLinks($this->routesList("project"), $entity);
-            $links = $this->generateActionLinks($hrefLinks);
+            $route = $this->routesList("project");
+            // dump($route);
+            $links [] = $this->generateHrefLinks($this->routesList("project"), $entity);
             dd($links);
+            // $links = $this->generateActionLinks($hrefLinks);
+            // dump($hrefLinks);
+            // dd($links);
         } elseif ($entityName === "experience") {
             $links["_links"] = $this->generateHrefLinks($this->routesList("experience"), $entity);
         } elseif ($entityName === "education") {
@@ -72,35 +76,44 @@ class CustomLink
     /**
      * Create Self, Update ou Delete link
      */
-    public function generateActionLinks(array $links)
+    public function generateActionLinks(string $route, string $href)
     {
         // dd($links);
-        for($i = 0; $i < count($links); $i++) {
-            $links["_links"]["self"] = ["href" => $links[0]];
-            $links["_links"]["update"] = ["href" => $links[1]];
-            $links["_links"]["delete"] = ["href" => $links[2]];
+        // for($i = 0; $i < count($links); $i++) {
+        //     $links["_links"]["self"] = ["href" => $links[0]];
+        //     $links["_links"]["update"] = ["href" => $links[1]];
+        //     $links["_links"]["delete"] = ["href" => $links[2]];
+        // } 
+        // return $links;
+        // $actionLinks = [];
+        if (str_contains($route, "get")) {
+            $actionLinks ["self"] = ["href" => $href];
+        } elseif (str_contains($route, "update")) {
+            $actionLinks ["update"] = ["href" => $href];
+        } elseif (str_contains($route, "delete")) {
+            $actionLinks ["delete"] = ["href" => $href];
         } 
-        return $links;
+        return $actionLinks;
     }
 
     /**
      * List all the Routes of an entity controller
      */
-    public function routesList(string $entity)
+    public function routesList(string $entityName)
     {
+        $routesRejected = [];
+        $routesKeep = [];
         $allRoutes = $this->routerInterface->getRouteCollection()->all();
-        $linksList = [];
         foreach ($allRoutes as $route => $params) {
             $controllersList = $params->getDefaults();
             if (isset($controllersList['_controller'])) {
                 $controllerAction = explode(":", $controllersList['_controller']);
                 $method = $controllerAction[2];
                 if (str_contains($method, "List") || str_contains($method, "create")) {
-                    $methodsRejected [] = $method;
+                    $routesRejected [] = $route;
                 } else {
-                    $routeList  [] = $route;
-                    if (strpos($route, $entity)) {
-                        // $linksList [] = $this->generateActionLinks($method, $route);
+                    // $routesKeep [] = $route;
+                    if (str_contains($route, $entityName)) {
                         $routesList [] = $route;
                     } 
                 }
@@ -115,23 +128,39 @@ class CustomLink
     public function generateHrefLinks(array $routesController, $entity)
     {
         $hrefList = [];
+        $linksList = [];
         foreach ($routesController as $routeController) {
             if(!is_array($entity)){
-                $hrefList [] = $this->urlGenerator->generate(
+                $href = $this->urlGenerator->generate(
                     $routeController, 
                     ["id" => $entity->getId()], 
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
+                // dump($routeController);
+                // dump($href);
+                $linksList [] = $this->generateActionLinks($routeController, $href);
+                // if (str_contains($routeController, "get")) {
+                //     $actionLinks ["self"] = ["href" => $href];
+                // } elseif (strpos($routeController, "update")) {
+                //         $actionLinks ["update"] = ["href" => $href];
+                // } elseif (strpos($routeController, "delete")) {
+                //             $actionLinks ["delete"] = ["href" => $href];
+                //         } 
+                // dd($linksList);
             } else {
                 for ($i = 0; $i < count($entity); $i++) {
-                $hrefList [] = $this->urlGenerator->generate(
+                $href = $this->urlGenerator->generate(
                     $routeController,
                     ["id" => $entity[$i]->getId()],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
+                foreach ($entity as $uniqueEntity) {
+                    $linksList [] = $this->generateActionLinks($routeController, $href);
+                }
                 }
             }
         }
-        return $hrefList;
+        dd($linksList);
+        return $linksList;
     }
 }

@@ -40,7 +40,9 @@ class ProjectController extends AbstractController
     public function readProject(Project $project, CustomLink $customLink): JsonResponse
     {
         $links = $customLink->createLink($project);
-        return $this->json([$project, $links], JsonResponse::HTTP_OK);
+        $response = [$project, $links];
+        // dd($response);
+        return $this->json($response, JsonResponse::HTTP_OK);
     }
     
     /**
