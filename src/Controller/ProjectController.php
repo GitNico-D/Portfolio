@@ -27,8 +27,14 @@ class ProjectController extends AbstractController
         $projects = $this->getDoctrine()
             ->getRepository(Project::class)
             ->findAll();
-        $links = $customLink->createLink($projects);
-        return $this->json([$projects, $links], JsonResponse::HTTP_OK);
+        foreach($projects as $project)
+        {
+            $links = $customLink->createLink($project);
+            // dd($links);
+            $data [] = [$project, $links];
+        }
+        // dd($data);
+        return $this->json($data, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -41,7 +47,7 @@ class ProjectController extends AbstractController
     {
         $links = $customLink->createLink($project);
         $response = [$project, $links];
-        // dd($response);
+        dd($response);
         return $this->json($response, JsonResponse::HTTP_OK);
     }
     
