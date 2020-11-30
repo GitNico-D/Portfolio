@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Experience;
-use App\Hateoas\CustomLink;
+use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +23,7 @@ class ExperienceController extends AbstractController
      * 
      * @Route("/experiences", name="get_experience_list", methods={"GET"})
      */
-    public function readExperienceList(Request $request, CustomLink $customLink): JsonResponse
+    public function readExperienceList(Request $request, CustomHateoasLinks $customLink): JsonResponse
     {
         $experiences = $this->getDoctrine()
             ->getRepository(Experience::class)
@@ -38,10 +38,10 @@ class ExperienceController extends AbstractController
      * @Route("/experiences/{id}", name="get_experience", methods={"GET"})
      * @ParamConverter("experience", class="App:experience")
      */
-    public function readExperience(Experience $experience, Request $request, CustomLink $customLink): JsonResponse
+    public function readExperience(Experience $experience, CustomHateoasLinks $customLink): JsonResponse
     { 
-        $customLink->createLink($request, $experience);
-        return $this->json($experience, JsonResponse::HTTP_OK);
+        $links = $customLink->createLink($experience);
+        return $this->json([$experience, ['_links' => $links]], JsonResponse::HTTP_OK);
     }
 
     /**

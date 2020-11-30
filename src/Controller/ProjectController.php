@@ -3,14 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Project;
-use App\Hateoas\CustomLink;
+use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api")
@@ -22,7 +21,7 @@ class ProjectController extends AbstractController
      * 
      * @Route("/projects", name="get_project_list", methods={"GET"})
      */
-    public function readProjectList(CustomLink $customLink): JsonResponse
+    public function readProjectList(CustomHateoasLinks $customLink): JsonResponse
     {
         $projects = $this->getDoctrine()
             ->getRepository(Project::class)
@@ -30,10 +29,8 @@ class ProjectController extends AbstractController
         foreach($projects as $project)
         {
             $links = $customLink->createLink($project);
-            // dd($links);
             $data [] = [$project, $links];
         }
-        // dd($data);
         return $this->json($data, JsonResponse::HTTP_OK);
     }
 
@@ -43,12 +40,10 @@ class ProjectController extends AbstractController
      * @Route("/projects/{id}", name="get_project", methods={"GET"})
      * @ParamConverter("project", class="App:project")
      */
-    public function readProject(Project $project, CustomLink $customLink): JsonResponse
+    public function readProject(Project $project, CustomHateoasLinks $customLink): JsonResponse
     {
         $links = $customLink->createLink($project);
-        $response = [$project, $links];
-        dd($response);
-        return $this->json($response, JsonResponse::HTTP_OK);
+        return $this->json([$project, ['_links' => $links]], JsonResponse::HTTP_OK);
     }
     
     /**
@@ -87,14 +82,16 @@ class ProjectController extends AbstractController
     public function updateProject(
         Project $project,
         EntityManagerInterface $em,
-        ErrorValidator $errorValidator
+        ErrorValidator $errorValidator,
+        CustomHateoasLinks $customLink
     ): JsonResponse {
         $errors = $errorValidator->errorsViolations($project);
         if ($errors) {
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
+            $links = $customLink->createLink($project);
             $em->flush();
-            return $this->json($project, JsonResponse::HTTP_OK);
+            return $this->json([$project, ['_links' => $links]], JsonResponse::HTTP_OK);
         }
     }
 
