@@ -22,12 +22,17 @@ class EducationController extends AbstractController
      * 
      * @Route("/educations", name="get_education_list", methods={"GET"})
      */
-    public function readEducationList()
+    public function readEducationList(CustomHateoasLinks $customLink)
     {
         $educations = $this->getDoctrine()
             ->getRepository(Education::class)
             ->findAll();
-        return $this->json($educations, JsonResponse::HTTP_OK);
+        foreach($educations as $education)
+        {
+            $links = $customLink->createLink($education);
+            $data [] = [$education, $links];
+        }
+        return $this->json($data, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -78,14 +83,16 @@ class EducationController extends AbstractController
     public function updateEducation(
         Education $education,
         EntityManagerInterface $em,
-        ErrorValidator $errorValidator
+        ErrorValidator $errorValidator,
+        CustomHateoasLinks $customLink
     ): JsonResponse {
         $errors = $errorValidator->errorsViolations($education);
         if ($errors) {
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
+            $links = $customLink->createLink($education); 
             $em->flush($education);
-            return $this->json($education, JsonResponse::HTTP_OK);
+            return $this->json([$education, ['_links' => $links]], JsonResponse::HTTP_OK);
         }
     } 
 
