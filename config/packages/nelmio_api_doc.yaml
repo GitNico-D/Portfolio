@@ -5,6 +5,45 @@ nelmio_api_doc:
             version: 1.0.0
         servers:
           - url: http://portfolio/
+        paths:
+            /categories:
+                get:
+                    summary: List all Categories
+                    tags: 
+                        - Categories
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json:
+                post:
+                    summary: Create a new Category
+                    tags: 
+                        - Categories
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json:
+            /categories/{id}:
+                get:
+                    summary: Return a Categories by his {id}
+                    tags: 
+                        - Categories
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json:
+                put:
+                    summary: Modidy an existing Category by his {id}
+                    tags: 
+                        - Categories
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json:
         components:
             securitySchemes:
                 Bearer:
@@ -15,4 +54,4 @@ nelmio_api_doc:
             - Bearer: []
     areas: # to filter documented areas
         path_patterns:
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+            - ^/api$ # Accepts routes under /api except /api/doc

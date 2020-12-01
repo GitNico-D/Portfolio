@@ -6,9 +6,6 @@ use App\Entity\Project;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -23,13 +20,6 @@ class ProjectController extends AbstractController
      * GET a Project resources list
      * 
      * @Route("/projects", name="get_project_list", methods={"GET"})
-     * @OA\Response(
-     *     response=200,
-     *     description="Return the Projects list",
-     *     @Model(type=Project::class)
-     * )
-     * @OA\Tag(name="Projects")
-     * @Security(name="Bearer")
      */
     public function readProjectList(CustomHateoasLinks $customLink): JsonResponse
     {
@@ -49,17 +39,11 @@ class ProjectController extends AbstractController
      * 
      * @Route("/projects/{id}", name="get_project", methods={"GET"})
      * @ParamConverter("project", class="App:project")
-     * @OA\Response(
-     *     response=200,
-     *     description="Return a resource Project by his id",
-     *     @Model(type=Project::class)
-     * )
-     * @OA\Tag(name="Projects")
-     * @Security(name="Bearer")
      */
     public function readProject(Project $project, CustomHateoasLinks $customLink): JsonResponse
     {
         $links = $customLink->createLink($project);
+        // dd($links);
         return $this->json([$project, ['_links' => $links]], JsonResponse::HTTP_OK);
     }
     
@@ -69,13 +53,6 @@ class ProjectController extends AbstractController
      * @Route("/projects", name="create_project", methods={"POST"})
      * @ParamConverter("project", converter="create_entity_Converter")
      * @IsGranted("ROLE_ADMIN")
-     * @OA\Response(
-     *     response=201,
-     *     description="Create a new resource Project",
-     *     @Model(type=Project::class)
-     * )
-     * @OA\Tag(name="Projects")
-     * @Security(name="Bearer")
      */
     public function createProject(
         Project $project,
@@ -102,13 +79,6 @@ class ProjectController extends AbstractController
      * @Route("/projects/{id}", name="update_project", methods={"PUT"}) 
      * @ParamConverter("project", converter="update_entity_converter")
      * @IsGranted("ROLE_ADMIN")
-     * @OA\Response(
-     *     response=200,
-     *     description="Update an existing resource Project",
-     *     @Model(type=Project::class)
-     * )
-     * @OA\Tag(name="Projects")
-     * @Security(name="Bearer")
      */
     public function updateProject(
         Project $project,
@@ -132,13 +102,6 @@ class ProjectController extends AbstractController
      * @Route("/projects/{id}", name="delete_project", methods={"DELETE"})
      * @ParamConverter("project", class="App:project")
      * @IsGranted("ROLE_ADMIN")
-     * @OA\Response(
-     *     response=200,
-     *     description="Delete an existing resoure Project",
-     *     @Model(type=Project::class)
-     * )
-     * @OA\Tag(name="Projects")
-     * @Security(name="Bearer")
      * 
      * @param Project $project
      * @param EntityManagerInterface $em
