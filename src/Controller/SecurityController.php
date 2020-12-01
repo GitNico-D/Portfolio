@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,6 +25,10 @@ class SecurityController extends AbstractController
     /**
      * @Route("/register", name="register", methods={"POST"})
      * @IsGranted("ROLE_ADMIN")
+     * 
+     * @OA\Tag(name="Security")
+     * @Security(name="Bearer")
+     * 
      */
     public function register(
         Request $request,
@@ -59,6 +66,10 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="login", methods={"POST"})
      * @IsGranted("ROLE_ADMIN")
+     * 
+     * @OA\Tag(name="Security")
+     * @Security(name="Bearer")
+     * 
      */
     public function login()
     {

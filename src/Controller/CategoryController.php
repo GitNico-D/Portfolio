@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -20,6 +23,9 @@ class CategoryController extends AbstractController
      * GET a Category resource List
      * 
      * @Route("/categories", name="get_category_list", methods={"GET"})
+     * 
+     * @OA\Tag(name="Categories")
+     * @Security(name="Bearer")
      */
     public function readCategoryList()
     {
@@ -34,6 +40,9 @@ class CategoryController extends AbstractController
      *  
      * @Route("/categories/{id}", name="get_category", methods={"GET"})
      * @ParamConverter("category", class="App:category")
+     * 
+     * @OA\Tag(name="Categories")
+     * @Security(name="Bearer")
      */
     public function readCategory(Category $category)
     {
@@ -46,6 +55,9 @@ class CategoryController extends AbstractController
      * @Route("/categories", name="create_category", methods={"POST"})
      * @ParamConverter("category", converter="create_entity_Converter")
      * @IsGranted("ROLE_ADMIN")
+     * 
+     * @OA\Tag(name="Categories")
+     * @Security(name="Bearer")
      */
     public function createCategory(
         Category $category,
@@ -72,6 +84,9 @@ class CategoryController extends AbstractController
      * @Route("/categories/{id}", name="update_category", methods={"PUT"})
      * @ParamConverter("category", converter="update_entity_converter")
      * @IsGranted("ROLE_ADMIN")
+     * 
+     * @OA\Tag(name="Categories")
+     * @Security(name="Bearer")
      */
     public function updateCategory(
         Category $category,
@@ -93,6 +108,9 @@ class CategoryController extends AbstractController
      * @Route("/categories/{id}", name="delete_category", methods={"DELETE"})
      * @ParamConverter("category", class="App:category")
      * @IsGranted("ROLE_ADMIN")
+     * 
+     * @OA\Tag(name="Categories")
+     * @Security(name="Bearer")
      */
     public function deleteCategory(Category $category, EntityManagerInterface $em)
     {
