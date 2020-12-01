@@ -40,8 +40,8 @@ class ExperienceController extends AbstractController
      */
     public function readExperience(Experience $experience, CustomHateoasLinks $customLink): JsonResponse
     { 
-        $links = $customLink->createLink($experience);
-        return $this->json([$experience, ['_links' => $links]], JsonResponse::HTTP_OK);
+        $experienceAndLinks = $customLink->createLink($experience);
+        return $this->json($experienceAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**

@@ -28,10 +28,9 @@ class ProjectController extends AbstractController
             ->findAll();
         foreach($projects as $project)
         {
-            $links = $customLink->createLink($project);
-            $data [] = [$project, $links];
+            $objectsAndLinks [] = $customLink->createLink($project);
         }
-        return $this->json($data, JsonResponse::HTTP_OK);
+        return $this->json($objectsAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -42,8 +41,8 @@ class ProjectController extends AbstractController
      */
     public function readProject(Project $project, CustomHateoasLinks $customLink): JsonResponse
     {
-        $links = $customLink->createLink($project);
-        return $this->json([$project, ['_links' => $links]], JsonResponse::HTTP_OK);
+        $objectAndLinks = $customLink->createLink($project);
+        return $this->json($objectAndLinks, JsonResponse::HTTP_OK);
     }
     
     /**
