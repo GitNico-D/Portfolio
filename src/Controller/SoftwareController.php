@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Software;
+use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,12 +22,16 @@ class SoftwareController extends AbstractController
      * 
      * @Route("/softwares", name="get_software_list", methods={"GET"})
      */
-    public function readSoftwareList()
+    public function readSoftwareList(CustomHateoasLinks $customLink)
     {
         $softwares = $this->getDoctrine()
             ->getRepository(Software::class)
             ->findAll();
-        return $this->json($softwares, JsonResponse::HTTP_OK);
+        foreach($softwares as $software)
+        {
+            $softwaresAndLinks [] = $customLink->createLink($software);
+        }
+        return $this->json($softwaresAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -35,9 +40,10 @@ class SoftwareController extends AbstractController
      * @Route("/softwares/{id}", name="get_software", methods={"GET"})
      * @ParamConverter("software", class="App:software")
      */
-    public function readSoftware(Software $software)
+    public function readSoftware(Software $software, CustomHateoasLinks $customLink)
     {
-        return $this->json($software, JsonResponse::HTTP_OK);
+        $softwareAndLinks = $customLink->createLink($software);
+        return $this->json($softwareAndLinks, JsonResponse::HTTP_OK);
     }
 
     /** 
@@ -76,14 +82,16 @@ class SoftwareController extends AbstractController
     public function updateSoftware(
         Software $software,
         EntityManagerInterface $em,
-        ErrorValidator $errorValidator
+        ErrorValidator $errorValidator,
+        CustomHateoasLinks $customLink
     ): JsonResponse {
         $errors = $errorValidator->errorsViolations($software);
         if ($errors) {
             return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
+            $softwareAndLinks = $customLink->createLink($software);
             $em->flush($software);
-            return$this->json($software, JsonResponse::HTTP_OK);
+            return$this->json($softwareAndLinks, JsonResponse::HTTP_OK);
         }
     }
 

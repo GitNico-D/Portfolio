@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Skill;
+use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,12 +22,16 @@ class SkillController extends AbstractController
      * 
      * @Route("/skills", name="get_skill_list", methods={"GET"})
      */
-    public function readSkillList()
+    public function readSkillList(CustomHateoasLinks $customLink)
     {
         $skills = $this->getDoctrine()
             ->getRepository(Skill::class)
             ->findAll();
-        return $this->json($skills, JsonResponse::HTTP_OK);
+        foreach($skills as $skill)
+        {
+            $skillsAndLinks [] = $customLink->createLink($skill);
+        }
+        return $this->json($skillsAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -35,9 +40,10 @@ class SkillController extends AbstractController
      * @Route("/skills/{id}", name="get_skill", methods={"GET"})
      * @ParamConverter("skill", class="App:skill")
      */
-    public function readSkill(Skill $skill)
+    public function readSkill(Skill $skill, CustomHateoasLinks $customLink)
     {
-        return $this->json($skill, JsonResponse::HTTP_OK);
+        $skillAndLinks = $customLink->createLink($skill);
+        return $this->json($skillAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -76,14 +82,16 @@ class SkillController extends AbstractController
     public function updateSkill(
         Skill $skill,
         EntityManagerInterface $em,
-        ErrorValidator $errorValidator
+        ErrorValidator $errorValidator,
+        CustomHateoasLinks $customLink
     ): JsonResponse { 
         $errors = $errorValidator->errorsViolations($skill);
         if ($errors) {
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
-        } else {                    
+        } else {      
+            $skillAndLinks = $customLink->createLink($skill);              
             $em->flush($skill);
-            return $this->json($skill, JsonResponse::HTTP_OK);
+            return $this->json($skillAndLinks, JsonResponse::HTTP_OK);
         }
     }
 
