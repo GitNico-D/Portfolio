@@ -5,6 +5,7 @@ namespace App\Services;
 use ReflectionClass;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Creating custom Hateoas Links
@@ -17,10 +18,14 @@ class CustomHateoasLinks
     /**
      *
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, RouterInterface $routerInterface)
+    public function __construct(
+        UrlGeneratorInterface $urlGenerator, 
+        RouterInterface $routerInterface, 
+        SerializerInterface $serializer)
     {
         $this->urlGenerator = $urlGenerator;
         $this->routerInterface = $routerInterface;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -30,37 +35,20 @@ class CustomHateoasLinks
     {
         $reflectionEntity = new ReflectionClass($entity);
         $entityName = strtolower($reflectionEntity->getShortName());
-        $finalLinks = [];
-        if ($entityName === "project") {
-            $links = $this->generateHrefLinks($this->routesList("project"), $entity);
-        } elseif ($entityName === "experience") {
-            $links = $this->generateHrefLinks($this->routesList("experience"), $entity);
-        } elseif ($entityName === "education") {
-            $links = $this->generateHrefLinks($this->routesList("education"), $entity);
-        } elseif ($entityName === "category") {
-            $links = $this->generateHrefLinks($this->routesList("education"), $entity);
-        } elseif ($entityName === "skill") {
-            $links = $this->generateHrefLinks($this->routesList("education"), $entity);
-        } elseif ($entityName === "software") {
-            $links = $this->generateHrefLinks($this->routesList("education"), $entity);
-        }          
-        return $links;
+        $links = ["_links" => $this->generateLinks($this->routesList($entityName), $entity)];
+        $serializedEntity = $this->serializer->serialize($entity, 'json'); 
+        $objectAndLinks = $this->createObjectWithLinks($serializedEntity, $links);
+        return $objectAndLinks;
     }
 
     /**
-     * Create Self, Update ou Delete link according to the href
+     * Transform Entity on an array and merge links on this arrayEntity
      */
-    public function generateActionLinks(string $route, string $href)
+    public function createObjectWithLinks($serializedEntity, array $links)
     {
-        $actionLinks = [];
-        if (str_contains($route, "get")) {
-            $actionLinks["self"] = ["href" => $href];
-        } elseif (str_contains($route, "update")) {
-            $actionLinks["update"] = ["href" => $href];
-        } elseif (str_contains($route, "delete")) {
-            $actionLinks["delete"] = ["href" => $href];
-        } 
-        return $actionLinks;
+        $entityArray = json_decode($serializedEntity, true);
+        $objectAndLinks = array_merge($entityArray, $links);
+        return $objectAndLinks;
     }
 
     /**
@@ -87,7 +75,7 @@ class CustomHateoasLinks
     /**
      * Create href link of all methods entity controller
      */
-    public function generateHrefLinks(array $routesController, $entity)
+    public function generateLinks(array $routesController, $entity)
     {
         $linksList = [];
         foreach ($routesController as $routeController) {
@@ -96,7 +84,13 @@ class CustomHateoasLinks
                 ["id" => $entity->getId()],
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
-            $linksList [] = $this->generateActionLinks($routeController, $href);
+            if (str_contains($routeController, "get")) {
+                $linksList["self"] = ["href" => $href];
+            } elseif (str_contains($routeController, "update")) {
+                $linksList["udapte"] = ["href" => $href];
+            } elseif (str_contains($routeController, "delete")) {
+                $linksList["delete"] = ["href" => $href];
+            }
         }
         return $linksList;
     }
