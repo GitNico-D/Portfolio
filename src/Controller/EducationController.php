@@ -29,10 +29,9 @@ class EducationController extends AbstractController
             ->findAll();
         foreach($educations as $education)
         {
-            $links = $customLink->createLink($education);
-            $data [] = [$education, $links];
+            $educationsAndLinks [] = $customLink->createLink($education);
         }
-        return $this->json($data, JsonResponse::HTTP_OK);
+        return $this->json($educationsAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -43,8 +42,8 @@ class EducationController extends AbstractController
      */
     public function readEducation(Education $education, CustomHateoasLinks $customLink)
     {     
-        $links = $customLink->createLink($education);     
-        return $this->json([$education, ['_links' => $links]], JsonResponse::HTTP_OK);
+        $educationAndLinks = $customLink->createLink($education);   
+        return $this->json($educationAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -90,9 +89,9 @@ class EducationController extends AbstractController
         if ($errors) {
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
-            $links = $customLink->createLink($education); 
+            $educationAndLinks = $customLink->createLink($education);
             $em->flush($education);
-            return $this->json([$education, ['_links' => $links]], JsonResponse::HTTP_OK);
+            return $this->json($educationAndLinks, JsonResponse::HTTP_OK);
         }
     } 
 

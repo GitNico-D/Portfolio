@@ -30,10 +30,9 @@ class ExperienceController extends AbstractController
             ->findAll();
         foreach($experiences as $experience)
         {
-            $links = $customLink->createLink($experience);
-            $data [] = [$experience, $links];
+            $experiencesAndLinks [] = $customLink->createLink($experience);
         }
-        return $this->json($experiences, JsonResponse::HTTP_OK);
+        return $this->json($experiencesAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -44,8 +43,8 @@ class ExperienceController extends AbstractController
      */
     public function readExperience(Experience $experience, CustomHateoasLinks $customLink): JsonResponse
     { 
-        $links = $customLink->createLink($experience);
-        return $this->json([$experience, ['_links' => $links]], JsonResponse::HTTP_OK);
+        $experienceAndLinks = $customLink->createLink($experience);
+        return $this->json($experienceAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -92,9 +91,9 @@ class ExperienceController extends AbstractController
         if ($errors) {
             return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
-            $links = $customLink->createLink($experience);
+            $experienceAndLinks = $customLink->createLink($experience);
             $em->flush($experience);
-            return$this->json([$experience, ['_links' => $links]], JsonResponse::HTTP_OK);
+            return$this->json($experienceAndLinks, JsonResponse::HTTP_OK);
         }
     }
     
