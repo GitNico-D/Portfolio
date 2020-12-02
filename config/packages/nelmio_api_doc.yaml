@@ -4,7 +4,7 @@ nelmio_api_doc:
             title: Portfolio API
             version: 1.0.0
         servers:
-          - url: http://portfolio/
+          - url: http://portfolio/api
         paths:
             /categories:
                 get:
@@ -20,25 +20,134 @@ nelmio_api_doc:
                     summary: Create a new Category
                     tags: 
                         - Categories
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: ID of an Category resource
+                          required: true
+                          schema:
+                            type: integer 
                     responses:
                         '200':
                             description: Successful response
                             content:
-                                application/json:
+                                application/json: {}
             /categories/{id}:
                 get:
-                    summary: Return a Categories by his {id}
+                    summary: Return a Category by his {id}
                     tags: 
                         - Categories
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: ID of education that needs to be updated
+                          required: true
+                          schema:
+                            type: integer
                     responses:
                         '200':
                             description: Successful response
                             content:
                                 application/json:
                 put:
+                    summary: Updated an existing Category by his {id}
+                    tags: 
+                        - Categories
+                    requestBody:
+                        content:
+                            'application/json':
+                                schema:
+                                    properties:
+                                        name:
+                                            description: Updated name of the category
+                                            type: string
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: ID of education that needs to be updated
+                          required: true
+                          schema:
+                            type: integer
+                        - name: name
+                          in: query 
+                          description: Updated name of the category
+                          required: true
+                          schema:
+                            type: string
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: {}
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: {}
+                delete:
                     summary: Modidy an existing Category by his {id}
                     tags: 
                         - Categories
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json:
+            /educations:
+                get:
+                    summary: List all Educations
+                    tags: 
+                        - Educations
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json:
+                post:
+                    summary: Create a new Educations
+                    tags: 
+                        - Educations
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json:
+            /educations/{id}:
+                get:
+                    summary: Return a Educations by his {id}
+                    tags: 
+                        - Educations
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: ID of an education resource
+                          required: true
+                          schema:
+                            type: integer 
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json:
+                put:
+                    summary: Modidy an existing Education by his {id}
+                    tags: 
+                        - Educations
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: ID of education that needs to be updated
+                          required: true
+                          schema:
+                            type: integer    
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json:
+                delete:
+                    summary: Modidy an existing Education by his {id}
+                    tags: 
+                        - Educations
                     responses:
                         '200':
                             description: Successful response
