@@ -6,9 +6,6 @@ use App\Entity\Education;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -24,9 +21,6 @@ class EducationController extends AbstractController
      * GET an Education resources list
      * 
      * @Route("/educations", name="get_education_list", methods={"GET"})
-     * 
-     * @OA\Tag(name="Educations")
-     * @Security(name="Bearer")
      */
     public function readEducationList()
     {
@@ -41,9 +35,6 @@ class EducationController extends AbstractController
      * 
      * @Route("/educations/{id}", name="get_education", methods={"GET"})
      * @ParamConverter("education", class="App:education")
-     * 
-     * @OA\Tag(name="Educations")
-     * @Security(name="Bearer")
      */
     public function readEducation(Education $education, CustomHateoasLinks $customLink)
     {     
@@ -57,9 +48,6 @@ class EducationController extends AbstractController
      * @Route("/educations", name="create_education", methods={"POST"})
      * @ParamConverter("education", converter="create_entity_Converter")
      * @IsGranted("ROLE_ADMIN")
-     * 
-     * @OA\Tag(name="Educations")
-     * @Security(name="Bearer")
      */
     public function createEducation(
         Education $education,
@@ -86,9 +74,6 @@ class EducationController extends AbstractController
      * @Route("/educations/{id}", name="update_education", methods={"PUT"})
      * @ParamConverter("education", converter="update_entity_converter")
      * @IsGranted("ROLE_ADMIN")
-     * 
-     * @OA\Tag(name="Educations")
-     * @Security(name="Bearer")
      */
     public function updateEducation(
         Education $education,
@@ -110,9 +95,6 @@ class EducationController extends AbstractController
      * @Route("/educations/{id}", name="delete_education", methods={"DELETE"})
      * @ParamConverter("education", class="App:education")
      * @IsGranted("ROLE_ADMIN")
-     * 
-     * @OA\Tag(name="Educations")
-     * @Security(name="Bearer")
      */
     public function deleteEducation(Education $education, EntityManagerInterface $em)
     {

@@ -5,9 +5,6 @@ namespace App\Controller;
 use App\Entity\Skill;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -23,9 +20,6 @@ class SkillController extends AbstractController
      * GET a Skill resources list
      * 
      * @Route("/skills", name="get_skill_list", methods={"GET"})
-     * 
-     * @OA\Tag(name="Skills")
-     * @Security(name="Bearer")
      */
     public function readSkillList()
     {
@@ -40,9 +34,6 @@ class SkillController extends AbstractController
      * 
      * @Route("/skills/{id}", name="get_skill", methods={"GET"})
      * @ParamConverter("skill", class="App:skill")
-     * 
-     * @OA\Tag(name="Skills")
-     * @Security(name="Bearer")
      */
     public function readSkill(Skill $skill)
     {
@@ -55,9 +46,6 @@ class SkillController extends AbstractController
      * @Route("/skills", name="create_skill", methods={"POST"})
      * @ParamConverter("skill", converter="create_entity_Converter")
      * @IsGranted("ROLE_ADMIN")
-     * 
-     * @OA\Tag(name="Skills")
-     * @Security(name="Bearer")
      */
     public function createSkill(
         Skill $skill, 
@@ -84,9 +72,6 @@ class SkillController extends AbstractController
      * @Route("/skills/{id}", name="update_skill", methods={"PUT"})
      * @ParamConverter("project", converter="update_entity_converter")
      * @IsGranted("ROLE_ADMIN")
-     * 
-     * @OA\Tag(name="Skills")
-     * @Security(name="Bearer")
      */
     public function updateSkill(
         Skill $skill,
@@ -108,9 +93,6 @@ class SkillController extends AbstractController
      * @Route("/skills/{id}", name="delete_skills", methods={"DELETE"})
      * @ParamConverter("skill", class="App:skill")
      * @IsGranted("ROLE_ADMIN")
-     * 
-     * @OA\Tag(name="Skills")
-     * @Security(name="Bearer")
      */
     public function deleteSkill(Skill $skill, EntityManagerInterface $em)
     {

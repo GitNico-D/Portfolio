@@ -5,9 +5,6 @@ namespace App\Controller;
 use App\Entity\Software;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -23,9 +20,6 @@ class SoftwareController extends AbstractController
      * GET a Software resources list
      * 
      * @Route("/softwares", name="get_software_list", methods={"GET"})
-     * 
-     * @OA\Tag(name="Softwares")
-     * @Security(name="Bearer")
      */
     public function readSoftwareList()
     {
@@ -40,9 +34,6 @@ class SoftwareController extends AbstractController
      * 
      * @Route("/softwares/{id}", name="get_software", methods={"GET"})
      * @ParamConverter("software", class="App:software")
-     * 
-     * @OA\Tag(name="Softwares")
-     * @Security(name="Bearer")
      */
     public function readSoftware(Software $software)
     {
@@ -55,9 +46,6 @@ class SoftwareController extends AbstractController
      * @Route("/softwares", name="create_software", methods={"POST"})
      * @ParamConverter("software", converter="create_entity_Converter")
      * @IsGranted("ROLE_ADMIN")
-     * 
-     * @OA\Tag(name="Softwares")
-     * @Security(name="Bearer")
      */
     public function createSoftware(
         Software $software,
@@ -84,9 +72,6 @@ class SoftwareController extends AbstractController
      * @Route("/softwares/{id}", name="update_software", methods={"PUT"})
      * @ParamConverter("software", converter="update_entity_converter")
      * @IsGranted("ROLE_ADMIN")
-     * 
-     * @OA\Tag(name="Softwares")
-     * @Security(name="Bearer")
      */
     public function updateSoftware(
         Software $software,
@@ -108,9 +93,6 @@ class SoftwareController extends AbstractController
      * @Route("/softwares/{id}", name="delete_software", methods={"DELETE"})
      * @ParamConverter("software", class="App:software")
      * @IsGranted("ROLE_ADMIN")
-     * 
-     * @OA\Tag(name="Softwares")
-     * @Security(name="Bearer")
      */
     public function deleteSoftware(Software $software, EntityManagerInterface $em)
     {
