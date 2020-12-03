@@ -6,159 +6,893 @@ nelmio_api_doc:
         servers:
           - url: http://portfolio/api
         paths:
-            /categories:
+            /projects:
                 get:
-                    summary: List all Categories
+                    summary: List all Project
                     tags: 
-                        - Categories
+                        - Projects
+                    description: ''
                     responses:
                         '200':
                             description: Successful response
                             content:
-                                application/json:
+                                application/json: 
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Project'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
                 post:
-                    summary: Create a new Category
+                    summary: Add a new Project
                     tags: 
-                        - Categories
-                    parameters:
-                        - name: id
-                          in: query 
-                          description: ID of an Category resource
-                          required: true
-                          schema:
-                            type: integer 
+                        - Projects
+                    requestBody:
+                        description: "**Project** that need to be added"
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Project'
+                        required: true
                     responses:
-                        '200':
-                            description: Successful response
-                            content:
-                                application/json: {}
-            /categories/{id}:
-                get:
-                    summary: Return a Category by his {id}
-                    tags: 
-                        - Categories
-                    parameters:
-                        - name: id
-                          in: query 
-                          description: ID of education that needs to be updated
-                          required: true
-                          schema:
-                            type: integer
-                    responses:
-                        '200':
-                            description: Successful response
+                        '201':
+                            description: "New **Project** resource created"
                             content:
                                 application/json:
-                put:
-                    summary: Updated an existing Category by his {id}
+                                    schema:
+                                        $ref: '#/components/schemas/Project'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '400':
+                            description: Syntax error, Validations errors of fields, Wrong attributes
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
+            /projects/{id}:
+                get:
+                    summary: Return a Project by his ID
                     tags: 
-                        - Categories
-                    requestBody:
-                        content:
-                            'application/json':
-                                schema:
-                                    properties:
-                                        name:
-                                            description: Updated name of the category
-                                            type: string
+                        - Projects
                     parameters:
                         - name: id
                           in: query 
-                          description: ID of education that needs to be updated
+                          description: "**ID** of project resource. *Example: 5,11.*"
                           required: true
                           schema:
                             type: integer
-                        - name: name
-                          in: query 
-                          description: Updated name of the category
-                          required: true
-                          schema:
-                            type: string
                     responses:
                         '200':
                             description: Successful response
                             content:
-                                application/json: {}
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Project'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '404':
+                            description: Resource **Project** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                put:
+                    summary: Updated an existing Project by his {id}
+                    tags: 
+                        - Projects
+                    requestBody:
+                        description: Project that need to be added
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Project'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Project'
                         '404':
                             description: Resource not found
                             content:
-                                application/json: {}
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
                 delete:
-                    summary: Modidy an existing Category by his {id}
+                    summary: Delete an existing Project
                     tags: 
-                        - Categories
+                        - Projects
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: "**ID** of project resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
                     responses:
                         '200':
-                            description: Successful response
+                            description: " **Project** Resource id deleted"
                             content:
-                                application/json:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/SuccessMessage'
+                        '404':
+                            description: Resource **Project** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
             /educations:
                 get:
                     summary: List all Educations
                     tags: 
                         - Educations
+                    description: ''
                     responses:
                         '200':
                             description: Successful response
                             content:
-                                application/json:
+                                application/json: 
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Education'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
                 post:
-                    summary: Create a new Educations
+                    summary: Add a new Education
                     tags: 
                         - Educations
+                    requestBody:
+                        description: "**Education** that need to be added"
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Education'
+                        required: true
                     responses:
-                        '200':
-                            description: Successful response
+                        '201':
+                            description: "New **Education** resource created"
                             content:
                                 application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Education'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '400':
+                            description: Syntax error, Validations errors of fields, Wrong attributes
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
             /educations/{id}:
                 get:
-                    summary: Return a Educations by his {id}
+                    summary: Return a Educations by his ID
                     tags: 
-                        - Educations
+                        - Educationss
                     parameters:
                         - name: id
                           in: query 
-                          description: ID of an education resource
+                          description: "**ID** of Educations resource. *Example: 5,11.*"
                           required: true
                           schema:
-                            type: integer 
+                            type: integer
                     responses:
                         '200':
                             description: Successful response
                             content:
-                                application/json:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Educations'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '404':
+                            description: Resource **Educations** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
                 put:
-                    summary: Modidy an existing Education by his {id}
+                    summary: Updated an existing Educations by his {id}
                     tags: 
-                        - Educations
+                        - Educationss
+                    requestBody:
+                        description: Educations that need to be added
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Educations'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Educations'
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
+                delete:
+                    summary: Delete an existing Educations
+                    tags: 
+                        - Educationss
                     parameters:
                         - name: id
                           in: query 
-                          description: ID of education that needs to be updated
+                          description: "**ID** of Educations resource. *Example: 5,11.*"
                           required: true
                           schema:
-                            type: integer    
+                            type: integer
                     responses:
                         '200':
-                            description: Successful response
+                            description: " **Educations** Resource id deleted"
                             content:
-                                application/json:
-                delete:
-                    summary: Modidy an existing Education by his {id}
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/SuccessMessage'
+                        '404':
+                            description: Resource **Educations** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+            /experience:
+                get:
+                    summary: List all Experiences
                     tags: 
-                        - Educations
+                        - Experiences
+                    description: ''
                     responses:
                         '200':
                             description: Successful response
                             content:
+                                application/json: 
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Experience'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                post:
+                    summary: Add a new Experience
+                    tags: 
+                        - Experiences
+                    requestBody:
+                        description: "**Experience** that need to be added"
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Experience'
+                        required: true
+                    responses:
+                        '201':
+                            description: "New **Experience** resource created"
+                            content:
                                 application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Experience'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '400':
+                            description: Syntax error, Validations errors of fields, Wrong attributes
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
+            /experience/{id}:
+                get:
+                    summary: Return a Experience by his ID
+                    tags: 
+                        - Experiences
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: "**ID** of Experience resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Experience'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '404':
+                            description: Resource **Experience** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                put:
+                    summary: Updated an existing Experience by his {id}
+                    tags: 
+                        - Experiences
+                    requestBody:
+                        description: Experience that need to be added
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Experience'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Experience'
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
+                delete:
+                    summary: Delete an existing Experience
+                    tags: 
+                        - Experiences
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: "**ID** of Experience resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: " **Experience** Resource id deleted"
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/SuccessMessage'
+                        '404':
+                            description: Resource **Experience** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+            /categories:
+                get:
+                    summary: List all Categories
+                    tags: 
+                        - categories
+                    description: ''
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Category'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                post:
+                    summary: Add a new Category
+                    tags: 
+                        - categories
+                    requestBody:
+                        description: "**Category** that need to be added"
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Category'
+                        required: true
+                    responses:
+                        '201':
+                            description: "New **Category** resource created"
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Category'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '400':
+                            description: Syntax error, Validations errors of fields, Wrong attributes
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
+            /categories/{id}:
+                get:
+                    summary: Return a Categories by his ID
+                    tags: 
+                        - Categories
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Category'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '404':
+                            description: Resource **Category** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                put:
+                    summary: Updated an existing Category by his {id}
+                    tags: 
+                        - Category
+                    requestBody:
+                        description: Category that need to be added
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Category'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Category'
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
+                delete:
+                    summary: Delete an existing Category
+                    tags: 
+                        - Categories
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: " **Category** Resource id deleted"
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/SuccessMessage'
+                        '404':
+                            description: Resource **Category** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+            /skill:
+                get:
+                    summary: List all Skills
+                    tags: 
+                        - Skills
+                    description: ''
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Skill'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                post:
+                    summary: Add a new Skill
+                    tags: 
+                        - Skills
+                    requestBody:
+                        description: "**Skill** that need to be added"
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Skill'
+                        required: true
+                    responses:
+                        '201':
+                            description: "New **Skill** resource created"
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Skill'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '400':
+                            description: Syntax error, Validations errors of fields, Wrong attributes
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
+            /skills/{id}:
+                get:
+                    summary: Return a Skill by his ID
+                    tags: 
+                        - Skills
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: "**ID** of Skill resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Skill'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '404':
+                            description: Resource **Skill** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                put:
+                    summary: Updated an existing Skill by his {id}
+                    tags: 
+                        - Skills
+                    requestBody:
+                        description: Skill that need to be added
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Skill'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Skill'
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
+                delete:
+                    summary: Delete an existing Skill
+                    tags: 
+                        - Skills
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: "**ID** of Skill resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: " **Skill** Resource id deleted"
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/SuccessMessage'
+                        '404':
+                            description: Resource **Skill** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+            /software:
+                get:
+                    summary: List all Softwares
+                    tags: 
+                        - Softwares
+                    description: ''
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Software'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                post:
+                    summary: Add a new Software
+                    tags: 
+                        - Softwares
+                    requestBody:
+                        description: "**Software** that need to be added"
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Software'
+                        required: true
+                    responses:
+                        '201':
+                            description: "New **Software** resource created"
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Software'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '400':
+                            description: Syntax error, Validations errors of fields, Wrong attributes
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
+            /softwares/{id}:
+                get:
+                    summary: Return a Software by his ID
+                    tags: 
+                        - Softwares
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: "**ID** of Software resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Software'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                        '404':
+                            description: Resource **Software** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                put:
+                    summary: Updated an existing Software by his {id}
+                    tags: 
+                        - Softwares
+                    requestBody:
+                        description: Software that need to be added
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Software'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Software'
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorMessage'
+                delete:
+                    summary: Delete an existing Software
+                    tags: 
+                        - Softwares
+                    parameters:
+                        - name: id
+                          in: query 
+                          description: "**ID** of Software resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: " **Software** Resource id deleted"
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/SuccessMessage'
+                        '404':
+                            description: Resource **Software** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/ErrorStatusMessage'
         components:
             securitySchemes:
                 Bearer:
                     type: http
                     scheme: bearer
                     bearerFormat: JWT
+            schemas:
+                Project:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                        description:
+                            type: string
+                        url: 
+                            type: string
+                        img_static:
+                            type: string
+                        img_hover:
+                            type: string
+                        alt_static:
+                            type: string
+                        alt_hover:
+                            type: string
+                        creation_date:
+                            type: string
+                    required:
+                        - id
+                        - name                
+                Education:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        title:
+                            type: string
+                        school:
+                            type: string
+                        city: 
+                            type: string
+                        start_date:
+                            type: string
+                Experience:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                        description:
+                            type: string
+                        company: 
+                            type: string
+                        logo_company:
+                            type: string
+                        start_date:
+                            type: string
+                        end_date:
+                            type: string
+                Category:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                Skill:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                        icon:
+                            type: string
+                        description:
+                            type: string
+                        knowledge_level: 
+                            type: integer
+                Software:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                        icon:
+                            type: string
+                SuccessMessage:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                ErrorMessage:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                ErrorStatusMessage:
+                    type: object
+                    properties:
+                        status:
+                            type: integer
+                        message:
+                            type: string
         security:
             - Bearer: []
     areas: # to filter documented areas
