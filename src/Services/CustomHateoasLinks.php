@@ -34,19 +34,19 @@ class CustomHateoasLinks
         $reflectionEntity = new ReflectionClass($entity);
         $entityName = strtolower($reflectionEntity->getShortName());
         $links = ["_links" => $this->generateLinks($this->routesList($entityName), $entity)];
-        $serializedEntity = $this->serializer->serialize($entity, 'json'); 
-        $objectAndLinks = $this->createObjectWithLinks($serializedEntity, $links);
-        return $objectAndLinks;
+        return $this->createObjectWithLinks($entity, $links);
     }
 
     /**
      * Transform Entity on an array and merge links on this arrayEntity
      */
-    public function createObjectWithLinks($serializedEntity, array $links)
+    public function createObjectWithLinks($entity, array $links)
     {
-        $entityArray = json_decode($serializedEntity, true);
-        $objectAndLinks = array_merge($entityArray, $links);
-        return $objectAndLinks;
+        $entityConverted = json_decode(
+            $this->serializer->serialize($entity, 'json'),
+            true
+        );
+        return array_merge($entityConverted, $links);
     }
 
     /**
