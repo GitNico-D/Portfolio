@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Symfony\Component\Serializer\SerializerInterface;
 use ReflectionClass;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -14,6 +15,7 @@ class CustomHateoasLinks
 {
     private $urlGenerator;
     private $routerInterface;
+    private $serializer;
 
     /**
      *
@@ -70,7 +72,7 @@ class CustomHateoasLinks
     }
 
     /**
-     * Create href link of all methods entity controller
+     * Create the list of link corresponding to route and entity
      */
     public function generateLinks(array $routesController, $entity)
     {
