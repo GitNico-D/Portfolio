@@ -58,11 +58,13 @@ class CustomHateoasLinks
             $controllersList = $params->getDefaults();
             if (isset($controllersList['_controller'])) {
                 $controllerAction = explode("::", $controllersList['_controller']);
-                $action = $controllerAction[1];
-                if ((!str_contains($action, "List")) && (!str_contains($action, "create"))) {
-                    if (str_contains($route, $entityName)) {
-                        $routesList [] = $route;
-                    } 
+                if (!str_contains($controllerAction[0], "nelmio")) {
+                    $action = $controllerAction[1];
+                    if ((!str_contains($action, "List")) && (!str_contains($action, "create"))) {
+                        if (str_contains($route, $entityName)) {
+                            $routesList [] = $route;
+                        } 
+                    }
                 }
             }
         }
