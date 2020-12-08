@@ -28,8 +28,11 @@ class ExperienceController extends AbstractController
         $experiences = $this->getDoctrine()
             ->getRepository(Experience::class)
             ->findAll();
-        $customLink->createLink($request, $experiences);
-        return $this->json($experiences, JsonResponse::HTTP_OK);
+        foreach($experiences as $experience)
+        {
+            $experiencesAndLinks [] = $customLink->createLink($experience);
+        }
+        return $this->json($experiencesAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -80,15 +83,17 @@ class ExperienceController extends AbstractController
     public function updateExperience(
         Experience $experience,
         EntityManagerInterface $em,
-        ErrorValidator $errorValidator
+        ErrorValidator $errorValidator,
+        CustomHateoasLinks $customLink
         ): JsonResponse
     {       
         $errors = $errorValidator->errorsViolations($experience);
         if ($errors) {
             return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
+            $experienceAndLinks = $customLink->createLink($experience);
             $em->flush($experience);
-            return$this->json($experience, JsonResponse::HTTP_OK);
+            return$this->json($experienceAndLinks, JsonResponse::HTTP_OK);
         }
     }
     

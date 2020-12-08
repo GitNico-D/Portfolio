@@ -6,6 +6,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use ReflectionClass;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Creating custom Hateoas Links
@@ -19,7 +20,10 @@ class CustomHateoasLinks
     /**
      *
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, RouterInterface $routerInterface, SerializerInterface $serializer)
+    public function __construct(
+        UrlGeneratorInterface $urlGenerator, 
+        RouterInterface $routerInterface, 
+        SerializerInterface $serializer)
     {
         $this->urlGenerator = $urlGenerator;
         $this->routerInterface = $routerInterface;
@@ -42,11 +46,8 @@ class CustomHateoasLinks
      */
     public function createObjectWithLinks($entity, array $links)
     {
-        $entityConverted = json_decode(
-            $this->serializer->serialize($entity, 'json'),
-            true
-        );
-        return array_merge($entityConverted, $links);
+        $entityArray = json_decode($this->serializer->serialize($entity, 'json'), true );
+        return array_merge($entityArray, $links);
     }
 
     /**

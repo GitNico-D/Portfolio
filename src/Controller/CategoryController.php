@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,12 +22,16 @@ class CategoryController extends AbstractController
      * 
      * @Route("/categories", name="get_category_list", methods={"GET"})
      */
-    public function readCategoryList()
+    public function readCategoryList(CustomHateoasLinks $customLink)
     {
         $categories = $this->getDoctrine()
             ->getRepository(Category::class)
             ->findAll();
-        return $this->json($categories, JsonResponse::HTTP_OK);
+        foreach($categories as $category)
+        {
+            $categoriesAndLinks [] = $customLink->createLink($category);
+        }
+        return $this->json($categoriesAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -35,9 +40,10 @@ class CategoryController extends AbstractController
      * @Route("/categories/{id}", name="get_category", methods={"GET"})
      * @ParamConverter("category", class="App:category")
      */
-    public function readCategory(Category $category)
+    public function readCategory(Category $category, CustomHateoasLinks $customLink)
     {
-        return $this->json($category, JsonResponse::HTTP_OK);
+        $categoryAndLinks = $customLink->createLink($category);
+        return $this->json($categoryAndLinks, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -76,14 +82,16 @@ class CategoryController extends AbstractController
     public function updateCategory(
         Category $category,
         EntityManagerInterface $em,
-        ErrorValidator $errorValidator
+        ErrorValidator $errorValidator,
+        CustomHateoasLinks $customLink
     ): JsonResponse {
         $errors = $errorValidator->errorsViolations($category);
         if ($errors) {
            return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
+            $categoryAndLinks = $customLink->createLink($category);
             $em->flush($category);
-           return$this->json($category, JsonResponse::HTTP_OK);
+           return$this->json($categoryAndLinks, JsonResponse::HTTP_OK);
         }
     }
 
