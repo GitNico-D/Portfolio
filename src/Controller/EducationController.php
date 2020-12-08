@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Education;
+use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +22,7 @@ class EducationController extends AbstractController
      * 
      * @Route("/educations", name="get_education_list", methods={"GET"})
      */
-    public function readEducationlist()
+    public function readEducationList()
     {
         $educations = $this->getDoctrine()
             ->getRepository(Education::class)
@@ -35,9 +36,10 @@ class EducationController extends AbstractController
      * @Route("/educations/{id}", name="get_education", methods={"GET"})
      * @ParamConverter("education", class="App:education")
      */
-    public function readEducation(Education $education)
-    {          
-        return $this->json($education, JsonResponse::HTTP_OK);
+    public function readEducation(Education $education, CustomHateoasLinks $customLink)
+    {     
+        $links = $customLink->createLink($education);     
+        return $this->json([$education, ['_links' => $links]], JsonResponse::HTTP_OK);
     }
 
     /**
