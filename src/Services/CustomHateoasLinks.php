@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Symfony\Component\Serializer\SerializerInterface;
 use ReflectionClass;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
