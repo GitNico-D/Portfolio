@@ -11,7 +11,7 @@
 /DOC/
 #idea
 .idea/
-
+/backend/
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
