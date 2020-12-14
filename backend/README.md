@@ -10,7 +10,7 @@ Symfony, composer
 
 ### DATABASE CONFIG
 
-Copy .env to .env.local and set DATABASE_URL with yout infos
+Copy .env to .env.local and set DATABASE_URL with your infos
 
 ### Installation commands
 ```
