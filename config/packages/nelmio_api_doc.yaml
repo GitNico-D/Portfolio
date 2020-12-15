@@ -26,7 +26,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Category
                     tags: 
@@ -50,13 +50,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '400':
                             description: Syntax error, Validations errors of fields, Wrong attributes
                             content:
                                 application/json:
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error400'
             /categories/{id}:
                 get:
                     summary: Return a Categories by his ID
@@ -81,13 +81,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '404':
                             description: Resource **Category** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated an existing Category by his {id}
                     tags: 
@@ -111,7 +111,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error401'
                 delete:
                     summary: Delete an existing Category
                     tags: 
@@ -129,13 +129,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/SuccessMessage'
+                                        $ref: '#/components/schemas/DeleteMessage'
                         '404':
                             description: Resource **Category** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
             /projects:
                 get:
                     summary: List all Project
@@ -156,7 +156,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Project
                     tags: 
@@ -180,21 +180,22 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '400':
                             description: Syntax error, Validations errors of fields, Wrong attributes
                             content:
                                 application/json:
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error400'
             /projects/{id}:
                 get:
                     summary: Return a Project by his ID
                     tags: 
                         - Projects
                     parameters:
-                        - name: id
-                          in: query 
+                        -
+                          name: id
+                          in: path 
                           description: "**ID** of project resource. *Example: 5,11.*"
                           required: true
                           schema:
@@ -211,13 +212,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '404':
                             description: Resource **Project** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated an existing Project by his {id}
                     tags: 
@@ -241,7 +242,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error404'
                 delete:
                     summary: Delete an existing Project
                     tags: 
@@ -259,13 +260,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/SuccessMessage'
+                                        $ref: '#/components/schemas/DeleteMessage'
                         '404':
                             description: Resource **Project** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
             /educations:
                 get:
                     summary: List all Educations
@@ -286,7 +287,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Education
                     tags: 
@@ -310,13 +311,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '400':
                             description: Syntax error, Validations errors of fields, Wrong attributes
                             content:
                                 application/json:
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error400'
             /educations/{id}:
                 get:
                     summary: Return a Educations by his ID
@@ -341,13 +342,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '404':
                             description: Resource **Education** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated an existing Education by his {id}
                     tags: 
@@ -371,7 +372,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error404'
                 delete:
                     summary: Delete an existing Education
                     tags: 
@@ -389,13 +390,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/SuccessMessage'
+                                        $ref: '#/components/schemas/DeleteMessage'
                         '404':
                             description: Resource **Education** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
             /experience:
                 get:
                     summary: List all Experiences
@@ -416,7 +417,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Experience
                     tags: 
@@ -440,13 +441,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '400':
                             description: Syntax error, Validations errors of fields, Wrong attributes
                             content:
                                 application/json:
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error400'
             /experience/{id}:
                 get:
                     summary: Return a Experience by his ID
@@ -471,13 +472,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '404':
                             description: Resource **Experience** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated an existing Experience by his {id}
                     tags: 
@@ -501,7 +502,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error404'
                 delete:
                     summary: Delete an existing Experience
                     tags: 
@@ -519,13 +520,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/SuccessMessage'
+                                        $ref: '#/components/schemas/DeleteMessage'
                         '404':
                             description: Resource **Experience** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
             /skill:
                 get:
                     summary: List all Skills
@@ -546,7 +547,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Skill
                     tags: 
@@ -570,13 +571,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '400':
                             description: Syntax error, Validations errors of fields, Wrong attributes
                             content:
                                 application/json:
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error400'
             /skills/{id}:
                 get:
                     summary: Return a Skill by his ID
@@ -601,13 +602,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '404':
                             description: Resource **Skill** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated an existing Skill by his {id}
                     tags: 
@@ -631,7 +632,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error404'
                 delete:
                     summary: Delete an existing Skill
                     tags: 
@@ -649,13 +650,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/SuccessMessage'
+                                        $ref: '#/components/schemas/DeleteMessage'
                         '404':
                             description: Resource **Skill** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
             /software:
                 get:
                     summary: List all Softwares
@@ -676,7 +677,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Software
                     tags: 
@@ -700,13 +701,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '400':
                             description: Syntax error, Validations errors of fields, Wrong attributes
                             content:
                                 application/json:
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error400'
             /softwares/{id}:
                 get:
                     summary: Return a Software by his ID
@@ -731,13 +732,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error401'
                         '404':
                             description: Resource **Software** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated an existing Software by his {id}
                     tags: 
@@ -761,7 +762,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorMessage'
+                                        $ref: '#/components/schemas/Error404'
                 delete:
                     summary: Delete an existing Software
                     tags: 
@@ -779,13 +780,13 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/SuccessMessage'
+                                        $ref: '#/components/schemas/DeleteMessage'
                         '404':
                             description: Resource **Software** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/ErrorStatusMessage'
+                                        $ref: '#/components/schemas/Error404'
         components:
             securitySchemes:
                 Bearer:
@@ -879,20 +880,53 @@ nelmio_api_doc:
                 SuccessMessage:
                     type: object
                     properties:
+                        status:
+                            type: int
                         message:
                             type: string
-                ErrorMessage:
+                    example: 
+                        status: 200
+                        message: 'Syntax error'
+                DeleteMessage:
                     type: object
                     properties:
+                        status:
+                            type: int
                         message:
                             type: string
-                ErrorStatusMessage:
+                    example: 
+                        status: 200
+                        message: "Resource 'ID' deleted"
+                Error400:
+                    type: object
+                    properties:
+                        status:
+                            type: int
+                        message:
+                            type: string
+                    example: 
+                        status: 400
+                        message: 'Syntax error'
+                Error401:
+                    type: object
+                    properties:
+                        status:
+                            type: int
+                        message:
+                            type: string
+                    example: 
+                        status: 401
+                        message: 'Unauthorized'
+                Error404:
                     type: object
                     properties:
                         status:
                             type: integer
                         message:
                             type: string
+                    example: 
+                        status: 404
+                        message: 'Resource ID not found'
         security:
             - Bearer: []
     areas: # to filter documented areas
