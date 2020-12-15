@@ -87,11 +87,11 @@ class CategoryController extends AbstractController
     ): JsonResponse {
         $errors = $errorValidator->errorsViolations($category);
         if ($errors) {
-           return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+            return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
             $categoryAndLinks = $customLink->createLink($category);
             $em->flush($category);
-           return$this->json($categoryAndLinks, JsonResponse::HTTP_OK);
+            return$this->json($categoryAndLinks, JsonResponse::HTTP_OK);
         }
     }
 
