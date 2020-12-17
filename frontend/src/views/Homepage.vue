@@ -5,7 +5,8 @@
                 BIENVENUE SUR MON PORTFOLIO !
             </h1>            
         </div>
-        <ButtonLink action="Mes Projets" class="bottomButtonPosition"/>
+        <ButtonLink action="Projets" class="bottomButtonPosition"/>
+        <ButtonLink action="Expériences" class="upButtonPosition"/>
     </b-container>
 </template>
 
@@ -37,7 +38,6 @@ export default {
     }
 }
 .bottomButtonPosition {
-    
     position: absolute;
     bottom: 0;
     left: 50%;
