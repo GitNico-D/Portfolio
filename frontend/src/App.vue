@@ -1,9 +1,9 @@
 <template>
 	<div id="app">
-		<nav id="nav">
+		<!-- <nav id="nav">
 			<router-link to="/">Homepage | </router-link>
 			<router-link to="/about">About</router-link>
-		</nav>
+		</nav> -->
 	<router-view />
 	</div>
 </template>
@@ -15,11 +15,6 @@
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
 	color: #2c3e50;
-}
-
-body {
-	background-image: linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);
-
 }
 
 #nav {
