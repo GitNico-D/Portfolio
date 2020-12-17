@@ -1,55 +1,43 @@
 <template>
     <b-container fluid class="background">
-        <div class="title">
-            <h1>
-                BIENVENUE !
+        <div class="d-flex title">
+            <h1 class="title-h1">
+                BIENVENUE SUR MON PORTFOLIO !
             </h1>            
         </div>
-        <BottomHomeButton action="Mes Projets" class="bottomButtonPosition"/>
-        <UpHomeButton action="Expérience Professionnelle" class="upButtonPosition" />
+        <ButtonLink action="Mes Projets" class="bottomButtonPosition"/>
     </b-container>
 </template>
 
 <script>
-import BottomHomeButton from "@/components/BottomHomeButton.vue"
-import UpHomeButton from "@/components/UpHomeButton.vue"
+import ButtonLink from "@/components/ButtonLink.vue"
 
 export default {
     name: "background",
     components: {
-        BottomHomeButton,
-        UpHomeButton
+        ButtonLink
     }
 }
 </script>
 
 <style lang="scss">
-// .curvedBackground {
-    // svg {
-        // display: block;
-    // }
-    // &-lower {
-        // position: relative;
-        // background: rgb(255,126,33);
-        // background: linear-gradient(90deg, rgba(255,166,102,1) 0%, rgba(254,225,127,1) 53%, rgba(201,123,252,1) 100%);
-        // border-radius: 50%/0 0 150px 30px;
-        // border-bottom: 2px solid black;
-        // overflow: hidden;
-        // padding: 25rem;
-    // }
-    // &-upper {
-        // position: relative;
-        // background: rgb(255,126,33);
-        // background: #fff;
-        // border-radius: 50%/0 0 150px 30px;
-        // border-bottom: 2px solid black;
-        // padding: 25rem;
-    // }
-// }
+.background {
+    background: no-repeat, linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486)!important;
+}
 .title {
-    height: 1040px;
+    min-height: 100vh;
+    &-h1 {
+        font-weight: 900!important;
+        color: #fff!important;
+        font-size: 4em!important;
+        letter-spacing: 0.10em!important;
+        text-shadow: 2px 3px 0px #898999;
+        width: 80%;
+        margin: auto;
+    }
 }
 .bottomButtonPosition {
+    
     position: absolute;
     bottom: 0;
     left: 50%;
