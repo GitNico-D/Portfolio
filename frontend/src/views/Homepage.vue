@@ -1,12 +1,12 @@
 <template>
-    <b-container fluid class="background">
-        <div class="d-flex title">
-            <h1 class="title-h1">
+    <b-container fluid>
+        <b-row>
+            <h1>
                 BIENVENUE SUR MON PORTFOLIO !
-            </h1>            
-        </div>
-        <ButtonLink action="Projets" class="bottomButtonPosition"/>
-        <ButtonLink action="Expériences" class="upButtonPosition"/>
+            </h1>    
+        </b-row>
+        <ButtonLink action="Projets" class="position bottomButton"/>
+        <ButtonLink action="Expériences" class="position upButton"/>
     </b-container>
 </template>
 
@@ -22,32 +22,35 @@ export default {
 </script>
 
 <style lang="scss">
-.background {
+@import "@/styles/scss/_variables.scss";
+
+.container-fluid {
     background: no-repeat, linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486)!important;
-}
-.title {
-    min-height: 100vh;
-    &-h1 {
-        font-weight: 900!important;
-        color: #fff!important;
-        font-size: 4em!important;
-        letter-spacing: 0.10em!important;
-        text-shadow: 2px 3px 0px #898999;
-        width: 80%;
-        margin: auto;
+    width: 100vh;
+    .row {
+        height: 100vh;
+        h1 {
+            font-weight: 900!important;
+            color: $white!important;
+            font-size: 4em!important;
+            letter-spacing: 0.10em!important;
+            text-shadow: 2px 3px 0px $gray-shadow;
+            width: 80%;
+            margin: auto;
+        }
     }
 }
-.bottomButtonPosition {
+.position {
     position: absolute;
-    bottom: 0;
     left: 50%;
-    transform: translate(-50%, -50%);
-}
-.upButtonPosition {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 50%);
+    &.upButton {
+        top: 0;
+        transform: translate(-50%, 50%);
+    }
+    &.bottomButton {
+        bottom: 0;
+        transform: translate(-50%, -50%);
+    }
 }
 </style>
 
