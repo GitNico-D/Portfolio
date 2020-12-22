@@ -23,6 +23,7 @@ export default {
 
 <style lang="scss">
 @import "@/styles/scss/_variables.scss";
+@import "@/styles/scss/_mixin.scss";
 
 .container-fluid {
     background: no-repeat, linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486)!important;
@@ -41,8 +42,7 @@ export default {
     }
 }
 .position {
-    position: absolute;
-    left: 50%;
+    @include positionX;
     &.upButton {
         top: 0;
         transform: translate(-50%, 50%);
