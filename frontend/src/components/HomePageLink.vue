@@ -1,7 +1,7 @@
 <template>
     <!-- <div class="linkBox"> -->
         <!-- <router-link to="/project" class="link link-border">{{ action }}</router-link> -->
-        <router-link class="animated-arrow">
+        <router-link :to=url class="animated-arrow">
             <span class="the-arrow -left">
                 <span class="shaft"></span>
             </span>
@@ -179,7 +179,7 @@ export default {
         transition: all 0.2s;
 
         .text {
-            font-family: "Oswald";
+            font-family: "Oswald", sans-serif;
             margin: 0 $text-arrow-space 0 0;
             line-height: 1;
         }
