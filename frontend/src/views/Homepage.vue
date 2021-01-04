@@ -5,23 +5,26 @@
                 BIENVENUE SUR MON PORTFOLIO !
             </h1>    
         </b-row>
-        <ButtonLink action="Projets" class="position bottomButton"/>
-        <ButtonLink action="Expériences" class="position upButton"/>
+        <HomePageLink action="Projets" url="/projects" class="position bottomButton"/>
+        <HomePageLink action="Expériences" url="/experiences" class="position upButton"/>
     </b-container>
 </template>
 
 <script>
-import ButtonLink from "@/components/ButtonLink.vue"
+// import ButtonLink from "@/components/ButtonLink.vue"
+import HomePageLink from "@/components/HomePageLink.vue"
 
 export default {
     name: "background",
     components: {
-        ButtonLink
+        // ButtonLink,
+        HomePageLink
     }
 }
 </script>
 
 <style lang="scss">
+
 .container-fluid {
     background: no-repeat, linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486)!important;
     width: 100vh;
