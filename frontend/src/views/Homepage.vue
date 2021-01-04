@@ -22,9 +22,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/styles/scss/_variables.scss";
-@import "@/styles/scss/_mixin.scss";
-
 .container-fluid {
     background: no-repeat, linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486)!important;
     width: 100vh;
