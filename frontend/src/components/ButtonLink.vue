@@ -15,7 +15,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/styles/scss/_variables.scss";
 
 .customButton {
 	border-radius: 50px!important;
