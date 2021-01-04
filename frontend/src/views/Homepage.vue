@@ -25,6 +25,7 @@ export default {
 .container-fluid {
     background: no-repeat, linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486)!important;
     width: 100vh;
+    position: relative;
     .row {
         height: 100vh;
         h1 {
