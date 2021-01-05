@@ -5,19 +5,17 @@
                 BIENVENUE SUR MON PORTFOLIO !
             </h1>    
         </b-row>
-        <HomePageLink action="Projets" url="/projects" class="position bottomButton"/>
-        <HomePageLink action="Expériences" url="/experiences" class="position upButton"/>
+        <HomePageLink action="Projets" url="/projects" direction="animated-arrowRtl" class="position bottomButton"/>
+        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="position upButton"/>
     </b-container>
 </template>
 
 <script>
-// import ButtonLink from "@/components/ButtonLink.vue"
 import HomePageLink from "@/components/HomePageLink.vue"
 
 export default {
     name: "background",
     components: {
-        // ButtonLink,
         HomePageLink
     }
 }
@@ -37,20 +35,21 @@ export default {
             font-size: 4em!important;
             letter-spacing: 0.10em!important;
             text-shadow: 2px 3px 0px $gray-shadow;
-            width: 80%;
+            width: 60%;
             margin: auto;
         }
     }
 }
 .position {
-    @include positionX;
+    // @include positionX;
+    position: absolute;
     &.upButton {
-        top: 0;
-        transform: translate(-50%, 50%);
+        top: 5%;
+        left: 7%;
     }
     &.bottomButton {
-        bottom: 0;
-        transform: translate(-50%, -50%);
+        right: 7%;
+        bottom: 5%;
     }
 }
 </style>
