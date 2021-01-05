@@ -1,6 +1,7 @@
 <template>
     <b-container fluid>
         <b-row>
+            <BackgroundAnimation />
             <h1>
                 BIENVENUE SUR MON PORTFOLIO !
             </h1>    
@@ -12,11 +13,13 @@
 
 <script>
 import HomePageLink from "@/components/HomePageLink.vue"
+import BackgroundAnimation from "@/components/BackgroundAnimation.vue"
 
 export default {
     name: "background",
     components: {
-        HomePageLink
+        HomePageLink,
+        BackgroundAnimation
     }
 }
 </script>
@@ -24,7 +27,7 @@ export default {
 <style lang="scss">
 
 .container-fluid {
-    background: no-repeat, linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486)!important;
+    // background: no-repeat, linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486)!important;
     width: 100vh;
     position: relative;
     .row {
