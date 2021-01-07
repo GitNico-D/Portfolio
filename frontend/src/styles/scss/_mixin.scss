@@ -3,3 +3,11 @@
 @mixin positionX {
     position: absolute;
 }
+
+@mixin customFont {
+    font-weight: 900!important;
+    font-size: 4rem!important;
+    letter-spacing: 0.10em!important;
+    text-shadow: 2px 3px 0px $gray-shadow;
+    margin: auto;
+}
