@@ -17,7 +17,6 @@
 
 <script>
 import gsap from 'gsap'
-const tl = gsap.timeline({ defaults: { ease: "power1.out"} })
 
 export default {
     name: "Transition",
@@ -27,11 +26,11 @@ export default {
         wordThree: String
     },
     mounted() {
-        tl.to(".text", { y: "0%", duration: 1, stagger: 0.25 });
-        tl.to(".slider", { y: "-100%", duration: 1.5, delay: 0.5 });
-        tl.to(".intro", { y: "-100%", duration: 1 }, "-=1.25");
+        gsap.timeline({defaults: { ease: "power1.out"}})
+            .to(".text", { y: "0%", duration: 1, stagger: 0.25 })
+            .to(".slider", { y: "-100%", duration: 1.5, delay: 0.5 })
+            .to(".intro", { y: "-100%", duration: 1 }, "-=1.25")
     }
-
 }
 </script>
 
@@ -56,22 +55,19 @@ export default {
     height: 100%;
     transform: translateY(100%);
 }
-
 .intro-text {
     @include customFont;
     color: rgb(233, 233, 233);
     font-family: "Montserrat", sans-serif;
-    font-size: 4.5rem!important;
-}
-
-.hide {
-    background: $green;
-    overflow: hidden;
-    width: 100%!important;
-}
-
-.hide span {
-    transform: translateY(100%);
-    display: inline-block;
+    font-size: 5.5rem!important;
+    .hide {
+        background: $green;
+        overflow: hidden;
+        width: 100%!important;
+    }
+    .hide span {
+        transform: translateY(100%);
+        display: inline-block;
+    }
 }
 </style>
