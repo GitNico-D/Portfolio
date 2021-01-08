@@ -13,10 +13,13 @@
                 <h2><span>Nicolas</span>,</h2> 
                 <h1>Développeur Web</h1>
             </div>    
+        <b-button variant="outline-success" class="menuButton">En savoir plus</b-button>
         </b-row>
         <Transition wordOne="Bienvenue" wordTwo="sur mon" wordThree="Portfolio" />
-        <HomePageLink action="Projets" url="/projects" direction="animated-arrowRtl" class="position bottomButton"/>
-        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="position upButton"/>
+        <HomePageLink action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right"/>
+        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowRtl" class="link link-left"/>
+        <HomePageLink action="Parcours" url="/career" direction="animated-arrowRtl" class="link link-top"/>
+        <HomePageLink action="Compétences" url="/skills" direction="animated-arrowRtl" class="link link-bottom"/>
     </b-container>
 </template>
 
@@ -69,8 +72,8 @@ export default {
         gsap.timeline()
             .from("#title h1", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "+=3")
             .from("#title h2", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "-=0.90")
-            .fromTo(".upButton", { opacity: 0 }, { opacity: 1, duration: 1 })
-            .fromTo(".bottomButton", { opacity: 0 }, { opacity: 1, duration: 1 }, "-=1")
+            .fromTo(".link", { opacity: 0 }, { opacity: 1, duration: 1 })
+            // .fromTo(".bottomButton", { opacity: 0 }, { opacity: 1, duration: 1 }, "-=1")
             .from(".circle", {
                 duration: 1,
                 scale: 0.5, 
@@ -101,11 +104,12 @@ export default {
             text-align: left;
             span {
                 color: $green;
-                text-shadow: 0px 0px 20px $green;
+                text-shadow: 0px 0px 5px $green;
             }
             h1 {
                 @include customFont;
                 color: $white!important;
+                text-shadow: 2px 3px 2px $green;
                 width: 85%;
             }
             h2 {
@@ -197,15 +201,32 @@ export default {
         to   { transform: translateY(calc(-100vh + -100%)) translateX(75%)}}
 
 }
-.position {
+.menuButton {
     position: absolute;
-    &.upButton {
-        top: 5%;
+    top: 60%;
+    left: 50%;
+}
+.link {
+    position: absolute;
+    &-left {
         left: 7%;
+        top: 5%;
     }
-    &.bottomButton {
-        right: 7%;
+    &-right {
+        right: 4%;
         bottom: 5%;
+    }
+    &-top {
+        transform-style: preserve-3d;
+        transform: rotateZ(-90deg);
+        right: 7%;
+        top: 15%;
+    }
+    &-bottom {
+        transform-style: preserve-3d;
+        transform: rotateZ(90deg);
+        left: 7%;
+        bottom: 17%;
     }
 }
 </style>
