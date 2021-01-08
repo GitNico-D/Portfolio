@@ -28,8 +28,8 @@ export default {
 //The Arrow rightToLeft
 .animated-arrowRtl {
     display: inline-block;
-    color: $purple;
-    font-size: 1.25em;
+    color: $green;
+    font-size: 2.25em;
     position: relative;
     transition: all 0.2s;
     .main {
@@ -46,26 +46,7 @@ export default {
         }
     }
     &:hover {
-        color: $white;
-        .the-arrow .-left {
-            .shaft {
-                width: $shaft-width;
-                transition-delay: 0.1s;
-                background-color: $white;
-                &:before,
-                &:after {
-                    width: $arrow-head-width;
-                    transition-delay: 0.1s;
-                    background-color: $white;
-                }
-                &:before {
-                    transform: rotate(40deg);
-                }
-                &:after {
-                    transform: rotate(-40deg);
-                }
-            }
-        }    
+        color: $white;  
         .main {
             transform: translateX($shaft-width + $text-arrow-space);            
             .the-arrow.-right {
@@ -92,28 +73,8 @@ export default {
     .the-arrow {
         width: $shaft-width;
         transition: all 0.2s;
-        &.-left {
-            position: absolute;
-            top: 60%;
-            left: 0;
-            .shaft {
-                width: 0;
-                background-color: $purple;        
-                &:before,
-                &:after {
-                    width: 0;
-                    background-color: $purple;
-                }
-                &:before {
-                    transform: rotate(0);
-                }
-                &:after {
-                    transform: rotate(0);
-                }
-            }
-        }
         &.-right {
-            top: 3px;
+            top: 6px;
             .shaft {
                 width: $shaft-width;
                 transition-delay: 0.2s;
@@ -133,7 +94,7 @@ export default {
             }
         }
         .shaft {
-            background-color: $purple;
+            background-color: $green;
             display: block;
             height: $shaft-thickness;
             position: relative;
@@ -142,7 +103,7 @@ export default {
             will-change: transform;
             &:before,
             &:after {
-                background-color: $purple;
+                background-color: $green;
                 content: '';
                 display: block;
                 height: $arrow-head-thickness;
@@ -161,11 +122,10 @@ export default {
         }
     }    
 }
-
 .animated-arrowLtr {
     display: inline-block;
-    color: $purple;
-    font-size: 1.25em;
+    color: $green;
+    font-size: 2.25em;
     position: relative;
     transition: all 0.2s;
     .main {
@@ -182,43 +142,20 @@ export default {
         }
     }
     &:hover {
-        color: $white;        
-        .the-arrow .-left {
-            .shaft {
-                width: 0;
-                transform: translateX(200%);
-                transition-delay: 0;                
-                &:before,
-                &:after {
-                    width: 0;
-                    transition-delay: 0;
-                    transition: all 0.1s;
-                }
-
-                &:before {
-                    transform: rotate(0);
-                }
-
-                &:after {
-                    transform: rotate(0);
-                }
-            }
-        }    
+        color: $white;  
         .main {
-            transform: translateX(-$shaft-width - $text-arrow-space);
+            transform: translateX($text-arrow-space - $shaft-width);
             .the-arrow.-right {
                 .shaft {
                     width: $shaft-width;
                     transition-delay: 0.1s;
                     background-color: $white;
-
                     &:before,
                     &:after {
                         width: $arrow-head-width;
                         transition-delay: 0.1s;
                         background-color: $white;
                     }
-
                     &:before {
                         transform: rotate(40deg);
                     }
@@ -227,95 +164,6 @@ export default {
                         transform: rotate(-40deg);
                     }
                 }                
-            }
-        }
-    }
-    .the-arrow {
-        width: $shaft-width;
-        transition: all 0.2s;
-        &.-left {
-            top: 3px;
-            .shaft {
-                width: $shaft-width;
-                transition-delay: 0.2s;
-                &:before,
-                &:after { 
-                    width: $arrow-head-width;
-                    transition-delay: 0.3s;
-                    transition: all 0.5s;
-                }        
-                &:before {
-                    transform: rotate(40deg);
-                }
-                
-                &:after {
-                    transform: rotate(-40deg);
-                }
-            }
-            // position: absolute;
-            // top: 60%;
-            // left: 0;
-            // .shaft {
-            //     width: 0;
-            //     background-color: $purple;        
-            //     &:before,
-            //     &:after {
-            //         width: 0;
-            //         background-color: $purple;
-            //     }
-            //     &:before {
-            //         transform: rotate(0);
-            //     }
-            //     &:after {
-            //         transform: rotate(0);
-            //     }
-            // }
-        }
-        // &.-right {
-            // top: 3px;
-            // .shaft {
-            //     width: $shaft-width;
-            //     transition-delay: 0.2s;
-            //     &:before,
-            //     &:after { 
-            //         width: $arrow-head-width;
-            //         transition-delay: 0.3s;
-            //         transition: all 0.5s;
-            //     }        
-            //     &:before {
-            //         transform: rotate(40deg);
-            //     }
-                
-            //     &:after {
-            //         transform: rotate(-40deg);
-            //     }
-            // }
-        // }
-        .shaft {
-            background-color: $purple;
-            display: block;
-            height: $shaft-thickness;
-            position: relative;
-            transition: all 0.2s;
-            transition-delay: 0;
-            will-change: transform;
-            &:before,
-            &:after {
-                background-color: $purple;
-                content: '';
-                display: block;
-                height: 1px;
-                position: absolute;
-                top: 0;
-                left: 0;
-                transition: all 0.2s;
-                transition-delay: 0;
-            }
-            &:before {
-                transform-origin: top left;
-            }
-            &:after {
-                transform-origin: bottom left;
             }
         }
     }
