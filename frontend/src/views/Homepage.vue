@@ -1,18 +1,15 @@
 <template>
     <b-container fluid>
-        <b-row id="circle" v-on:mousemove="mouseMove">
-            <div class="circle circle-blue" :style="{left: x, top: y, position: 'absolute'}">
-            </div>
-                <div>{{x}}, {{y}}</div>
+        <b-row id="circle" :style="style">
+            <div class="circle circle-blue" :style="translate"></div>
             <div class="circle circle-purple"></div>
             <div class="circle circle-green">
                 <div class="circle circle-littleGreen"></div>
-                <div class="circle circle-littleGreen2"></div>
             </div>
-            <div class="circle circle-purple2"></div>
+            <div class="circle circle-purple2" ></div>
             <div class="circle circle-green2"></div>
             <div class="circle circle-blue2"></div>
-            <div id="title">
+            <div id="title" v-on:mousemove="mouseMove" v-on:mouseleave="mouseLeave">
                 <h2><span>Nicolas</span>,</h2> 
                 <h1>Développeur Web</h1>
             </div>    
@@ -36,87 +33,83 @@ export default {
     },
     data() {
         return {
+            move: false,
             x: 0,
             y: 0
         }
     },
-    mounted() {
-        gsap.timeline()
-            // .from("#title h1", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "+=3")
-            // .from("#title h2", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "-=0.90")
-            // .fromTo(".upButton", { opacity: 0 }, { opacity: 1, duration: 1 })
-            // .fromTo(".bottomButton", { opacity: 0 }, { opacity: 1, duration: 1 }, "-=1")
-            // .from(".circle", {
-            //     duration: 1,
-            //     scale: 0.5,
-            //     rotation: 180, 
-            //     opacity: 0, 
-            //     // delay: 0.5,
-            //     stagger: 0.1, 
-            //     ease: "back", 
-            //     force3D: true
-            // }, "-=1.5")
-            // .fromTo(".circle-blue", { opacity: 0, scale: 0 }, { xPercent: 50, yPercent: 65, opacity: 1, rotation: 360, scale: 1, ease: "back", stagger: 0.1 }, "-=1")
-        // gsap.from(".circle-green", { rotation: 360, duration: 5, repeat: -1, ease: "none" })
+    computed: {
+        style() {
+            if(this.move) {
+                return {
+                    transform: `rotateX(${this.y}deg) rotateY(${this.x}deg)`
+                }
+            } else {
+                return { 
+                    transition: "all 0.5s ease",
+                    transform: `rotateX(0deg) rotateY(0deg)`
+                }
+            }
+        },
+        translate() {
+            return { transform: `translateZ(${this.x}px)`};
+        }
     },
     methods: {
-        // mouseEnter() {
-        // },
         mouseMove(event) {
-            this.y = event.clientY + "px";
-            this.x = event.clientX + "px";
-            
-            // this.rotateY(`${xAxis}deg`);
+            this.move = true;
+            this.y = (window.innerWidth / 2 - event.pageY) / 25;
+            this.x = (window.innerWidth / 2 - event.pageX) / 25;
+        },
+        mouseLeave() { 
+            this.move = false;      
         }
-        // mouseLeave() {
-        //     this.style.transform = `rotateY(0deg) rotateX(0deg)`
-            // circle = document.querySelectorAll(".circle");
-            
-            // document.getElementById("title").style.transition = "all 0.5s ease";
-            // document.getElementById("title").style.transform = `rotateY(0deg) rotateX(0deg)`;
-        // }
+    },
+    mounted() {
+        gsap.timeline()
+            .from("#title h1", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "+=3")
+            .from("#title h2", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "-=0.90")
+            .fromTo(".upButton", { opacity: 0 }, { opacity: 1, duration: 1 })
+            .fromTo(".bottomButton", { opacity: 0 }, { opacity: 1, duration: 1 }, "-=1")
+            .from(".circle", {
+                duration: 1,
+                scale: 0.5, 
+                opacity: 0, 
+                // delay: 0.5,
+                stagger: 0.3
+            }, "-=2")
+        // .fromTo(".circle-blue", { opacity: 0, scale: 0 }, { xPercent: 50, yPercent: 65, opacity: 1, rotation: 360, scale: 1, ease: "back", stagger: 0.1 }, "-=1")
+        // gsap.from(".circle-green", { rotation: 360, duration: 5, repeat: -1, ease: "none" })
     }
 }
 </script>
 
 <style lang="scss">
-
 .container-fluid {
-    // background: no-repeat, linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486)!important;
-    // background: linear-gradient(180deg, rgba(255,255,255,0.03405112044817926) 75%, rgba(218,218,218,0.773546918767507) 95%);
-    background-color: whitesmoke;
+    background-color: rgba(0,0,0, 0.9);
     width: 100vh;
     position: relative;
     perspective: 1000px;
-    #background {
-        position: relative;
-        left: 50%;
-        top: 0;
-        transform: translate(-50%, 0);
-        overflow: hidden;
-        width: 100%;
-        height: 100vh;
-    }
+    overflow: hidden;
     .row {
         height: 100vh;
-        h1 {
-            @include customFont;
-            color: $green!important;
-            width: 85%;
-            margin: auto;
-        }
-        h2 {
-            font-size: 2.5rem; 
-        }
         #title {
             @include customFont;
-            transform-style: preserve-3d;
             color: $white!important;
-            margin: auto;
+            line-height: 50px;
             width: 60%;
             text-align: left;
             span {
-                color: $purple;
+                color: $green;
+                text-shadow: 0px 0px 20px $green;
+            }
+            h1 {
+                @include customFont;
+                color: $white!important;
+                width: 85%;
+            }
+            h2 {
+                font-size: 2.5rem; 
             }
         }
     }
@@ -124,79 +117,87 @@ export default {
 .circle {
     position: absolute;
     border-radius: 100%;
-    transform-style: preserve-3d;
-    // transform: translate3d(0,0,0);
+    animation: circles 9.5s linear infinite;
     &-blue {
-        background-color: rgba(41,171,226,0.3);
+        background-color: rgba(41,171,226,1);
         width: 10vw;
         height: 10vw;
         top: 44%;
         left: 50%;
-        z-index: 1;
+        transform-style: preserve-3d;
+        animation-duration: 15s;
+        filter: blur(10px);
     }
     &-purple {
-        background-color: rgba(109, 50, 124,0.5);
+        background-color: $purple;
         border-radius: 100%;
         width: 30vw;
         height: 30vw;
         top: 20%;
         left: -20%;
-        z-index: 5;
-        transform: rotateX(25deg) rotateY(25deg);
+        box-shadow:0 0 100px $purple;
+        transform-style: preserve-3d;
+        animation-duration: 6s; 
+        filter: blur(3px);
     }
     &-green {
-        border: 25px solid rgba(54, 196, 134, 0.6);
+        border: 25px solid rgba(54, 196, 134, 1);
         width: 15vw;
         height: 15vw;
         top: 10%;
         right: 5%;
         overflow: hidden;
+        transform-style: preserve-3d;
+        box-shadow:0 0 50px $green; 
+        animation-duration: 30s; 
+        filter: blur(10px);
     }
     &-littleGreen {
-        background-color: rgba(54, 196, 134, 0.6);
+        background-color: rgba(54, 196, 134, 1);
         width: 2vw;
         height: 2vw;
         top: 25%;
         left: 70%;
+        transform-style: preserve-3d;
+        animation-duration: 5s; 
     }
-    // &-littleGreen2 {
-    //     border-radius: 100%;
-    //     background-color: rgba(54, 196, 134, 0.6);
-    //     width: 2vw;
-    //     height: 2vw;
-    //     top: 0;
-    //     left: 0;
-    //     transform: translate(-100%);
-    // }
     &-purple2 {
-        border: 25px solid rgba(72, 93, 166, 0.7);
+        border: 25px solid $blue;
         width: 10vw;
         height: 10vw;
         top: 60%;
         left: 20%;
         z-index: 30;
+        transform-style: preserve-3d;
+        animation-duration: 10s; 
+        filter: blur(3px);
     }
     &-green2 {
-        background-color: rgba(54, 196, 134,  0.9);
+        background-color: $white;
         width: 3vw;
         height: 3vw;
         top: 25%;
         left: 40%;
-        z-index: 40;
+        box-shadow:0 0 50px $white;
     }
     &-blue2 {
-        background-color: $light-blue-alpha;
+        background-color: $purple;
         width: 8vw;
         height: 8vw;
         top: 80%;
         right: 20%;
+        box-shadow:0 0 75px $purple;
         transform-style: preserve-3d;
         transform: translateZ(50px);
+        filter: blur(1px);
     }
+
+    @keyframes circles { 
+        from { transform: translateY(450%) }
+        to   { transform: translateY(calc(-100vh + -100%)) translateX(75%)}}
 
 }
 .position {
-    // @include positionX;
     position: absolute;
     &.upButton {
         top: 5%;
