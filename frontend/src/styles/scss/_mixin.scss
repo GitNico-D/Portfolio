@@ -6,8 +6,7 @@
 
 @mixin customFont {
     font-weight: 900!important;
-    font-size: 4rem!important;
+    font-size: 4rem;
     letter-spacing: 0.10em!important;
-    text-shadow: 2px 3px 0px $green 0px 0px 50px $green;
     margin: auto;
 }
