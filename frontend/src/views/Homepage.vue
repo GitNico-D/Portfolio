@@ -1,23 +1,25 @@
 <template>
-    <b-container fluid>
-        <b-row id="circle" :style="style">
-            <div class="circle circle-blue" :style="translate"></div>
-            <div class="circle circle-purple"></div>
-            <div class="circle circle-green">
-                <div class="circle circle-littleGreen"></div>
+    <b-container fluid >
+        <b-row>
+            <div class="circle_box">
+                <div class="circle circle-blue"></div>
+                <div class="circle circle-purple"></div>
+                <div class="circle circle-green">
+                    <div class="circle circle-littleGreen"></div>
+                </div>
+                <div class="circle circle-purple2" ></div>
+                <div class="circle circle-green2"></div>
+                <div class="circle circle-blue2"></div>
             </div>
-            <div class="circle circle-purple2" ></div>
-            <div class="circle circle-green2"></div>
-            <div class="circle circle-blue2"></div>
-            <div id="title" v-on:mousemove="mouseMove" v-on:mouseleave="mouseLeave">
+            <div class="title" v-on:mouseleave="mouseLeave">
                 <h2><span>Nicolas</span>,</h2> 
                 <h1>Développeur Web</h1>
             </div>    
-        <b-button variant="outline-success" class="menuButton">En savoir plus</b-button>
+        <b-button >En savoir plus</b-button>
         </b-row>
-        <Transition wordOne="Bienvenue" wordTwo="sur mon" wordThree="Portfolio" />
+        <Transition />
         <HomePageLink action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right"/>
-        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowRtl" class="link link-left"/>
+        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="link link-left"/>
         <HomePageLink action="Parcours" url="/career" direction="animated-arrowRtl" class="link link-top"/>
         <HomePageLink action="Compétences" url="/skills" direction="animated-arrowRtl" class="link link-bottom"/>
     </b-container>
@@ -36,53 +38,20 @@ export default {
     },
     data() {
         return {
-            move: false,
-            x: 0,
-            y: 0
-        }
-    },
-    computed: {
-        style() {
-            if(this.move) {
-                return {
-                    transform: `rotateX(${this.y}deg) rotateY(${this.x}deg)`
-                }
-            } else {
-                return { 
-                    transition: "all 0.5s ease",
-                    transform: `rotateX(0deg) rotateY(0deg)`
-                }
-            }
-        },
-        translate() {
-            return { transform: `translateZ(${this.x}px)`};
         }
     },
     methods: {
-        mouseMove(event) {
-            this.move = true;
-            this.y = (window.innerWidth / 2 - event.pageY) / 25;
-            this.x = (window.innerWidth / 2 - event.pageX) / 25;
-        },
         mouseLeave() { 
-            this.move = false;      
+            gsap.from(".title h1", { duration: 2.5, ease: "elastic.out(1, 0.3)", stagger:0.5, z: -60 })
+            gsap.from(".title h2", { duration: 2, ease: "elastic.out(1, 0.3)", stagger:0.5, z: -40 })
         }
     },
     mounted() {
         gsap.timeline()
-            .from("#title h1", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "+=3")
-            .from("#title h2", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "-=0.90")
-            .fromTo(".link", { opacity: 0 }, { opacity: 1, duration: 1 })
-            // .fromTo(".bottomButton", { opacity: 0 }, { opacity: 1, duration: 1 }, "-=1")
-            .from(".circle", {
-                duration: 1,
-                scale: 0.5, 
-                opacity: 0, 
-                // delay: 0.5,
-                stagger: 0.3
-            }, "-=2")
-        // .fromTo(".circle-blue", { opacity: 0, scale: 0 }, { xPercent: 50, yPercent: 65, opacity: 1, rotation: 360, scale: 1, ease: "back", stagger: 0.1 }, "-=1")
-        // gsap.from(".circle-green", { rotation: 360, duration: 5, repeat: -1, ease: "none" })
+            .from(".title h1", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "+=0.5")
+            .from(".title h2", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "-=1")
+            .from(".link", { opacity: 0 }, { opacity: 1, duration: 1, stagger: 0.3 }, "=-0.5")
+            .from(".circle", { duration: 1, scale: 0.5,  opacity: 0, stagger: 0.3}, "-=0.25")
     }
 }
 </script>
@@ -96,12 +65,18 @@ export default {
     overflow: hidden;
     .row {
         height: 100vh;
-        #title {
+        .title {
             @include customFont;
+            position: absolute;
+            top: 45%;
+            left: 20%;
             color: $white!important;
             line-height: 50px;
             width: 60%;
             text-align: left;
+            &:hover {
+                cursor: default;
+            }
             span {
                 color: $green;
                 text-shadow: 0px 0px 5px $green;
@@ -118,8 +93,13 @@ export default {
         }
     }
 }
+.circle_box {
+    height: 100vh;
+    width: 100vw;
+}
 .circle {
     position: absolute;
+    width: 100%;
     border-radius: 100%;
     animation: circles 9.5s linear infinite;
     &-blue {
@@ -195,21 +175,29 @@ export default {
         transform: translateZ(50px);
         filter: blur(1px);
     }
-
     @keyframes circles { 
         from { transform: translateY(450%) }
-        to   { transform: translateY(calc(-100vh + -100%)) translateX(75%)}}
-
+        to   { transform: translateY(calc(-100vh + -100%)) translateX(75%)}
+    }
 }
-.menuButton {
+.btn {
     position: absolute;
     top: 60%;
     left: 50%;
+    color: $green!important;
+    background-color: transparent!important;
+    border: 1px solid $green!important;
+    &:hover {
+        color: $white!important;
+        background-color: $green!important;
+        box-shadow:0 0 10px $white!important; 
+    }
 }
+
 .link {
     position: absolute;
     &-left {
-        left: 7%;
+        left: 5%;
         top: 5%;
     }
     &-right {
@@ -219,15 +207,45 @@ export default {
     &-top {
         transform-style: preserve-3d;
         transform: rotateZ(-90deg);
-        right: 7%;
+        right: 0;
         top: 15%;
     }
     &-bottom {
         transform-style: preserve-3d;
         transform: rotateZ(90deg);
-        left: 7%;
+        left: 0;
         bottom: 17%;
     }
 }
+
+@media (min-width: 1200px) {
+    .title {
+        h1 {
+            font-size: 4rem;
+        }
+    }
+}
+@media (min-width: 992px) {
+    .title {
+        h1 {
+            font-size: 2rem;
+        }
+    }
+}
+@media (min-width: 768px) {
+    .title {
+        h1 {
+            font-size: 2rem;
+        }
+    }
+}
+@media (min-width: 576px) {
+    .title {
+        h1 {
+            font-size: 2rem;
+        }
+    }
+}
+
 </style>
 

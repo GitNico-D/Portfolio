@@ -27,9 +27,8 @@ export default {
     },
     mounted() {
         gsap.timeline({defaults: { ease: "power1.out"}})
-            .to(".text", { y: "0%", duration: 1, stagger: 0.25 })
-            .to(".slider", { y: "-100%", duration: 1.5, delay: 0.5 })
-            .to(".intro", { y: "-100%", duration: 1 }, "-=1.25")
+            .to(".slider", { y: "-100%", duration: 1})
+            .to(".intro", { y: "-100%", duration: 0.5 }, "-=0.5")
     }
 }
 </script>
