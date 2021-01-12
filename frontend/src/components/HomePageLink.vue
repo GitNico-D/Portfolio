@@ -23,11 +23,11 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" >
 .animated-arrowRtl {
     display: inline-block;
     color: $green;
-    font-size: 2.25em;
+    font-size: 1.75em;
     position: relative;
     transition: all 0.2s;
     .main {
@@ -39,9 +39,9 @@ export default {
             margin: 0 $text-arrow-space 0 0;
             line-height: 1;
             letter-spacing: 3px;
-            text-shadow: 0px 0px 3px $green;
+            @include text_shadow;
             &:hover {
-                text-shadow: 0px 0px 3px $white;
+                @include text_shadow_hover;
             }
         }
         .the-arrow {
@@ -104,7 +104,7 @@ export default {
             transition: all 0.2s;
             will-change: transform;
             &:hover {
-                box-shadow: 0px 0px 10px $green;
+                @include box_shadow;
             }
             &:before,
             &:after {
@@ -130,7 +130,7 @@ export default {
 .animated-arrowLtr {
     display: inline-block;
     color: $green;
-    font-size: 2.25em;
+    font-size: 1.75em;
     position: relative;
     transition: all 0.2s;
     .main {
@@ -142,9 +142,9 @@ export default {
             margin: 0 0 0 ($shaft-width + $text-arrow-space) ;
             line-height: 1;
             letter-spacing: 3px;
-            text-shadow: 0px 0px 3px $green;
+            @include text-shadow;
             &:hover {
-                text-shadow: 0px 0px 3px $white;
+                @include text_shadow_hover;
             }
         }
         .the-arrow {
@@ -166,7 +166,6 @@ export default {
                     &:before,
                     &:after {
                         width: 0;
-                        transition-delay: 0;
                         transition: all 0.1s;
                     }
                     &:before {
@@ -188,7 +187,6 @@ export default {
                 &:before,
                 &:after { 
                     width: $arrow-head-width;
-                    transition-delay: 0.3s;
                     transition: all 0.5s;
                 }        
                 &:before {
@@ -208,7 +206,7 @@ export default {
             transition: all 0.2s;
             will-change: transform;
             &:hover {
-                box-shadow: 0px 0px 10px $green;
+                @include box_shadow;
             }
             &:before,
             &:after {
@@ -230,4 +228,10 @@ export default {
         }
     } 
 }
+
+// @media (min-width: 320px) {
+//     .animated-arrowLtr, .animated-arrowRtl {
+//         font-size: 0.9rem;
+//     }
+// }
 </style>
