@@ -58,11 +58,8 @@ export default {
 
 <style lang="scss">
 .container-fluid {
-    background-color: rgba(0,0,0, 0.9);
-    width: 100vh;
-    position: relative;
+    @include container-background;
     perspective: 1000px;
-    overflow: hidden;
     .row {
         height: 100vh;
         .title {

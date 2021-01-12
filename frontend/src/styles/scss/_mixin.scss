@@ -19,3 +19,10 @@
 @mixin box_shadow ($box-offset-x: 0px, $box-offset-y: 0px, $box-blur: 10px, $color: $green) {
     box-shadow: $box-offset-x $box-offset-y $box-blur $color;
 }
+
+@mixin container-background {
+    background-color: rgba(0,0,0, 0.9);
+    width: 100vh;
+    position: relative;
+    overflow: hidden;
+}
