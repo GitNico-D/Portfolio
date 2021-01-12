@@ -39,6 +39,7 @@ export default {
             margin: 0 $text-arrow-space 0 0;
             line-height: 1;
             letter-spacing: 3px;
+            text-shadow: 0px 0px 3px $green;
             &:hover {
                 text-shadow: 0px 0px 3px $white;
             }
@@ -137,11 +138,11 @@ export default {
         align-items: center;
         transition: all 0.2s;
         .text {
-            text-shadow: 0px 0px 3px $white;
             font-family: "Oswald", sans-serif;
             margin: 0 0 0 ($shaft-width + $text-arrow-space) ;
             line-height: 1;
             letter-spacing: 3px;
+            text-shadow: 0px 0px 3px $green;
             &:hover {
                 text-shadow: 0px 0px 3px $white;
             }
