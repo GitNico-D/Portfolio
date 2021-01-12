@@ -50,7 +50,7 @@ export default {
         gsap.timeline()
             .from(".title h1", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "+=0.5")
             .from(".title h2", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "-=1")
-            .fromTo(".link", { opacity: 0 }, { opacity: 1, duration: 1}, "=-0.5")
+            .from(".link", { opacity: 0, duration: 1}, "=-0.5")
             .from(".circle", { duration: 1, scale: 0.5,  opacity: 0, stagger: 0.3}, "-=0.25")
     }
 }
