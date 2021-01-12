@@ -14,8 +14,8 @@
             <div class="title" v-on:mouseleave="mouseLeave">
                 <h2><span>Nicolas</span>,</h2> 
                 <h1>Développeur Web</h1>
+            <b-button >En savoir plus</b-button>
             </div>    
-        <b-button >En savoir plus</b-button>
         </b-row>
         <Transition />
         <HomePageLink action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right"/>
@@ -79,17 +79,28 @@ export default {
             }
             span {
                 color: $green;
-                text-shadow: 0px 0px 5px $green;
+                @include text_shadow(0px, 0px, 5px);
             }
             h1 {
                 @include customFont;
+                @include text_shadow(2px, 3px, 2px);
                 color: $white!important;
-                text-shadow: 2px 3px 2px $green;
-                width: 85%;
+                margin-left: 2rem;
             }
             h2 {
                 font-size: 2.5rem; 
             }
+            .btn {
+                margin: 2rem 0 0 20rem;
+                color: $green!important;
+                background-color: transparent!important;
+                border: 1px solid $green!important;
+                &:hover {
+                    color: $white!important;
+                    background-color: $green!important;
+                    box-shadow:0 0 10px $white!important; 
+                }
+            }   
         }
     }
 }
@@ -103,14 +114,14 @@ export default {
     border-radius: 100%;
     animation: circles 9.5s linear infinite;
     &-blue {
-        background-color: rgba(41,171,226,1);
+        background-color: $light-blue;
         width: 10vw;
         height: 10vw;
         top: 44%;
         left: 50%;
         transform-style: preserve-3d;
         animation-duration: 15s;
-        filter: blur(10px);
+        filter: blur(7px);
     }
     &-purple {
         background-color: $purple;
@@ -119,25 +130,24 @@ export default {
         height: 30vw;
         top: 20%;
         left: -20%;
-        box-shadow:0 0 100px $purple;
+        @include box_shadow(0px, 0px, 100px, $purple);
         transform-style: preserve-3d;
         animation-duration: 6s; 
         filter: blur(3px);
     }
     &-green {
-        border: 25px solid rgba(54, 196, 134, 1);
+        border: 25px solid $green;
         width: 15vw;
         height: 15vw;
         top: 10%;
         right: 5%;
-        overflow: hidden;
         transform-style: preserve-3d;
-        box-shadow:0 0 50px $green; 
+        @include box_shadow(0px, 0px, 50px); 
         animation-duration: 30s; 
         filter: blur(10px);
     }
     &-littleGreen {
-        background-color: rgba(54, 196, 134, 1);
+        background-color: $green;
         width: 2vw;
         height: 2vw;
         top: 25%;
@@ -162,7 +172,7 @@ export default {
         height: 3vw;
         top: 25%;
         left: 40%;
-        box-shadow:0 0 50px $white;
+        @include box_shadow(0px, 0px, 50px, $white);
     }
     &-blue2 {
         background-color: $purple;
@@ -170,27 +180,13 @@ export default {
         height: 8vw;
         top: 80%;
         right: 20%;
-        box-shadow:0 0 75px $purple;
+        @include box_shadow(0px, 0px, 75px, $purple);
         transform-style: preserve-3d;
-        transform: translateZ(50px);
         filter: blur(1px);
     }
     @keyframes circles { 
         from { transform: translateY(450%) }
         to   { transform: translateY(calc(-100vh + -100%)) translateX(75%)}
-    }
-}
-.btn {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    color: $green!important;
-    background-color: transparent!important;
-    border: 1px solid $green!important;
-    &:hover {
-        color: $white!important;
-        background-color: $green!important;
-        box-shadow:0 0 10px $white!important; 
     }
 }
 
@@ -218,34 +214,69 @@ export default {
     }
 }
 
-@media (min-width: 1200px) {
-    .title {
-        h1 {
-            font-size: 4rem;
-        }
-    }
-}
-@media (min-width: 992px) {
-    .title {
-        h1 {
-            font-size: 2rem;
-        }
-    }
-}
-@media (min-width: 768px) {
-    .title {
-        h1 {
-            font-size: 2rem;
-        }
-    }
-}
-@media (min-width: 576px) {
-    .title {
-        h1 {
-            font-size: 2rem;
-        }
-    }
-}
-
+// @media (min-width: 1200px) {
+//     .container-fluid .row {
+//         .title {
+//             h1 {
+//                 font-size: 4rem;
+//             }
+//             h2 {
+//                 font-size: 1.2rem;
+//             }
+//         }
+//     }
+// }
+// @media (min-width: 992px) {
+//     .container-fluid .row {
+//         .title {
+//             h1 {
+//                 font-size: 4rem;
+//             }
+//             h2 {
+//                 font-size: 1.2rem;
+//             }
+//         }
+//     }
+// }
+// @media (min-width: 768px) {
+//     .container-fluid .row {
+//         .title {
+//             h1 {
+//                 font-size: 2.5rem;
+//             }
+//             h2 {
+//                 font-size: 1.2rem;
+//             }
+//         }
+//     }
+// }
+// @media (min-width: 576px) {
+//     .container-fluid .row {
+//         .title {           
+//             h1 {
+//                 font-size: 1.6rem;
+//             }
+//             h2 {
+//                 font-size: 1.2rem;
+//             }
+//         }
+//     }
+// }
+// @media (min-width: 320px) {
+//     .container-fluid .row{
+//         .title {
+//             h1 {
+//                 font-size: 1.2rem;
+//             }
+//             h2 {
+//                 font-size: 1rem;
+//             }
+//         }
+//     }
+//     .btn {
+//         margin: auto;
+//         transform: scale(0.6);
+//     }
+// }
 </style>
 
