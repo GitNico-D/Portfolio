@@ -77,7 +77,7 @@ export default {
         width: $shaft-width;
         transition: all 0.2s;
         &.-right {
-            top: 6px;
+            top: 5px;
             .shaft {
                 width: $shaft-width;
                 transition-delay: 0.2s;                
@@ -180,7 +180,7 @@ export default {
     }
     .the-arrow {
         &.-right {
-            top: 24px;
+            top: 16px;
             .shaft {
                 width: $shaft-width;
                 transition-delay: 0.2s;                
