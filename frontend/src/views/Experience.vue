@@ -8,7 +8,10 @@
 
 <script>
 export default {
-
+    name: "Experience",
+    props: {
+        
+    }
 }
 </script>
 
