@@ -228,10 +228,4 @@ export default {
         }
     } 
 }
-
-// @media (min-width: 320px) {
-//     .animated-arrowLtr, .animated-arrowRtl {
-//         font-size: 0.9rem;
-//     }
-// }
 </style>

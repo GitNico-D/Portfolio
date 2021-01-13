@@ -69,7 +69,7 @@ export default {
             left: 20%;
             color: $white!important;
             line-height: 50px;
-            width: 60%;
+            width: 70%;
             text-align: left;
             &:hover {
                 cursor: default;
@@ -82,10 +82,6 @@ export default {
                 @include customFont;
                 @include text_shadow(2px, 3px, 2px);
                 color: $white!important;
-                margin-left: 2rem;
-            }
-            h2 {
-                font-size: 2.5rem; 
             }
             .btn {
                 margin: 2rem 0 0 20rem;
@@ -211,69 +207,87 @@ export default {
     }
 }
 
-// @media (min-width: 1200px) {
-//     .container-fluid .row {
-//         .title {
-//             h1 {
-//                 font-size: 4rem;
-//             }
-//             h2 {
-//                 font-size: 1.2rem;
-//             }
-//         }
-//     }
-// }
-// @media (min-width: 992px) {
-//     .container-fluid .row {
-//         .title {
-//             h1 {
-//                 font-size: 4rem;
-//             }
-//             h2 {
-//                 font-size: 1.2rem;
-//             }
-//         }
-//     }
-// }
-// @media (min-width: 768px) {
-//     .container-fluid .row {
-//         .title {
-//             h1 {
-//                 font-size: 2.5rem;
-//             }
-//             h2 {
-//                 font-size: 1.2rem;
-//             }
-//         }
-//     }
-// }
-// @media (min-width: 576px) {
-//     .container-fluid .row {
-//         .title {           
-//             h1 {
-//                 font-size: 1.6rem;
-//             }
-//             h2 {
-//                 font-size: 1.2rem;
-//             }
-//         }
-//     }
-// }
-// @media (min-width: 320px) {
-//     .container-fluid .row{
-//         .title {
-//             h1 {
-//                 font-size: 1.2rem;
-//             }
-//             h2 {
-//                 font-size: 1rem;
-//             }
-//         }
-//     }
-//     .btn {
-//         margin: auto;
-//         transform: scale(0.6);
-//     }
-// }
+@media (min-width: 320px) {
+    .container-fluid .row{
+        .title {
+            h1 {
+                font-size: 1.5rem;
+                margin-left: 0;
+            }
+            h2 {
+                font-size: 1rem;
+            }
+            .btn {
+                margin: 2rem 0 0 4rem;
+                transform: scale(0.8);
+            }
+        }
+    }
+}
+@media (min-width: 576px) {
+    .container-fluid .row{
+        .title {
+            h1 {
+                font-size: 2rem;
+                margin-left: 0.5rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .btn {
+                margin: 2rem 0 0 15rem;
+                transform: scale(1);
+            }
+        }
+    }
+}
+@media (min-width: 768px) {
+    .container-fluid .row{
+        .title {
+            h1 {
+                font-size: 2.5rem;
+                margin-left: 1rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .btn {
+                margin: 2rem 0 0 18rem;
+            }
+        }
+    }
+}
+@media (min-width: 992px) {
+    .container-fluid .row{
+        .title {
+            h1 {
+                font-size: 2rem;
+                margin-left: 1.5rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            .btn {
+                margin: 2rem 0 0 20rem;
+            }
+        }
+    }
+}
+@media (min-width: 1200px) {
+    .container-fluid .row{
+        .title {
+            h1 {
+                font-size: 4rem;
+                margin-left: 2rem;
+            }
+            h2 {
+                font-size: 2.5rem;
+            }
+            .btn {
+                margin: 2rem 0 0 30rem;
+            }
+        }
+    }
+}
 </style>
 
