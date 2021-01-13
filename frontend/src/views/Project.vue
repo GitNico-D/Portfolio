@@ -4,6 +4,8 @@
         <b-row>
             <Project title="Projet 1" content="Description projet 1"/>
             <Project title="Projet 2" content="Description projet 2"/>
+            <Project title="Projet 3" content="Description projet 3"/>
+            <Project title="Projet 4" content="Description projet 4"/>
         </b-row>
     </b-container>
 </template>
