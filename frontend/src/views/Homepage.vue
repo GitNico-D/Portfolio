@@ -72,7 +72,7 @@ export default {
             left: 20%;
             color: $white!important;
             line-height: 50px;
-            width: 60%;
+            width: 70%;
             text-align: left;
             &:hover {
                 cursor: default;
@@ -189,94 +189,187 @@ export default {
         to   { transform: translateY(calc(-100vh + -100%)) translateX(75%)}
     }
 }
-
-.link {
-    position: absolute;
-    &-left {
-        left: 5%;
-        top: 5%;
+@media (min-width: 320px) {
+    .container-fluid .row{
+        .title {
+            h1 {
+                font-size: 1.5rem;
+                margin-left: 0;
+            }
+            h2 {
+                font-size: 1rem;
+            }
+            .btn {
+                margin: 2rem 0 0 4rem;
+                transform: scale(0.8);
+            }
+        }
     }
-    &-right {
-        right: 4%;
-        bottom: 5%;
-    }
-    &-top {
-        transform-style: preserve-3d;
-        transform: rotateZ(-90deg);
-        right: 0;
-        top: 15%;
-    }
-    &-bottom {
-        transform-style: preserve-3d;
-        transform: rotateZ(90deg);
-        left: 0;
-        bottom: 17%;
+    .link {
+        position: absolute;
+        &-left {
+            transform: translateX(-5%) scale(0.7);
+            left: 0;
+            top: 2%;
+        }
+        &-right {
+            transform: translateX(5%) scale(0.7);
+            right: 0;
+            bottom: 2%;
+        }
+        &-top {
+            transform-style: preserve-3d;
+            transform: translateX(35%) rotateZ(-90deg) scale(0.7);
+            right: 0;
+            top: 12%;
+        }
+        &-bottom {
+            transform-style: preserve-3d;
+            transform: translatex(-35%) rotateZ(90deg) scale(0.7);
+            left: 0;
+            bottom: 14%;
+        }
     }
 }
-
-// @media (min-width: 1200px) {
-//     .container-fluid .row {
-//         .title {
-//             h1 {
-//                 font-size: 4rem;
-//             }
-//             h2 {
-//                 font-size: 1.2rem;
-//             }
-//         }
-//     }
-// }
-// @media (min-width: 992px) {
-//     .container-fluid .row {
-//         .title {
-//             h1 {
-//                 font-size: 4rem;
-//             }
-//             h2 {
-//                 font-size: 1.2rem;
-//             }
-//         }
-//     }
-// }
-// @media (min-width: 768px) {
-//     .container-fluid .row {
-//         .title {
-//             h1 {
-//                 font-size: 2.5rem;
-//             }
-//             h2 {
-//                 font-size: 1.2rem;
-//             }
-//         }
-//     }
-// }
-// @media (min-width: 576px) {
-//     .container-fluid .row {
-//         .title {           
-//             h1 {
-//                 font-size: 1.6rem;
-//             }
-//             h2 {
-//                 font-size: 1.2rem;
-//             }
-//         }
-//     }
-// }
-// @media (min-width: 320px) {
-//     .container-fluid .row{
-//         .title {
-//             h1 {
-//                 font-size: 1.2rem;
-//             }
-//             h2 {
-//                 font-size: 1rem;
-//             }
-//         }
-//     }
-//     .btn {
-//         margin: auto;
-//         transform: scale(0.6);
-//     }
-// }
+@media (min-width: 576px) {
+    .container-fluid .row{
+        .title {
+            h1 {
+                font-size: 2rem;
+                margin-left: 0.5rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .btn {
+                margin: 2rem 0 0 15rem;
+                transform: scale(1);
+            }
+        }
+    }
+    .link {
+        &-left {
+            transform: scale(0.8);
+        }
+        &-right {
+            transform: scale(0.8);
+        }
+        &-top {
+            transform: translateX(35%) rotateZ(-90deg) scale(0.8);
+            right: 0;
+            top: 12%;
+        }
+        &-bottom {
+            transform: translatex(-35%) rotateZ(90deg) scale(0.8);
+            left: 0;
+            bottom: 14%;
+        }
+    }
+}
+@media (min-width: 768px) {
+    .container-fluid .row{
+        .title {
+            h1 {
+                font-size: 2.5rem;
+                margin-left: 1rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .btn {
+                margin: 2rem 0 0 18rem;
+            }
+        }
+    }
+    .link {
+        &-left {
+            transform: scale(0.9);
+        }
+        &-right {
+            transform: scale(0.9);
+        }
+        &-top {
+            transform: translateX(25%) rotateZ(-90deg) scale(0.9);
+            right: 0;
+            top: 12%;
+        }
+        &-bottom {
+            transform: translatex(-25%) rotateZ(90deg) scale(0.9);
+            left: 0;
+            bottom: 14%;
+        }
+    }
+}
+@media (min-width: 992px) {
+    .container-fluid .row{
+        .title {
+            h1 {
+                font-size: 2rem;
+                margin-left: 1.5rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            .btn {
+                margin: 2rem 0 0 20rem;
+            }
+        }
+    }
+    .link {
+        &-left {
+            left: 3%;
+            top: 4%;
+        }
+        &-right {
+            right: 3%;
+            bottom: 4%;
+        }
+        &-top {
+            transform: translateX(25%) rotateZ(-90deg);
+            right: 0;
+            top: 14%;
+        }
+        &-bottom {
+            transform: translatex(-25%) rotateZ(90deg);
+            left: 0;
+            bottom: 16%;
+        }
+    }
+}
+@media (min-width: 1200px) {
+    .container-fluid .row{
+        .title {
+            h1 {
+                font-size: 4rem;
+                margin-left: 2rem;
+            }
+            h2 {
+                font-size: 2.5rem;
+            }
+            .btn {
+                margin: 2rem 0 0 30rem;
+            }
+        }
+    }
+    .link {
+        &-left {
+            left: 5%;
+            top: 5%;
+        }
+        &-right {
+            right: 4%;
+            bottom: 5%;
+        }
+        &-top {
+            transform: rotateZ(-90deg);
+            top: 12%;
+        }
+        &-bottom {
+            transform: rotateZ(90deg);
+            left: 0;
+            bottom: 15%;
+        }
+    }
+}
 </style>
 
