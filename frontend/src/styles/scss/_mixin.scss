@@ -20,7 +20,7 @@
 }
 
 @mixin container-background {
-    background-color: rgba(0,0,0, 0.9);
+    background-color: $dark_gray;
     width: 100vh;
     position: relative;
     overflow: hidden;
