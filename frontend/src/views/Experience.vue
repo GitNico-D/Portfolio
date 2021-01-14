@@ -1,26 +1,21 @@
 <template>
     <b-container fluid>
-        <b-row>
-            <h1>Page Experience</h1>
-        </b-row>
+        <PageTitle title="Page expériences" textColor="#00a1ba" />
     </b-container>
 </template>
 
 <script>
+import PageTitle from '@/components/PageTitle.vue'
+
 export default {
-    name: "Experience",
-    props: {
-        
+    components: {
+        PageTitle
     }
 }
 </script>
 
 <style lang="scss">
-    .row {
-        h1 {
-            @include customFont;
-            @include text_shadow(2px, 3px, 2px);
-            color: $white;            
-        }
-    }
+.container-fluid {
+    @include container-background;
+}
 </style>

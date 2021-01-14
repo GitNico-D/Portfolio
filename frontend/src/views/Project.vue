@@ -1,6 +1,7 @@
 <template>
     <b-container fluid>
-        <h1>Page Projets</h1>
+        <MenuNavigation linkColor="white" activeLink="#6d327c" />
+        <PageTitle title="Page Projets" textColor="#6d327c"/>
         <b-row>
             <Project title="Projet 1" content="Description projet 1"/>
             <Project title="Projet 2" content="Description projet 2"/>
@@ -12,9 +13,14 @@
 
 <script>
 import Project from '@/components/Project.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import MenuNavigation from '@/components/MenuNavigation.vue'
+
 export default {
     components: {
-        Project
+        Project,
+        PageTitle,
+        MenuNavigation
     }
 }
 </script>
@@ -22,11 +28,6 @@ export default {
 <style lang="scss">
 .container-fluid {
     @include container-background;
-    h1 {
-        @include customFont;
-        @include text_shadow(2px, 3px, 2px);
-        color: $white;            
-    }
     .row {
         justify-content: space-around;
         align-items: center;        
