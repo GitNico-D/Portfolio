@@ -1,6 +1,6 @@
 <template>
     <b-container fluid>
-        <MenuNavigation linkColor="white" activeLink="#6d327c" />
+        <MenuNavigation linkColor="white" actionColorLink="#6d327c"/>
         <PageTitle title="Page Projets" textColor="#6d327c"/>
         <b-row>
             <Project title="Projet 1" content="Description projet 1"/>
