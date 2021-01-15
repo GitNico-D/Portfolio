@@ -22,6 +22,6 @@
 @mixin container-background {
     background-color: $dark_gray;
     width: 100vh;
-    // position: relative;
+    position: relative;
     overflow: hidden;
 }
