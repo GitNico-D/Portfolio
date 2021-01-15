@@ -14,6 +14,7 @@ export default {
     name: "MenuNavigation",
     props: {
         linkColor: String,
+        spanColor: String,
         actionColorLink: String
     }
 }
