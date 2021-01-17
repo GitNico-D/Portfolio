@@ -22,7 +22,7 @@ export default {
 
 <style lang="scss">
 .text-box {
-    background: linear-gradient(150deg, $light-purple 0%, $light-purple 50%, $purple 50%, $purple 100%);
+    // background: linear-gradient(150deg, $light-purple 0%, $light-purple 50%, $purple 50%, $purple 100%);
     position: relative;
     perspective: 1000px;
     font-family: 'MontSerrat',  sans-serif;
