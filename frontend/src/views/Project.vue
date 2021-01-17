@@ -1,9 +1,9 @@
 <template>
     <b-container fluid>
-        <BackgroundPage pageTitle="Projets"/>
-        <MenuNavigation linkColor="white" actionColorLink="#6d327c"/>
-        <PageTitle title="Page Projets" textColor="#6d327c"/>
         <b-row>
+            <BackgroundPage pageTitle="Projets"/>
+            <MenuNavigation linkColor="white" actionColorLink="#6d327c"/>
+            <PageTitle title="Page Projets" textColor="#6d327c"/>
             <!-- <Project title="Projet 1" content="Description projet 1"/>
             <Project title="Projet 2" content="Description projet 2"/>
             <Project title="Projet 3" content="Description projet 3"/>
@@ -30,14 +30,18 @@ export default {
 
 <style lang="scss">
 .container-fluid {
-    @include container-background;
-    // background: linear-gradient(150deg, rgba(246,213,255,1) 0%, rgba(246,213,255,1) 50%, rgba(109,50,124,1) 50%, rgba(109,50,124,1) 100%);
     .row {
         justify-content: space-around;
         align-items: center;        
     }
-    .text-box {
+    h1 {
         position: absolute;
+        top: 4rem;
+    }
+    .nav {
+        position: absolute;
+        top: 0;
+        left: 5rem;
     }
 }
 </style>
