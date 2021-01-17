@@ -17,5 +17,6 @@ h1 {
     @include customFont;
     @include text_shadow(2px, 3px, 2px, var(--text-color)!important);
     color: $white;            
+    text-transform: uppercase;
 }
 </style>
