@@ -27,7 +27,7 @@ export default {
     a {
         position: relative;
         font-family: 'Oswald', sans-serif;
-        font-size: 0.8rem;
+        font-size: 1rem;
         line-height: 1.6rem;        
         color: var(--link-color);
         text-transform: uppercase;
