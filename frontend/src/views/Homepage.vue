@@ -112,7 +112,7 @@ export default {
         height: 10vw;
         top: 44%;
         left: 50%;
-        transform-style: preserve-3d;
+        // transform-style: preserve-3d;
         animation-duration: 15s;
         filter: blur(7px);
     }
