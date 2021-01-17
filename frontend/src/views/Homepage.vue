@@ -18,10 +18,10 @@
             </div>    
         </b-row>
         <Transition />
-        <HomePageLink action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right"/>
-        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="link link-left"/>
-        <HomePageLink action="Parcours" url="/career" direction="animated-arrowRtl" class="link link-top"/>
-        <HomePageLink action="Compétences" url="/skills" direction="animated-arrowRtl" class="link link-bottom"/>
+        <HomePageLink action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right" textColor="#36C486"/>
+        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="link link-left" textColor="#36C486"/>
+        <HomePageLink action="Parcours" url="/career" direction="animated-arrowRtl" class="link link-top" textColor="#36C486"/>
+        <HomePageLink action="Compétences" url="/skills" direction="animated-arrowRtl" class="link link-bottom" textColor="#36C486"/>
     </b-container>
 </template>
 

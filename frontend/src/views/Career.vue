@@ -1,24 +1,50 @@
 <template>
     <b-container fluid>
-        <MenuNavigation linkColor="white" actionColorLink="#485DA6"/>
-        <PageTitle title="Page Carrières" textColor="#485DA6"/>
+        <b-row>
+            <MenuNavigation linkColor="white" actionColorLink="#485DA6" spanColor="#485DA6"/>
+            <HomePageLink action="Retour" url="/" direction="animated-arrowRtl" class="link link-bottom" textColor="#36C486"/>
+            <PageTitle title="Page Carrières" textColor="#485DA6"/>
+        </b-row>
     </b-container>
 </template>
 
 <script>
 import PageTitle from '@/components/PageTitle.vue'
 import MenuNavigation from '@/components/MenuNavigation.vue' 
+import HomePageLink from '@/components/HomePageLink.vue'
 
 export default {
     components: {
         PageTitle,
-        MenuNavigation
+        MenuNavigation,
+        HomePageLink
     }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container-fluid {
-    @include container-background;
+    .link {
+        position: absolute;
+        &-bottom {
+            transform-style: preserve-3d;
+            transform: rotateZ(90deg) scale(0.8);
+            left: 0;
+            bottom: 10%;
+        }
+    }
+    .row {
+        justify-content: space-around;
+        align-items: center;        
+    }
+    h1 {
+        position: absolute;
+        top: 4rem;
+    }
+    .nav {
+        position: absolute;
+        top: 0;
+        left: 5rem;
+    }
 }
 </style>
