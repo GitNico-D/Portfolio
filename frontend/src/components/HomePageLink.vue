@@ -56,11 +56,10 @@ export default {
                 .shaft {
                     width: 0;
                     transform: translateX(200%);
-                    transition-delay: 0;                    
                     &:before,
                     &:after {
                         width: 0;
-                        transition-delay: 0;
+                        
                         transition: all 0.1s;
                     }
                     &:before {
@@ -79,12 +78,10 @@ export default {
         &.-right {
             top: 6px;
             .shaft {
-                width: $shaft-width;
-                transition-delay: 0.2s;                
+                width: $shaft-width;          
                 &:before,
                 &:after { 
                     width: $arrow-head-width;
-                    transition-delay: 0.3s;
                     transition: all 0.5s;
                 }        
                 &:before {
@@ -162,7 +159,6 @@ export default {
                 .shaft {
                     width: 0;
                     transform: translateX(200%);
-                    transition-delay: 0;                    
                     &:before,
                     &:after {
                         width: 0;
@@ -182,8 +178,7 @@ export default {
         &.-right {
             top: 24px;
             .shaft {
-                width: $shaft-width;
-                transition-delay: 0.2s;                
+                width: $shaft-width;             
                 &:before,
                 &:after { 
                     width: $arrow-head-width;
