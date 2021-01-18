@@ -26,9 +26,9 @@ export default {
     position: relative;
     perspective: 1000px;
     font-family: 'MontSerrat',  sans-serif;
-    width: 100vw;
-    height: 100vh;
-    transform: translate3d(0, 0, 1rem);
+    // width: 100vw;
+    // height: 100vh;
+    // transform: translate3d(0, 0, 1rem);
     .one {
         position: absolute;
         text-transform: uppercase;

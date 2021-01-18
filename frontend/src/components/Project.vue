@@ -1,10 +1,12 @@
 <template>
-    <b-card :title=title>
-        <b-card-text>
-            {{ content }}
-            <b-button class="btn m-auto">Vers le site</b-button>
-        </b-card-text>
-    </b-card>
+    <!-- <div class="cache"> -->
+        <b-card :title=title>
+            <b-card-text>
+                {{ content }}
+                <b-button class="btn m-auto">Vers le site</b-button>
+            </b-card-text>
+        </b-card>
+    <!-- </div> -->
 </template>
 
 <script>
@@ -20,39 +22,43 @@ export default {
 <style lang="scss">
 .card {
     border: none!important;
-    background: $dark-gray!important;
-    width:400px;
-    height: 200px;
+    background: $white!important;
+    width: 32rem;
+    height: 20rem;
     transition:.4s;
+    margin: 1rem;
+    flex-grow: 4;
+    justify-content: space-between;
+    align-items: center;
     &-body {
-        background: $dark-gray;
-        @include box-shadow(0px, 0px, 20px, $purple);
+        background: $white;
+        @include box-shadow(0px, 0px, 10px, $white);
         padding: 0!important;
     }
     &-text {
-        height: 250px;
-        width:400px;
+        // width: 32rem;
+        // height: 20rem;
         padding: 1rem;
         opacity: 0;
     }
     &:hover {
+        @include box-shadow(0px, 0px, 20px, $purple);
         .card-body {
-            background: $dark-gray;
             padding: 0!important;
-                transition: all ease-in-out .5s;
-                transform: translateY(-125px);
+            // z-index: 10;
+            // @include box-shadow(0px, 0px, 20px, $purple);
         }
         .card-text {
             opacity: 1;
             background-color: $white;
-            transition: all ease-in-out .5s;
-            transform: translateY(160px);
+            transition: opacity ease-in-out 1s;
+            margin-top: 10px;
         }
     }
     &-title {
-        font-size: 1.5rem;
-        color: white;
-        text-align: center; 
+        font-size: 2.5rem;
+        color: $dark-gray;
+        align-items: center; 
     }
     .btn {
         text-decoration:none;
