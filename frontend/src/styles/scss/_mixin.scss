@@ -1,5 +1,5 @@
 // _mixin.scss
-@use "../styles/scss/_variables";
+@import "./_variables";
 
 @mixin customFont {
     font-weight: 900!important;
