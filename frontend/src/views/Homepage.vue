@@ -95,12 +95,13 @@ export default {
                 color: $green!important;
                 background-color: transparent!important;
                 border: 1px solid $green!important;
+                animation: 1s ease-in 2s opacityAnimation;
                 &:hover {
                     color: $white!important;
                     background-color: $green!important;
                     box-shadow:0 0 10px $white!important; 
                 }
-            }   
+            }  
         }
     }
 }
@@ -189,6 +190,19 @@ export default {
         to   { transform: translateY(calc(-100vh + -100%)) translateX(75%)}
     }
 }
+
+@keyframes opacityAnimation {
+    0% {
+        opacity: 0;
+    }  
+    50% {
+        opacity: 0.7;   
+    }
+    100% {
+        opacity: 1;   
+    }
+}
+
 @media (min-width: 320px) {
     .container-fluid .row{
         .title {
@@ -207,6 +221,7 @@ export default {
     }
     .link {
         position: absolute;
+        animation: 1s ease-in 5s opacityAnimation;
         &-left {
             transform: translateX(-5%) scale(0.7);
             left: 0;
