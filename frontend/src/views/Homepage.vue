@@ -11,14 +11,14 @@
                 <div class="circle circle-green2"></div>
                 <div class="circle circle-blue2"></div>
             </div>
-            <div class="title" v-on:mouseleave="mouseLeave">
+            <div class="title" >
                 <h2><span>Nicolas</span>,</h2> 
                 <h1>Développeur Web</h1>
-            <b-button >En savoir plus</b-button>
+            <b-button @click="actionTransition" directionAnimation="up">En savoir plus</b-button>
             </div>    
         </b-row>
-        <Transition />
-        <HomePageLink action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right"/>
+        <Transition v-show="showTransition" directionAnimation="up"/>
+        <HomePageLink @click="actionTransition" directionAnimation="right" action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right"/>
         <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="link link-left"/>
         <HomePageLink action="Parcours" url="/career" direction="animated-arrowRtl" class="link link-top"/>
         <HomePageLink action="Compétences" url="/skills" direction="animated-arrowRtl" class="link link-bottom"/>
@@ -28,30 +28,30 @@
 <script>
 import HomePageLink from "@/components/HomePageLink.vue"
 import Transition from "@/components/Transition.vue"
-import { gsap } from 'gsap'
 
 export default {
     name: "background",
     components: {
         HomePageLink,
-        Transition
+        Transition,
     },
     data() {
         return {
+            showTransition: true            
         }
     },
     methods: {
-        mouseLeave() { 
-            gsap.from(".title h1", { duration: 2.5, ease: "elastic.out(1, 0.3)", stagger:0.5, z: -60 })
-            gsap.from(".title h2", { duration: 2, ease: "elastic.out(1, 0.3)", stagger:0.5, z: -40 })
+        actionTransition () {
+            this.showTransition = true;
+            setTimeout(() => {
+                this.showTransition = false;
+            },1300);
         }
     },
-    mounted() {
-        gsap.timeline()
-            .from(".title h1", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "+=0.5")
-            .from(".title h2", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "-=1")
-            .from(".link", { opacity: 0, duration: 1}, "=-0.5")
-            .from(".circle", { duration: 1, scale: 0.5,  opacity: 0, stagger: 0.3}, "-=0.25")
+    created() {
+        setTimeout(() => {
+            this.showTransition = false;
+        },1300);
     }
 }
 </script>
