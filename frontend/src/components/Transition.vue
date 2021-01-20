@@ -51,7 +51,6 @@ export default {
             transform: translateY(100px);
             animation: ease-in-out 1.5s slideUpPurple;
             transition-delay: 0.5s;
-            transition: none;
         }
         @keyframes slideUpGreen { 
             from { 
@@ -82,7 +81,6 @@ export default {
         &-purple {
             animation: ease-in-out 1.5s slideRightPurple;
             transition-delay: 0.5s;
-            transition: none;
         }
         @keyframes slideRightGreen { 
             from { 
