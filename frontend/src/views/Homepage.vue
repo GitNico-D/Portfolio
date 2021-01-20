@@ -58,7 +58,7 @@ export default {
 
 <style lang="scss">
 .container-fluid {
-    background-color: rgba(0,0,0, 0.9);
+    background-color: $dark-gray;
     width: 100vh;
     position: relative;
     perspective: 1000px;
@@ -69,7 +69,7 @@ export default {
             @include customFont;
             position: absolute;
             top: 45%;
-            left: 20%;
+            left: 24%;
             color: $white!important;
             line-height: 50px;
             width: 70%;
@@ -86,16 +86,28 @@ export default {
                 @include text_shadow(2px, 3px, 2px);
                 color: $white!important;
                 margin-left: 2rem;
+                animation: slideH1 1s ease-in-out 0.5s;
+                transition: transform 0.5s cubic-bezier(.03,.92,.87,1.46);
+                &:hover {
+                    transform: translate3d(0px, 0px, 100px);
+                    
+                }
             }
             h2 {
                 font-size: 2.5rem; 
+                animation: slideH2 1.25s ease-in-out 0.5s;
+                transition: transform 0.5s cubic-bezier(.03,.92,.87,1.46);
+                &:hover {
+                    transform: translate3d(0px, 0px, 100px);
+                    
+                }
             }
             .btn {
                 margin: 2rem 0 0 20rem;
                 color: $green!important;
                 background-color: transparent!important;
                 border: 1px solid $green!important;
-                animation: 1s ease-in 2s opacityAnimation;
+                animation: slideBtn 1.25s ease-in-out 0.5s;
                 &:hover {
                     color: $white!important;
                     background-color: $green!important;
@@ -103,6 +115,50 @@ export default {
                 }
             }  
         }
+    }
+}
+@keyframes slideH1 {
+    0% {
+        transform: translateY(100px);
+    }  
+    50% {
+        transform: translateY(-40px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+@keyframes slideH2 {
+    0% {
+        transform: translateY(100px);
+    }  
+    50% {
+        transform: translateY(-60px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+@keyframes slideBtn {
+    0% {
+        transform: translateY(80px);
+    }  
+    50% {
+        transform: translateY(-30px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+@keyframes opacityIn {
+    0% {
+        opacity: 0;
+    }  
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }
 .circle_box {
@@ -191,17 +247,6 @@ export default {
     }
 }
 
-@keyframes opacityAnimation {
-    0% {
-        opacity: 0;
-    }  
-    50% {
-        opacity: 0.7;   
-    }
-    100% {
-        opacity: 1;   
-    }
-}
 
 @media (min-width: 320px) {
     .container-fluid .row{
@@ -221,7 +266,7 @@ export default {
     }
     .link {
         position: absolute;
-        animation: 1s ease-in 5s opacityAnimation;
+        animation: 1.5s ease-in-out opacityIn;
         &-left {
             transform: translateX(-5%) scale(0.7);
             left: 0;
