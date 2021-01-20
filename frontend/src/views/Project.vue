@@ -1,16 +1,16 @@
 <template>
     <b-container fluid>
-            <BackgroundPage pageTitle="Projets"/>
+            <!-- <BackgroundPage pageTitle="Projets"/> -->
             <MenuNavigation linkColor="white" actionColorLink="#6d327c" spanColor="#6d327c"/>
         <b-row class="header">
             <PageTitle title="Projets" textColor="#6d327c"/>
         </b-row>
         <b-row class="cards">
-            <Project title="Projet 1" content="Description projet 1"/>
-            <Project title="Projet 2" content="Description projet 2"/>
-            <Project title="Projet 3" content="Description projet 3"/>
-            <Project title="Projet 4" content="Description projet 4"/>
-            <Project title="Projet 5" content="Description projet 5"/>
+            <ProjectCard title="Projet 1" content="Description projet 1"/>
+            <ProjectCard title="Projet 2" content="Description projet 2"/>
+            <ProjectCard title="Projet 3" content="Description projet 3"/>
+            <ProjectCard title="Projet 4" content="Description projet 4"/>
+            <ProjectCard title="Projet 5" content="Description projet 5"/>
         </b-row>
         <b-row class="back">
             <HomePageLink action="Retour" url="/" direction="animated-arrowLtr" class="link link-left" textColor="#6d327c"/>
@@ -19,18 +19,18 @@
 </template>
 
 <script>
-import Project from '@/components/Project.vue'
+import ProjectCard from '@/components/ProjectCard.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import MenuNavigation from '@/components/MenuNavigation.vue'
-import BackgroundPage from '../components/BackgroundPage.vue'
+// import BackgroundPage from '../components/BackgroundPage.vue'
 import HomePageLink from '@/components/HomePageLink.vue'
 
 export default {
     components: {
-        Project,
+        ProjectCard,
         PageTitle,
         MenuNavigation,
-        BackgroundPage,
+        // BackgroundPage,
         HomePageLink
     }
 }
@@ -38,7 +38,7 @@ export default {
 
 <style lang="scss" scoped>
 .container-fluid {
-    background: linear-gradient(150deg, $light-purple 0%, $light-purple 50%, $purple 50%, $purple 100%);
+    background-color: $dark-gray;
     .link {
         position: absolute;
         &-left {
@@ -61,6 +61,7 @@ export default {
         justify-content: space-around; 
         width: 90%;
         margin: auto;
+        height: unset;
     }
     .back {
         height: 10vh;
