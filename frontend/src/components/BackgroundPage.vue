@@ -1,11 +1,10 @@
 <template>
-    <div class="text-box">
-        <div class="one">
-            {{pageTitle}}
-        </div>
-        <div class="two">
-            {{pageTitle}}
-        </div>
+    <div>
+        <div class="circlebackground -one" :style="{'--circle-color': circleColor }"></div>
+        <div class="circlebackground -two" :style="{'--circle-color': circleColor }"></div>
+        <div class="circlebackground -three" :style="{'--circle-color': circleColor }"></div>
+        <div class="circlebackground -four" :style="{'--circle-color': circleColor }"></div>
+        <div class="circlebackground -five" :style="{'--circle-color': circleColor }"></div>
     </div>
 </template>
 
@@ -13,49 +12,52 @@
 export default {
     name: "BackgroundPage",
     props: {
-        pageTitle: String,
-        gradientFirstColor: String,
-        gradientSecondColor: String
+        circleColor: String
     }
 }
 </script>
 
 <style lang="scss">
-.text-box {
-    // background: linear-gradient(150deg, $light-purple 0%, $light-purple 50%, $purple 50%, $purple 100%);
-    position: relative;
-    perspective: 1000px;
-    font-family: 'MontSerrat',  sans-serif;
-    // width: 100vw;
-    // height: 100vh;
-    // transform: translate3d(0, 0, 1rem);
-    .one {
-        position: absolute;
-        text-transform: uppercase;
-        overflow: hidden;
-        top: 5%;
-        color: rgba(53, 53, 53, 0.8);
-        font-size: 20rem;
-        animation: 25s linear infinite translatingOne;
-        filter: blur(0.5px);
+.circlebackground {
+    position: absolute;
+    border-radius: 50%;
+    background-color: var(--circle-color);
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    &.-one {
+        opacity: 0.4;
+        width: 60vw;
+        height: 60vw;
+        filter: blur(2px);
     }
-    .two {
-        position: absolute;
-        text-transform: uppercase;
-        overflow: hidden;
-        top: 0;
-        color: rgba(245,245,245,0.8);
-        font-size: 55rem;
-        filter: blur(4px);
-        animation: 10s linear infinite translatingTwo;
+    &.-two {
+        opacity: 0.2;
+        width: 70vw;
+        height: 60vw;
     }
-    @keyframes translatingTwo {
-        from { transform: translateX(-250rem); }
-        to   { transform: translateX(200rem); }
+    &.-three {
+        opacity: 0.4;
+        width: 75vw;
+        height: 60vw;
     }
-    @keyframes translatingOne {
-        from { transform: translateX(-125rem); }
-        to   { transform: translateX(125rem); }
+    // &.-four {
+    //     opacity: 0.6;
+    //     width: 5vw;
+    //     height: 5vw;
+    // }
+    // &.-five {
+    //     opacity: 0.4;
+    //     width: 15vw;
+    //     height: 15vw;
+    // }
+    @keyframes circletranslate {
+        from {
+            transform: translateX(100%) translateY(100%);
+        }
+        to {
+            transform: translateX(-150rem) translateY(-200%);
+        }
     }
 }
 </style>
