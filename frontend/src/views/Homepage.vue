@@ -89,7 +89,6 @@ export default {
                 transition: transform 0.5s cubic-bezier(.03,.92,.87,1.46);
                 &:hover {
                     transform: translate3d(0px, 0px, 100px);
-                    
                 }
             }
             h2 {
@@ -98,7 +97,6 @@ export default {
                 transition: transform 0.5s cubic-bezier(.03,.92,.87,1.46);
                 &:hover {
                     transform: translate3d(0px, 0px, 100px);
-                    
                 }
             }
             .btn {
@@ -253,13 +251,14 @@ export default {
             h1 {
                 font-size: 1.5rem;
                 margin-left: 0;
+                width: 80%;
             }
             h2 {
                 font-size: 1rem;
             }
             .btn {
-                margin: 2rem 0 0 4rem;
-                transform: scale(0.8);
+                margin: 1rem 0 0 4rem;
+                transform: scale(0.7);
             }
         }
     }
@@ -296,13 +295,14 @@ export default {
             h1 {
                 font-size: 2rem;
                 margin-left: 0.5rem;
+                width: 100%;
             }
             h2 {
                 font-size: 1.3rem;
             }
             .btn {
                 margin: 2rem 0 0 15rem;
-                transform: scale(1);
+                transform: scale(0.9);
             }
         }
     }
@@ -363,11 +363,11 @@ export default {
     .container-fluid .row{
         .title {
             h1 {
-                font-size: 2rem;
+                font-size: 3rem;
                 margin-left: 1.5rem;
             }
             h2 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             .btn {
                 margin: 2rem 0 0 20rem;
