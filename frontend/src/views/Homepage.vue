@@ -72,7 +72,6 @@ export default {
             left: 24%;
             color: $white!important;
             line-height: 50px;
-            width: 70%;
             text-align: left;
             &:hover {
                 cursor: default;
