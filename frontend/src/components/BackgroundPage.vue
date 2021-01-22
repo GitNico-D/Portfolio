@@ -1,10 +1,6 @@
 <template>
     <div>
         <div class="circlebackground -one" :style="{'--circle-color': circleColor }"></div>
-        <div class="circlebackground -two" :style="{'--circle-color': circleColor }"></div>
-        <div class="circlebackground -three" :style="{'--circle-color': circleColor }"></div>
-        <div class="circlebackground -four" :style="{'--circle-color': circleColor }"></div>
-        <div class="circlebackground -five" :style="{'--circle-color': circleColor }"></div>
     </div>
 </template>
 
@@ -21,37 +17,17 @@ export default {
 .circlebackground {
     position: absolute;
     border-radius: 50%;
-    background-color: var(--circle-color);
     top: 50%;
     right: 50%;
     transform: translate(50%, -50%);
     &.-one {
-        opacity: 0.4;
-        width: 60vw;
-        height: 60vw;
-        filter: blur(2px);
+        background-color: var(--circle-color);
+        opacity: 1;
+        width: 50vw;
+        height: 50vw;
+        @include box_shadow(0px, 0px, 20px, $purple);
     }
-    &.-two {
-        opacity: 0.2;
-        width: 70vw;
-        height: 60vw;
-    }
-    &.-three {
-        opacity: 0.4;
-        width: 75vw;
-        height: 60vw;
-    }
-    // &.-four {
-    //     opacity: 0.6;
-    //     width: 5vw;
-    //     height: 5vw;
-    // }
-    // &.-five {
-    //     opacity: 0.4;
-    //     width: 15vw;
-    //     height: 15vw;
-    // }
-    @keyframes circletranslate {
+    @keyframes respire {
         from {
             transform: translateX(100%) translateY(100%);
         }
