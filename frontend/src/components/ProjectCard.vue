@@ -1,6 +1,6 @@
 <template>
     <div class="cardflip">
-        <b-card no-body :title="title" class="frontcard">
+        <b-card no-body :title="title" class="frontcard" img-src="@/assets/logo.png">
             <b-card-title>{{ title }}</b-card-title>
         </b-card>
         <b-card class="backcard">
@@ -16,7 +16,8 @@ export default {
     props: {
         title: String,
         content: String,
-        color: String
+        color: String,
+        url: String
     }
 }
 </script>
