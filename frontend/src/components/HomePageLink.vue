@@ -143,7 +143,7 @@ export default {
             margin: 0 0 0 ($shaft-width + $text-arrow-space) ;
             line-height: 1;
             letter-spacing: 3px;
-            @include text-shadow;
+            @include text-shadow(0px, 0px, 2px, var(--text-color));
             &:hover {
                 @include text_shadow_hover;
             }
