@@ -1,6 +1,5 @@
 <template>
     <b-container fluid>
-        <BackgroundPage circleColor="#6d327c"/>
         <MenuNavigation linkColor="white" actionColorLink="#6d327c" spanColor="#6d327c"/>
         <b-row class="header">
             <PageTitle title="Projets" textColor="#6d327c"/>
@@ -22,7 +21,6 @@
 import ProjectCard from '@/components/ProjectCard.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import MenuNavigation from '@/components/MenuNavigation.vue'
-import BackgroundPage from '../components/BackgroundPage.vue'
 import HomePageLink from '@/components/HomePageLink.vue'
 
 export default {
@@ -30,7 +28,6 @@ export default {
         ProjectCard,
         PageTitle,
         MenuNavigation,
-        BackgroundPage,
         HomePageLink
     },
     data() {
@@ -74,6 +71,7 @@ export default {
         align-items: stretch;
         width: 90%;
         margin: auto;
+        padding: 4rem 0 2rem 0;
         height: unset;
         .cardflip {
             animation: slide-in-blurred-right 0.8s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
