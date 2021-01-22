@@ -1,9 +1,7 @@
 <template>
     <b-container fluid>
-        <MenuNavigation linkColor="white" actionColorLink="#6d327c" spanColor="#6d327c"/>
-        <b-row class="header">
-            <PageTitle title="Projets" textColor="#6d327c"/>
-        </b-row>
+        <Header title="Compétences" linkColor="white" actionColorLink="#6d327c" spanColor="#6d327c" textColor="#6d327c"/>
+        <BackgroundPage circleColor="#6d327c"/>
         <b-row class="cards">
             <ProjectCard title="Projet 1" content="Description projet 1" :style="[this.transformUnset ? { transform: 'unset' } : { transform: 'translateX(330%)' }]"/>
             <ProjectCard title="Projet 2" content="Description projet 2" :style="[this.transformUnset ? { transform: 'unset' } : { transform: 'translateX(330%)' }]"/>
@@ -19,15 +17,15 @@
 
 <script>
 import ProjectCard from '@/components/ProjectCard.vue'
-import PageTitle from '@/components/PageTitle.vue'
-import MenuNavigation from '@/components/MenuNavigation.vue'
 import HomePageLink from '@/components/HomePageLink.vue'
+import BackgroundPage from '@/components/BackgroundPage.vue'
+import Header from '@/components/Header.vue'
 
 export default {
     components: {
         ProjectCard,
-        PageTitle,
-        MenuNavigation,
+        Header,
+        BackgroundPage,
         HomePageLink
     },
     data() {
