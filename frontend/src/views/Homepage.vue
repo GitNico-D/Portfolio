@@ -103,12 +103,12 @@ export default {
                 margin: 2rem 0 0 20rem;
                 color: $green!important;
                 background-color: transparent!important;
-                border: 1px solid $green!important;
+                border: 2px solid $green!important;
                 animation: slideBtn 1.25s ease-in-out 0.5s;
                 &:hover {
                     color: $white!important;
                     background-color: $green!important;
-                    box-shadow:0 0 10px $white!important; 
+                    box-shadow: 0 0 10px $white!important; 
                 }
             }  
         }
@@ -138,7 +138,7 @@ export default {
 }
 @keyframes slideBtn {
     0% {
-        transform: translateY(80px);
+        transform: translateY(80px) ;
     }  
     50% {
         transform: translateY(-30px);
@@ -292,6 +292,7 @@ export default {
 @media (min-width: 576px) {
     .container-fluid .row{
         .title {
+            left: 20%;
             h1 {
                 font-size: 2rem;
                 margin-left: 0.5rem;
@@ -337,6 +338,7 @@ export default {
             }
             .btn {
                 margin: 2rem 0 0 18rem;
+                transform: scale(1);
             }
         }
     }
@@ -362,6 +364,7 @@ export default {
 @media (min-width: 992px) {
     .container-fluid .row{
         .title {
+            left: 24%;
             h1 {
                 font-size: 3rem;
                 margin-left: 1.5rem;
@@ -391,7 +394,7 @@ export default {
         &-bottom {
             transform: translatex(-25%) rotateZ(90deg);
             left: 0;
-            bottom: 16%;
+            bottom: 17%;
         }
     }
 }
@@ -421,12 +424,12 @@ export default {
         }
         &-top {
             transform: rotateZ(-90deg);
-            top: 12%;
+            top: 13%;
         }
         &-bottom {
             transform: rotateZ(90deg);
             left: 0;
-            bottom: 15%;
+            bottom: 16%;
         }
     }
 }
