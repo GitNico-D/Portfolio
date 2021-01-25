@@ -112,6 +112,7 @@ export default {
         0 50px 30px rgba(109, 50, 124, 0.3);
     color: $white;            
     text-transform: uppercase;
+    margin-top: 1rem;
     }
 }
 @media (min-width: 320px) {
