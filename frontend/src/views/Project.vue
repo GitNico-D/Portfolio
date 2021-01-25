@@ -46,12 +46,16 @@ export default {
 .container-fluid {
     position: relative;
     background-color: $dark-gray;
-    .link {
-        position: absolute;
-        &-left {
-            left: 85%;
-            top: 95%;
-            transform: scale(0.8);
+    .back {
+        position: relative;
+        height: 10vh;
+        .link {
+            position: absolute;
+            &-left {
+                left: 70%;
+                bottom: 0;
+                transform: scale(0.8);
+            }
         }
     }
     .header {
@@ -90,9 +94,7 @@ export default {
             }
         }
     }
-    .back {
-        height: 10vh;
-    }
+    
 }
 @keyframes slide-in-blurred-right {
     0% {
@@ -106,6 +108,32 @@ export default {
         transform-origin: 50% 50%;
         filter: blur(0);
         opacity: 1;
+    }
+}
+@media (min-width: 320px) {
+    .container-fluid {
+        .back {
+            .link {
+                &-left {
+                    left: 50%;
+                    bottom: 0;
+                    transform: translate(-50%) scale(0.8);
+                }
+            }
+        }
+    }
+}
+@media (min-width: 992px) {
+    .container-fluid {
+        .back {
+            .link {
+                &-left {
+                    left: 85%;
+                    bottom: 0;
+                    transform: scale(0.8);
+                }
+            }
+        }
     }
 }
 </style>

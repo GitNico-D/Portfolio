@@ -26,9 +26,7 @@ export default {
 .cardflip {
     position: relative;
     display: inline-block;
-    margin-right: 2px;
     margin-bottom: 1em;
-    width: 35rem;
     font-family: 'Oswald', sans-serif;
     .card-title {
         color: $purple;
@@ -105,6 +103,24 @@ export default {
                 transform: rotateX(0deg);
             }
         }
+    }
+}
+
+@media (min-width: 320px) {
+    .cardflip {
+        width: 100%;
+    }
+}
+@media (min-width: 576px) {
+    .cardflip {
+        width: 100%;
+        margin: 1rem 3rem 1rem 3rem;
+    }
+}
+@media (min-width: 992px) {
+    .cardflip {
+        width: 35rem;
+        margin: 1rem;
     }
 }
 </style>
