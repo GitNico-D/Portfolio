@@ -1,5 +1,5 @@
 <template>
-    <router-link :to=url :class=direction :style="{ '--text-color': textColor }">
+    <router-link :to=url :class=direction>
         <span class="the-arrow">
             <span class="shaft"></span>
         </span>
@@ -18,8 +18,7 @@ export default {
     props: {
         action: String,
         url: String,
-        direction: String,
-        textColor: String
+        direction: String
     }
 }
 </script>
@@ -27,7 +26,7 @@ export default {
 <style lang="scss" >
 .animated-arrowRtl {
     display: inline-block;
-    color: var(--text-color);
+    color: $green;
     font-size: 1.75em;
     position: relative;
     transition: all 0.2s;
@@ -57,11 +56,10 @@ export default {
                 .shaft {
                     width: 0;
                     transform: translateX(200%);
-                    transition-delay: 0;                    
                     &:before,
                     &:after {
                         width: 0;
-                        transition-delay: 0;
+                        
                         transition: all 0.1s;
                     }
                     &:before {
@@ -78,14 +76,12 @@ export default {
         width: $shaft-width;
         transition: all 0.2s;
         &.-right {
-            top: 5px;
+            top: 6px;
             .shaft {
-                width: $shaft-width;
-                transition-delay: 0.2s;                
+                width: $shaft-width;          
                 &:before,
                 &:after { 
                     width: $arrow-head-width;
-                    transition-delay: 0.3s;
                     transition: all 0.5s;
                 }        
                 &:before {
@@ -98,7 +94,7 @@ export default {
             }
         }
         .shaft {
-            background-color: var(--text-color);
+            background-color: $green;
             display: block;
             height: $shaft-thickness;
             position: relative;
@@ -109,7 +105,7 @@ export default {
             }
             &:before,
             &:after {
-                background-color: var(--text-color);
+                background-color: $green;
                 content: '';
                 display: block;
                 height: $arrow-head-thickness;
@@ -130,7 +126,7 @@ export default {
 
 .animated-arrowLtr {
     display: inline-block;
-    color: var(--text-color);
+    color: $green;
     font-size: 1.75em;
     position: relative;
     transition: all 0.2s;
@@ -143,7 +139,7 @@ export default {
             margin: 0 0 0 ($shaft-width + $text-arrow-space) ;
             line-height: 1;
             letter-spacing: 3px;
-            @include text-shadow(0px, 0px, 2px, var(--text-color));
+            @include text-shadow;
             &:hover {
                 @include text_shadow_hover;
             }
@@ -163,7 +159,6 @@ export default {
                 .shaft {
                     width: 0;
                     transform: translateX(200%);
-                    transition-delay: 0;                    
                     &:before,
                     &:after {
                         width: 0;
@@ -181,10 +176,9 @@ export default {
     }
     .the-arrow {
         &.-right {
-            top: 16px;
+            top: 24px;
             .shaft {
-                width: $shaft-width;
-                transition-delay: 0.2s;                
+                width: $shaft-width;             
                 &:before,
                 &:after { 
                     width: $arrow-head-width;
@@ -200,7 +194,7 @@ export default {
             }
         }
         .shaft {
-            background-color: var(--text-color);
+            background-color: $green;
             display: block;
             height: $shaft-thickness;
             position: relative;
@@ -211,7 +205,7 @@ export default {
             }
             &:before,
             &:after {
-                background-color: var(--text-color);
+                background-color: $green;
                 content: '';
                 display: block;
                 height: $arrow-head-thickness;
