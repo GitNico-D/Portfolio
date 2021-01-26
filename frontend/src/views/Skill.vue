@@ -1,22 +1,16 @@
 <template>
     <b-container fluid>
         <b-row>
-            <MenuNavigation linkColor="white" actionColorLink="#36C486" spanColor="#36C486"/>
             <HomePageLink action="Retour" url="/" direction="animated-arrowRtl" class="link link-top" textColor="#36C486"/>
-            <PageTitle title="Page Compétences" textColor="#36C486" />
             </b-row>
     </b-container>
 </template>
 
 <script>
-import PageTitle from '@/components/PageTitle.vue'
-import MenuNavigation from '@/components/MenuNavigation.vue'
 import HomePageLink from '@/components/HomePageLink.vue'
 
 export default {
     components: {
-        PageTitle,
-        MenuNavigation,
         HomePageLink
     }
 }
