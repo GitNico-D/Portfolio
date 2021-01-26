@@ -11,65 +11,67 @@
                 <div class="circle circle-green2"></div>
                 <div class="circle circle-blue2"></div>
             </div>
-            <div class="title" v-on:mouseleave="mouseLeave">
+            <div class="title" >
                 <h2><span>Nicolas</span>,</h2> 
                 <h1>Développeur Web</h1>
-            <b-button >En savoir plus</b-button>
+            <b-button @click="actionTransition" directionAnimation="up">En savoir plus</b-button>
             </div>    
         </b-row>
-        <Transition />
-        <HomePageLink action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right" textColor="#36C486"/>
-        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="link link-left" textColor="#36C486"/>
-        <HomePageLink action="Parcours" url="/career" direction="animated-arrowRtl" class="link link-top" textColor="#36C486"/>
-        <HomePageLink action="Compétences" url="/skills" direction="animated-arrowRtl" class="link link-bottom" textColor="#36C486"/>
+        <Transition v-show="showTransition" directionAnimation="up"/>
+        <HomePageLink @click="actionTransition" directionAnimation="right" action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right"/>
+        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="link link-left"/>
+        <HomePageLink action="Parcours" url="/career" direction="animated-arrowRtl" class="link link-top"/>
+        <HomePageLink action="Compétences" url="/skills" direction="animated-arrowRtl" class="link link-bottom"/>
     </b-container>
 </template>
 
 <script>
 import HomePageLink from "@/components/HomePageLink.vue"
 import Transition from "@/components/Transition.vue"
-import { gsap } from 'gsap'
 
 export default {
     name: "background",
     components: {
         HomePageLink,
-        Transition
+        Transition,
     },
     data() {
         return {
+            showTransition: true            
         }
     },
     methods: {
-        mouseLeave() { 
-            gsap.from(".title h1", { duration: 2.5, ease: "elastic.out(1, 0.3)", stagger:0.5, z: -60 })
-            gsap.from(".title h2", { duration: 2, ease: "elastic.out(1, 0.3)", stagger:0.5, z: -40 })
+        actionTransition () {
+            this.showTransition = true;
+            setTimeout(() => {
+                this.showTransition = false;
+            },1300);
         }
     },
-    mounted() {
-        gsap.timeline()
-            .from(".title h1", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "+=0.5")
-            .from(".title h2", { y:160, stagger: 0.1, duration: 0.8, ease: "back" }, "-=1")
-            .from(".link", { opacity: 0, duration: 1}, "=-0.5")
-            .from(".circle", { duration: 1, scale: 0.5,  opacity: 0, stagger: 0.3}, "-=0.25")
+    created() {
+        setTimeout(() => {
+            this.showTransition = false;
+        },1300);
     }
 }
 </script>
 
 <style lang="scss">
 .container-fluid {
-    @include container-background;
+    background-color: $dark-gray;
+    width: 100vh;
+    position: relative;
     perspective: 1000px;
+    overflow: hidden;
     .row {
         height: 100vh;
         .title {
             @include customFont;
             position: absolute;
             top: 45%;
-            left: 20%;
+            left: 24%;
             color: $white!important;
             line-height: 50px;
-            width: 70%;
             text-align: left;
             &:hover {
                 cursor: default;
@@ -82,19 +84,78 @@ export default {
                 @include customFont;
                 @include text_shadow(2px, 3px, 2px);
                 color: $white!important;
+                margin-left: 2rem;
+                animation: slideH1 1s ease-in-out 0.5s;
+                transition: transform 0.5s cubic-bezier(.03,.92,.87,1.46);
+                &:hover {
+                    transform: translate3d(0px, 0px, 100px);
+                }
+            }
+            h2 {
+                font-size: 2.5rem; 
+                animation: slideH2 1.25s ease-in-out 0.5s;
+                transition: transform 0.5s cubic-bezier(.03,.92,.87,1.46);
+                &:hover {
+                    transform: translate3d(0px, 0px, 100px);
+                }
             }
             .btn {
                 margin: 2rem 0 0 20rem;
                 color: $green!important;
                 background-color: transparent!important;
-                border: 1px solid $green!important;
+                border: 2px solid $green!important;
+                animation: slideBtn 1.25s ease-in-out 0.5s;
                 &:hover {
                     color: $white!important;
                     background-color: $green!important;
-                    box-shadow:0 0 10px $white!important; 
+                    box-shadow: 0 0 10px $white!important; 
                 }
-            }   
+            }  
         }
+    }
+}
+@keyframes slideH1 {
+    0% {
+        transform: translateY(100px);
+    }  
+    50% {
+        transform: translateY(-40px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+@keyframes slideH2 {
+    0% {
+        transform: translateY(100px);
+    }  
+    50% {
+        transform: translateY(-60px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+@keyframes slideBtn {
+    0% {
+        transform: translateY(80px) ;
+    }  
+    50% {
+        transform: translateY(-30px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+@keyframes opacityIn {
+    0% {
+        opacity: 0;
+    }  
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }
 .circle_box {
@@ -112,7 +173,7 @@ export default {
         height: 10vw;
         top: 44%;
         left: 50%;
-        // transform-style: preserve-3d;
+        transform-style: preserve-3d;
         animation-duration: 15s;
         filter: blur(7px);
     }
@@ -183,29 +244,6 @@ export default {
     }
 }
 
-.link {
-    position: absolute;
-    &-left {
-        left: 5%;
-        top: 5%;
-    }
-    &-right {
-        right: 4%;
-        bottom: 5%;
-    }
-    &-top {
-        transform-style: preserve-3d;
-        transform: rotateZ(-90deg);
-        right: 0;
-        top: 15%;
-    }
-    &-bottom {
-        transform-style: preserve-3d;
-        transform: rotateZ(90deg);
-        left: 0;
-        bottom: 17%;
-    }
-}
 
 @media (min-width: 320px) {
     .container-fluid .row{
@@ -213,31 +251,78 @@ export default {
             h1 {
                 font-size: 1.5rem;
                 margin-left: 0;
+                width: 80%;
             }
             h2 {
                 font-size: 1rem;
             }
             .btn {
-                margin: 2rem 0 0 4rem;
-                transform: scale(0.8);
+                margin: 1rem 0 0 4rem;
+                transform: scale(0.7);
             }
+        }
+    }
+    .link {
+        position: absolute;
+        animation: 1.5s ease-in-out opacityIn;
+        &-left {
+            transform: translateX(-5%) scale(0.7);
+            left: 0;
+            top: 2%;
+        }
+        &-right {
+            transform: translateX(5%) scale(0.7);
+            right: 0;
+            bottom: 2%;
+        }
+        &-top {
+            transform-style: preserve-3d;
+            transform: translateX(35%) rotateZ(-90deg) scale(0.7);
+            right: 0;
+            top: 12%;
+        }
+        &-bottom {
+            transform-style: preserve-3d;
+            transform: translatex(-35%) rotateZ(90deg) scale(0.7);
+            left: 0;
+            bottom: 14%;
         }
     }
 }
 @media (min-width: 576px) {
     .container-fluid .row{
         .title {
+            left: 20%;
             h1 {
                 font-size: 2rem;
                 margin-left: 0.5rem;
+                width: 100%;
             }
             h2 {
                 font-size: 1.3rem;
             }
             .btn {
                 margin: 2rem 0 0 15rem;
-                transform: scale(1);
+                transform: scale(0.9);
             }
+        }
+    }
+    .link {
+        &-left {
+            transform: scale(0.8);
+        }
+        &-right {
+            transform: scale(0.8);
+        }
+        &-top {
+            transform: translateX(35%) rotateZ(-90deg) scale(0.8);
+            right: 0;
+            top: 12%;
+        }
+        &-bottom {
+            transform: translatex(-35%) rotateZ(90deg) scale(0.8);
+            left: 0;
+            bottom: 14%;
         }
     }
 }
@@ -253,23 +338,63 @@ export default {
             }
             .btn {
                 margin: 2rem 0 0 18rem;
+                transform: scale(1);
             }
+        }
+    }
+    .link {
+        &-left {
+            transform: scale(0.9);
+        }
+        &-right {
+            transform: scale(0.9);
+        }
+        &-top {
+            transform: translateX(25%) rotateZ(-90deg) scale(0.9);
+            right: 0;
+            top: 12%;
+        }
+        &-bottom {
+            transform: translatex(-25%) rotateZ(90deg) scale(0.9);
+            left: 0;
+            bottom: 14%;
         }
     }
 }
 @media (min-width: 992px) {
     .container-fluid .row{
         .title {
+            left: 24%;
             h1 {
-                font-size: 2rem;
+                font-size: 3rem;
                 margin-left: 1.5rem;
             }
             h2 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             .btn {
                 margin: 2rem 0 0 20rem;
             }
+        }
+    }
+    .link {
+        &-left {
+            left: 3%;
+            top: 4%;
+        }
+        &-right {
+            right: 3%;
+            bottom: 4%;
+        }
+        &-top {
+            transform: translateX(25%) rotateZ(-90deg);
+            right: 0;
+            top: 14%;
+        }
+        &-bottom {
+            transform: translatex(-25%) rotateZ(90deg);
+            left: 0;
+            bottom: 17%;
         }
     }
 }
@@ -286,6 +411,25 @@ export default {
             .btn {
                 margin: 2rem 0 0 30rem;
             }
+        }
+    }
+    .link {
+        &-left {
+            left: 5%;
+            top: 5%;
+        }
+        &-right {
+            right: 4%;
+            bottom: 5%;
+        }
+        &-top {
+            transform: rotateZ(-90deg);
+            top: 13%;
+        }
+        &-bottom {
+            transform: rotateZ(90deg);
+            left: 0;
+            bottom: 16%;
         }
     }
 }
