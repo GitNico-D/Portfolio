@@ -59,8 +59,7 @@ export default {
                     &:before,
                     &:after {
                         width: 0;
-                        
-                        transition: all 0.1s;
+                        transition-delay: 0;
                     }
                     &:before {
                         transform: rotate(0);
@@ -139,7 +138,7 @@ export default {
             margin: 0 0 0 ($shaft-width + $text-arrow-space) ;
             line-height: 1;
             letter-spacing: 3px;
-            @include text-shadow;
+            @include text-shadow(0px, 0px, 2px, var(--text-color));
             &:hover {
                 @include text_shadow_hover;
             }
@@ -178,7 +177,7 @@ export default {
         &.-right {
             top: 24px;
             .shaft {
-                width: $shaft-width;             
+                width: $shaft-width;              
                 &:before,
                 &:after { 
                     width: $arrow-head-width;

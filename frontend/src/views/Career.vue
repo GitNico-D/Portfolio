@@ -6,7 +6,7 @@
     </b-container>
 </template>
 
-<script> 
+<script>
 import HomePageLink from '@/components/HomePageLink.vue'
 
 export default {
