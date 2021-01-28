@@ -59,8 +59,8 @@ export default {
                     transform: translateX(200%);
                     &:before,
                     &:after {
-                        width: 0;
-                        transition-delay: 0;
+                        width: 0;                        
+                        transition: all 0.1s;
                     }
                     &:before {
                         transform: rotate(0);
@@ -178,7 +178,7 @@ export default {
         &.-right {
             top: 24px;
             .shaft {
-                width: $shaft-width;              
+                width: $shaft-width;
                 &:before,
                 &:after { 
                     width: $arrow-head-width;

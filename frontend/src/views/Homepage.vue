@@ -366,6 +366,7 @@ export default {
     .container-fluid .row{
         .title {
             left: 21%;
+            left: 24%;
             h1 {
                 font-size: 3rem;
                 margin-left: 1.5rem;

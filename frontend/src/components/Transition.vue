@@ -3,6 +3,9 @@
         <div class="slider-green" >
             <div class="slider-purple"></div>
         </div>
+    <div class="slider-green" >
+        <div class="slider-purple"></div>
+    </div>
     </div>
 </template>
 
