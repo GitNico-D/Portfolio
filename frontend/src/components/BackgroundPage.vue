@@ -20,7 +20,7 @@ export default {
     width: 45vw;
     height: 45vw;
     @include box_shadow(0px, 0px, 55px, var(--circle-color));
-    animation: scale-up-center 0.8s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    animation: scale-up-center 0.8s cubic-bezier(0.390, 0.575, 0.565, 1.000) 1.2s both;
 }
 @keyframes scale-up-center {
     0% {

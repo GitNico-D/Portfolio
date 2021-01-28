@@ -11,7 +11,7 @@
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
-        <h1 :style="{'--color': color}" class="">{{ title }}</h1>
+        <h1 :style="{'--color': color}" class="mt-1">{{ title }}</h1>
     </b-row>
 </template>
 
@@ -38,6 +38,19 @@ export default {
                 color: $white;
                 text-transform: uppercase;
                 transition: ease-out 0.2s;
+                animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+                &:nth-child(1) {
+                    animation-delay: 1.2s;
+                }
+                &:nth-child(3) {
+                    animation-delay: 1.4s;
+                }
+                &:nth-child(5) {
+                    animation-delay: 1.4s;
+                }
+                &:nth-child(7) {
+                    animation-delay: 1.2s;
+                }
                 &::after {
                     position: absolute;
                     content: " ";
@@ -67,6 +80,7 @@ export default {
             span {
                 color: var(--color);
                 font-weight: bold;
+                animation: swirl-in-fwd 0.8s ease-out 1.6s both;
             }
             .indicator
             {
@@ -90,20 +104,42 @@ export default {
         }
     }
     h1 {
-    @include customFont;
-    text-shadow: 0 1px 0 var(--color),
-        0 2px 0 var(--color), 
-        0 3px 0 var(--color), 
-        0 4px 0 var(--color), 
-        0 5px 0 var(--color),
-        0 6px 0 var(--color),
-        0 7px 0 var(--color), 
-        0 8px 0 var(--color), 
-        0 9px 0 var(--color),
-        0 50px 30px rgba(109, 50, 124, 0.3);
-    color: $white;            
-    text-transform: uppercase;
-    margin-top: 1rem;
+        @include customFont;
+        text-shadow: 0 1px 0 var(--color),
+            0 2px 0 var(--color), 
+            0 3px 0 var(--color), 
+            0 4px 0 var(--color), 
+            0 5px 0 var(--color),
+            0 6px 0 var(--color),
+            0 7px 0 var(--color), 
+            0 8px 0 var(--color), 
+            0 9px 0 var(--color),
+            0 50px 30px rgba(109, 50, 124, 0.3);
+        color: $white;            
+        text-transform: uppercase;
+        animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1s both;
+    }
+    @keyframes tracking-in-expand {
+        0% {
+            letter-spacing: -0.5em;
+            opacity: 0;
+        }
+        40% {
+            opacity: 0.6;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    @keyframes swirl-in-fwd {
+        0% {
+            transform: rotate(-540deg) scale(0);
+            opacity: 0;
+        }
+        100% {
+            transform: rotate(0) scale(1);
+            opacity: 1;
+        }
     }
 }
 @media (min-width: 320px) {

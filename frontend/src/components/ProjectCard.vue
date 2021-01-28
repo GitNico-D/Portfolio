@@ -98,10 +98,16 @@ export default {
         margin: 1rem;
     }
 }
-@media (min-width: 576px) {
+@media (min-width: 768px) {
     .cardflip {
-        width: 100%;
-        margin: 1rem 3rem 1rem 3rem;
+        width: 40rem;
+        margin: 1rem;
+    }
+}
+@media (min-width: 768px) {
+    .cardflip {
+        width: 40rem;
+        margin: 1rem;
     }
 }
 @media (min-width: 992px) {
