@@ -41,6 +41,7 @@ export default {
             transform: translateY(0px);
             animation: ease-in-out 1.5s slideUpGreen;
             z-index: 255;
+            
         }
         &-purple {
             background: $purple;
@@ -74,38 +75,38 @@ export default {
         }
     }
 }
-.up {
-    .slider {
-        &-green {
-            transform: translateY(0px);
-            animation: ease-in-out 1.5s slideRightGreen;
-        }
-        &-purple {
-            animation: ease-in-out 1.5s slideRightPurple;
-            transition-delay: 0.5s;
-        }
-        @keyframes slideRightGreen { 
-            from { 
-                transform: translateY(0%);
-                filter: blur(5px);
-            }
-            to  { 
-                transform: translateY(-110%);
-                filter: blur(0);
-            }
-        }       
-        @keyframes slideRightPurple { 
-            from { 
-                transform: translateY(100%);
-                height: 100%;
-                filter: blur(5px);
-                }
-            to  { 
-                transform: translateY(-110%);
-                height: 0%;
-                filter: blur(0);
-            }
-        }
-    }
-}
+// .up {
+//     .slider {
+//         &-green {
+//             transform: translateY(0px);
+//             animation: ease-in-out 1.5s slideRightGreen;
+//         }
+//         &-purple {
+//             animation: ease-in-out 1.5s slideRightPurple;
+//             transition-delay: 0.5s;
+//         }
+//         @keyframes slideRightGreen { 
+//             from { 
+//                 transform: translateY(0%);
+//                 filter: blur(5px);
+//             }
+//             to  { 
+//                 transform: translateY(-110%);
+//                 filter: blur(0);
+//             }
+//         }       
+//         @keyframes slideRightPurple { 
+//             from { 
+//                 transform: translateY(100%);
+//                 height: 100%;
+//                 filter: blur(5px);
+//                 }
+//             to  { 
+//                 transform: translateY(-110%);
+//                 height: 0%;
+//                 filter: blur(0);
+//             }
+//         }
+//     }
+// }
 </style>
