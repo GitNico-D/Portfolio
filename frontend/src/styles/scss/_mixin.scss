@@ -1,0 +1,20 @@
+// _mixin.scss
+@import "./_variables";
+
+@mixin customFont {
+    font-weight: 900!important;
+    letter-spacing: 0.10em;
+    margin: auto;
+}
+
+@mixin text_shadow ($offset-x: 0px, $offset-y: 0px, $blur: 2px, $color: $green) {
+    text-shadow: $offset-x $offset-y $blur $color;
+}
+
+@mixin text_shadow_hover ($offset-x: 0px, $offset-y: 0px, $blur: 2px, $color: $white) {
+    text-shadow: $offset-x $offset-y $blur $color;
+}
+
+@mixin box_shadow ($box-offset-x: 0px, $box-offset-y: 0px, $box-blur: 10px, $color: $green) {
+    box-shadow: $box-offset-x $box-offset-y $box-blur $color;
+}
