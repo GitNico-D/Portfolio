@@ -39,8 +39,6 @@ export default {
         justify-content: center;
         color: white;
         width: inherit;
-        background-size: cover!important;
-        background-position: center!important;
         height: 25rem;
         padding: 1em 2em;
         background: $white;
