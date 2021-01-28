@@ -18,7 +18,7 @@
             </div>    
         </b-row>
         <Transition v-show="showTransition" directionAnimation="up"/>
-        <HomePageLink @click="actionTransition" directionAnimation="right" action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right" textColor="#36C486"/>
+        <HomePageLink @click="actionTransition" action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right" textColor="#36C486"/>
         <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="link link-left" textColor="#36C486"/>
         <HomePageLink action="Parcours" url="/career" direction="animated-arrowRtl" class="link link-top" textColor="#36C486"/>
         <HomePageLink action="Compétences" url="/skills" direction="animated-arrowRtl" class="link link-bottom" textColor="#36C486"/>
