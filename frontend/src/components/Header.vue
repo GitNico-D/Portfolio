@@ -1,17 +1,17 @@
 <template>
     <b-row>
         <b-navbar toggleable="sm">
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-navbar-toggle target="nav-collapse" :style="{'--color': color}" ></b-navbar-toggle>
             <b-collapse id="nav-collapse" is-nav>
-                <b-navbar-nav :style="{ '--link-color': linkColor, '--action-color-link': actionColorLink}">
-                    <router-link to="/projects">Projets</router-link><span :style="{'--span-color': spanColor}"> | </span>
-                    <router-link to="/experiences">Expériences</router-link><span :style="{'--span-color': spanColor}"> | </span> 
-                    <router-link to="/skills">Compétences</router-link><span :style="{'--span-color': spanColor}"> | </span>
-                    <router-link to="/career">Carrières</router-link><span :style="{'--span-color': spanColor}"> | </span> 
+                <b-navbar-nav class="p-3" :style="{ '--color': color, '--color': color}">
+                    <router-link to="/projects">Projets</router-link><span class="px-3" :style="{'--color': color}"> | </span>
+                    <router-link to="/experiences">Expériences</router-link><span class="px-3" :style="{'--color': color}"> | </span> 
+                    <router-link to="/skills">Compétences</router-link><span class="px-3" :style="{'--color': color}"> | </span>
+                    <router-link to="/career">Carrières</router-link><span class="px-3" :style="{'--color': color}"> | </span> 
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
-        <h1 :style="{'--text-color': textColor}" class="">{{ title }}</h1>
+        <h1 :style="{'--color': color}" class="">{{ title }}</h1>
     </b-row>
 </template>
 
@@ -19,10 +19,7 @@
 export default {
     name: "Header",
     props: {
-        linkColor: String,
-        spanColor: String,
-        actionColorLink: String,
-        textColor: String,
+        color: String,
         title: String
     }
 }
@@ -31,19 +28,14 @@ export default {
 <style lang="scss" scoped>
 .row {
     height: 20vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
     .navbar {
         width: 100%;
         &-nav {
-            padding: 1rem;
             margin: auto;
-            text-align: center;
             a {
                 position: relative;
                 font-family: 'Oswald', sans-serif;
-                color: var(--link-color);
+                color: $white;
                 text-transform: uppercase;
                 transition: ease-out 0.2s;
                 &::after {
@@ -53,7 +45,7 @@ export default {
                     left: 0;
                     width: 100%;
                     height: 3px;
-                    background: var(--action-color-link);
+                    background: var(--color);
                     transform: scaleX(0);
                     transform-origin: right;
                     transition: transform 0.5s;
@@ -63,18 +55,18 @@ export default {
                     transform-origin: left;
                 }
                 &:hover {
-                    color: var(--action-color-link);
+                    color: var(--color);
                 }
             }
             .router-link-exact-active {
-                color: var(--action-color-link);
+                color: var(--color);
                 &:hover {
                     color: $white;
                 }
             }
             span {
-                padding: 0 1rem 0 1rem;
-                color: var(--action-color-link);
+                // padding: 0 1rem 0 1rem;
+                color: var(--color);
                 font-weight: bold;
             }
             .indicator
@@ -94,21 +86,21 @@ export default {
         }
         button {
             color: $white;
-            background-color: $green!important;
-            border: 1px solid var(--text-color)!important;
+            background-color: var(--color);
+            border: 1px solid var(--color)!important;
         }
     }
     h1 {
     @include customFont;
-    text-shadow: 0 1px 0 var(--text-color),
-        0 2px 0 var(--text-color), 
-        0 3px 0 var(--text-color), 
-        0 4px 0 var(--text-color), 
-        0 5px 0 var(--text-color),
-        0 6px 0 var(--text-color),
-        0 7px 0 var(--text-color), 
-        0 8px 0 var(--text-color), 
-        0 9px 0 var(--text-color),
+    text-shadow: 0 1px 0 var(--color),
+        0 2px 0 var(--color), 
+        0 3px 0 var(--color), 
+        0 4px 0 var(--color), 
+        0 5px 0 var(--color),
+        0 6px 0 var(--color),
+        0 7px 0 var(--color), 
+        0 8px 0 var(--color), 
+        0 9px 0 var(--color),
         0 50px 30px rgba(109, 50, 124, 0.3);
     color: $white;            
     text-transform: uppercase;

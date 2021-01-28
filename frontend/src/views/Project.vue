@@ -1,8 +1,8 @@
 <template>
     <b-container fluid>
-        <Header title="Compétences" linkColor="white" actionColorLink="#6d327c" spanColor="#6d327c" textColor="#6d327c"/>
+        <Header title="Compétences" color="#6d327c"/>
         <BackgroundPage circleColor="#6d327c"/>
-        <b-row class="cards">
+        <b-row class="cards m-auto">
             <ProjectCard title="Projet 1" content="Description projet 1" :style="[this.transformUnset ? { transform: 'unset' } : { transform: 'translateX(330%)' }]"/>
             <ProjectCard title="Projet 2" content="Description projet 2" :style="[this.transformUnset ? { transform: 'unset' } : { transform: 'translateX(330%)' }]"/>
             <ProjectCard title="Projet 3" content="Description projet 3" :style="[this.transformUnset ? { transform: 'unset' } : { transform: 'translateX(330%)' }]"/>
@@ -70,9 +70,8 @@ export default {
     }
     .cards {
         justify-content: space-around; 
-        align-items: stretch;
-        width: 90%;
-        margin: auto;
+        width: 100%;
+        // margin: auto;
         padding: 4rem 0 2rem 0;
         height: unset;
         .cardflip {
@@ -128,7 +127,7 @@ export default {
         .back {
             .link {
                 &-left {
-                    left: 85%;
+                    left: 81%;
                     bottom: 0;
                     transform: scale(0.8);
                 }

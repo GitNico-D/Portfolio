@@ -1,7 +1,7 @@
 <template>
-    <div class="cardflip">
-        <b-card no-body :title="title" class="frontcard" img-src="@/assets/logo.png">
-            <b-card-title>{{ title }}</b-card-title>
+    <div class="cardflip mb-3">
+        <b-card no-body :title="title" class="frontcard">
+            <b-card-title class="fs-1">{{ title }}</b-card-title>
         </b-card>
         <b-card class="backcard">
             <b-card-text>{{ content }}</b-card-text>
@@ -24,23 +24,19 @@ export default {
 
 <style lang="scss">
 .cardflip {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 1em;
     font-family: 'Oswald', sans-serif;
     .card-title {
-        color: $purple;
-        font-size: 2rem;
+        color: $purple;       
         text-transform: uppercase;
-        margin-top: 9.5rem;
         @include special-text-shadow;
     }
     .frontcard,
     .backcard {
-        display: block;
         transition-timing-function: cubic-bezier(.175, .885, .32, 1.275);
         transition-duration: 1s;
         transition-property: transform, opacity;
+        align-items: center;
+        justify-content: center;
         color: white;
         width: inherit;
         background-size: cover!important;
@@ -69,16 +65,19 @@ export default {
         transform: rotateY(-180deg);
         @include box_shadow(0px, 0px, 30px, $purple);
         @include box_shadow(0px, 0px, 1px, $purple);
-        .btn {
-            margin: 14rem 0 0 0;
-            color: $purple!important;
-            background-color: transparent!important;
-            border: 1px solid $purple!important;
-            transform: translateZ(100px);
-            &:hover {
-                color: $white!important;
-                background-color: $purple!important;
-                @include box_shadow(0px, 0px, 10px, $purple); 
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            .btn {
+                color: $purple!important;
+                background-color: transparent!important;
+                border: 1px solid $purple!important;
+                transform: translateZ(100px);
+                &:hover {
+                    color: $white!important;
+                    background-color: $purple!important;
+                    @include box_shadow(0px, 0px, 10px, $purple); 
+                }
             }
         }
     }
@@ -109,6 +108,7 @@ export default {
 @media (min-width: 320px) {
     .cardflip {
         width: 100%;
+        margin: 1rem;
     }
 }
 @media (min-width: 576px) {
@@ -119,7 +119,7 @@ export default {
 }
 @media (min-width: 992px) {
     .cardflip {
-        width: 35rem;
+        width: 40rem;
         margin: 1rem;
     }
 }
