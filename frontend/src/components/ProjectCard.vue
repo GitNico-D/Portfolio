@@ -90,19 +90,6 @@ export default {
             transform: rotateY(0deg);
         }
     }
-    &.flip-vertical {
-        .backcard {
-            transform: rotateX(-180deg);
-        }
-        &:hover {
-            .frontcard {
-                transform: rotateX(180deg);
-            }
-            .backcard {
-                transform: rotateX(0deg);
-            }
-        }
-    }
 }
 
 @media (min-width: 320px) {
