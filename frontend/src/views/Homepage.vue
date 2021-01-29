@@ -18,10 +18,10 @@
             </div>    
         </b-row>
         <Transition v-show="showTransition" directionAnimation="up"/>
-        <HomePageLink @click="actionTransition" directionAnimation="right" action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right"/>
-        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="link link-left"/>
-        <HomePageLink action="Parcours" url="/career" direction="animated-arrowRtl" class="link link-top"/>
-        <HomePageLink action="Compétences" url="/skills" direction="animated-arrowRtl" class="link link-bottom"/>
+        <HomePageLink @click="actionTransition" action="Projets" url="/projects" direction="animated-arrowRtl" class="link link-right" textColor="#36C486"/>
+        <HomePageLink action="Expériences" url="/experiences" direction="animated-arrowLtr" class="link link-left" textColor="#36C486"/>
+        <HomePageLink action="Parcours" url="/career" direction="animated-arrowRtl" class="link link-top" textColor="#36C486"/>
+        <HomePageLink action="Compétences" url="/skills" direction="animated-arrowRtl" class="link link-bottom" textColor="#36C486"/>
     </b-container>
 </template>
 
@@ -248,6 +248,7 @@ export default {
 @media (min-width: 320px) {
     .container-fluid .row{
         .title {
+            left: 20%;
             h1 {
                 font-size: 1.5rem;
                 margin-left: 0;
@@ -292,7 +293,7 @@ export default {
 @media (min-width: 576px) {
     .container-fluid .row{
         .title {
-            left: 20%;
+            left: 16%;
             h1 {
                 font-size: 2rem;
                 margin-left: 0.5rem;
@@ -364,6 +365,7 @@ export default {
 @media (min-width: 992px) {
     .container-fluid .row{
         .title {
+            left: 21%;
             left: 24%;
             h1 {
                 font-size: 3rem;
@@ -401,6 +403,7 @@ export default {
 @media (min-width: 1200px) {
     .container-fluid .row{
         .title {
+            left: 20%;
             h1 {
                 font-size: 4rem;
                 margin-left: 2rem;
