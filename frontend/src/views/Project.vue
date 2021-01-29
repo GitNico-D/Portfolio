@@ -1,14 +1,14 @@
 <template>
     <b-container fluid>
-        <Header title="Compétences" color="#6d327c"/>
+        <Header title="Projets" color="#6d327c"/>
         <BackgroundPage circleColor="#6d327c"/>
         <Transition v-show="showTransition" directionAnimation="right"/>
         <b-row class="cards m-auto">
-            <ProjectCard title="Projet 1" content="Description projet 1" />
-            <ProjectCard title="Projet 2" content="Description projet 2" />
-            <ProjectCard title="Projet 3" content="Description projet 3" />
-            <ProjectCard title="Projet 4" content="Description projet 4" />
-            <ProjectCard title="Projet 5" content="Description projet 5" />
+            <ProjectCard title="Projet 1" content="Description projet 1" url="/" :imgSrc="require('../assets/img-test-1.jpg')" imgAlt="Image Projet 1"/>
+            <ProjectCard title="Projet 2" content="Description projet 2" url="/" :imgSrc="require('../assets/img-test-2.jpg')" imgAlt="Image Projet 2"/>
+            <ProjectCard title="Projet 3" content="Description projet 3" url="/" :imgSrc="require('../assets/img-test-3.jpg')" imgAlt="Image Projet 3"/>
+            <ProjectCard title="Projet 4" content="Description projet 4" url="/" :imgSrc="require('../assets/img-test-1.jpg')" imgAlt="Image Projet 4"/>
+            <ProjectCard title="Projet 5" content="Description projet 5" url="/" :imgSrc="require('../assets/img-test-2.jpg')" imgAlt="Image Projet 5"/>
         </b-row>
         <b-row class="back">
             <HomePageLink action="Retour" url="/" direction="animated-arrowLtr" class="link link-left" textColor="#6d327c"/>
@@ -79,10 +79,7 @@ export default {
         left: 5rem;
     }
     .cards {
-        justify-content: space-around; 
-        width: 100%;
-        margin: auto;
-        padding: 4rem 0 2rem 0;
+        justify-content: space-around;
         height: unset;
         .cardflip {
             animation: slide-in-blurred-right 0.8s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;

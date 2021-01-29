@@ -1,11 +1,9 @@
 <template>
     <div class="cardflip mb-3">
-        <b-card no-body :title="title" class="frontcard">
-            <b-card-title class="fs-1">{{ title }}</b-card-title>
-        </b-card>
+        <b-card overlay :img-src="imgSrc" :img-alt="imgAlt" :title="title"  class="frontcard"></b-card>        
         <b-card class="backcard">
             <b-card-text>{{ content }}</b-card-text>
-            <b-button class="btn">Vers le site</b-button>
+            <b-link :href="url" class="btn">Vers le site</b-link>
         </b-card>
     </div>
 </template>
@@ -17,7 +15,9 @@ export default {
         title: String,
         content: String,
         color: String,
-        url: String
+        url: String,
+        imgSrc: String,
+        imgAlt: String
     }
 }
 </script>
@@ -26,7 +26,7 @@ export default {
 .cardflip {
     font-family: 'Oswald', sans-serif;
     .card-title {
-        color: $purple;       
+        color: $white;       
         text-transform: uppercase;
         @include special-text-shadow;
     }
@@ -38,11 +38,12 @@ export default {
         align-items: center;
         justify-content: center;
         color: white;
-        width: inherit;
-        height: 25rem;
-        padding: 1em 2em;
+        padding: 0.5em;
         background: $white;
         border-radius: 10px;
+        .card-title {
+            font-size: 3rem;
+        }
         .card-text {
             font-size: 1.1rem;
             line-height: 2rem;
@@ -54,15 +55,27 @@ export default {
         transform: rotateY(0deg);
         @include box_shadow(0px, 0px, 5px, $white);
         background: $white;
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
     }
     .backcard {
         position: absolute;
         opacity: 0;
         top: 0px;
         left: 0px;
+        width: inherit;
+        height: 100%;
         transform: rotateY(-180deg);
         @include box_shadow(0px, 0px, 30px, $purple);
         @include box_shadow(0px, 0px, 1px, $purple);
+        .card-text {
+            padding: 0.5rem;
+            border: 1px solid $purple;
+            border-radius: 5%;
+        }
         .card-body {
             display: flex;
             flex-direction: column;
