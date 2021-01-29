@@ -68,16 +68,6 @@ export default {
             }
         }
     }
-    .header {
-        align-items: center;        
-        height: 10vh;
-        margin: 2rem 0 0 0;
-    }
-    .nav {
-        position: absolute;
-        top: 0;
-        left: 5rem;
-    }
     .cards {
         justify-content: space-around;
         height: unset;
@@ -126,6 +116,16 @@ export default {
                     transform: translate(-50%) scale(0.8);
                 }
             }
+        }
+        .cards {
+            padding-top: 3rem;
+        }
+    }
+}
+@media (min-width: 576px) {
+    .container-fluid {
+        .cards {
+            padding-top: 2rem;
         }
     }
 }
