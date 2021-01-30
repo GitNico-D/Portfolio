@@ -1,7 +1,7 @@
 <template>
     <b-card :title="title" :style="{'--color': color}">
         <b-card-text>
-            <b-progress  show-value :style="{'--color': color, '--value': this.value + '%'}" >                
+            <b-progress :style="{'--color': color, '--value': this.value + '%', '--url-icon': urlIcon}" >                
                 <b-progress-bar :value="value" max="100" :style="{'--color': color}" class=""></b-progress-bar>
             </b-progress>
         </b-card-text>
@@ -30,6 +30,7 @@ export default {
         color: $white;
         font-family: "Oswald", sans-serif;
         text-align: left;
+        animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1.3s both;
     }
     &-text {
         position: relative;
@@ -37,16 +38,51 @@ export default {
             background-color: $white;
                 &:after {
                     position: absolute;
-                    content: url("../assets/logo-html-5.png");
-                    transform: translate(-50%, -50%);
+                    content: var(--url-icon);
                     top: 0;
                     left: var(--value);
+                    animation: flip-in-ver-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.3s both;
                 }
             &-bar {
+                animation: scale-in-hor-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.8s both;
                 align-items: flex-end;
                 background-color: var(--color);
             }
         }
+    }
+}
+@keyframes scale-in-hor-left {
+    0% {
+        transform: scaleX(0);
+        transform-origin: 0% 0%;
+        opacity: 1;
+    }
+    100% {
+        transform: scaleX(1);
+        transform-origin: 0% 0%;
+        opacity: 1;
+    }
+}
+@keyframes flip-in-ver-left {
+    0% {
+        transform: translate(-50%, -50%) rotateY(80deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) rotateY(0);
+        opacity: 1;
+    }
+}
+@keyframes tracking-in-expand {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+    40% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
     }
 }
 @media (min-width: 320px) {
