@@ -24,33 +24,28 @@
                         <ProgressBarCard title="SON 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
                         <ProgressBarCard title="SON 2" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
                         <ProgressBarCard title="SON 3" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=50 color="#36C486"/>
-                        <ProgressBarCard title="SON 4" :value=50 color="#36C486"/>
-                        <ProgressBarCard title="SON 5" :value=10 color="#36C486"/>
                     </div>
                     <div v-show="this.current == 2" class="skill-block">
                         <ProgressBarCard title="SON 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
                         <ProgressBarCard title="SON 2" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
                         <ProgressBarCard title="SON 3" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=50 color="#36C486"/>
-                        <ProgressBarCard title="SON 4" :value=50 color="#36C486"/>
-                        <ProgressBarCard title="SON 5" :value=10 color="#36C486"/>
                     </div>
                 </b-col>
                 <b-col cols="12" md="5">
                     <h4 class="software-title">Logiciel associées</h4>
                     <div v-show="this.current == 0" class="software-block mt-1 ms-auto">
                         <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=80 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel Dév 2" value=80 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel Dév 3" value=50 color="#36C486"/>
-                    </div>
+                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=80 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=80 color="#36C486"/>
                     <div v-show="this.current == 1" class="software-block mt-1 ms-auto">
                         <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=60 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel vidéo 2" value=40 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel vidéo 3" value=80 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=60 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=60 color="#36C486"/>
                     </div>
                     <div v-show="this.current == 2" class="software-block mt-1 ms-auto">
                         <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=20 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel son 2" value=60 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel son 3" value=50 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=20 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=20 color="#36C486"/>
                     </div>
                 </b-col> 
             </b-row>
@@ -135,7 +130,7 @@ export default {
         }
     }
     .btn {
-        font-family: "Oswald", "sans-serif";
+        font-family: "Oswald", sans-serif;
         color: $white;
         background: $green;
         border: none;
