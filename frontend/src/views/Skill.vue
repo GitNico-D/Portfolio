@@ -11,18 +11,21 @@
             <b-row class="skill-description">
                 <b-col cols="12" md="7">
                     <div v-show="this.current == 0" class="skill-block">
-                        <ProgressBarCard title="HTML 5" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=60 color="#36C486"/>
-                        <ProgressBarCard title="CSS 3" :urlIcon="'url(' + require('@/assets/logo-css3.png') + ')'" :value=80 color="#36C486"/>
-                        <ProgressBarCard title="DÉV 3" :urlIcon="'url(' + require('@/assets/logo-css3.png') + ')'" :value=50 color="#36C486"/>
-                        <ProgressBarCard title="DÉV 4" :urlIcon="'url(' + require('@/assets/logo-css3.png') + ')'" :value=50 color="#36C486"/>
-                        <ProgressBarCard title="DÉV 5" :urlIcon="'url(' + require('@/assets/logo-css3.png') + ')'" :value=50 color="#36C486"/>
-                    </div>
+                        <ProgressBarCard 
+                            v-for="index in devSkillsList" 
+                            :key="index.name" 
+                            :title="index.name" 
+                            :urlIcon="index.icon" 
+                            :value=index.value 
+                            color="#36C486" 
+                            />
+                        </div>
                     <div v-show="this.current == 1" class="skill-block">
-                        <ProgressBarCard title="VIDEO 1" :urlIcon="'url(' + require('@/assets/logo-css3.png') + ')'" :value=30 color="#36C486"/>
-                        <ProgressBarCard title="VIDEO 2" :urlIcon="'url(' + require('@/assets/logo-css3.png') + ')'" :value=70 color="#36C486"/>
-                        <ProgressBarCard title="VIDEO 3" :urlIcon="'url(' + require('@/assets/logo-css3.png') + ')'" :value=100 color="#36C486"/>
-                        <ProgressBarCard title="VIDEO 4" :value=50 color="#36C486"/>
-                        <ProgressBarCard title="VIDEO 5" :value=50 color="#36C486"/>
+                        <ProgressBarCard title="SON 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
+                        <ProgressBarCard title="SON 2" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
+                        <ProgressBarCard title="SON 3" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=50 color="#36C486"/>
+                        <ProgressBarCard title="SON 4" :value=50 color="#36C486"/>
+                        <ProgressBarCard title="SON 5" :value=10 color="#36C486"/>
                     </div>
                     <div v-show="this.current == 2" class="skill-block">
                         <ProgressBarCard title="SON 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
@@ -76,7 +79,29 @@ export default {
         return {
             current: 0,
             skillsName:["Développement Web", "Vidéo", "Son"],
-            showTransition: true
+            showTransition: true,
+            devSkillsList: [
+                {
+                    name: "HTML5",
+                    icon: 'url(' + require('@/assets/logo-html5.png') +')',
+                    value: 70
+                },
+                {
+                    name: "CSS 3",
+                    icon: 'url(' + require('@/assets/logo-css3.png') +')',
+                    value: 60
+                },
+                {
+                    name: "SKILL DEV 3",
+                    icon: 'url(' + require('@/assets/logo-css3.png') +')',
+                    value: 50
+                },
+                {
+                    name: "SKILL DEV 4",
+                    icon: 'url(' + require('@/assets/logo-css3.png') +')',
+                    value: 80
+                }
+            ] 
         }
     },
     methods: {
@@ -152,46 +177,26 @@ export default {
         &-block {
             .card {
                 animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
-                &:nth-child(1) {
-                    animation-delay: 0.5s;
-                }
-                &:nth-child(2) {
-                    animation-delay: 0.7s;
-                }
-                &:nth-child(3) {
-                    animation-delay: 0.9s;
-                }
-                &:nth-child(4) {
-                    animation-delay: 1.1s;
-                }
-                &:nth-child(5) {
-                    animation-delay: 1.3s;
+                @for $i from 1 through 10 {
+                    &:nth-child(#{$i}) {
+                        animation-delay: $i * 0.2s;
+                    }
                 }
             }
         }
     }
     .software {
         &-title {
-            font-family: "MontSerrat", sans-serif;
+            font-family: "Oswald", sans-serif;
             color: $white;
         }
         &-block {
             .card {
-                animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
-                &:nth-child(1) {
-                    animation-delay: 1.5s;
-                }
-                &:nth-child(2) {
-                    animation-delay: 1.7s;
-                }
-                &:nth-child(3) {
-                    animation-delay: 1.9s;
-                }
-                &:nth-child(4) {
-                    animation-delay: 2.1s;
-                }
-                &:nth-child(5) {
-                    animation-delay: 2.3s;
+                animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) 1s both;
+                @for $i from 1 through 10 {
+                    &:nth-child(#{$i}) {
+                        animation-delay: $i * 0.2s;
+                    }
                 }
             } 
         }
@@ -219,8 +224,7 @@ export default {
 }
 
 @media (min-width: 320px) {
-    .container-fluid {
-        
+    .container-fluid {        
         .btn {
             font-size: 0.9rem;
             padding: 0.5rem;
@@ -238,6 +242,13 @@ export default {
             &-title {
                 flex-direction: column;
                 padding-top: 3rem;
+            }
+        }
+        .software {
+            &-title {
+                text-align: left;
+                font-size: 0.9rem;
+                margin-top: 2rem 
             }
         }
     }
@@ -265,6 +276,13 @@ export default {
                 }
             }
         }
+        .software {
+            &-title {
+                text-align: right;
+                font-size: 1rem;
+                margin-top: 2rem 
+            }
+        }
     }
 }
 @media (min-width: 992px) {
@@ -289,6 +307,11 @@ export default {
             font-size: 1.2rem;
             padding: 1rem 5rem 1rem 5rem;
         }
+        .software {
+            &-title {
+                text-align: right;
+            }
+        }
     }
 }
 @media (min-width: 1200px) {
@@ -298,7 +321,7 @@ export default {
             padding: 1rem 5rem 1rem 5rem;
         }
         .back {
-            height: 15vh;
+            height: 18vh;
             .link {
                 &-bottom {
                     left: 5%;
