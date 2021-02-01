@@ -1,6 +1,6 @@
 <template>
     <b-container fluid >
-        <Header title="Parcours" linkColor="white" actionColorLink="#00a1ba" spanColor="#00a1ba" textColor="#00a1ba"/>
+        <Header title="Parcours" color="#00a1ba"/>
         <BackgroundPage circleColor="#00a1ba"/>
         <CareerStageOdd date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba"/>
         <CareerStageEven date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba"/>
