@@ -1,20 +1,19 @@
 <template>
-    <b-row class="career my-5">
-        <b-col cols="12" sm="6">
-            <h2 class="me-5">{{ date }}</h2>     
-        </b-col>
-        <b-col cols="12" sm="6" class="rotateCard">
+    <b-row :class="parity" class="my-5" >
+        <b-col cols="12" md="6" class="rotateCard">
             <b-card :title="title" :style="{'--color': color}">
                 <b-card-text>
                     <h4 class="mt-2">{{ company }}</h4>
-                    <p class="mt-2">{{ description }} Lorem Ipsum is simply dummy text of the printing 
+                    <p class="mt-4">{{ description }} Lorem Ipsum is simply dummy text of the printing 
                         and typesetting industry. Lorem Ipsum has been the industry's standard dummy
                         text ever since the 1500s, when an unknown printer took a galley of type and 
                         scrambled it to make a type specimen book.
                     </p>
                 </b-card-text>
             </b-card>    
-            <b-card no-body></b-card>
+        </b-col>
+        <b-col cols="12" md="6">
+            <h2 class="me-5">{{ date }}</h2>     
         </b-col>
     </b-row>   
 </template>
@@ -27,51 +26,80 @@ export default {
         title: String,
         description: String,
         company: String,
-        color: String
+        color: String,
+        parity: String
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.rotateCard {
-    transform: rotateY(-10deg);
-    transform-origin: right;
+.row {
+    width: 90%;
+    perspective: 1000px;
 }
 h2 {
-    text-align: right;
     color: $white;
     font-family: "MontSerrat", sans-serif;
     font-weight: 600;
     text-transform: uppercase;
-    animation: focus-in-contract 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s both;
     margin-top: 5.5rem;
+    animation: focus-in-contract 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s both;
 }
 .card {
     font-family: "Oswald", sans-serif;
-    background-color: transparent;
+    background-color: $white;
     border: 2px solid var(--color);
-    color: $white;
+    color: $dark_gray;
     @include box_shadow(0px, 0px, 15px, var(--color));
-    animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s both;
+    transition: .5s all ease;
+    perspective: 1000px;
     &-title {
         font-family: "MontSerrat", sans-serif;
         font-weight: 600;
         text-transform: uppercase;
-        border: 2px solid $white;
+        border: 2px solid var(--color);
         padding: 1.5rem;
-        @include box_shadow(0px, 0px, 15px, $white);
+        @include box_shadow(0px, 0px, 5px, var(--color));        
     }
     &-text {
         h4 {
             font-weight: bold;
             text-transform: uppercase;
-            text-align: left;
+            text-align: right;
         }
         p {
             text-align: justify;
         }
     }
+    &:hover {
+        .card-body {
+            transition: 0.5s all ease;
+        .card-title {
+            transform: translateZ(160px);
+            transition: 0.5s all ease;
+            color: $white;
+            background-color: var(--color);
+        }   
+    }
+    }
+
 }
+.odd {
+    width: 90%;
+    margin: auto;
+    .card {
+        animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s both;
+    }   
+    
+}
+.even {
+    width: 90%;
+    margin:auto; 
+    .card {
+        animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s both;
+    }
+}
+
 
 @keyframes focus-in-contract {
     0% {
@@ -81,6 +109,16 @@ h2 {
     }
     100% {
         filter: blur(0px);
+        opacity: 1;
+    }
+}
+@keyframes slide-in-left {
+    0% {
+        transform: translateX(-500px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
         opacity: 1;
     }
 }
@@ -94,23 +132,69 @@ h2 {
         opacity: 1;
     }
 }
+
 @media (min-width: 320px) {
-    .rotateCard {
-        transform : unset;
-    }
-    h2 {
-        font-size: 1.1rem;
-        margin-top: 1rem;
+    .even, .odd {
+        flex-direction: column-reverse;
+        .rotateCard {
+            transform : unset;
+        }
+        h2 {
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
     }
 }
 @media (min-width: 576px) {
     .rotateCard {
-        transform: rotateY(-10deg);
-        transform-origin: right;
+        transform: rotateY(15deg);
+        transform-origin: left;
     }
     h2 {
         font-size: 1.5rem;
-        margin-top: 2.5rem;
+        margin-top: 4.5rem;
+    }
+}
+@media (min-width: 768px) {
+    .odd {
+        flex-direction: row;
+        .rotateCard {
+            transform: rotateY(15deg);
+            transform-origin: left;
+            transition: 0.5s all ease;
+            &:hover {
+                transform: none;
+                transition: 0.5s all ease;
+            }
+        }
+        h2 {
+            text-align: left;
+            font-size: 2rem;
+            margin-top: 4.5rem;
+        }
+    }
+    .even {
+        flex-direction: row-reverse;
+        .rotateCard {
+            transform: rotateY(-15deg);
+            transform-origin: right;
+            transition: 0.5s all ease;
+            &:hover {
+                transform: none;
+                transition: 0.5s all ease;
+            }
+        }
+        h2 {
+            text-align: right;
+            font-size: 2rem;
+            margin-top: 4.5rem;
+        }
+    }
+}
+@media (min-width: 992px) {
+    h2 {
+        font-size: 2rem;
+        margin-top: 4.5rem;
     }
 }
 </style>
