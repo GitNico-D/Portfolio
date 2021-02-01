@@ -37,6 +37,7 @@
                         <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=80 color="#36C486"/>
                         <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=80 color="#36C486"/>
                         <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=80 color="#36C486"/>
+                    </div>
                     <div v-show="this.current == 1" class="software-block mt-1 ms-auto">
                         <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=60 color="#36C486"/>
                         <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=60 color="#36C486"/>
