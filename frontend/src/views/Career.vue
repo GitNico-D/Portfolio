@@ -2,10 +2,10 @@
     <b-container fluid >
         <Header title="Parcours" color="#00a1ba"/>
         <BackgroundPage circleColor="#00a1ba"/>
-        <CareerStageOdd date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba"/>
-        <CareerStageEven date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba"/>
-        <CareerStageOdd date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba"/>
-        <CareerStageEven date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba"/>
+        <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="odd"/>
+        <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="even"/>
+        <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="odd"/>
+        <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="even"/>
         <b-row class="bottom">
             <HomePageLink action="Retour" url="/" direction="animated-arrowRtl" class="link link-bottom" textColor="#00a1ba"/>
         </b-row> 
@@ -17,24 +17,20 @@
 import HomePageLink from '@/components/HomePageLink.vue'
 import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
-import CareerStageEven from '@/components/CareerStageEven.vue'
-import CareerStageOdd from '@/components/CareerStageOdd.vue'
+import CareerStage from '@/components/CareerStage.vue'
 
 export default {
     components: {
         HomePageLink,
         BackgroundPage,
         Header,
-        CareerStageEven,
-        CareerStageOdd
+        CareerStage
     }
 }
 </script>
 
 <style lang="scss" scoped>
 .container-fluid {
-    position: relative;
-    perspective: 1000px;
     .line {
         position: absolute;
         height: 70%;
@@ -44,6 +40,7 @@ export default {
         background-color: $white;
         transform: translateZ(-10px);
         animation: scale-up-ver-top 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 1s both;
+        z-index: -1;
     }
 }
 .row {
@@ -78,20 +75,11 @@ export default {
         }
     }
 }
-@media (min-width: 576px) {
-    .container-fluid {
-        .line {
-            display: initial;
-            height: 72%;
-            top: 12%;
-        }
-    }
-}
 @media (min-width: 768px) {
     .container-fluid {
         .line {
             display: initial;
-            height: 74%;
+            height: 72%;
             top: 12%;
         }
     }
