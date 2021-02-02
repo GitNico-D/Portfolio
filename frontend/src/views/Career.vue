@@ -1,7 +1,8 @@
 <template>
     <b-container fluid >
-        <Header title="Parcours" color="#00a1ba"/>
+        <Header title="Parcours" color="#00a1ba" class="header"/>
         <BackgroundPage circleColor="#00a1ba"/>
+        <Transition v-show="showTransition" directionAnimation="down"/>
         <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="odd"/>
         <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="even"/>
         <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="odd"/>
@@ -18,36 +19,40 @@ import HomePageLink from '@/components/HomePageLink.vue'
 import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
 import CareerStage from '@/components/CareerStage.vue'
+import Transition from "@/components/Transition.vue"
 
 export default {
     components: {
         HomePageLink,
         BackgroundPage,
         Header,
-        CareerStage
+        CareerStage,
+        Transition
+    },
+    data() {
+        return {
+            showTransition: true    
+        }
+    },
+    methods: {
+        actionTransition () {
+            this.showTransition = true;
+            setTimeout(() => {
+                this.showTransition = false;
+            },1300);
+        }
+    },
+    created() {
+        setTimeout(() => {
+            this.showTransition = false;
+        },1300);
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.container-fluid {
-    .line {
-        position: absolute;
-        height: 70%;
-        width: 3px;
-        left: 50%;
-        top: 14%;
-        background-color: $white;
-        transform: translateZ(-10px);
-        animation: scale-up-ver-top 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 1s both;
-        z-index: -1;
-    }
-}
-.row {
-    height: unset;
-}
 .bottom {
-    height: 20vh;
+    height: 16vh!important;
     position: relative;
     .link-bottom {
         position: absolute;
@@ -55,6 +60,23 @@ export default {
         left: 50%;
         transform: translate(-50%, 50%) rotate(90deg) scale(0.8);
     }
+}
+.header {
+    padding-bottom: 2rem;
+}
+.line {
+    position: absolute;
+    height: 70%;
+    width: 3px;
+    left: 50%;
+    top: 14%;
+    background-color: $white;
+    transform: translateZ(-10px);
+    animation: scale-up-ver-top 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.5s both;
+    z-index: -1;
+}
+.row {
+    height: unset;
 }
 @keyframes scale-up-ver-top {
     0% {
@@ -88,8 +110,8 @@ export default {
     .container-fluid {
         .line {
             display: initial;
-            height: 69%;
-            top: 14%;
+            height: 70%;
+            top: 15%;
         }
     }
 }

@@ -3,7 +3,7 @@
         <b-col cols="12" md="6" class="rotateCard">
             <b-card :title="title" :style="{'--color': color}">
                 <b-card-text>
-                    <h4 class="mt-2">{{ company }}</h4>
+                    <h4 class="mt-4">{{ company }}</h4>
                     <p class="mt-4">{{ description }} Lorem Ipsum is simply dummy text of the printing 
                         and typesetting industry. Lorem Ipsum has been the industry's standard dummy
                         text ever since the 1500s, when an unknown printer took a galley of type and 
@@ -36,7 +36,7 @@ export default {
 .row {
     width: 90%;
     perspective: 1000px;
-}
+    transform-style: preserve-3d;}
 h2 {
     color: $white;
     font-family: "MontSerrat", sans-serif;
@@ -45,6 +45,7 @@ h2 {
     margin-top: 5.5rem;
     animation: focus-in-contract 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s both;
 }
+
 .card {
     font-family: "Oswald", sans-serif;
     background-color: $white;
@@ -59,13 +60,13 @@ h2 {
         text-transform: uppercase;
         border: 2px solid var(--color);
         padding: 1.5rem;
-        @include box_shadow(0px, 0px, 5px, var(--color));        
+        @include box_shadow(0px, 0px, 5px, var(--color)); 
+        
     }
     &-text {
         h4 {
             font-weight: bold;
             text-transform: uppercase;
-            text-align: right;
         }
         p {
             text-align: justify;
@@ -75,7 +76,7 @@ h2 {
         .card-body {
             transition: 0.5s all ease;
         .card-title {
-            transform: translateZ(160px);
+            border: 2px solid $white;
             transition: 0.5s all ease;
             color: $white;
             background-color: var(--color);
@@ -85,21 +86,56 @@ h2 {
 
 }
 .odd {
-    width: 90%;
     margin: auto;
+    .rotateCard {
+        transform-origin: left;
+        transition: 0.5s all ease;
+        &:hover {
+            transform: none;
+            transition: 0.5s all ease;
+        }
+    }
     .card {
-        animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s both;
-    }   
-    
+        animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
+        &-title {
+            color: $white;
+            background-color: var(--color);
+            border: 2px solid $white;
+            @include box_shadow(0px, 0px, 15px, $dark_gray);
+        }
+        &-text {
+            h4 {
+                text-align: right;
+            }
+        }
+    }       
 }
 .even {
-    width: 90%;
     margin:auto; 
+    .rotateCard {
+        transform-style: preserve-3d;
+        transform-origin: right;
+        transition: 0.5s all ease;
+        &:hover {
+            transform: none;
+            transition: 0.5s all ease;
+        }
+    }
     .card {
-        animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s both;
+        animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
+        &-title {
+            color: $white;
+            background-color: var(--color);
+            border: 2px solid $white;
+            @include box_shadow(0px, 0px, 15px, $dark_gray);
+        }
+        &-text {
+            h4 {
+                text-align: left;
+            }
+        }
     }
 }
-
 
 @keyframes focus-in-contract {
     0% {
@@ -144,11 +180,61 @@ h2 {
             margin-top: 1rem;
         }
     }
+    .odd {
+        width: 100%;
+        .card {
+            &-title {
+                transform: unset;
+            }
+        }
+        h2 {
+            text-align: right;
+        }
+    }
+    .even {
+        width: 100%;
+        .card {
+            &-title { 
+                transform: unset;
+            }
+        }
+        h2 {
+            text-align: left;
+        }
+    }
 }
 @media (min-width: 576px) {
     .rotateCard {
         transform: rotateY(15deg);
         transform-origin: left;
+    }
+    .odd {
+        .card {
+            &-title {
+                position: absolute; 
+                width: 65%;
+                top: 0;    
+                left: 0;  
+                transform: translate(-2%, -50%);
+            }
+        }
+        h2 {
+            text-align: right;
+        }
+    }
+    .even {
+        .card {
+            &-title {
+                position: absolute; 
+                width: 65%;
+                top: 0;    
+                right: 0;  
+                transform: translate(2%, -50%);
+            }
+        }
+        h2 {
+            text-align: left;
+        }
     }
     h2 {
         font-size: 1.5rem;
@@ -157,41 +243,89 @@ h2 {
 }
 @media (min-width: 768px) {
     .odd {
+        width: 95%;
         flex-direction: row;
         .rotateCard {
             transform: rotateY(15deg);
-            transform-origin: left;
-            transition: 0.5s all ease;
-            &:hover {
-                transform: none;
-                transition: 0.5s all ease;
-            }
         }
         h2 {
             text-align: left;
             font-size: 2rem;
-            margin-top: 4.5rem;
+            margin-top: 2rem;
+        }
+        .card {
+            &-title {
+                width: 50%;
+                margin: auto;
+                transform: translate(-10%, -50%);
+            }
         }
     }
     .even {
+        width: 95%;
         flex-direction: row-reverse;
         .rotateCard {
             transform: rotateY(-15deg);
-            transform-origin: right;
-            transition: 0.5s all ease;
-            &:hover {
-                transform: none;
-                transition: 0.5s all ease;
+        }
+        .card {
+            &-title {
+                width: 50%;
+                margin: auto;
+                transform: translate(10%, -50%);
             }
         }
         h2 {
             text-align: right;
             font-size: 2rem;
-            margin-top: 4.5rem;
+            margin-top: 2rem;
         }
     }
 }
 @media (min-width: 992px) {
+    h2 {
+        font-size: 2rem;
+        margin-top: 4.5rem;
+    }
+}
+@media (min-width: 992px) {
+    .odd {
+        width: 85%;
+        flex-direction: row;
+        .rotateCard {
+            transform: rotateY(15deg);
+        }
+        h2 {
+            text-align: left;
+            font-size: 2rem;
+            margin-top: 2rem;
+        }
+        .card {
+            &-title {
+                width: 50%;
+                margin: auto;
+                transform: translate(-10%, -50%);
+            }
+        }
+    }
+    .even {
+        width: 85%;
+        flex-direction: row-reverse;
+        .rotateCard {
+            transform: rotateY(-15deg);
+        }
+        .card {
+            &-title {
+                width: 50%;
+                margin: auto;
+                transform: translate(10%, -50%);
+            }
+        }
+        h2 {
+            text-align: right;
+            font-size: 2rem;
+            margin-top: 2rem;
+        }
+    }
     h2 {
         font-size: 2rem;
         margin-top: 4.5rem;
