@@ -36,7 +36,8 @@ export default {
 .row {
     width: 90%;
     perspective: 1000px;
-    transform-style: preserve-3d;}
+    // transform-style: preserve-3d;
+    }
 h2 {
     color: $white;
     font-family: "MontSerrat", sans-serif;
@@ -52,13 +53,14 @@ h2 {
     border: 2px solid var(--color);
     color: $dark_gray;
     @include box_shadow(0px, 0px, 15px, var(--color));
-    transition: .5s all ease;
     perspective: 1000px;
     &-title {
         font-family: "MontSerrat", sans-serif;
+        color: $white;
         font-weight: 600;
+        background-color: var(--color);
         text-transform: uppercase;
-        border: 2px solid var(--color);
+        border: 2px solid $white;
         padding: 1.5rem;
         @include box_shadow(0px, 0px, 5px, var(--color)); 
         
@@ -72,55 +74,60 @@ h2 {
             text-align: justify;
         }
     }
-    &:hover {
-        .card-body {
-            transition: 0.5s all ease;
-        .card-title {
-            border: 2px solid $white;
-            transition: 0.5s all ease;
-            color: $white;
-            background-color: var(--color);
-        }   
-    }
-    }
-
+    // &:hover {
+    //     .card-body {
+    //         transition: 0.5s all ease;
+    //         .card-title {
+    //             border: 2px solid $white;
+    //             color: $white;
+    //             background-color: var(--color);
+    //         }   
+    //     }
+    // }
 }
 .odd {
     margin: auto;
-    .rotateCard {
-        transform-origin: left;
-        transition: 0.5s all ease;
-        &:hover {
-            transform: none;
-            transition: 0.5s all ease;
-        }
-    }
     .card {
         animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
-        &-title {
-            color: $white;
+        transition: all 1s ease;
+        z-index: 2;
+        transform: rotateX(15deg);
+        &:before {
+            content: "";
+            position: absolute;
+            // border: 5px solid var(--color);
             background-color: var(--color);
-            border: 2px solid $white;
-            @include box_shadow(0px, 0px, 15px, $dark_gray);
+            width: 60%;
+            height: 2%;
+            left: 0%;
+            top: 90%;
+        }
+        &:hover {
+            cursor: default;
+            .card-title {
+                border: 2px solid $white;
+                color: var(--color);
+                background-color: $white;
+            }  
+            // &:before {
+            //     transition: all 1s ease;
+            //     position: absolute;
+            //     border: 5px solid $blue;
+            //     width: 100%;
+            //     height: 100%;
+            //     left: 0%;
+            //     transform: none;
+            // }
         }
         &-text {
             h4 {
                 text-align: right;
             }
         }
-    }       
+    } 
 }
 .even {
     margin:auto; 
-    .rotateCard {
-        transform-style: preserve-3d;
-        transform-origin: right;
-        transition: 0.5s all ease;
-        &:hover {
-            transform: none;
-            transition: 0.5s all ease;
-        }
-    }
     .card {
         animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
         &-title {
@@ -204,10 +211,6 @@ h2 {
     }
 }
 @media (min-width: 576px) {
-    .rotateCard {
-        transform: rotateY(15deg);
-        transform-origin: left;
-    }
     .odd {
         .card {
             &-title {
@@ -246,7 +249,7 @@ h2 {
         width: 95%;
         flex-direction: row;
         .rotateCard {
-            transform: rotateY(15deg);
+            transform-origin: right;
         }
         h2 {
             text-align: left;
@@ -264,9 +267,6 @@ h2 {
     .even {
         width: 95%;
         flex-direction: row-reverse;
-        .rotateCard {
-            transform: rotateY(-15deg);
-        }
         .card {
             &-title {
                 width: 50%;
@@ -290,16 +290,13 @@ h2 {
 @media (min-width: 992px) {
     .odd {
         width: 85%;
-        flex-direction: row;
-        .rotateCard {
-            transform: rotateY(15deg);
-        }
         h2 {
             text-align: left;
             font-size: 2rem;
             margin-top: 2rem;
         }
         .card {
+            transform: rotateY(15deg);
             &-title {
                 width: 50%;
                 margin: auto;
@@ -309,10 +306,7 @@ h2 {
     }
     .even {
         width: 85%;
-        flex-direction: row-reverse;
-        .rotateCard {
-            transform: rotateY(-15deg);
-        }
+        
         .card {
             &-title {
                 width: 50%;
