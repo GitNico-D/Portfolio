@@ -3,12 +3,10 @@
         <Header title="Parcours" color="#00a1ba" class="header"/>
         <BackgroundPage circleColor="#00a1ba"/>
         <Transition v-show="showTransition" directionAnimation="down"/>
-        <!-- <div class="alpha-left"></div>
-        <div class="alpha-right"></div> -->
-        <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="odd"/>
-        <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="even"/>
-        <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="odd"/>
-        <CareerStage date="date 1 - date 2"  title="Stage 1" company="Company 1" color="#00a1ba" parity="even"/>
+        <CareerStage startDate="2000"  endDate="2000"  title="Stage 1" company="Company 1" color="#00a1ba" parity="odd"/>
+        <CareerStage startDate="2000"  endDate="2000"  title="Stage 1" company="Company 1" color="#00a1ba" parity="even"/>
+        <CareerStage startDate="2000"  endDate="2000"  title="Stage 1" company="Company 1" color="#00a1ba" parity="odd"/>
+        <CareerStage startDate="2000"  endDate="2000"  title="Stage 1" company="Company 1" color="#00a1ba" parity="even"/>
         <b-row class="bottom">
             <HomePageLink action="Retour" url="/" direction="animated-arrowRtl" class="link link-bottom" textColor="#00a1ba"/>
         </b-row> 
@@ -53,24 +51,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .container-fluid {
-//     position: relative;
-//     .alpha-left {
-//         background-color: rgba(255, 255, 255, 0);
-//         position: absolute;
-//         width: 50vw;
-//         height: 100vw;
-//         z-index: -1;
-//         overflow: hidden;
-//     }
-//     .alpha-right {
-//         background-color: rgba(255, 255, 255, 0.1);
-//         position: absolute;
-//         right: 0;
-//         width: 50vw;
-//         height: 100vw;
-//     }
-// }
 .bottom {
     height: 16vh!important;
     position: relative;
@@ -82,7 +62,7 @@ export default {
     }
 }
 .header {
-    padding-bottom: 2rem;
+    padding-bottom: 5rem;
 }
 .line {
     position: absolute;
@@ -93,10 +73,13 @@ export default {
     background-color: $white;
     transform: translateZ(-10px);
     animation: scale-up-ver-top 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.5s both;
-    z-index: -1;
+    z-index: 1;
 }
 .row {
     height: unset;
+}
+.odd {
+    margin-bottom: 10rem;
 }
 @keyframes scale-up-ver-top {
     0% {

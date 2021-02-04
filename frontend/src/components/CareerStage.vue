@@ -1,6 +1,6 @@
 <template>
-    <b-row :class="parity" class="my-5" >
-        <b-col cols="12" md="6" class="rotateCard">
+    <b-row :class="parity">
+        <b-col cols="12" md="6">
             <b-card :title="title" :style="{'--color': color}">
                 <b-card-text>
                     <h4 class="mt-4">{{ company }}</h4>
@@ -12,8 +12,9 @@
                 </b-card-text>
             </b-card>    
         </b-col>
-        <b-col cols="12" md="6">
-            <h2 class="me-5">{{ date }}</h2>     
+        <b-col cols="12" md="6" class="career-date">
+            <h2><span>{{ startDate }}</span> - <span>{{ endDate }}</span></h2>  
+            <p class="career-date-second"><span>{{ startDate }}</span> - <span>{{ endDate }}</span></p>
         </b-col>
     </b-row>   
 </template>
@@ -22,7 +23,8 @@
 export default {
     name: "CareerStage",
     props: {
-        date: String,
+        startDate: String,
+        endDate: String,
         title: String,
         description: String,
         company: String,
@@ -36,23 +38,20 @@ export default {
 .row {
     width: 90%;
     perspective: 1000px;
-    // transform-style: preserve-3d;
     }
 h2 {
     color: $white;
     font-family: "MontSerrat", sans-serif;
     font-weight: 600;
     text-transform: uppercase;
-    margin-top: 5.5rem;
     animation: focus-in-contract 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s both;
 }
-
 .card {
     font-family: "Oswald", sans-serif;
-    background-color: $white;
-    border: 2px solid var(--color);
+    background-color: transparent;
+    border-radius: 0;
+    border: 0;
     color: $dark_gray;
-    @include box_shadow(0px, 0px, 15px, var(--color));
     perspective: 1000px;
     &-title {
         font-family: "MontSerrat", sans-serif;
@@ -63,7 +62,29 @@ h2 {
         border: 2px solid $white;
         padding: 1.5rem;
         @include box_shadow(0px, 0px, 5px, var(--color)); 
-        
+        z-index: 5;
+    }
+    &:before {
+        content: "";
+        position: absolute;
+        background-color: $white;
+        transform: rotateZ(-5deg);
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        @include box_shadow(0px, 0px, 10px, var(--color)); 
+    }
+    &:after {
+        content: "";
+        position: absolute;
+        border: 1px solid var(--color);
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        left: 2%;
+        bottom: 5%;
+        transform: rotateZ(4deg);
+        @include box-shadow (0px, 0px, 10px, var(--color));
     }
     &-text {
         h4 {
@@ -74,76 +95,106 @@ h2 {
             text-align: justify;
         }
     }
-    // &:hover {
-    //     .card-body {
-    //         transition: 0.5s all ease;
-    //         .card-title {
-    //             border: 2px solid $white;
-    //             color: $white;
-    //             background-color: var(--color);
-    //         }   
-    //     }
-    // }
+    &:hover {
+        cursor: default;
+        .card {
+            &-title {
+                transition: all 0.5s ease;
+                border: 2px solid var(--color);
+                color: var(--color);
+                background-color: $white;
+            } 
+        }
+    }
+}
+.career {
+    &-date {
+        position: relative;
+        &-second {
+            font-family: "MontSerrat", sans-serif;
+            text-transform: uppercase;
+            font-size: 6rem;
+            font-weight: 900;
+            color: $light-blue;
+            opacity: 0.3;
+            z-index: -1;
+            position: absolute;
+            transform: translateY(-30%);
+        }
+    }
 }
 .odd {
-    margin: auto;
+    margin: 3rem auto 6rem auto;
+    align-items: center;
     .card {
         animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
         transition: all 1s ease;
-        z-index: 2;
-        transform: rotateX(15deg);
-        &:before {
-            content: "";
-            position: absolute;
-            // border: 5px solid var(--color);
-            background-color: var(--color);
-            width: 60%;
-            height: 2%;
-            left: 0%;
-            top: 90%;
-        }
-        &:hover {
-            cursor: default;
-            .card-title {
-                border: 2px solid $white;
-                color: var(--color);
-                background-color: $white;
-            }  
-            // &:before {
-            //     transition: all 1s ease;
-            //     position: absolute;
-            //     border: 5px solid $blue;
-            //     width: 100%;
-            //     height: 100%;
-            //     left: 0%;
-            //     transform: none;
-            // }
-        }
         &-text {
             h4 {
                 text-align: right;
             }
         }
     } 
+    &:hover {
+        cursor: default;
+        .card {
+            &:after {
+                transition: all 0.2s ease;
+                box-shadow: 5px 7px 2px var(--color);
+                left: 0;
+                bottom: 0;
+            }
+        }
+    }
+    .career {
+        &-date {
+            &-second {
+                top: 0%;
+                left: 5%;
+            }
+        }
+    }
+    
 }
 .even {
-    margin:auto; 
+    margin: 3rem auto 6rem auto; 
+    align-items: center;
     .card {
         animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
-        &-title {
-            color: $white;
-            background-color: var(--color);
-            border: 2px solid $white;
-            @include box_shadow(0px, 0px, 15px, $dark_gray);
-        }
         &-text {
             h4 {
                 text-align: left;
             }
         }
+        &-title {
+            color: $white;
+            border: 2px solid $white;
+            @include box_shadow(0px, 0px, 15px, $dark_gray);
+        }
+        &:hover {
+            .card {
+                &:after {
+                    transform: rotateZ(0deg);
+                    transition: all 0.5s ease;
+                    box-shadow: -25px -7px 2px var(--color);
+                    left: 0;
+                    bottom: 0;
+                }
+                &-title {
+                    transform: translate(-2%, -50%);
+                }
+            }
+        }
+    }
+    .career {
+        &-date {
+            &-second {
+                top: 0%;
+                right: 5%;
+            }
+        }
     }
 }
-
 @keyframes focus-in-contract {
     0% {
         letter-spacing: 1em;
@@ -180,18 +231,40 @@ h2 {
     .even, .odd {
         flex-direction: column-reverse;
         .rotateCard {
-            transform : unset;
+            transform: unset;
         }
         h2 {
             font-size: 1.1rem;
-            margin-top: 1rem;
+        }
+        .card {
+            &-title {
+                transform: unset;                
+            }  
+            &-body {
+                transform: unset;
+            }
+            &:before {
+                transform: unset;
+            }
+            &:after {
+                transform: unset;
+                left: 0;
+                bottom: 0;
+            }
+            &:hover {
+                transform: unset;
+                box-shadow: unset;
+            }
         }
     }
     .odd {
         width: 100%;
-        .card {
-            &-title {
-                transform: unset;
+        &:hover {
+            .card {
+                &-title {
+                    transform: unset;
+                    box-shadow: 5px 7px 2px var(--color);
+                }
             }
         }
         h2 {
@@ -200,9 +273,12 @@ h2 {
     }
     .even {
         width: 100%;
-        .card {
-            &-title { 
-                transform: unset;
+        &:hover {
+            .card {
+                &-title {
+                    transform: unset;
+                    box-shadow: -5px 7px 2px var(--color);
+                }
             }
         }
         h2 {
@@ -220,6 +296,13 @@ h2 {
                 left: 0;  
                 transform: translate(-2%, -50%);
             }
+            &:hover {
+                .card {
+                    &-title {
+                        transform: translate(-2%, -50%);
+                    }
+                }
+            }
         }
         h2 {
             text-align: right;
@@ -234,6 +317,14 @@ h2 {
                 right: 0;  
                 transform: translate(2%, -50%);
             }
+            &:hover {
+                .card {
+                    &-title {
+                        transform: translate(2%, -50%);
+                        box-shadow: -5px 7px 2px var(--color);
+                    }
+                }
+            }
         }
         h2 {
             text-align: left;
@@ -241,26 +332,51 @@ h2 {
     }
     h2 {
         font-size: 1.5rem;
-        margin-top: 4.5rem;
     }
 }
 @media (min-width: 768px) {
     .odd {
         width: 95%;
         flex-direction: row;
-        .rotateCard {
-            transform-origin: right;
-        }
         h2 {
             text-align: left;
             font-size: 2rem;
-            margin-top: 2rem;
         }
         .card {
+            &:after {
+                transform: rotateZ(4deg);
+            }
+            &:before {
+                transform: rotateZ(-5deg);
+            }
+            &-body {
+                transform: rotateZ(4deg);
+            }
             &-title {
                 width: 50%;
                 margin: auto;
-                transform: translate(-10%, -50%);
+                transform: translate(-10%, -50%) rotateZ(-4deg);
+            }
+        }
+        &:hover {
+            cursor: default;
+            .card {
+                &-title {
+                    transition: all 0.2s ease;
+                    transform: translate(-10%, -50%) rotateZ(0deg);
+                    box-shadow: 5px 7px 2px var(--color);
+                }  
+                &-body {
+                    transition: all 0.2s ease;
+                    transform: rotateZ(0deg);
+                }
+                &:before {
+                    transition: all 0.2s ease;
+                    transform: rotateZ(0deg);
+                }
+                &:after {
+                    transform: rotateZ(0deg);
+                }
             }
         }
     }
@@ -272,57 +388,55 @@ h2 {
                 width: 50%;
                 margin: auto;
                 transform: translate(10%, -50%);
+                color: $white;
+                border: 2px solid $white;
+            }
+            &:before {
+                transform: rotateZ(5deg);
+            }
+            &:after {
+                transform: rotateZ(-4deg);
+            }
+            &-body {
+                transform: rotateZ(-4deg);
+            }
+        }
+        &:hover {
+            cursor: default;
+            .card {
+                &-title {
+                    transition: all 0.2s ease;
+                    transform: translate(10%, -50%) rotateZ(0deg);
+                    box-shadow: -5px 7px 2px var(--color);
+                }  
+                &-body {
+                    transition: all 0.2s ease;
+                    transform: rotateZ(0deg);
+                }
+                &:before {
+                    transition: all 0.2s ease;
+                    transform: rotateZ(0deg);
+                }
+                &:after {
+                    transform: rotateZ(0deg);
+                }
             }
         }
         h2 {
             text-align: right;
             font-size: 2rem;
-            margin-top: 2rem;
         }
-    }
-}
-@media (min-width: 992px) {
-    h2 {
-        font-size: 2rem;
-        margin-top: 4.5rem;
     }
 }
 @media (min-width: 992px) {
     .odd {
         width: 85%;
-        h2 {
-            text-align: left;
-            font-size: 2rem;
-            margin-top: 2rem;
-        }
-        .card {
-            transform: rotateY(15deg);
-            &-title {
-                width: 50%;
-                margin: auto;
-                transform: translate(-10%, -50%);
-            }
-        }
     }
     .even {
         width: 85%;
-        
-        .card {
-            &-title {
-                width: 50%;
-                margin: auto;
-                transform: translate(10%, -50%);
-            }
-        }
-        h2 {
-            text-align: right;
-            font-size: 2rem;
-            margin-top: 2rem;
-        }
     }
     h2 {
         font-size: 2rem;
-        margin-top: 4.5rem;
     }
 }
 </style>
