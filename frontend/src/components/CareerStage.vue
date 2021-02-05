@@ -40,7 +40,7 @@ export default {
     perspective: 1000px;
     }
 h2 {
-    color: $white;
+    // color: $white;
     font-family: "MontSerrat", sans-serif;
     font-weight: 600;
     text-transform: uppercase;
@@ -104,7 +104,6 @@ h2 {
 }
 .career {
     &-date {
-        mix-blend-mode: multiply;
         position: relative;
         color: $white;
         &-second {
@@ -137,7 +136,7 @@ h2 {
         .card {
             &:after {
                 transition: all 0.2s ease;
-                box-shadow: 5px 7px 2px var(--color);
+                box-shadow: 5px 7px 2px $white;
                 left: 0;
                 bottom: 0;
             }
@@ -148,6 +147,22 @@ h2 {
                 background-color: var(--color);
                 box-shadow: 5px 7px 2px $white,
                             0px 0px 15px var(--color);
+            }
+        }
+        h2 {
+            transition: all 0.2s ease;
+            color: $light_blue;
+            opacity: 1;
+            z-index: -1;
+        }
+        .career {
+            &-date {
+                &-second {
+                    transition: all 0.2s ease;
+                    color: $white;
+                    opacity: 1;
+                    z-index: 1;
+                }
             }
         }
     }
@@ -186,6 +201,22 @@ h2 {
                 background-color: var(--color);
                 box-shadow: -5px 7px 2px $white,
                             0px 0px 15px var(--color);
+            }
+        }
+        h2 {
+            transition: all 0.2s ease;
+            color: $light_blue;
+            opacity: 1;
+            z-index: -1;
+        }
+        .career {
+            &-date {
+                &-second {
+                    transition: all 0.2s ease;
+                    color: $white;
+                    opacity: 1;
+                    z-index: 1;
+                }
             }
         }
     }
@@ -266,6 +297,17 @@ h2 {
             .card {
                 &-title {
                     transform: unset;
+                    border: 1px solid $white;
+                }
+            }
+            h2 {
+                font-size: 1.25rem;
+            }
+            .career {
+                &-date {
+                    &-second {
+                        font-size: 2rem;
+                    }
                 }
             }
         }
@@ -288,6 +330,17 @@ h2 {
             .card {
                 &-title {
                     transform: unset;
+                    border: 1px solid $white;
+                }
+            }
+            h2 {
+                font-size: 1.25rem;
+            }
+            .career {
+                &-date {
+                    &-second {
+                        font-size: 2rem;
+                    }
                 }
             }
         }
@@ -316,15 +369,22 @@ h2 {
                 transform: translate(-2%, -50%);
             }
         }
+        h2 {
+            text-align: right;
+        }
         &:hover {
             .card {
                 &-title {
                     transform: translate(-2%, -50%);
                 }
+            } 
+            .career {
+                &-date {
+                    &-second {
+                        font-size: 1.70rem;
+                    }
+                }
             }
-        }
-        h2 {
-            text-align: right;
         }
         .career {
             &-date {
@@ -349,6 +409,13 @@ h2 {
             .card {
                 &-title {
                     transform: translate(2%, -50%);
+                }
+            }
+            .career {
+                &-date {
+                    &-second {
+                        font-size: 1.70rem;
+                    }
                 }
             }
         }
@@ -411,6 +478,16 @@ h2 {
                     transform: rotateZ(0deg);
                 }
             }
+            h2 {
+                font-size: 1.25rem;
+            }
+            .career {
+                &-date {
+                    &-second {
+                        font-size: 3rem;
+                    }
+                }
+            }
         }
         .career {
             &-date {
@@ -469,6 +546,16 @@ h2 {
                     transform: rotateZ(0deg);
                 }
             }
+            h2 {
+                font-size: 1.25rem;
+            }
+            .career {
+                &-date {
+                    &-second {
+                        font-size: 3rem;
+                    }
+                }
+            }
         }
         h2 {
             text-align: right;
@@ -482,11 +569,29 @@ h2 {
         h2 {
             font-size: 3rem;
         }
+        &:hover {
+            .career {
+                &-date {
+                    &-second {
+                        font-size: 5rem;
+                    }
+                }
+            }
+        }
     }
     .even {
         width: 85%;
         h2 {
             font-size: 3rem;
+        }
+        &:hover {
+            .career {
+                &-date {
+                    &-second {
+                        font-size: 5rem;
+                    }
+                }
+            }
         }
     }
 }
