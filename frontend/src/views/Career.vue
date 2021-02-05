@@ -73,7 +73,7 @@ export default {
     background-color: $white;
     transform: translateZ(-10px);
     animation: scale-up-ver-top 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.5s both;
-    z-index: 1;
+    // z-index: 1;
 }
 .row {
     height: unset;
@@ -104,8 +104,8 @@ export default {
     .container-fluid {
         .line {
             display: initial;
-            height: 72%;
-            top: 12%;
+            height: 77%;
+            top: 11%;
         }
     }
 }
@@ -113,8 +113,8 @@ export default {
     .container-fluid {
         .line {
             display: initial;
-            height: 70%;
-            top: 15%;
+            height: 77%;
+            top: 12%;
         }
     }
 }

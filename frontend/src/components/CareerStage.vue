@@ -13,7 +13,7 @@
             </b-card>    
         </b-col>
         <b-col cols="12" md="6" class="career-date">
-            <h2><span>{{ startDate }}</span> - <span>{{ endDate }}</span></h2>  
+            <h2 class="career-date-one"><span>{{ startDate }}</span> - <span>{{ endDate }}</span></h2>  
             <p class="career-date-second"><span>{{ startDate }}</span> - <span>{{ endDate }}</span></p>
         </b-col>
     </b-row>   
@@ -57,7 +57,6 @@ h2 {
         font-family: "MontSerrat", sans-serif;
         color: $white;
         font-weight: 600;
-        background-color: var(--color);
         text-transform: uppercase;
         border: 2px solid $white;
         padding: 1.5rem;
@@ -77,7 +76,7 @@ h2 {
     &:after {
         content: "";
         position: absolute;
-        border: 1px solid var(--color);
+        background-color: var(--color);
         width: 100%;
         height: 100%;
         z-index: -1;
@@ -89,31 +88,29 @@ h2 {
     &-text {
         h4 {
             font-weight: bold;
+            color: $white;
             text-transform: uppercase;
         }
         p {
             text-align: justify;
+            color: $white;
         }
     }
-    &:hover {
-        cursor: default;
-        .card {
-            &-title {
-                transition: all 0.5s ease;
-                border: 2px solid var(--color);
-                color: var(--color);
-                background-color: $white;
-            } 
-        }
+}
+.card {
+    &:before, &:after {
+        mix-blend-mode: multiply;
     }
 }
 .career {
     &-date {
+        mix-blend-mode: multiply;
         position: relative;
+        color: $white;
         &-second {
             font-family: "MontSerrat", sans-serif;
             text-transform: uppercase;
-            font-size: 6rem;
+            font-size: 5rem;
             font-weight: 900;
             color: $light-blue;
             opacity: 0.3;
@@ -144,6 +141,14 @@ h2 {
                 left: 0;
                 bottom: 0;
             }
+            &-title {
+                border: none;
+                transition: all 0.5s ease;
+                color: $white;
+                background-color: var(--color);
+                box-shadow: 5px 7px 2px $white,
+                            0px 0px 15px var(--color);
+            }
         }
     }
     .career {
@@ -153,8 +158,7 @@ h2 {
                 left: 5%;
             }
         }
-    }
-    
+    }    
 }
 .even {
     margin: 3rem auto 6rem auto; 
@@ -166,23 +170,22 @@ h2 {
                 text-align: left;
             }
         }
-        &-title {
-            color: $white;
-            border: 2px solid $white;
-            @include box_shadow(0px, 0px, 15px, $dark_gray);
-        }
-        &:hover {
-            .card {
-                &:after {
-                    transform: rotateZ(0deg);
-                    transition: all 0.5s ease;
-                    box-shadow: -25px -7px 2px var(--color);
-                    left: 0;
-                    bottom: 0;
-                }
-                &-title {
-                    transform: translate(-2%, -50%);
-                }
+    }
+    &:hover {
+        .card {
+            &:after {
+                transition: all 0.2s ease;
+                box-shadow: -5px 7px 2px $white;
+                left: 0;
+                bottom: 0;
+            }
+            &-title {
+                border: none;
+                transition: all 0.5s ease;
+                color: $white;
+                background-color: var(--color);
+                box-shadow: -5px 7px 2px $white,
+                            0px 0px 15px var(--color);
             }
         }
     }
@@ -234,7 +237,7 @@ h2 {
             transform: unset;
         }
         h2 {
-            font-size: 1.1rem;
+            font-size: 1.5rem;
         }
         .card {
             &-title {
@@ -251,11 +254,11 @@ h2 {
                 left: 0;
                 bottom: 0;
             }
-            &:hover {
-                transform: unset;
-                box-shadow: unset;
-            }
         }
+        &:hover {
+            transform: unset;
+            box-shadow: unset;
+        }        
     }
     .odd {
         width: 100%;
@@ -263,12 +266,20 @@ h2 {
             .card {
                 &-title {
                     transform: unset;
-                    box-shadow: 5px 7px 2px var(--color);
                 }
             }
         }
         h2 {
             text-align: right;
+        }
+        .career {
+            &-date {
+                &-second {
+                    top: 0%;
+                    left: 30%;
+                    font-size: 2rem;
+                }
+            }
         }
     }
     .even {
@@ -277,13 +288,21 @@ h2 {
             .card {
                 &-title {
                     transform: unset;
-                    box-shadow: -5px 7px 2px var(--color);
                 }
             }
         }
         h2 {
             text-align: left;
-        }
+        } 
+        .career {
+            &-date {
+                &-second {
+                    top: 0%;
+                    right: 28%;
+                    font-size: 2rem;
+                }
+            }
+        }         
     }
 }
 @media (min-width: 576px) {
@@ -296,16 +315,24 @@ h2 {
                 left: 0;  
                 transform: translate(-2%, -50%);
             }
-            &:hover {
-                .card {
-                    &-title {
-                        transform: translate(-2%, -50%);
-                    }
+        }
+        &:hover {
+            .card {
+                &-title {
+                    transform: translate(-2%, -50%);
                 }
             }
         }
         h2 {
             text-align: right;
+        }
+        .career {
+            &-date {
+                &-second {
+                    left: 65%;
+                    font-size: 1.8rem;
+                }
+            }
         }
     }
     .even {
@@ -317,17 +344,24 @@ h2 {
                 right: 0;  
                 transform: translate(2%, -50%);
             }
-            &:hover {
-                .card {
-                    &-title {
-                        transform: translate(2%, -50%);
-                        box-shadow: -5px 7px 2px var(--color);
-                    }
+        }
+        &:hover {
+            .card {
+                &-title {
+                    transform: translate(2%, -50%);
                 }
             }
         }
         h2 {
             text-align: left;
+        }
+        .career {
+            &-date {
+                &-second {
+                    right: 65%;
+                    font-size: 1.8rem;
+                }
+            }
         }
     }
     h2 {
@@ -355,7 +389,7 @@ h2 {
             &-title {
                 width: 50%;
                 margin: auto;
-                transform: translate(-10%, -50%) rotateZ(-4deg);
+                transform: translate(-10%, -50%);
             }
         }
         &:hover {
@@ -364,7 +398,6 @@ h2 {
                 &-title {
                     transition: all 0.2s ease;
                     transform: translate(-10%, -50%) rotateZ(0deg);
-                    box-shadow: 5px 7px 2px var(--color);
                 }  
                 &-body {
                     transition: all 0.2s ease;
@@ -376,6 +409,14 @@ h2 {
                 }
                 &:after {
                     transform: rotateZ(0deg);
+                }
+            }
+        }
+        .career {
+            &-date {
+                &-second {
+                    left: 8%;
+                    font-size: 3rem;
                 }
             }
         }
@@ -401,13 +442,20 @@ h2 {
                 transform: rotateZ(-4deg);
             }
         }
+        .career {
+            &-date {
+                &-second {
+                    right: 8%;
+                    font-size: 3rem;
+                }
+            }
+        }
         &:hover {
             cursor: default;
             .card {
                 &-title {
                     transition: all 0.2s ease;
                     transform: translate(10%, -50%) rotateZ(0deg);
-                    box-shadow: -5px 7px 2px var(--color);
                 }  
                 &-body {
                     transition: all 0.2s ease;
@@ -424,19 +472,22 @@ h2 {
         }
         h2 {
             text-align: right;
-            font-size: 2rem;
+            font-size: 2.5rem;
         }
     }
 }
 @media (min-width: 992px) {
     .odd {
         width: 85%;
+        h2 {
+            font-size: 3rem;
+        }
     }
     .even {
         width: 85%;
-    }
-    h2 {
-        font-size: 2rem;
+        h2 {
+            font-size: 3rem;
+        }
     }
 }
 </style>
