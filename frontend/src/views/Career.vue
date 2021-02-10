@@ -61,6 +61,9 @@ export default {
         transform: translate(-50%, 50%) rotate(90deg) scale(0.8);
     }
 }
+.even, .odd {
+    margin-bottom: 8rem;
+}
 .header {
     padding-bottom: 5rem;
 }
@@ -73,13 +76,10 @@ export default {
     background-color: $white;
     transform: translateZ(-10px);
     animation: scale-up-ver-top 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.5s both;
-    // z-index: 1;
+    z-index: -1;
 }
 .row {
     height: unset;
-}
-.odd {
-    margin-bottom: 10rem;
 }
 @keyframes scale-up-ver-top {
     0% {
@@ -98,6 +98,9 @@ export default {
         .line {
             display: none;
         }
+        // .even, .odd {
+        //     margin-bottom: 5rem;
+        // }
     }
 }
 @media (min-width: 768px) {
@@ -107,6 +110,9 @@ export default {
             height: 77%;
             top: 11%;
         }
+        // .even, .odd {
+        //     margin-bottom: 10rem;
+        // }
     }
 }
 @media (min-width: 1200px) {

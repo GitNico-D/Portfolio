@@ -1,10 +1,10 @@
 <template>
-    <b-row :class="parity">
+    <b-row :class="parity" class="align-items-center">
         <b-col cols="12" md="6">
-            <b-card :title="title" :style="{'--color': color}">
+            <b-card :title="title" :style="{'--color': color}" class="border-0">
                 <b-card-text>
-                    <h4 class="mt-4">{{ company }}</h4>
-                    <p class="mt-4">{{ description }} Lorem Ipsum is simply dummy text of the printing 
+                    <h4 class="mt-4 font-weight-bold text-uppercase">{{ company }}</h4>
+                    <p class="mt-4 text-justify">{{ description }} Lorem Ipsum is simply dummy text of the printing 
                         and typesetting industry. Lorem Ipsum has been the industry's standard dummy
                         text ever since the 1500s, when an unknown printer took a galley of type and 
                         scrambled it to make a type specimen book.
@@ -12,9 +12,8 @@
                 </b-card-text>
             </b-card>    
         </b-col>
-        <b-col cols="12" md="6" class="career-date">
-            <h2 class="career-date-one"><span>{{ startDate }}</span> - <span>{{ endDate }}</span></h2>  
-            <p class="career-date-second"><span>{{ startDate }}</span> - <span>{{ endDate }}</span></p>
+        <b-col cols="12" md="6">
+            <h2 class=""><span>{{ startDate }}</span> - <span>{{ endDate }}</span></h2> 
         </b-col>
     </b-row>   
 </template>
@@ -37,22 +36,19 @@ export default {
 <style lang="scss" scoped>
 .row {
     width: 90%;
-    perspective: 1000px;
     }
 h2 {
-    // color: $white;
     font-family: "MontSerrat", sans-serif;
     font-weight: 600;
+    font-size: 2.5rem;
     text-transform: uppercase;
+    color: $white;  
+    transition: all 0.2s ease;
     animation: focus-in-contract 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s both;
 }
 .card {
     font-family: "Oswald", sans-serif;
     background-color: transparent;
-    border-radius: 0;
-    border: 0;
-    color: $dark_gray;
-    perspective: 1000px;
     &-title {
         font-family: "MontSerrat", sans-serif;
         color: $white;
@@ -67,7 +63,6 @@ h2 {
         content: "";
         position: absolute;
         background-color: $white;
-        transform: rotateZ(-5deg);
         z-index: -1;
         width: 100%;
         height: 100%;
@@ -82,17 +77,13 @@ h2 {
         z-index: -1;
         left: 2%;
         bottom: 5%;
-        transform: rotateZ(4deg);
         @include box-shadow (0px, 0px, 10px, var(--color));
     }
     &-text {
         h4 {
-            font-weight: bold;
             color: $white;
-            text-transform: uppercase;
         }
         p {
-            text-align: justify;
             color: $white;
         }
     }
@@ -102,26 +93,12 @@ h2 {
         mix-blend-mode: multiply;
     }
 }
-.career {
-    &-date {
-        position: relative;
-        color: $white;
-        &-second {
-            font-family: "MontSerrat", sans-serif;
-            text-transform: uppercase;
-            font-size: 5rem;
-            font-weight: 900;
-            color: $light-blue;
-            opacity: 0.3;
-            z-index: -1;
-            position: absolute;
-            transform: translateY(-30%);
-        }
-    }
+.date {
+    color: $white;           
 }
 .odd {
     margin: 3rem auto 6rem auto;
-    align-items: center;
+    transition: all 0.5s ease;
     .card {
         animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
         transition: all 1s ease;
@@ -129,6 +106,19 @@ h2 {
             h4 {
                 text-align: right;
             }
+        }
+        &:after {
+            transform: rotateZ(4deg);
+        }
+        &:before {
+            transform: rotateZ(-5deg);
+        }
+        &-body {
+            transform: rotateZ(4deg);
+        }
+        &-title {
+            color: $white;
+            background-color: transparent;
         }
     } 
     &:hover {
@@ -139,45 +129,35 @@ h2 {
                 box-shadow: 5px 7px 2px $white;
                 left: 0;
                 bottom: 0;
+                transform: rotateZ(0deg);
+            }
+            &:before {
+                transition: all 0.2s ease;
+                transform: rotateZ(0deg);
+            }
+            &-body {
+                transition: all 0.2s ease;
+                transform: rotateZ(0deg);
             }
             &-title {
                 border: none;
-                transition: all 0.5s ease;
+                transition: all 0.2s ease;
                 color: $white;
                 background-color: var(--color);
                 box-shadow: 5px 7px 2px $white,
                             0px 0px 15px var(--color);
+                transform: translate(-10%, -50%) rotateZ(0deg);
             }
+            
         }
         h2 {
             transition: all 0.2s ease;
             color: $light_blue;
-            opacity: 1;
-            z-index: -1;
         }
-        .career {
-            &-date {
-                &-second {
-                    transition: all 0.2s ease;
-                    color: $white;
-                    opacity: 1;
-                    z-index: 1;
-                }
-            }
-        }
-    }
-    .career {
-        &-date {
-            &-second {
-                top: 0%;
-                left: 5%;
-            }
-        }
-    }    
+    }  
 }
 .even {
     margin: 3rem auto 6rem auto; 
-    align-items: center;
     .card {
         animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
         &-text {
@@ -185,47 +165,51 @@ h2 {
                 text-align: left;
             }
         }
+        &-title {
+            color: $white;
+            border: 2px solid $white;
+        }
+        &:before {
+            transform: rotateZ(5deg);
+        }
+        &:after {
+            transform: rotateZ(-4deg);
+        }
+        &-body {
+            transform: rotateZ(-4deg);
+        }
     }
     &:hover {
+        cursor: default;
         .card {
             &:after {
                 transition: all 0.2s ease;
                 box-shadow: -5px 7px 2px $white;
                 left: 0;
                 bottom: 0;
+                transform: rotateZ(0deg);
+            }
+            &:before {
+                transition: all 0.2s ease;
+                transform: rotateZ(0deg);
             }
             &-title {
                 border: none;
-                transition: all 0.5s ease;
+                transition: all 0.2s ease;
                 color: $white;
                 background-color: var(--color);
                 box-shadow: -5px 7px 2px $white,
                             0px 0px 15px var(--color);
+                transform: translate(10%, -50%) rotateZ(0deg);
+            }
+            &-body {
+                transition: all 0.2s ease;
+                transform: rotateZ(0deg);
             }
         }
         h2 {
             transition: all 0.2s ease;
             color: $light_blue;
-            opacity: 1;
-            z-index: -1;
-        }
-        .career {
-            &-date {
-                &-second {
-                    transition: all 0.2s ease;
-                    color: $white;
-                    opacity: 1;
-                    z-index: 1;
-                }
-            }
-        }
-    }
-    .career {
-        &-date {
-            &-second {
-                top: 0%;
-                right: 5%;
-            }
         }
     }
 }
@@ -262,103 +246,39 @@ h2 {
 }
 
 @media (min-width: 320px) {
+    .col-12 {
+        padding: unset;
+    }
     .even, .odd {
         flex-direction: column-reverse;
-        .rotateCard {
-            transform: unset;
-        }
+        width: 85%;
         h2 {
             font-size: 1.5rem;
-        }
-        .card {
-            &-title {
-                transform: unset;                
-            }  
-            &-body {
-                transform: unset;
-            }
-            &:before {
-                transform: unset;
-            }
-            &:after {
-                transform: unset;
-                left: 0;
-                bottom: 0;
-            }
+            margin-bottom: 2rem;
         }
         &:hover {
-            transform: unset;
-            box-shadow: unset;
+            .card {
+                &-title {
+                    border: 1px solid $white;
+                }
+            }
         }        
     }
     .odd {
-        width: 100%;
-        &:hover {
-            .card {
-                &-title {
-                    transform: unset;
-                    border: 1px solid $white;
-                }
-            }
-            h2 {
-                font-size: 1.25rem;
-            }
-            .career {
-                &-date {
-                    &-second {
-                        font-size: 2rem;
-                    }
-                }
-            }
-        }
         h2 {
             text-align: right;
         }
-        .career {
-            &-date {
-                &-second {
-                    top: 0%;
-                    left: 30%;
-                    font-size: 2rem;
-                }
-            }
-        }
     }
     .even {
-        width: 100%;
-        &:hover {
-            .card {
-                &-title {
-                    transform: unset;
-                    border: 1px solid $white;
-                }
-            }
-            h2 {
-                font-size: 1.25rem;
-            }
-            .career {
-                &-date {
-                    &-second {
-                        font-size: 2rem;
-                    }
-                }
-            }
-        }
         h2 {
             text-align: left;
-        } 
-        .career {
-            &-date {
-                &-second {
-                    top: 0%;
-                    right: 28%;
-                    font-size: 2rem;
-                }
-            }
         }         
     }
 }
 @media (min-width: 576px) {
+    .even, .odd {
+        width: 90%;
+    }
     .odd {
         .card {
             &-title {
@@ -372,28 +292,6 @@ h2 {
         h2 {
             text-align: right;
         }
-        &:hover {
-            .card {
-                &-title {
-                    transform: translate(-2%, -50%);
-                }
-            } 
-            .career {
-                &-date {
-                    &-second {
-                        font-size: 1.70rem;
-                    }
-                }
-            }
-        }
-        .career {
-            &-date {
-                &-second {
-                    left: 65%;
-                    font-size: 1.8rem;
-                }
-            }
-        }
     }
     .even {
         .card {
@@ -405,30 +303,8 @@ h2 {
                 transform: translate(2%, -50%);
             }
         }
-        &:hover {
-            .card {
-                &-title {
-                    transform: translate(2%, -50%);
-                }
-            }
-            .career {
-                &-date {
-                    &-second {
-                        font-size: 1.70rem;
-                    }
-                }
-            }
-        }
         h2 {
             text-align: left;
-        }
-        .career {
-            &-date {
-                &-second {
-                    right: 65%;
-                    font-size: 1.8rem;
-                }
-            }
         }
     }
     h2 {
@@ -436,125 +312,39 @@ h2 {
     }
 }
 @media (min-width: 768px) {
+    .col-12 {
+        padding: 1.5rem;
+    }
+    .odd, .even {
+        width: 90%;
+        &:hover {
+            h2 {
+                font-size: 3.25rem;
+                color: $light-blue;
+            }
+        }
+    }
     .odd {
-        width: 95%;
         flex-direction: row;
         h2 {
             text-align: left;
             font-size: 2rem;
         }
         .card {
-            &:after {
-                transform: rotateZ(4deg);
-            }
-            &:before {
-                transform: rotateZ(-5deg);
-            }
-            &-body {
-                transform: rotateZ(4deg);
-            }
             &-title {
                 width: 50%;
                 margin: auto;
                 transform: translate(-10%, -50%);
             }
         }
-        &:hover {
-            cursor: default;
-            .card {
-                &-title {
-                    transition: all 0.2s ease;
-                    transform: translate(-10%, -50%) rotateZ(0deg);
-                }  
-                &-body {
-                    transition: all 0.2s ease;
-                    transform: rotateZ(0deg);
-                }
-                &:before {
-                    transition: all 0.2s ease;
-                    transform: rotateZ(0deg);
-                }
-                &:after {
-                    transform: rotateZ(0deg);
-                }
-            }
-            h2 {
-                font-size: 1.25rem;
-            }
-            .career {
-                &-date {
-                    &-second {
-                        font-size: 3rem;
-                    }
-                }
-            }
-        }
-        .career {
-            &-date {
-                &-second {
-                    left: 8%;
-                    font-size: 3rem;
-                }
-            }
-        }
     }
     .even {
-        width: 95%;
         flex-direction: row-reverse;
         .card {
             &-title {
                 width: 50%;
                 margin: auto;
                 transform: translate(10%, -50%);
-                color: $white;
-                border: 2px solid $white;
-            }
-            &:before {
-                transform: rotateZ(5deg);
-            }
-            &:after {
-                transform: rotateZ(-4deg);
-            }
-            &-body {
-                transform: rotateZ(-4deg);
-            }
-        }
-        .career {
-            &-date {
-                &-second {
-                    right: 8%;
-                    font-size: 3rem;
-                }
-            }
-        }
-        &:hover {
-            cursor: default;
-            .card {
-                &-title {
-                    transition: all 0.2s ease;
-                    transform: translate(10%, -50%) rotateZ(0deg);
-                }  
-                &-body {
-                    transition: all 0.2s ease;
-                    transform: rotateZ(0deg);
-                }
-                &:before {
-                    transition: all 0.2s ease;
-                    transform: rotateZ(0deg);
-                }
-                &:after {
-                    transform: rotateZ(0deg);
-                }
-            }
-            h2 {
-                font-size: 1.25rem;
-            }
-            .career {
-                &-date {
-                    &-second {
-                        font-size: 3rem;
-                    }
-                }
             }
         }
         h2 {
@@ -564,34 +354,9 @@ h2 {
     }
 }
 @media (min-width: 992px) {
-    .odd {
-        width: 85%;
+    .odd, .even {
         h2 {
             font-size: 3rem;
-        }
-        &:hover {
-            .career {
-                &-date {
-                    &-second {
-                        font-size: 5rem;
-                    }
-                }
-            }
-        }
-    }
-    .even {
-        width: 85%;
-        h2 {
-            font-size: 3rem;
-        }
-        &:hover {
-            .career {
-                &-date {
-                    &-second {
-                        font-size: 5rem;
-                    }
-                }
-            }
         }
     }
 }
