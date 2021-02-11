@@ -4,8 +4,8 @@
         <b-navbar-toggle target="nav-collapse" :style="{'--color': color}" ></b-navbar-toggle>
             <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav class="p-3" :style="{ '--color': color, '--color': color}">
+                    <router-link to="/presentation">Présentation</router-link><span class="px-3" :style="{'--color': color}"> | </span> 
                     <router-link to="/projects">Projets</router-link><span class="px-3" :style="{'--color': color}"> | </span>
-                    <router-link to="/experiences">Expériences</router-link><span class="px-3" :style="{'--color': color}"> | </span> 
                     <router-link to="/skills">Compétences</router-link><span class="px-3" :style="{'--color': color}"> | </span>
                     <router-link to="/career">Carrières</router-link><span class="px-3" :style="{'--color': color}"> | </span> 
                 </b-navbar-nav>
