@@ -101,19 +101,21 @@ h2 {
     transition: all 0.5s ease;
     .card {
         animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
-        transition: all 1s ease;
         &-text {
             h4 {
                 text-align: right;
             }
         }
         &:after {
+            transition: transform 0.3s ease;
             transform: rotateZ(4deg);
         }
         &:before {
+            transition: transform 0.3s ease;
             transform: rotateZ(-5deg);
         }
         &-body {
+            transition: transform 0.3s ease;
             transform: rotateZ(4deg);
         }
         &-title {
@@ -125,23 +127,23 @@ h2 {
         cursor: default;
         .card {
             &:after {
-                transition: all 0.2s ease;
+                transition: all 0.4s ease;
                 box-shadow: 5px 7px 2px $white;
                 left: 0;
                 bottom: 0;
                 transform: rotateZ(0deg);
             }
             &:before {
-                transition: all 0.2s ease;
+                transition: all 0.4s ease;
                 transform: rotateZ(0deg);
             }
             &-body {
-                transition: all 0.2s ease;
+                transition: all 0.4s ease;
                 transform: rotateZ(0deg);
             }
             &-title {
                 border: none;
-                transition: all 0.2s ease;
+                transition: all 0.4s ease;
                 color: $white;
                 background-color: var(--color);
                 box-shadow: 5px 7px 2px $white,
@@ -160,23 +162,28 @@ h2 {
     margin: 3rem auto 6rem auto; 
     .card {
         animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
+        
+        &:before {
+            transition: transform 0.3s ease;
+            transform: rotateZ(5deg);
+        }
+        &:after {
+            transition: transform 0.3s ease;
+            transform: rotateZ(-4deg);
+        }
+        &-body {
+            transition: transform 0.3s ease;
+            transform: rotateZ(-4deg);
+        }
         &-text {
             h4 {
                 text-align: left;
             }
         }
         &-title {
+            transition: transform 0.3s ease;
             color: $white;
             border: 2px solid $white;
-        }
-        &:before {
-            transform: rotateZ(5deg);
-        }
-        &:after {
-            transform: rotateZ(-4deg);
-        }
-        &-body {
-            transform: rotateZ(-4deg);
         }
     }
     &:hover {
