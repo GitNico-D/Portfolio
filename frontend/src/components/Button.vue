@@ -1,5 +1,5 @@
 <template>
-    <b-button :href="socialLink" :style="{'--color-one': colorOne, '--color-two': colorTwo}">
+    <b-button :href="socialLink" :style="{'--color-one': colorOne, '--color-two': colorTwo}" class="m-1">
         <!-- <b-img :src="logoIcon" :alt="'logo ' + name"></b-img> -->
         {{name}}
     </b-button>
