@@ -3,7 +3,9 @@
         <Header title="Projets" color="#6d327c"/>
         <BackgroundPage circleColor="#6d327c"/>
         <Transition v-show="showTransition" directionAnimation="right"/>
+        <b-alert show variant="danger">{{ error }}</b-alert>
         <b-row class="cards m-auto">
+            {{info}}
             <ProjectCard title="Projet 1" content="Description projet 1" url="/" :imgSrc="require('../assets/img-test-1.jpg')" imgAlt="Image Projet 1"/>
             <ProjectCard title="Projet 2" content="Description projet 2" url="/" :imgSrc="require('../assets/img-test-2.jpg')" imgAlt="Image Projet 2"/>
             <ProjectCard title="Projet 3" content="Description projet 3" url="/" :imgSrc="require('../assets/img-test-3.jpg')" imgAlt="Image Projet 3"/>
@@ -23,6 +25,7 @@ import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
 import Transition from "@/components/Transition.vue"
 
+
 export default {
     components: {
         ProjectCard,
@@ -33,7 +36,9 @@ export default {
     },
     data() {
         return {
-            showTransition: true    
+            showTransition: true,  
+            info: null,
+            error: null 
         }
     },
     methods: {
@@ -48,6 +53,22 @@ export default {
         setTimeout(() => {
             this.showTransition = false;
         },1300);
+    }, 
+    mounted() {
+        this.axios.get('http://portfolio/api/projects', {
+            headers: {
+                'Authorization': 'Bearer' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTMyMzY4NjgsImV4cCI6MTYxMzMyMzI2OCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluQGFkbWluLmNvbSJ9.qBKp8xcBP1SFiXthavx8YimrXibc6jFdaSBq4UVfRt6A886GW_GvR_KpnXPj-PiK1um0dOFNrty3BZV1pjdB-B1_fvsB5D2B4S6eFmtIIsDWbrG2x6UzR4voVgt9FeDv5hghGaM-44APmUAs5c28y3QGMWFfXw9tNxdN4cuKFuC2a8o3fyLV3uYPH-bSZN8F1CEzTL2kQhedFcSwxtb_m4RdfyrVLDZZhSslVRd7R9O0k-yLBzDM6DXi993JHq7Ks8C4E9JvX2838oMVIUiZttY9HvzQVwxyg3kitdzfElu6cjBDNu80KDtzH38prBOh4z-Cn1MyAZdbeblFGNbqbrgRrU0j1Q74KZ_1xavWqjt3sh7C5V6wLSj3NDPBv1HfCUK_hzIUnUsarrsapSSXZ6dlaTFVRW748FzuqtQX9SilP8faDO27W3UFXaUYdV0OzD8ITtZjKFwIDu-j_RlWzVbkAff6LWiG6BWZ5HiZ8WRfwx-FpEiUS-1TLkzEPC3oKnDHJdIFY0s_w8Qwa8rJ1brFVi556I1OO_42qW-05Hb_eD8gIN2EvdJlplgjx-3pPWAYAxm73xo-TRjDz3a8ZcxM1Xq_FWgmSswlIujRO6ujqnqmQMHkohuZeGIDHbHar9rCFE8taHRe_9DVB6irIZCQ-PiXlDQpjfm8hI6bvKk',
+                "Content-Type": "application/json"
+            },
+        })  
+        .then(response => { 
+            this.info = response.data 
+            console.log(response)
+            })
+        .catch(error => {
+            this.error = error.response.data;
+            console.log(error.response.data);
+        });
     }
 }
 </script>
