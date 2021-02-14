@@ -87,8 +87,6 @@ h2 {
             color: $white;
         }
     }
-}
-.card {
     &:before, &:after {
         mix-blend-mode: multiply;
     }
