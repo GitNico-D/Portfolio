@@ -113,8 +113,7 @@ export default {
             0 6px 0 var(--color),
             0 7px 0 var(--color), 
             0 8px 0 var(--color), 
-            0 9px 0 var(--color),
-            0 50px 30px rgba(109, 50, 124, 0.3);
+            0 9px 0 var(--color);
         color: $white;            
         text-transform: uppercase;
         animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1s both;
