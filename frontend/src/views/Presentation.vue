@@ -12,10 +12,10 @@
                     <hr>
                     <b-card-text>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        <div class="d-flex flex-wrap justify-content-around my-3">
-                            <Button name="GitHub" href="https://github.com/GitNico-D" colorOne="#485DA6" colorTwo="#FF9C66" :logoIcon="require('../assets/logo-github.svg')"/>
-                            <Button name="GitHub" href="https://github.com/GitNico-D" colorOne="#FF9C66" colorTwo="#485DA6" :logoIcon="require('../assets/logo-github.svg')"/>
-                            <Button name="GitHub" href="https://github.com/GitNico-D" colorOne="#485DA6" colorTwo="#FF9C66" :logoIcon="require('../assets/logo-github.svg')"/>
+                        <div class="d-flex flex-wrap justify-content-around my-4">
+                            <Button name="GitHub" href="https://github.com/GitNico-D" colorOne="#485DA6" colorTwo="#FF9C66" :logoIcon="'url(' + require('../assets/logo-github.png') + ')'"/>
+                            <Button name="LinkedIn" href="https://fr.linkedin.com/" colorOne="#FF9C66" colorTwo="#485DA6" :logoIcon="'url(' + require('../assets/logo-linkedin.png') + ')'"/>
+                            <Button name="Contact" colorOne="#485DA6" colorTwo="#FF9C66" :logoIcon="'url(' + require('../assets/logo-gmail.png') + ')'"/>
                         </div>
                     </b-card-text>
                 </b-card>
