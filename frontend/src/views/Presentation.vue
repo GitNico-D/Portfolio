@@ -315,7 +315,7 @@ export default {
                 font-size: 1.2rem;
             }
             &-border-back {
-                height: 42%;
+                height: 45%;
             }
         }
     }
