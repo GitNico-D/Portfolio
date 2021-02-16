@@ -5,6 +5,7 @@ import Project from "../views/Project.vue";
 import Skill from "../views/Skill.vue";
 import Presentation from "../views/Presentation.vue";
 import Career from "../views/Career.vue";
+import Error404 from "../views/Error404.vue";
 
 Vue.use(VueRouter);
 
@@ -33,6 +34,11 @@ const routes = [
     path: "/skills",
     name: "Skill",
     component: Skill
+  },
+  {
+    path: "/error",
+    name: "Error404",
+    component: Error404
   }
 ];
 

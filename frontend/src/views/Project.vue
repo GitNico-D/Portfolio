@@ -55,6 +55,7 @@ export default {
         },1300);
     }, 
     mounted() {
+        console.log(process.env.VUE_APP_API_URL);
         this.axios.get(process.env.VUE_APP_API_URL + '/projects', {
             headers: {
                 'Authorization': 'Bearer' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTMyMzY4NjgsImV4cCI6MTYxMzMyMzI2OCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluQGFkbWluLmNvbSJ9.qBKp8xcBP1SFiXthavx8YimrXibc6jFdaSBq4UVfRt6A886GW_GvR_KpnXPj-PiK1um0dOFNrty3BZV1pjdB-B1_fvsB5D2B4S6eFmtIIsDWbrG2x6UzR4voVgt9FeDv5hghGaM-44APmUAs5c28y3QGMWFfXw9tNxdN4cuKFuC2a8o3fyLV3uYPH-bSZN8F1CEzTL2kQhedFcSwxtb_m4RdfyrVLDZZhSslVRd7R9O0k-yLBzDM6DXi993JHq7Ks8C4E9JvX2838oMVIUiZttY9HvzQVwxyg3kitdzfElu6cjBDNu80KDtzH38prBOh4z-Cn1MyAZdbeblFGNbqbrgRrU0j1Q74KZ_1xavWqjt3sh7C5V6wLSj3NDPBv1HfCUK_hzIUnUsarrsapSSXZ6dlaTFVRW748FzuqtQX9SilP8faDO27W3UFXaUYdV0OzD8ITtZjKFwIDu-j_RlWzVbkAff6LWiG6BWZ5HiZ8WRfwx-FpEiUS-1TLkzEPC3oKnDHJdIFY0s_w8Qwa8rJ1brFVi556I1OO_42qW-05Hb_eD8gIN2EvdJlplgjx-3pPWAYAxm73xo-TRjDz3a8ZcxM1Xq_FWgmSswlIujRO6ujqnqmQMHkohuZeGIDHbHar9rCFE8taHRe_9DVB6irIZCQ-PiXlDQpjfm8hI6bvKk',
