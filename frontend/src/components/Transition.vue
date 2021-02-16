@@ -110,7 +110,7 @@ export default {
         }
         @keyframes slideLeftGreen { 
             from { 
-                transform: translateX(-110%);
+                transform: translateX(0%);
                 filter: blur(5px);
             }
             to  { 
