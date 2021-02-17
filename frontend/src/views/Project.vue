@@ -3,14 +3,16 @@
         <Header title="Projets" color="#6d327c"/>
         <BackgroundPage circleColor="#6d327c"/>
         <Transition v-show="showTransition" directionAnimation="right"/>
-        <b-alert show variant="danger">{{ error }}</b-alert>
         <b-row class="cards m-auto">
-            {{info}}
-            <ProjectCard title="Projet 1" content="Description projet 1" url="/" :imgSrc="require('../assets/img-test-1.jpg')" imgAlt="Image Projet 1"/>
-            <ProjectCard title="Projet 2" content="Description projet 2" url="/" :imgSrc="require('../assets/img-test-2.jpg')" imgAlt="Image Projet 2"/>
-            <ProjectCard title="Projet 3" content="Description projet 3" url="/" :imgSrc="require('../assets/img-test-3.jpg')" imgAlt="Image Projet 3"/>
-            <ProjectCard title="Projet 4" content="Description projet 4" url="/" :imgSrc="require('../assets/img-test-1.jpg')" imgAlt="Image Projet 4"/>
-            <ProjectCard title="Projet 5" content="Description projet 5" url="/" :imgSrc="require('../assets/img-test-2.jpg')" imgAlt="Image Projet 5"/>
+            <ProjectCard 
+                v-for="project in projects" 
+                :key="project.id" 
+                :title="project.name"
+                :content="project.description" 
+                :url="project.url" 
+                :imgSrc="require('../assets/img-test-1.jpg')" 
+                imgAlt="Image Projet 1"
+                />
         </b-row>
         <b-row class="back">
             <HomePageLink action="Retour" url="/" direction="animated-arrowLtr" class="link link-left" textColor="#6d327c"/>
@@ -37,7 +39,7 @@ export default {
     data() {
         return {
             showTransition: true,  
-            info: null,
+            projects: null,
             error: null 
         }
     },
@@ -61,12 +63,10 @@ export default {
             },
         })  
         .then(response => { 
-            this.info = response.data 
-            console.log(response)
+            this.projects = response.data 
             })
         .catch(error => {
             this.error = error.response.data;
-            console.log(error.response.data);
         });
     }
 }
@@ -116,13 +116,11 @@ export default {
     0% {
         transform: translateX(1000px) scaleX(2.5) scaleY(0.2);
         transform-origin: 0% 50%;
-        // filter: blur(20px);
         opacity: 0;
     }
     100% {
         transform: translateX(0) scaleY(1) scaleX(1);
         transform-origin: 50% 50%;
-        // filter: blur(0);
         opacity: 1;
     }
 }
