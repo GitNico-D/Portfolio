@@ -5,7 +5,7 @@ import Project from "../views/Project.vue";
 import Skill from "../views/Skill.vue";
 import Presentation from "../views/Presentation.vue";
 import Career from "../views/Career.vue";
-import Error404 from "../views/Error404.vue";
+import Whaterror from "../views/Whaterror.vue";
 
 Vue.use(VueRouter);
 
@@ -36,13 +36,18 @@ const routes = [
     component: Skill
   },
   {
-    path: "/error",
-    name: "Error404",
-    component: Error404
+    path: "/whaterror",
+    name: "Whaterror",
+    component: Whaterror
+  },
+  {
+    path: "*",
+    redirect: "/"
   }
 ];
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 });
 
