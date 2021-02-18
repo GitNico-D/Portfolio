@@ -3,7 +3,7 @@
         <Header title="Projets" color="#6d327c"/>
         <BackgroundPage circleColor="#6d327c"/>
         <Transition v-show="showTransition" directionAnimation="right"/>
-        <b-row class="cards m-auto">
+        <b-row v-if="!errors" class="cards m-auto">
             <ProjectCard 
                 v-for="project in projects" 
                 :key="project.id" 
@@ -15,6 +15,9 @@
 				:date="project.creationDate"
                 />
         </b-row>
+		<b-row v-else>
+			<Error :code="errors.status" :message="errors.message"/>
+		</b-row>
         <b-row class="back">
             <HomePageLink action="Retour" url="/" direction="animated-arrowLtr" class="link link-left" textColor="#6d327c"/>
         </b-row>
@@ -26,7 +29,8 @@ import ProjectCard from '@/components/ProjectCard.vue'
 import HomePageLink from '@/components/HomePageLink.vue'
 import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
-import Transition from "@/components/Transition.vue"
+import Transition from '@/components/Transition.vue'
+import Error from '@/components/Error.vue'
 
 
 export default {
@@ -35,13 +39,14 @@ export default {
         Header,
         BackgroundPage,
         HomePageLink,
-        Transition
+        Transition,
+		Error
     },
     data() {
         return {
             showTransition: true,  
             projects: null,
-            error: null 
+            errors: null 
         }
     },
     methods: {
@@ -51,13 +56,26 @@ export default {
                 this.showTransition = false;
             },1300);
         }
-    },
+		// beforeEnter: (to, from, next) => {
+		// 	console.log(this.errors);
+		// 	if (!this.errors) {
+		// 		next() 
+		// 	} else {
+		// 		from ('/whaterror')
+		// 	}
+		// }
+	},
     created() {
         setTimeout(() => {
             this.showTransition = false;
         },1300);
     }, 
     mounted() {
+		this.axios.interceptors.response.use(function (response) {
+			return response;
+		}, function (error) {
+			return Promise.reject(error);
+		});
         this.axios.get(process.env.VUE_APP_API_URL + '/projects', {
             headers: {
                 "Content-Type": "application/json"
@@ -67,7 +85,7 @@ export default {
             this.projects = response.data 
             })
         .catch(error => {
-            this.error = error.response.data;
+            this.errors = JSON.parse(JSON.stringify(error.response.data));
         });
     }
 }
