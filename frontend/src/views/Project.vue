@@ -12,6 +12,7 @@
                 :url="project.url" 
                 :imgSrc="require('../assets/img-test-1.jpg')" 
                 imgAlt="Image Projet 1"
+				:date="project.creationDate"
                 />
         </b-row>
         <b-row class="back">
