@@ -55,7 +55,7 @@ export default {
             setTimeout(() => {
                 this.showTransition = false;
             },1300);
-        }
+        },
 		// beforeEnter: (to, from, next) => {
 		// 	console.log(this.errors);
 		// 	if (!this.errors) {
@@ -64,6 +64,9 @@ export default {
 		// 		from ('/whaterror')
 		// 	}
 		// }
+        consoleError() {
+            console.log("Error");
+        }
 	},
     created() {
         setTimeout(() => {
@@ -74,6 +77,10 @@ export default {
 		this.axios.interceptors.response.use(function (response) {
 			return response;
 		}, function (error) {
+            console.log(error.response.data);
+            if(error) {
+                this.consoleError();
+            }
 			return Promise.reject(error);
 		});
         this.axios.get(process.env.VUE_APP_API_URL + '/projects', {
@@ -85,6 +92,9 @@ export default {
             this.projects = response.data 
             })
         .catch(error => {
+            console.log(this.$router);
+            this.$router.push("/")
+
             this.errors = JSON.parse(JSON.stringify(error.response.data));
         });
     }
