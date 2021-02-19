@@ -5,6 +5,7 @@ import Project from "../views/Project.vue";
 import Skill from "../views/Skill.vue";
 import Presentation from "../views/Presentation.vue";
 import Career from "../views/Career.vue";
+import Whaterror from "../views/Whaterror.vue";
 
 Vue.use(VueRouter);
 
@@ -33,10 +34,20 @@ const routes = [
     path: "/skills",
     name: "Skill",
     component: Skill
+  },
+  {
+    path: "/whaterror",
+    name: "Whaterror",
+    component: Whaterror
+  },
+  {
+    path: "*",
+    redirect: "/"
   }
 ];
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 });
 

@@ -6,13 +6,10 @@ use App\Entity\User;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route("/api")
@@ -21,22 +18,15 @@ class SecurityController extends AbstractController
 {    
     /**
      * @Route("/register", name="register", methods={"POST"})
-     * @IsGranted("ROLE_ADMIN")
+     * @ParamConverter("user", converter="create_entity_Converter")
      */
     public function register(
-        Request $request,
-        SerializerInterface $serializer,
+        User $user,
         EntityManagerInterface $entityManager,
         UserPasswordEncoderInterface $passwordEncoder,
         ErrorValidator $errorValidator
     ): JsonResponse {
         try {
-            $user = $serializer->deserialize(
-                $request->getContent(),
-                User::class,
-                'json',
-                [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false]
-            );
             $user->setPassword($passwordEncoder->encodePassword($user, "password"));
             $errors = $errorValidator->errorsViolations($user);
             if ($errors) {
@@ -50,7 +40,7 @@ class SecurityController extends AbstractController
                     ["Location" => $this->generateUrl("get_project", ["id" => $user->getId()])]
                 );
             }
-        } catch (\Exception $e) {
+        } catch (\Exception $error) {
             $error = ['Message' => 'Email or Username already used'];
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
@@ -58,11 +48,10 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/login", name="login", methods={"POST"})
-     * @IsGranted("ROLE_ADMIN")
+     * @ParamConverter("user", converter="create_entity_Converter")
      */
-    public function login()
+    public function login(User $user)
     {
-        $user = $this->getUser();
         return $this->json([
             'username' => $user->getUsername(),
             'roles' => $user->getRoles()

@@ -3,7 +3,9 @@
         <Header title="Projets" color="#6d327c"/>
         <BackgroundPage circleColor="#6d327c"/>
         <Transition v-show="showTransition" directionAnimation="right"/>
+        <b-alert show variant="danger">{{ error }}</b-alert>
         <b-row class="cards m-auto">
+            {{info}}
             <ProjectCard title="Projet 1" content="Description projet 1" url="/" :imgSrc="require('../assets/img-test-1.jpg')" imgAlt="Image Projet 1"/>
             <ProjectCard title="Projet 2" content="Description projet 2" url="/" :imgSrc="require('../assets/img-test-2.jpg')" imgAlt="Image Projet 2"/>
             <ProjectCard title="Projet 3" content="Description projet 3" url="/" :imgSrc="require('../assets/img-test-3.jpg')" imgAlt="Image Projet 3"/>
@@ -23,6 +25,7 @@ import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
 import Transition from "@/components/Transition.vue"
 
+
 export default {
     components: {
         ProjectCard,
@@ -33,7 +36,9 @@ export default {
     },
     data() {
         return {
-            showTransition: true    
+            showTransition: true,  
+            info: null,
+            error: null 
         }
     },
     methods: {
@@ -48,6 +53,21 @@ export default {
         setTimeout(() => {
             this.showTransition = false;
         },1300);
+    }, 
+    mounted() {
+        this.axios.get(process.env.VUE_APP_API_URL + '/projects', {
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })  
+        .then(response => { 
+            this.info = response.data 
+            console.log(response)
+            })
+        .catch(error => {
+            this.error = error.response.data;
+            console.log(error.response.data);
+        });
     }
 }
 </script>
