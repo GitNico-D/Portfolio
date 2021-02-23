@@ -3,7 +3,7 @@
         <Header title="Erreur" color="#6d327c"/>
         <BackgroundPage circleColor="#00a1ba"/>
         <b-row>
-            <Error code="404" message="Désolé, cette page n'existe pas"/>
+            <Error :code=404 message="La page demandé n'existe pas"/>
             <HomePageLink action="Retour" url="/" direction="animated-arrowLtr" class="link jumbotron-link" textColor="#00a1ba"/>
         </b-row>
     </b-container>
@@ -26,7 +26,7 @@ export default {
         return {
             response: null
         }
-    }
+    }  
 }
 </script>
 
