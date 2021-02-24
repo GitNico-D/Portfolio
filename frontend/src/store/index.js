@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import Vuex from 'vuex'
+import Vuex from 'vuex';
+import Skill from './modules/skill';
 
 Vue.use(Vuex)
 
@@ -35,6 +36,5 @@ export default new Vuex.Store({
     getters: getters,
     actions: {
     },
-    modules: {
-    }
+    modules: Skill
 })

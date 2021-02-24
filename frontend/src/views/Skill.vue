@@ -34,19 +34,19 @@
                 <b-col cols="12" md="5">
                     <h4 class="software-title">Logiciel associées</h4>
                     <div v-show="this.current == 0" class="software-block mt-1 ms-auto">
-                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=80 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=80 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=80 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
                     </div>
                     <div v-show="this.current == 1" class="software-block mt-1 ms-auto">
-                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=60 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=60 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=60 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=60 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=60 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=60 color="#36C486"/>
                     </div>
                     <div v-show="this.current == 2" class="software-block mt-1 ms-auto">
-                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=20 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=20 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" value=20 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
+                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
                     </div>
                 </b-col> 
             </b-row>
@@ -62,6 +62,7 @@ import Header from '@/components/Header.vue'
 import BackgroundPage from '@/components/BackgroundPage.vue'
 import ProgressBarCard from '@/components/ProgressBarCard.vue'
 import Transition from '@/components/Transition.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     components: {
@@ -106,12 +107,21 @@ export default {
             setTimeout(() => {
                 this.showTransition = false;
             },1300);
-        }
+        },
+        ...mapActions([
+            'getAllSkills',
+        ])
+    },
+    computed: {
+        ...mapGetters([
+            'allSkills',
+        ])
     },
     created() {
         setTimeout(() => {
             this.showTransition = false;
         },1300);
+        console.log(this.$store.state.skill)
     }
 }
 </script>
