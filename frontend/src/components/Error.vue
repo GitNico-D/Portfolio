@@ -9,7 +9,7 @@
 export default {
     name: "Error",
     props: {
-        code: Number,
+        code: String,
         message: String,
     }
 }

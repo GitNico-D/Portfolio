@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
     <b-container fluid>
         <Header title="Projets" color="#6d327c"/>
@@ -15,9 +16,6 @@
 				:date="project.creationDate"
                 />
         </b-row>
-		<b-row v-else>
-			<Error :code="errors.status" :message="errors.message"/>
-		</b-row>
         <b-row class="back">
             <HomePageLink action="Retour" url="/" direction="animated-arrowLtr" class="link link-left" textColor="#6d327c"/>
         </b-row>
@@ -30,7 +28,6 @@ import HomePageLink from '@/components/HomePageLink.vue'
 import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
 import Transition from '@/components/Transition.vue'
-import Error from '@/components/Error.vue'
 
 
 export default {
@@ -39,8 +36,7 @@ export default {
         Header,
         BackgroundPage,
         HomePageLink,
-        Transition,
-		Error
+        Transition
     },
     data() {
         return {
@@ -55,47 +51,35 @@ export default {
             setTimeout(() => {
                 this.showTransition = false;
             },1300);
-        },
-		// beforeEnter: (to, from, next) => {
-		// 	console.log(this.errors);
-		// 	if (!this.errors) {
-		// 		next() 
-		// 	} else {
-		// 		from ('/whaterror')
-		// 	}
-		// }
-        consoleError() {
-            console.log("Error");
         }
 	},
-    created() {
+    beforeCreate() {
         setTimeout(() => {
             this.showTransition = false;
         },1300);
-    }, 
-    mounted() {
-		this.axios.interceptors.response.use(function (response) {
-			return response;
-		}, function (error) {
-            console.log(error.response.data);
-            if(error) {
-                this.consoleError();
-            }
-			return Promise.reject(error);
-		});
+    },
+    created() {
         this.axios.get(process.env.VUE_APP_API_URL + '/projects', {
             headers: {
                 "Content-Type": "application/json"
             },
         })  
         .then(response => { 
-            this.projects = response.data 
-            })
-        .catch(error => {
-            console.log(this.$router);
-            this.$router.push("/")
-
-            this.errors = JSON.parse(JSON.stringify(error.response.data));
+            this.projects = response.data
+            return Promise.resolve(response.data); 
+            })            
+        .catch(error => { 
+            if (error.response) {
+                this.errors = JSON.parse(JSON.stringify(error.response.data)); 
+                this.$store.commit('ADD_ERROR', this.errors.message);
+                this.$router.push({ name: 'WhatError', params: { errorStatus: 'Erreur Api -' + this.errors.status}});
+            } else if (error.request) {
+                this.$store.commit('ADD_ERROR', "Le serveur semble être indisponible");
+                this.$router.push({ name: 'WhatError', params: { errorStatus: '500' }});
+            } else {
+                this.$router.push({ name: 'WhatError', params: { errorStatus: '404' }});
+            }
+            return Promise.reject(error.response.data); 
         });
     }
 }
