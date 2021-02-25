@@ -55,6 +55,11 @@ security:
             stateless: true
             methods: ["GET"]    
             anonymous: true    
+        softwares:
+            pattern: ^/api/softwares
+            stateless: true
+            methods: ["GET"]    
+            anonymous: true  
         categories:
             pattern: ^/api/categories
             stateless: true
@@ -76,5 +81,6 @@ security:
         - { path: ^/api/experiences, methods: ["GET"], roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/educations, methods: ["GET"], roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/skills, methods: ["GET"], roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/softwares, methods: ["GET"], roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/categories, methods: ["GET"], roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
