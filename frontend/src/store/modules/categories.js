@@ -1,23 +1,23 @@
 import axios from 'axios'
 import errorRedirection from '../../services/errorRedirection'
 
+const headers = { "Content-Type": "application/json" }
+
 const state = () => ({
-    softwares: [],
+    categories: [],
 })
 
 const getters = {
-    allSoftwares: (state) => state.softwares
+    allCategories: (state) => state.categories
 }
 
 const actions = {
-    getAllSoftwares ({ commit }) {
-        axios.get(process.env.VUE_APP_API_URL + '/softwares', {
-            headers: {
-                "Content-Type": "application/json"
-            },
+    getAllCategories ({ commit }) {
+        axios.get(process.env.VUE_APP_API_URL + '/categories', {
+            headers: headers
         })
         .then(response => {
-            commit('ADD_SOFTWARE', response.data);
+            commit('ADD_CATEGORIES', response.data);
         })
         .catch(error => { 
             errorRedirection(error);
@@ -26,8 +26,8 @@ const actions = {
 }
 
 const mutations = {
-    ADD_SOFTWARE(state, softwares) {
-        state.softwares = softwares
+    ADD_CATEGORIES(state, categories) {
+        state.categories = categories
     }
 }
 

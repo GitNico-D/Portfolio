@@ -4,12 +4,15 @@
         <BackgroundPage circleColor="#36C486"/>
         <Transition v-show="showTransition" directionAnimation="up"/>
             <b-row class="skill-title m-3 p-3">
-                <b-button v-for="(name, i) in skillsName" :key="i" @click="current = i" :class="{current:i == current}">
-                    {{ name }}
+                <b-button v-for="(categories, i) in allCategories" :key="categories.id" @click="current = i" :class="{current:i == current}">
+                    {{ categories.name }}
                 </b-button>
             </b-row>
             <b-row class="skill-description">
                 <b-col cols="12" md="7">
+                    <div v-for="skill in allSkills" :key="skill.id" >
+                        {{ skill.icon }}
+                    </div> 
                     <div v-show="this.current == 0" class="skill-block">
                         <ProgressBarCard 
                             v-for="skill in allSkills" 
@@ -49,18 +52,14 @@
                             :key="software.id" 
                             :title="software.name" 
                             :urlIcon="software.icon" 
-                            :value=software.knowledgeLevel
+                            :value=software.masteryOf
                             color="#36C486" 
                             />
                     </div>
                     <div v-show="this.current == 1" class="software-block mt-1 ms-auto">
                         <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=60 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=60 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=60 color="#36C486"/>
                     </div>
                     <div v-show="this.current == 2" class="software-block mt-1 ms-auto">
-                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
                         <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
                     </div>
                 </b-col> 
@@ -103,13 +102,15 @@ export default {
         },
         ...mapActions([
             'getAllSkills',
-            'getAllSoftwares'
+            'getAllSoftwares',
+            'getAllCategories'
         ])
     },
     computed: {
         ...mapGetters([
             'allSkills',
-            'allSoftwares'
+            'allSoftwares',
+            'allCategories'
         ])
     },
     created() {
@@ -119,7 +120,8 @@ export default {
     },
     mounted() {
         this.$store.dispatch('getAllSkills'),
-        this.$store.dispatch('getAllSoftwares')
+        this.$store.dispatch('getAllSoftwares'),
+        this.$store.dispatch('getAllCategories')
     }
 }
 </script>
