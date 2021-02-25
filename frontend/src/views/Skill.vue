@@ -12,31 +12,46 @@
                 <b-col cols="12" md="7">
                     <div v-show="this.current == 0" class="skill-block">
                         <ProgressBarCard 
-                            v-for="index in devSkillsList" 
-                            :key="index.name" 
-                            :title="index.name" 
-                            :urlIcon="index.icon" 
-                            :value=index.value 
+                            v-for="skill in allSkills" 
+                            :key="skill.id" 
+                            :title="skill.name" 
+                            :urlIcon="skill.icon" 
+                            :value=skill.knowledgeLevel
                             color="#36C486" 
                             />
                         </div>
                     <div v-show="this.current == 1" class="skill-block">
-                        <ProgressBarCard title="SON 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
-                        <ProgressBarCard title="SON 2" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
-                        <ProgressBarCard title="SON 3" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=50 color="#36C486"/>
+                        <ProgressBarCard 
+                            v-for="skill in allSkills" 
+                            :key="skill.id" 
+                            :title="skill.name" 
+                            :urlIcon="skill.icon" 
+                            :value=skill.knowledgeLevel
+                            color="#36C486" 
+                            />
                     </div>
                     <div v-show="this.current == 2" class="skill-block">
-                        <ProgressBarCard title="SON 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
-                        <ProgressBarCard title="SON 2" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
-                        <ProgressBarCard title="SON 3" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=50 color="#36C486"/>
+                        <ProgressBarCard 
+                            v-for="skill in allSkills" 
+                            :key="skill.id" 
+                            :title="skill.name" 
+                            :urlIcon="skill.icon" 
+                            :value=skill.knowledgeLevel
+                            color="#36C486" 
+                            />
                     </div>
                 </b-col>
                 <b-col cols="12" md="5">
                     <h4 class="software-title">Logiciel associées</h4>
                     <div v-show="this.current == 0" class="software-block mt-1 ms-auto">
-                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
-                        <ProgressBarCard title="Logiciel Dév 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=80 color="#36C486"/>
+                        <ProgressBarCard 
+                            v-for="software in allSoftwares" 
+                            :key="software.id" 
+                            :title="software.name" 
+                            :urlIcon="software.icon" 
+                            :value=software.knowledgeLevel
+                            color="#36C486" 
+                            />
                     </div>
                     <div v-show="this.current == 1" class="software-block mt-1 ms-auto">
                         <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=60 color="#36C486"/>
@@ -77,28 +92,6 @@ export default {
             current: 0,
             skillsName:["Développement Web", "Vidéo", "Son"],
             showTransition: true,
-            devSkillsList: [
-                {
-                    name: "HTML5",
-                    icon: 'url(' + require('@/assets/logo-html5.png') +')',
-                    value: 70
-                },
-                {
-                    name: "CSS 3",
-                    icon: 'url(' + require('@/assets/logo-css3.png') +')',
-                    value: 60
-                },
-                {
-                    name: "SKILL DEV 3",
-                    icon: 'url(' + require('@/assets/logo-css3.png') +')',
-                    value: 50
-                },
-                {
-                    name: "SKILL DEV 4",
-                    icon: 'url(' + require('@/assets/logo-css3.png') +')',
-                    value: 80
-                }
-            ] 
         }
     },
     methods: {
@@ -110,18 +103,23 @@ export default {
         },
         ...mapActions([
             'getAllSkills',
+            'getAllSoftwares'
         ])
     },
     computed: {
         ...mapGetters([
             'allSkills',
+            'allSoftwares'
         ])
     },
     created() {
         setTimeout(() => {
             this.showTransition = false;
         },1300);
-        console.log(this.$store.state.skill)
+    },
+    mounted() {
+        this.$store.dispatch('getAllSkills'),
+        this.$store.dispatch('getAllSoftwares')
     }
 }
 </script>

@@ -2,22 +2,22 @@ import axios from 'axios'
 import router from '../../router'
 
 const state = () => ({
-    skills: [],
+    softwares: [],
 })
 
 const getters = {
-    allSkills: (state) => state.skills
+    allSoftwares: (state) => state.softwares
 }
 
 const actions = {
-    getAllSkills ({ commit }) {
-        axios.get(process.env.VUE_APP_API_URL + '/skills', {
+    getAllSoftwares ({ commit }) {
+        axios.get(process.env.VUE_APP_API_URL + '/softwares', {
             headers: {
                 "Content-Type": "application/json"
             },
         })
         .then(response => {
-            commit('ADD_SKILL', response.data);
+            commit('ADD_SOFTWARE', response.data);
         })
         .catch(error => { 
             if (error.response) {
@@ -36,8 +36,8 @@ const actions = {
 }
 
 const mutations = {
-    ADD_SKILL(state, skills) {
-        state.skills = skills
+    ADD_SOFTWARE(state, softwares) {
+        state.softwares = softwares
     }
 }
 
