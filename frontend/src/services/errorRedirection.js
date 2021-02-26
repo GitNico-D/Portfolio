@@ -7,7 +7,7 @@ export default function errorRedirection(error) {
         let errors = JSON.parse(JSON.stringify(error.response.data)); 
         store.commit('ADD_ERROR', errors.message);
         router.push({ 
-            name: 'WhatError', 
+            name: 'ErrorView', 
             params: { 
                 errorStatus: 'Erreur Api -' + errors.code
             }
@@ -15,14 +15,14 @@ export default function errorRedirection(error) {
     } else if (error.request) {
         store.commit('ADD_ERROR', "Le serveur semble être indisponible");
         router.push({ 
-            name: 'WhatError', 
+            name: 'ErrorView', 
             params: { 
                 errorStatus: '500' 
             }
         });
     } else {
         router.push({ 
-            name: 'WhatError', 
+            name: 'ErrorView', 
             params: { 
                 errorStatus: '404' 
             }

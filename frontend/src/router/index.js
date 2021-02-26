@@ -5,7 +5,7 @@ import Project from "../views/Project.vue";
 import Skill from "../views/Skill.vue";
 import Presentation from "../views/Presentation.vue";
 import Career from "../views/Career.vue";
-import WhatError from '../views/WhatError.vue';
+import ErrorView from '../views/ErrorView.vue';
 
 Vue.use(VueRouter);
 
@@ -36,13 +36,13 @@ const routes = [
     component: Skill
   },
   {
-    path: "/whaterror/:errorStatus",
-    name: "WhatError",
-    component: WhatError
+    path: "/ErrorView/:errorStatus",
+    name: "ErrorView",
+    component: ErrorView
   },
   {
     path: "*",
-    redirect: "/WhatError/404"
+    redirect: "/ErrorView/404"
   }
 ];
 
