@@ -5,7 +5,7 @@
         <BackgroundPage circleColor="#6d327c"/>
         <Transition v-show="showTransition" directionAnimation="right"/>
         <b-row v-if="!errors" class="cards m-auto">
-            <Projectcard 
+            <ProjectCard 
                 v-for="project in projects" 
                 :key="project.id" 
                 :title="project.name"
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import Projectcard from '@/components/Projectcard.vue'
+import ProjectCard from '@/components/ProjectCard.vue'
 import HomePageLink from '@/components/HomePageLink.vue'
 import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
@@ -32,7 +32,7 @@ import Transition from '@/components/Transition.vue'
 
 export default {
     components: {
-        Projectcard,
+        ProjectCard,
         Header,
         BackgroundPage,
         HomePageLink,
