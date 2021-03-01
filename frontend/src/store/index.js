@@ -1,14 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex'
-/* eslint no-shadow: ["error", { "allow": ["state", "getters"] }]*/
 
 Vue.use(Vuex)
-
-const state = () => ({
-    errors: [{ 
-        message: "La page demandée est introuvable"
-    }]
-});
 
 const mutations = {
     ADD_ERROR: (state, message) => {
@@ -26,6 +19,12 @@ const getters = {
         return getters.allErrors[getters.allErrors.length -1].message
     }
 }
+
+const state = () => ({
+    errors: [{ 
+        message: "La page demandée est introuvable"
+    }]
+});
 
 export default new Vuex.Store({
     state: state,
