@@ -167,7 +167,6 @@ export default {
 @media (min-width: 768px) {
   .cardflip {
     width: 40rem;
-    margin: 1rem;
     .frontcard {
       .card-title {
         font-size: 3rem;
