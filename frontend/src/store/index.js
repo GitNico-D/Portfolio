@@ -3,6 +3,12 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+const state = () => ({
+    errors: [{ 
+        message: "La page demandée est introuvable"
+    }]
+});
+
 const mutations = {
     ADD_ERROR: (state, message) => {
         state.errors.push({
@@ -20,11 +26,6 @@ const getters = {
     }
 }
 
-const state = () => ({
-    errors: [{ 
-        message: "La page demandée est introuvable"
-    }]
-});
 
 export default new Vuex.Store({
     state: state,
