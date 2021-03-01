@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex'
+/* eslint no-shadow: ["error", { "allow": ["state", "getters"] }]*/
 
 Vue.use(Vuex)
 
