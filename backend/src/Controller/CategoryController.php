@@ -43,7 +43,7 @@ class CategoryController extends AbstractController
     public function readCategory(Category $category, CustomHateoasLinks $customLink)
     {
         $categoryAndLinks = $customLink->createLink($category);
-        return $this->json($categoryAndLinks, JsonResponse::HTTP_OK);
+        return $this->json($categoryAndLinks, JsonResponse::HTTP_OK, [], ['groups' => 'category:read']);
     }
 
     /**

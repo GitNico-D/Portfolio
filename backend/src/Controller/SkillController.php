@@ -43,7 +43,7 @@ class SkillController extends AbstractController
     public function readSkill(Skill $skill, CustomHateoasLinks $customLink)
     {
         $skillAndLinks = $customLink->createLink($skill);
-        return $this->json($skillAndLinks, JsonResponse::HTTP_OK);
+        return $this->json($skillAndLinks, JsonResponse::HTTP_OK, [], ['groups' => 'category:read']);
     }
 
     /**
