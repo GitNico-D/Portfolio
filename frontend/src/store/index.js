@@ -10,18 +10,18 @@ const state = () => ({
 });
 
 const mutations = {
-    ADD_ERROR: (state, message) => {
-        state.errors.push({
+    ADD_ERROR: (stateError, message) => {
+        stateError.errors.push({
             message: message
         })
     }
 }
 
 const getters = {
-    allErrors: (state) => {
-        return state.errors
+    allErrors: (stateError) => {
+        return stateError.errors
     },
-    lastErrorMessage: (state, getters) => {
+    lastErrorMessage: (stateError, getters) => {
         return getters.allErrors[getters.allErrors.length -1].message
     }
 }
