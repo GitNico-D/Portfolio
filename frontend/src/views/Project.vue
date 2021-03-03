@@ -59,7 +59,7 @@ export default {
         },1300);
     },
     created() {
-        this.axios.get(process.env.VUE_APP_API_URL + '/project', {
+        this.axios.get(process.env.VUE_APP_API_URL + '/projects', {
             headers: {
                 "Content-Type": "application/json"
             },
