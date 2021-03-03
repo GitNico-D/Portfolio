@@ -21,8 +21,8 @@ const getters = {
     allErrors: (stateError) => {
         return stateError.errors
     },
-    lastErrorMessage: (stateError, getters) => {
-        return getters.allErrors[getters.allErrors.length -1].message
+    lastErrorMessage: (stateError, gettersError) => {
+        return gettersError.allErrors[gettersError.allErrors.length -1].message
     }
 }
 
