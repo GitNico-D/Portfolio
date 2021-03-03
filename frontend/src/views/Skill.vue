@@ -4,25 +4,12 @@
         <BackgroundPage circleColor="#36C486"/>
         <Transition v-show="showTransition" directionAnimation="up"/>
             <b-row class="skill-title m-3 p-3">
-                <b-button v-for="(categories, i) in allCategories" :key="categories.id" @click="current = i" :class="{current:i == current}">
+                <b-button v-for="categories in allCategories" :key="categories.id" @click="current = categories.id" :class="{current: categories.id == current}">
                     {{ categories.name }}
                 </b-button>
             </b-row>
             <b-row class="skill-description">
                 <b-col cols="12" md="7">
-                    <div v-for="skill in allSkills" :key="skill.id" >
-                        {{ skill.icon }}
-                    </div> 
-                    <div v-show="this.current == 0" class="skill-block">
-                        <ProgressBarCard 
-                            v-for="skill in allSkills" 
-                            :key="skill.id" 
-                            :title="skill.name" 
-                            :urlIcon="skill.icon" 
-                            :value=skill.knowledgeLevel
-                            color="#36C486" 
-                            />
-                        </div>
                     <div v-show="this.current == 1" class="skill-block">
                         <ProgressBarCard 
                             v-for="skill in allSkills" 
@@ -32,8 +19,18 @@
                             :value=skill.knowledgeLevel
                             color="#36C486" 
                             />
-                    </div>
+                        </div>
                     <div v-show="this.current == 2" class="skill-block">
+                        <ProgressBarCard 
+                            v-for="skill in allSkills" 
+                            :key="skill.id" 
+                            :title="skill.name" 
+                            :urlIcon="skill.icon" 
+                            :value=skill.knowledgeLevel
+                            color="#36C486" 
+                            />
+                    </div>
+                    <div v-show="this.current == 3" class="skill-block">
                         <ProgressBarCard 
                             v-for="skill in allSkills" 
                             :key="skill.id" 
@@ -88,7 +85,7 @@ export default {
     },
     data() {
         return {
-            current: 0,
+            current: 1,
             skillsName:["Développement Web", "Vidéo", "Son"],
             showTransition: true,
         }
