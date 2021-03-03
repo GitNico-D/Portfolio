@@ -3,7 +3,7 @@
         <Header title="Erreur" color="#6d327c"/>
         <BackgroundPage circleColor="#00a1ba"/>
         <b-row>
-            <Error code="404" message="Désolé, cette page n'existe pas"/>
+            <Error :code=this.$route.params.errorStatus :message="lastErrorMessage"/>
             <HomePageLink action="Retour" url="/" direction="animated-arrowLtr" class="link jumbotron-link" textColor="#00a1ba"/>
         </b-row>
     </b-container>
@@ -14,6 +14,7 @@ import HomePageLink from '@/components/HomePageLink.vue'
 import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
 import Error from '@/components/Error.vue'
+import { mapGetters } from 'vuex'
 
 export default {
     components: {
@@ -22,10 +23,10 @@ export default {
         Header,
         Error
     },
-    data() {
-        return {
-            response: null
-        }
+    computed: {
+        ...mapGetters([
+            'lastErrorMessage'
+        ])
     }
 }
 </script>

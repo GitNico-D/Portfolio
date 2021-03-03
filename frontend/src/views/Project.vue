@@ -1,16 +1,20 @@
+/* eslint-disable */
 <template>
     <b-container fluid>
         <Header title="Projets" color="#6d327c"/>
         <BackgroundPage circleColor="#6d327c"/>
         <Transition v-show="showTransition" directionAnimation="right"/>
-        <b-alert show variant="danger">{{ error }}</b-alert>
-        <b-row class="cards m-auto">
-            {{info}}
-            <ProjectCard title="Projet 1" content="Description projet 1" url="/" :imgSrc="require('../assets/img-test-1.jpg')" imgAlt="Image Projet 1"/>
-            <ProjectCard title="Projet 2" content="Description projet 2" url="/" :imgSrc="require('../assets/img-test-2.jpg')" imgAlt="Image Projet 2"/>
-            <ProjectCard title="Projet 3" content="Description projet 3" url="/" :imgSrc="require('../assets/img-test-3.jpg')" imgAlt="Image Projet 3"/>
-            <ProjectCard title="Projet 4" content="Description projet 4" url="/" :imgSrc="require('../assets/img-test-1.jpg')" imgAlt="Image Projet 4"/>
-            <ProjectCard title="Projet 5" content="Description projet 5" url="/" :imgSrc="require('../assets/img-test-2.jpg')" imgAlt="Image Projet 5"/>
+        <b-row v-if="!errors" class="cards m-auto">
+            <ProjectCard 
+                v-for="project in projects" 
+                :key="project.id" 
+                :title="project.name"
+                :content="project.description" 
+                :url="project.url" 
+                :imgSrc="require('../assets/img-test-1.jpg')" 
+                imgAlt="Image Projet 1"
+				:date="project.creationDate"
+                />
         </b-row>
         <b-row class="back">
             <HomePageLink action="Retour" url="/" direction="animated-arrowLtr" class="link link-left" textColor="#6d327c"/>
@@ -23,7 +27,7 @@ import ProjectCard from '@/components/ProjectCard.vue'
 import HomePageLink from '@/components/HomePageLink.vue'
 import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
-import Transition from "@/components/Transition.vue"
+import Transition from '@/components/Transition.vue'
 
 
 export default {
@@ -37,8 +41,8 @@ export default {
     data() {
         return {
             showTransition: true,  
-            info: null,
-            error: null 
+            projects: null,
+            errors: null 
         }
     },
     methods: {
@@ -48,25 +52,34 @@ export default {
                 this.showTransition = false;
             },1300);
         }
-    },
-    created() {
+	},
+    beforeCreate() {
         setTimeout(() => {
             this.showTransition = false;
         },1300);
-    }, 
-    mounted() {
-        this.axios.get(process.env.VUE_APP_API_URL + '/projects', {
+    },
+    created() {
+        this.axios.get(process.env.VUE_APP_API_URL + '/project', {
             headers: {
                 "Content-Type": "application/json"
             },
         })  
         .then(response => { 
-            this.info = response.data 
-            console.log(response)
-            })
-        .catch(error => {
-            this.error = error.response.data;
-            console.log(error.response.data);
+            this.projects = response.data
+            return Promise.resolve(response.data); 
+            })            
+        .catch(error => { 
+            if (error.response) {
+                this.errors = JSON.parse(JSON.stringify(error.response.data)); 
+                this.$store.commit('ADD_ERROR', this.errors.message);
+                this.$router.push({ name: 'Whaterror', params: { errorStatus: 'Erreur Api -' + this.errors.status}});
+            } else if (error.request) {
+                this.$store.commit('ADD_ERROR', "Le serveur semble être indisponible");
+                this.$router.push({ name: 'Whaterror', params: { errorStatus: '500' }});
+            } else {
+                this.$router.push({ name: 'Whaterror', params: { errorStatus: '404' }});
+            }
+            return Promise.reject(error.response.data); 
         });
     }
 }
@@ -116,13 +129,11 @@ export default {
     0% {
         transform: translateX(1000px) scaleX(2.5) scaleY(0.2);
         transform-origin: 0% 50%;
-        // filter: blur(20px);
         opacity: 0;
     }
     100% {
         transform: translateX(0) scaleY(1) scaleX(1);
         transform-origin: 50% 50%;
-        // filter: blur(0);
         opacity: 1;
     }
 }
