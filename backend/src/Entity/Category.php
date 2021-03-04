@@ -38,9 +38,16 @@ class Category
      */
     private $skills;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Software::class, mappedBy="category", cascade={"ALL"})
+     * @Groups({"category:read"})
+     */
+    private $softwares;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
+        $this->softwares = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,6 +92,37 @@ class Category
             // set the owning side to null (unless already changed)
             if ($skill->getCategory() === $this) {
                 $skill->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Software[]
+     */
+    public function getSoftwares(): Collection
+    {
+        return $this->softwares;
+    }
+
+    public function addSoftware(Software $software): self
+    {
+        if (!$this->softwares->contains($software)) {
+            $this->softwares[] = $software;
+            $software->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSoftware(Software $software): self
+    {
+        if ($this->softwares->contains($software)) {
+            $this->softwares->removeElement($software);
+            // set the owning side to null (unless already changed)
+            if ($software->getCategory() === $this) {
+                $software->setCategory(null);
             }
         }
 

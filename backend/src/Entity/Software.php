@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SoftwareRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -17,6 +18,7 @@ class Software
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"category:read"})
      */
     private $id;
 
@@ -24,6 +26,7 @@ class Software
      * @ORM\Column(type="string", length=75)
      * @Assert\NotBlank
      * @Assert\Length(min="2", max="75")
+     * @Groups({"category:read"})
      */
     private $name;
 
@@ -31,6 +34,7 @@ class Software
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank
      * @Assert\Length(min="2", max="100")
+     * @Groups({"category:read"})
      */
     private $icon;
 
@@ -39,12 +43,14 @@ class Software
      * @Assert\NotBlank
      * @Assert\Positive
      * @Assert\Type("integer")
+     * @Groups({"category:read"})
      */
     private $mastery_of;
+
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="softwares", cascade={"persist"})
      */
-    private $category_id;
+    private $category;
 
     public function getId(): ?int
     {
@@ -87,14 +93,14 @@ class Software
         return $this;
     }
 
-    public function getCategoryId(): ?int
+    public function getCategory(): ?Category
     {
-        return $this->category_id;
+        return $this->category;
     }
 
-    public function setCategoryId(int $category_id): self
+    public function setCategory(?Category $category): self
     {
-        $this->category_id = $category_id;
+        $this->category = $category;
 
         return $this;
     }

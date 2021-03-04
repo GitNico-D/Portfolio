@@ -58,7 +58,7 @@ class UpdateEntityConverter implements ParamConverterInterface
             'json',
             [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
         );
-        if($configuration->getName() === "skill") {
+        if($configuration->getName() === "skill" || $configuration->getName() === "software") {
             $categoryId = json_decode($request->getContent(), true)['category'];
             $category = $this->entityManager
                 ->getRepository(Category::class)

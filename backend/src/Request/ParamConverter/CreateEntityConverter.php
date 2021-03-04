@@ -49,7 +49,7 @@ class CreateEntityConverter implements ParamConverterInterface
             $configuration->getClass(), 
             'json'
         );
-        if($configuration->getName() === "skill") {
+        if($configuration->getName() === "skill" || $configuration->getName() === "software") {
             $categoryId = json_decode($request->getContent(), true)['category'];
             $category = $this->entityManager
                 ->getRepository(Category::class)

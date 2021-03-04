@@ -92,7 +92,7 @@ class SkillController extends AbstractController
         } else {      
             $skillAndLinks = $customLink->createLink($skill);              
             $em->flush($skill);
-            return $this->json($skillAndLinks, JsonResponse::HTTP_OK);
+            return $this->json($skillAndLinks, JsonResponse::HTTP_OK, [], ['groups' => 'category:read']);
         }
     }
 
