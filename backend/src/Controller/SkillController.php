@@ -67,7 +67,8 @@ class SkillController extends AbstractController
             return $this->json(
                 $skill,
                 JsonResponse::HTTP_CREATED,
-                ["Location" => $this->generateUrl("get_skill", ["id" => $skill->getId()])]
+                ["Location" => $this->generateUrl("get_skill", ["id" => $skill->getId()])],
+                ['groups' => 'category:read']
             );
         }
     }
