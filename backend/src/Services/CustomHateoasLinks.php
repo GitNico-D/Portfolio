@@ -54,7 +54,7 @@ class CustomHateoasLinks
      */
     public function createObjectWithLinks($entity, array $links)
     {   
-        if ($this->getEntityName($entity) === "category" || $this->getEntityName($entity) === "skill") {
+        if ($this->getEntityName($entity) === "category" || $this->getEntityName($entity) === "skill" || $this->getEntityName($entity) === "software") {
             $entityArray = json_decode($this->serializer->serialize($entity, 'json', ['groups' => 'category:read']), true );
         } else {
             $entityArray = json_decode($this->serializer->serialize($entity, 'json'), true );
