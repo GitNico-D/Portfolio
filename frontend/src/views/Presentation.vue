@@ -3,19 +3,28 @@
         <Header title="Presentation" color="#485DA6" class="header"/>
         <BackgroundPage circleColor="#485DA6"/>
         <Transition v-show="showTransition" directionAnimation="left"/>
-        <b-row class="presentation justify-content-center">
+        <b-row class="presentation justify-content-center"
+            v-for="presentation in presentations" 
+            :key="presentation.id"
+            >
             <b-col cols="10" md="5" xl="3">
                 <b-card :img-src="require('../assets/img-test-1.jpg')" img-top>
                     <b-card-title class="text-uppercase">  
-                        <span class="card-title-first">{{ firstName }}</span> <span class="card-title-last font-weight-bold">{{ lastName }}</span>
+                        <span class="card-title-first">{{ presentation.lastName }}</span> <span class="card-title-last font-weight-bold">{{ presentation.firstName }}</span>
                     </b-card-title>
                     <hr>
                     <b-card-text>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                         <div class="d-flex flex-wrap justify-content-around my-4">
-                            <Button name="GitHub" href="https://github.com/GitNico-D" colorOne="#485DA6" colorTwo="#FF9C66" :logoIcon="'url(' + require('../assets/logo-github.png') + ')'"/>
-                            <Button name="LinkedIn" href="https://fr.linkedin.com/" colorOne="#FF9C66" colorTwo="#485DA6" :logoIcon="'url(' + require('../assets/logo-linkedin.png') + ')'"/>
-                            <Button name="Contact" colorOne="#485DA6" colorTwo="#FF9C66" :logoIcon="'url(' + require('../assets/logo-gmail.png') + ')'"/>
+                            <Button 
+                                v-for="(contact, index) in presentation.contacts" 
+                                :key="contact.id"
+                                :name="contact.title" 
+                                :href="contact.link" 
+                                :logoIcon="contact.icon"
+                                :colorOne="(index % 2) ? colorOne = '#485DA6' : colorOne= '#FF9C66'" 
+                                :colorTwo="(index % 2) ? colorOne = '#FF9C66' : colorTwo = '#485DA6'" 
+                                />
                         </div>
                     </b-card-text>
                 </b-card>
@@ -23,25 +32,19 @@
             </b-col>
             <b-col cols="12" md="6" xl="5" class="presentation-text">
                 <div>
-                    <h5 class="text-right text-uppercase">Lorem Ipsum</h5>
+                    <h5 class="text-right text-uppercase">{{ presentation.titleFirstText }}</h5>
                     <p class="presentation-text-first text-justify">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book
+                        {{ presentation.firstText }}
                     </p>
                     <div class="presentation-text-separator"></div>
-                    <h5 class="text-left text-uppercase pt-4">Lorem Ipsum</h5>
+                    <h5 class="text-left text-uppercase pt-4">{{ presentation.titleSecondText }}</h5>
                     <p class="presentation-text-second text-justify">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book
+                        {{ presentation.secondText }}
                     </p>
                     <div class="presentation-text-separator"></div>
-                    <h5 class="text-right text-uppercase pt-4">Lorem Ipsum</h5>
+                    <h5 class="text-right text-uppercase pt-4">{{ presentation.titleThirdText }}</h5>
                     <p class="presentation-text-third text-justify">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book
+                        {{ presentation.thirdText }}
                     </p>
                 </div>
             </b-col>
@@ -58,6 +61,7 @@ import Header from '@/components/Header.vue'
 import HomePageLink from '@/components/HomePageLink.vue'
 import Transition from "@/components/Transition.vue"
 import Button from '@/components/Button.vue'
+import errorRedirection from '@/services/errorRedirection'
 
 export default {
     components: {
@@ -69,9 +73,8 @@ export default {
     },
     data() {
         return {
-            showTransition: true,  
-            firstName: "Nicolas",
-            lastName: "Dubief"  
+            showTransition: true,
+            presentations: null
         }
     },
     methods: {
@@ -86,6 +89,19 @@ export default {
         setTimeout(() => {
             this.showTransition = false;
         },1300);
+        this.axios.get(process.env.VUE_APP_API_URL + '/presentations', {
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })  
+        .then(response => { 
+            this.presentations = response.data
+            return Promise.resolve(response.data); 
+            })            
+        .catch(error => { 
+            console.log(error);
+            errorRedirection(error);
+        });
     }
 }
 </script>
@@ -99,7 +115,6 @@ export default {
     height: unset;
     .card {
         animation: text-focus-in 0.7s cubic-bezier(0.550, 0.085, 0.680, 0.530) 1s both;
-        // z-index: 1;
         &-title {
             font-family: "MontSerrat", sans-serif;
             font-size:2.5rem;

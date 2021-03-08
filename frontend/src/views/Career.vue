@@ -3,10 +3,17 @@
         <Header title="Parcours" color="#00a1ba" class="header"/>
         <BackgroundPage circleColor="#00a1ba"/>
         <Transition v-show="showTransition" directionAnimation="down"/>
-        <CareerStage startDate="2000"  endDate="2000"  title="Stage 1" company="Company 1" color="#00a1ba" parity="odd"/>
-        <CareerStage startDate="2000"  endDate="2000"  title="Stage 1" company="Company 1" color="#00a1ba" parity="even"/>
-        <CareerStage startDate="2000"  endDate="2000"  title="Stage 1" company="Company 1" color="#00a1ba" parity="odd"/>
-        <CareerStage startDate="2000"  endDate="2000"  title="Stage 1" company="Company 1" color="#00a1ba" parity="even"/>
+        <CareerStage
+            v-for="(careerStage, index) in allCareerStage" 
+            :key="careerStage.id"
+            :title="careerStage.name"
+            :description="careerStage.description" 
+            :company="careerStage.company" 
+            :logo="careerStage.logoCompany"
+            :startDate="careerStage.startDate"  
+            :endDate="careerStage.endDate"   
+            color="#00a1ba" 
+            :parity="(index % 2) ? parity = 'even' : parity = 'odd'"/>
         <b-row class="bottom">
             <HomePageLink action="Retour" url="/" direction="animated-arrowRtl" class="link link-bottom" textColor="#00a1ba"/>
         </b-row> 
@@ -19,7 +26,8 @@ import HomePageLink from '@/components/HomePageLink.vue'
 import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
 import CareerStage from '@/components/CareerStage.vue'
-import Transition from "@/components/Transition.vue"
+import Transition from '@/components/Transition.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     components: {
@@ -40,13 +48,24 @@ export default {
             setTimeout(() => {
                 this.showTransition = false;
             },1300);
-        }
+        },
+        ...mapActions([
+            'getAllCareerStage'
+        ])
+    },
+    computed: {
+        ...mapGetters([
+            'allCareerStage'
+        ])
     },
     created() {
         setTimeout(() => {
             this.showTransition = false;
         },1300);
-    }
+    },
+    mounted() {
+        this.$store.dispatch("getAllCareerStage")
+    },
 }
 </script>
 
