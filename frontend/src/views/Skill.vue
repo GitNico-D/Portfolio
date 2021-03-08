@@ -8,61 +8,40 @@
                     {{ categories.name }}
                 </b-button>
             </b-row>
-            <b-row class="skill-description">
-                <b-col cols="12" md="7">
-                    <div v-show="this.current == 1" class="skill-block">
+            <b-row v-for="categories in allCategories" :key="categories.allCategories" class="skill-description">
+                <b-col cols="12" md="7" >
+                    <div class="skill-block" v-show="current == categories.id">
                         <ProgressBarCard 
-                            v-for="skill in allSkills" 
-                            :key="skill.id" 
-                            :title="skill.name" 
-                            :urlIcon="skill.icon" 
-                            :value=skill.knowledgeLevel
+                            v-for="skills in categories.skills" 
+                            :key="skills.id"
+                            :title="skills.name" 
+                            :urlIcon="skills.icon" 
+                            :value=skills.knowledge_level
                             color="#36C486" 
-                            />
-                        </div>
-                    <div v-show="this.current == 2" class="skill-block">
-                        <ProgressBarCard 
-                            v-for="skill in allSkills" 
-                            :key="skill.id" 
-                            :title="skill.name" 
-                            :urlIcon="skill.icon" 
-                            :value=skill.knowledgeLevel
-                            color="#36C486" 
-                            />
+                        />
                     </div>
-                    <div v-show="this.current == 3" class="skill-block">
+                </b-col>
+                <b-col cols="12" md="5">
+                    <div v-show="current == categories.id" class="software-block mt-1 ms-auto">
+                    <h4 class="software-title">Logiciel associées</h4>
                         <ProgressBarCard 
-                            v-for="skill in allSkills" 
-                            :key="skill.id" 
-                            :title="skill.name" 
-                            :urlIcon="skill.icon" 
-                            :value=skill.knowledgeLevel
+                            v-for="software in categories.softwares" 
+                            :key="software.id" 
+                            :title="software.name" 
+                            :urlIcon="software.icon" 
+                            :value=software.mastery_of
                             color="#36C486" 
                             />
                     </div>
                 </b-col>
-                <b-col cols="12" md="5">
-                    <h4 class="software-title">Logiciel associées</h4>
-                    <div v-show="this.current == 0" class="software-block mt-1 ms-auto">
-                        <ProgressBarCard 
-                            v-for="software in allSoftwares" 
-                            :key="software.id" 
-                            :title="software.name" 
-                            :urlIcon="software.icon" 
-                            :value=software.masteryOf
-                            color="#36C486" 
-                            />
-                    </div>
-                    <div v-show="this.current == 1" class="software-block mt-1 ms-auto">
-                        <ProgressBarCard title="Logiciel vidéo 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=60 color="#36C486"/>
-                    </div>
-                    <div v-show="this.current == 2" class="software-block mt-1 ms-auto">
-                        <ProgressBarCard title="Logiciel son 1" :urlIcon="'url(' + require('@/assets/logo-html5.png') + ')'" :value=20 color="#36C486"/>
-                    </div>
-                </b-col> 
             </b-row>
-        <b-row class="back my-3">
-            <HomePageLink action="Retour" url="/" direction="animated-arrowRtl" class="link link-bottom" textColor="#36C486"/>
+        <b-row class="back position-relative my-3">
+            <HomePageLink 
+                action="Retour" 
+                url="/" 
+                direction="animated-arrowRtl" 
+                class="position-absolute link-bottom" 
+                textColor="#36C486"/>
         </b-row>
     </b-container>
 </template>
@@ -86,7 +65,6 @@ export default {
     data() {
         return {
             current: 1,
-            skillsName:["Développement Web", "Vidéo", "Son"],
             showTransition: true,
         }
     },
@@ -98,15 +76,11 @@ export default {
             },1300);
         },
         ...mapActions([
-            'getAllSkills',
-            'getAllSoftwares',
             'getAllCategories'
         ])
     },
     computed: {
         ...mapGetters([
-            'allSkills',
-            'allSoftwares',
             'allCategories'
         ])
     },
@@ -116,8 +90,6 @@ export default {
         },1300);
     },
     mounted() {
-        this.$store.dispatch('getAllSkills'),
-        this.$store.dispatch('getAllSoftwares'),
         this.$store.dispatch('getAllCategories')
     }
 }
@@ -126,16 +98,7 @@ export default {
 <style lang="scss" scoped>
 .container-fluid {
     .back {
-        position: relative;
         height: 15vh;
-        .link {
-            position: absolute;
-            &-bottom {
-                left: 2%;
-                bottom: 0;
-                transform: scale(0.8);
-            }
-        }
     }
     .btn {
         font-family: "Oswald", sans-serif;
@@ -225,7 +188,6 @@ export default {
     transform: scale(1);
     }
 }
-
 @media (min-width: 320px) {
     .container-fluid {        
         .btn {
@@ -236,8 +198,8 @@ export default {
             .link {
                 &-bottom {
                     left: 50%;
-                    bottom: 40%;
-                    transform: translateX(-50%) rotateZ(-90deg) scale(0.5);
+                    bottom: 50%;
+                    transform: translate(-50%, -50%) rotateZ(-90deg) scale(0.5);
                 }
             }
         }
@@ -273,9 +235,7 @@ export default {
         .back {
             .link {
                 &-bottom {
-                    left: 5%;
-                    bottom: 40%;
-                    transform: translateX(-50%) rotateZ(-90deg) scale(0.6);
+                    transform: translate(-50%, -50%) rotateZ(-90deg) scale(0.6);
                 }
             }
         }
@@ -293,9 +253,7 @@ export default {
         .back {
             .link {
                 &-bottom {
-                    left: 5%;
-                    bottom: 40%;
-                    transform: translateX(-50%) rotateZ(-90deg) scale(0.8);
+                    transform: translate(-50%, -50%) rotateZ(-90deg) scale(0.8);
                 }
             }
         }
@@ -322,16 +280,6 @@ export default {
         .btn {
             font-size: 1.5rem;
             padding: 1rem 5rem 1rem 5rem;
-        }
-        .back {
-            height: 18vh;
-            .link {
-                &-bottom {
-                    left: 5%;
-                    bottom: 45%;
-                    transform: translateX(-50%) rotateZ(-90deg) scale(1);
-                }
-            }
         }
     }
 }
