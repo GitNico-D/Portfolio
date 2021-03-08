@@ -34,7 +34,6 @@ class CustomHateoasLinks
      */
     public function createLink($entity)
     {
-        // $entityName = $this->getEntityName($entity);
         $links = ["_links" => $this->generateLinks($this->routesList($this->getEntityName($entity)), $entity)];
         return $this->createObjectWithLinks($entity, $links);
     }
@@ -45,8 +44,7 @@ class CustomHateoasLinks
     public function getEntityName($entity) 
     {
         $reflectionEntity = new ReflectionClass($entity);
-        $entityName = strtolower($reflectionEntity->getShortName());
-        return $entityName;
+        return strtolower($reflectionEntity->getShortName());
     }
 
     /**

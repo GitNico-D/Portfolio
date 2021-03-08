@@ -92,7 +92,7 @@ class SoftwareController extends AbstractController
         } else {
             $softwareAndLinks = $customLink->createLink($software);
             $em->flush($software);
-            return $this->json($softwareAndLinks, JsonResponse::HTTP_OK, [], ['groups' => 'category:read']);
+            return $this->json($softwareAndLinks, JsonResponse::HTTP_OK);
         }
     }
 
