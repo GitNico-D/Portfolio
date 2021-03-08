@@ -98,9 +98,6 @@ export default {
         .line {
             display: none;
         }
-        // .even, .odd {
-        //     margin-bottom: 5rem;
-        // }
     }
 }
 @media (min-width: 768px) {
@@ -110,9 +107,6 @@ export default {
             height: 77%;
             top: 11%;
         }
-        // .even, .odd {
-        //     margin-bottom: 10rem;
-        // }
     }
 }
 @media (min-width: 1200px) {

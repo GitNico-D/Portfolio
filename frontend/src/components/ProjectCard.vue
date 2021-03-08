@@ -69,7 +69,7 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: center
-    };
+    }
   }
   .backcard {
     position: absolute;
@@ -83,7 +83,6 @@ export default {
     @include box_shadow(0px, 0px, 1px, $purple);
     .card-text {
       padding: 0.5rem;
-      // border: 1px solid $purple;
       font-size: 1.1rem;
       line-height: 2rem;
       color: $purple;
@@ -167,7 +166,6 @@ export default {
 @media (min-width: 768px) {
   .cardflip {
     width: 40rem;
-    margin: 1rem;
     .frontcard {
       .card-title {
         font-size: 3rem;
