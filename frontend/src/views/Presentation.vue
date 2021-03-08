@@ -5,20 +5,21 @@
         <Transition v-show="showTransition" directionAnimation="left"/>
         <b-row class="presentation justify-content-center">
             <b-col cols="10" md="5" xl="3">
-                <b-card img-src="https://picsum.photos/600/300/?image=25" img-top>
+                <b-card :img-src="require('../assets/img-test-1.jpg')" img-top>
                     <b-card-title class="text-uppercase">  
                         <span class="card-title-first">{{ firstName }}</span> <span class="card-title-last font-weight-bold">{{ lastName }}</span>
                     </b-card-title>
                     <hr>
                     <b-card-text>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        <div class="d-flex flex-wrap justify-content-around my-3">
-                            <Button name="GitHub" href="https://github.com/GitNico-D" colorOne="#485DA6" colorTwo="#FF9C66" :logoIcon="require('../assets/logo-github.svg')"/>
-                            <Button name="GitHub" href="https://github.com/GitNico-D" colorOne="#FF9C66" colorTwo="#485DA6" :logoIcon="require('../assets/logo-github.svg')"/>
-                            <Button name="GitHub" href="https://github.com/GitNico-D" colorOne="#485DA6" colorTwo="#FF9C66" :logoIcon="require('../assets/logo-github.svg')"/>
+                        <div class="d-flex flex-wrap justify-content-around my-4">
+                            <Button name="GitHub" href="https://github.com/GitNico-D" colorOne="#485DA6" colorTwo="#FF9C66" :logoIcon="'url(' + require('../assets/logo-github.png') + ')'"/>
+                            <Button name="LinkedIn" href="https://fr.linkedin.com/" colorOne="#FF9C66" colorTwo="#485DA6" :logoIcon="'url(' + require('../assets/logo-linkedin.png') + ')'"/>
+                            <Button name="Contact" colorOne="#485DA6" colorTwo="#FF9C66" :logoIcon="'url(' + require('../assets/logo-gmail.png') + ')'"/>
                         </div>
                     </b-card-text>
                 </b-card>
+                <div class="card-border-back"></div>
             </b-col>
             <b-col cols="12" md="6" xl="5" class="presentation-text">
                 <div>
@@ -97,10 +98,11 @@ export default {
     padding-top: 14rem;
     height: unset;
     .card {
+        animation: text-focus-in 0.7s cubic-bezier(0.550, 0.085, 0.680, 0.530) 1s both;
+        // z-index: 1;
         &-title {
             font-family: "MontSerrat", sans-serif;
             font-size:2.5rem;
-            animation: text-focus-in 0.7s cubic-bezier(0.550, 0.085, 0.680, 0.530) 1s both;
             &-first {
                 color: $blue;
                 margin-right: 5rem;
@@ -112,17 +114,17 @@ export default {
         }
         &-body {            
             margin-top: 5rem;
-            &:before {
-                position: absolute;
-                content: "";
-                border: 8px solid rgba(72, 93, 166, 0.2);
-                top: 5%;
-                left: 5%;
-                width: 100%;
-                @include box_shadow(0px, 0px, 15px, $blue);
-                height: 100%;
-                z-index: -1;
-            }
+        }
+        &-border-back {
+            position: absolute;
+            content: "";
+            border: 8px solid rgba(72, 93, 166, 0.2);
+            top: 5%;
+            left: 5%;
+            width: 95%;
+            @include box_shadow(0px, 0px, 15px, $blue);
+            z-index: -1;
+            animation: text-focus-in 0.7s cubic-bezier(0.550, 0.085, 0.680, 0.530) 1s both;
         }
         &-text {
             font-family: "Oswald", sans-serif;
@@ -131,9 +133,8 @@ export default {
         }
         &-img-top {
             position: absolute;
-            z-index: 3;
-            animation: tilt-in-fwd-tl 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
-            @include box_shadow(0px, 0px, 25px, $blue);
+            animation: text-focus-in 0.7s cubic-bezier(0.550, 0.085, 0.680, 0.530) 1s both;
+            @include box_shadow(0px, 0px, 15px, $blue);
         }
     }
     &-text {
@@ -163,7 +164,7 @@ export default {
         &-separator {
             width: 50%;
             margin: auto;
-            height: 2px;
+            height: 4px;
             background-color: $blue;
             box-shadow: 0px 0px 20px $blue;
         }
@@ -248,6 +249,9 @@ export default {
                 font-size: 1.5rem;
                 padding-top: 1rem;
             }
+            &-border-back {
+                height: 100%;
+            }
         }
         &-text {
             padding-top: 3rem;
@@ -290,6 +294,9 @@ export default {
                 font-size: 2rem;
                 padding-top: unset;
             }
+            &-border-back {
+                height: 31%;
+            }
         }
     }
 }
@@ -306,6 +313,9 @@ export default {
             }
             &-text {
                 font-size: 1.2rem;
+            }
+            &-border-back {
+                height: 45%;
             }
         }
     }

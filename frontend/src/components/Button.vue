@@ -1,8 +1,7 @@
 <template>
-    <b-button :href="socialLink" :style="{'--color-one': colorOne, '--color-two': colorTwo}" class="m-1">
-        <!-- <b-img :src="logoIcon" :alt="'logo ' + name"></b-img> -->
+    <b-link :href="socialLink" :style="{'--color-one': colorOne, '--color-two': colorTwo, '--url-icon': logoIcon}" class="btn m-1 p-2">
         {{name}}
-    </b-button>
+    </b-link>
 </template>
 
 <script>
@@ -41,7 +40,7 @@ export default {
             content:"";
             transition: transform 0.2s ease;
             position: absolute;
-            background: url("../assets/logo-github.svg") no-repeat;
+            background: var(--url-icon) no-repeat;
             top: -20%;
             left: 55%;
             transform: rotate(12deg) scale(1.2);

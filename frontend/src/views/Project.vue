@@ -72,12 +72,12 @@ export default {
             if (error.response) {
                 this.errors = JSON.parse(JSON.stringify(error.response.data)); 
                 this.$store.commit('ADD_ERROR', this.errors.message);
-                this.$router.push({ name: 'WhatError', params: { errorStatus: 'Erreur Api -' + this.errors.status}});
+                this.$router.push({ name: 'Whaterror', params: { errorStatus: 'Erreur Api -' + this.errors.status}});
             } else if (error.request) {
                 this.$store.commit('ADD_ERROR', "Le serveur semble être indisponible");
-                this.$router.push({ name: 'WhatError', params: { errorStatus: '500' }});
+                this.$router.push({ name: 'Whaterror', params: { errorStatus: '500' }});
             } else {
-                this.$router.push({ name: 'WhatError', params: { errorStatus: '404' }});
+                this.$router.push({ name: 'Whaterror', params: { errorStatus: '404' }});
             }
             return Promise.reject(error.response.data); 
         });
