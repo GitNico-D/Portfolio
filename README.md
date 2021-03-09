@@ -10,4 +10,4 @@ Portfolio based on Vue for the frontend and a Symfony API for the backend
 
 ### Requirements
 
-Symfony, composer, npm, Vue
+Symfony, composer, npm, Vu
