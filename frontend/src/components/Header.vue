@@ -3,7 +3,7 @@
         <b-navbar toggleable="sm">
         <b-navbar-toggle target="nav-collapse" :style="{'--color': color}" ></b-navbar-toggle>
             <b-collapse id="nav-collapse" is-nav>
-                <b-navbar-nav class="p-3" :style="{ '--color': color, '--color': color}">
+                <b-navbar-nav class="p-3" :style="{ '--color': color}">
                     <router-link to="/presentation">Présentation</router-link><span class="px-3" :style="{'--color': color}"> | </span> 
                     <router-link to="/projects">Projets</router-link><span class="px-3" :style="{'--color': color}"> | </span>
                     <router-link to="/skills">Compétences</router-link><span class="px-3" :style="{'--color': color}"> | </span>
