@@ -6,6 +6,7 @@ import Skill from "../views/Skill.vue";
 import Presentation from "../views/Presentation.vue";
 import Career from "../views/Career.vue";
 import ErrorView from '../views/ErrorView.vue';
+import Login from '../views/Login.vue'
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,11 @@ const routes = [
     path: "/ErrorView/:errorStatus",
     name: "ErrorView",
     component: ErrorView
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login
   },
   {
     path: "*",
