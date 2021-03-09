@@ -1,19 +1,15 @@
 <template>
-    <b-row :class="parity" class="align-items-center">
+    <b-row :class="parity" :startDate="startDate" :endDate="endDate" class="align-items-center">
         <b-col cols="12" md="6">
             <b-card :title="title" :style="{'--color': color}" class="border-0">
                 <b-card-text>
                     <h4 class="mt-4 font-weight-bold text-uppercase">{{ company }}</h4>
-                    <p class="mt-4 text-justify">{{ description }} Lorem Ipsum is simply dummy text of the printing 
-                        and typesetting industry. Lorem Ipsum has been the industry's standard dummy
-                        text ever since the 1500s, when an unknown printer took a galley of type and 
-                        scrambled it to make a type specimen book.
-                    </p>
+                    <p class="mt-4 p-3 text-justify">{{ description }} </p>
                 </b-card-text>
             </b-card>    
         </b-col>
         <b-col cols="12" md="6">
-            <h2 class=""><span>{{ startDate }}</span> - <span>{{ endDate }}</span></h2> 
+            <h2 class=""><span>{{ formatStartDate }}</span> - <span>{{ formatEndDate }}</span></h2> 
         </b-col>
     </b-row>   
 </template>
@@ -29,7 +25,19 @@ export default {
         company: String,
         color: String,
         parity: String
-    }
+    },
+    computed: {
+        formatStartDate () {
+            const options = { year: 'numeric' };
+            let formatDate = new Date(this.startDate).toLocaleDateString(undefined, options);
+            return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
+        },
+        formatEndDate () {
+            const options = { year: 'numeric' };
+            let formatDate = new Date(this.endDate).toLocaleDateString(undefined, options);
+            return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
+        }
+    },
 }
 </script>
 
@@ -55,7 +63,7 @@ h2 {
         font-weight: 600;
         text-transform: uppercase;
         border: 2px solid $white;
-        padding: 1.5rem;
+        padding: 1rem;
         @include box_shadow(0px, 0px, 5px, var(--color)); 
         z-index: 5;
     }
@@ -146,7 +154,7 @@ h2 {
                 background-color: var(--color);
                 box-shadow: 5px 7px 2px $white,
                             0px 0px 15px var(--color);
-                transform: translate(-10%, -50%) rotateZ(0deg);
+                // transform: translate(-5%, -50%) rotateZ(0deg);
             }
             
         }
@@ -205,7 +213,7 @@ h2 {
                 background-color: var(--color);
                 box-shadow: -5px 7px 2px $white,
                             0px 0px 15px var(--color);
-                transform: translate(10%, -50%) rotateZ(0deg);
+                // transform: translate(10%, -50%) rotateZ(0deg);
             }
             &-body {
                 transition: all 0.2s ease;
@@ -260,6 +268,11 @@ h2 {
         h2 {
             font-size: 1.5rem;
             margin-bottom: 2rem;
+        }
+        .card {
+            &-title {
+                font-size: 1rem;
+            }
         }
         &:hover {
             .card {
@@ -324,8 +337,15 @@ h2 {
         width: 90%;
         &:hover {
             h2 {
-                font-size: 3.25rem;
+                font-size: 3rem;
                 color: $light-blue;
+            }
+        }
+        .card {
+            &-title {
+                width: 90%;
+                margin: auto;
+                font-size: 1rem;
             }
         }
     }
@@ -337,9 +357,14 @@ h2 {
         }
         .card {
             &-title {
-                width: 50%;
-                margin: auto;
-                transform: translate(-10%, -50%);
+                transform: translate(-10%, -70%);
+            }
+        }
+        &:hover {
+            .card {
+                &-title {
+                    transform: translate(-8%, -70%) rotateZ(0deg);
+                }
             }
         }
     }
@@ -347,14 +372,19 @@ h2 {
         flex-direction: row-reverse;
         .card {
             &-title {
-                width: 50%;
-                margin: auto;
-                transform: translate(10%, -50%);
+                transform: translate(10%, -70%);
             }
         }
         h2 {
             text-align: right;
             font-size: 2.5rem;
+        }
+        &:hover {
+            .card {
+                &-title {
+                    transform: translate(8%, -70%) rotateZ(0deg);
+                }
+            }
         }
     }
 }
@@ -362,6 +392,18 @@ h2 {
     .odd, .even {
         h2 {
             font-size: 3rem;
+        }
+        .card {
+            &-title {
+                width: 60%;
+                font-size: 1.3rem;
+            }
+        }
+        &:hover {
+            h2 {
+                font-size: 3.25rem;
+                color: $light-blue;
+            }
         }
     }
 }

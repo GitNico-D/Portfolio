@@ -6,7 +6,7 @@
         <Transition v-show="showTransition" directionAnimation="right"/>
         <b-row v-if="!errors" class="cards m-auto">
             <ProjectCard 
-                v-for="project in projects" 
+                v-for="project in allProjects" 
                 :key="project.id" 
                 :title="project.name"
                 :content="project.description" 
@@ -28,7 +28,7 @@ import HomePageLink from '@/components/HomePageLink.vue'
 import BackgroundPage from '@/components/BackgroundPage.vue'
 import Header from '@/components/Header.vue'
 import Transition from '@/components/Transition.vue'
-
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     components: {
@@ -51,36 +51,23 @@ export default {
             setTimeout(() => {
                 this.showTransition = false;
             },1300);
-        }
+        },
+        ...mapActions([
+            'getAllProjects'
+        ])
 	},
+    computed: {
+        ...mapGetters([
+            'allProjects'
+        ])
+    },
     beforeCreate() {
         setTimeout(() => {
             this.showTransition = false;
         },1300);
     },
-    created() {
-        this.axios.get(process.env.VUE_APP_API_URL + '/projects', {
-            headers: {
-                "Content-Type": "application/json"
-            },
-        })  
-        .then(response => { 
-            this.projects = response.data
-            return Promise.resolve(response.data); 
-            })            
-        .catch(error => { 
-            if (error.response) {
-                this.errors = JSON.parse(JSON.stringify(error.response.data)); 
-                this.$store.commit('ADD_ERROR', this.errors.message);
-                this.$router.push({ name: 'Whaterror', params: { errorStatus: 'Erreur Api -' + this.errors.status}});
-            } else if (error.request) {
-                this.$store.commit('ADD_ERROR', "Le serveur semble être indisponible");
-                this.$router.push({ name: 'Whaterror', params: { errorStatus: '500' }});
-            } else {
-                this.$router.push({ name: 'Whaterror', params: { errorStatus: '404' }});
-            }
-            return Promise.reject(error.response.data); 
-        });
+    mounted() {
+        this.$store.dispatch('getAllProjects')
     }
 }
 </script>

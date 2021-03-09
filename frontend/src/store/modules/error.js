@@ -6,7 +6,7 @@ const state = () => ({
 })
 
 const mutations = {
-    ADD_ERROR: (stateError, message) => {
+    ADD_ERROR: (state, message) => {
         state.errors.push({
             message: message
         })

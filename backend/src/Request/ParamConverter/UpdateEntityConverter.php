@@ -3,6 +3,7 @@
 namespace App\Request\ParamConverter;
 
 use App\Entity\Category;
+use App\Entity\Presentation;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
@@ -64,6 +65,13 @@ class UpdateEntityConverter implements ParamConverterInterface
                 ->getRepository(Category::class)
                 ->find($categoryId);
             $entity->setCategory($category);
+        }
+        if($configuration->getName() === "presentation") {
+            $presentationId = json_decode($request->getContent(), true)['presentation'];
+            $presentation = $this->entityManager
+                ->getRepository(Presentation::class)
+                ->find($presentationId);
+            $entity->setpresentation($presentation);
         }
         $request->attributes->set($configuration->getName(), $entity);
     }

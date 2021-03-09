@@ -64,7 +64,17 @@ security:
             pattern: ^/api/categories
             stateless: true
             methods: ["GET"]    
-            anonymous: true             
+            anonymous: true  
+        presentations:
+            pattern: ^/api/presentations
+            stateless: true
+            methods: ["GET"]    
+            anonymous: true     
+        contacts:
+            pattern: ^/api/contacts
+            stateless: true
+            methods: ["GET"]    
+            anonymous: true        
         api:
             pattern:   ^/api
             stateless: true
@@ -83,4 +93,6 @@ security:
         - { path: ^/api/skills, methods: ["GET"], roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/softwares, methods: ["GET"], roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/categories, methods: ["GET"], roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/presentations, methods: ["GET"], roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/contacts, methods: ["GET"], roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

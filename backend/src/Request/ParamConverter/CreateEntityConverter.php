@@ -3,10 +3,10 @@
 namespace App\Request\ParamConverter;
 
 use App\Entity\Category;
+use App\Entity\Presentation;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -55,6 +55,13 @@ class CreateEntityConverter implements ParamConverterInterface
                 ->getRepository(Category::class)
                 ->find($categoryId);
             $entity->setCategory($category);
+        }
+        if($configuration->getName() === "contact") {
+            $presentationId = json_decode($request->getContent(), true)['presentation'];
+            $presentation = $this->entityManager
+                ->getRepository(Presentation::class)
+                ->find($presentationId);
+            $entity->setPresentation($presentation);
         }
         $request->attributes->set($configuration->getName(), $entity);
     }
