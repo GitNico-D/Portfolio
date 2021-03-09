@@ -6,6 +6,7 @@ use App\Repository\SkillRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=SkillRepository::class)
@@ -17,6 +18,7 @@ class Skill
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"category:read"})
      */
     private $id;
 
@@ -24,6 +26,7 @@ class Skill
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank
      * @Assert\Length(min="2", max="100")
+     * @Groups({"category:read"})
      */
     private $name;
 
@@ -31,6 +34,7 @@ class Skill
      * @ORM\Column(type="string", length=150)
      * @Assert\NotBlank
      * @Assert\Length(min="2", max="150")
+     * @Groups({"category:read"})
      */
     private $icon;
 
@@ -38,6 +42,7 @@ class Skill
      * @ORM\Column(type="text")
      * @Assert\NotBlank
      * @Assert\Length(min="2")
+     * @Groups({"category:read"})
      */
     private $description;
 
@@ -46,8 +51,15 @@ class Skill
      * @Assert\NotBlank
      * @Assert\Positive
      * @Assert\Type("integer")
+     * @Groups({"category:read"})
      */
     private $knowledge_level;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="skills", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
 
     public function getId(): ?int
     {
@@ -98,6 +110,18 @@ class Skill
     public function setKnowledgeLevel(int $knowledge_level): self
     {
         $this->knowledge_level = $knowledge_level;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

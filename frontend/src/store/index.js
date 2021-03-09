@@ -1,38 +1,21 @@
 import Vue from 'vue';
-import Vuex from 'vuex'
+import Vuex from 'vuex';
+import skill from './modules/skill';
+import error from './modules/error';
+import software from './modules/software'
+import categories from './modules/categories'
 
 Vue.use(Vuex)
 
-const state = () => ({
-    errors: [{ 
-        message: "La page demandée est introuvable"
-    }]
-});
-
-const mutations = {
-    ADD_ERROR: (stateError, message) => {
-        stateError.errors.push({
-            message: message
-        })
-    }
-}
-
-const getters = {
-    allErrors: (stateError) => {
-        return stateError.errors
-    },
-    lastErrorMessage: (stateError, gettersError) => {
-        return gettersError.allErrors[gettersError.allErrors.length -1].message
-    }
-}
-
-
 export default new Vuex.Store({
-    state: state,
-    mutations: mutations,
-    getters: getters,
-    actions: {
-    },
-    modules: {
+    state: {},
+    mutations: {},
+    getters: {},
+    actions: {},
+    modules: { 
+        skill,
+        error,
+        software,
+        categories
     }
 })

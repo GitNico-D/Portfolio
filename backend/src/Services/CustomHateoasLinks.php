@@ -34,18 +34,29 @@ class CustomHateoasLinks
      */
     public function createLink($entity)
     {
-        $reflectionEntity = new ReflectionClass($entity);
-        $entityName = strtolower($reflectionEntity->getShortName());
-        $links = ["_links" => $this->generateLinks($this->routesList($entityName), $entity)];
+        $links = ["_links" => $this->generateLinks($this->routesList($this->getEntityName($entity)), $entity)];
         return $this->createObjectWithLinks($entity, $links);
+    }
+
+    /**
+     * Return the name of the entity
+     */
+    public function getEntityName($entity) 
+    {
+        $reflectionEntity = new ReflectionClass($entity);
+        return strtolower($reflectionEntity->getShortName());
     }
 
     /**
      * Transform Entity on an array and merge links on this arrayEntity
      */
     public function createObjectWithLinks($entity, array $links)
-    {
-        $entityArray = json_decode($this->serializer->serialize($entity, 'json'), true );
+    {   
+        if ($this->getEntityName($entity) === "category" || $this->getEntityName($entity) === "skill" || $this->getEntityName($entity) === "software") {
+            $entityArray = json_decode($this->serializer->serialize($entity, 'json', ['groups' => 'category:read']), true );
+        } else {
+            $entityArray = json_decode($this->serializer->serialize($entity, 'json'), true );
+        }
         return array_merge($entityArray, $links);
     }
 

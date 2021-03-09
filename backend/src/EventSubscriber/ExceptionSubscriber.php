@@ -23,7 +23,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $exception = $event->getThrowable();
         if (($exception instanceof NotFoundHttpException) || ($exception instanceof MethodNotAllowedHttpException)){
             $error = [
-                'status' => $exception->getStatusCode(),
+                'code' => $exception->getStatusCode(),
                 'message' => $exception->getMessage()
             ];            
             $response = new JsonResponse($error, JsonResponse::HTTP_NOT_FOUND);

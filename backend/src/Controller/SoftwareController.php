@@ -43,7 +43,7 @@ class SoftwareController extends AbstractController
     public function readSoftware(Software $software, CustomHateoasLinks $customLink)
     {
         $softwareAndLinks = $customLink->createLink($software);
-        return $this->json($softwareAndLinks, JsonResponse::HTTP_OK);
+        return $this->json($softwareAndLinks, JsonResponse::HTTP_OK, [], ['groups' => 'category:read']);
     }
 
     /** 
@@ -66,8 +66,9 @@ class SoftwareController extends AbstractController
             $em->flush();
             return $this->json(
                 $software,
-                JsonResponse::HTTP_CREATED, // Serialize and return a JsonResponse
-            ["Location" => $this->generateUrl("get_software", ["id" => $software->getId()])]
+                JsonResponse::HTTP_CREATED, 
+                ["Location" => $this->generateUrl("get_software", ["id" => $software->getId()])],
+                ['groups' => 'category:read']
             );
         }
     }
@@ -87,11 +88,11 @@ class SoftwareController extends AbstractController
     ): JsonResponse {
         $errors = $errorValidator->errorsViolations($software);
         if ($errors) {
-            return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
+            return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
             $softwareAndLinks = $customLink->createLink($software);
             $em->flush($software);
-            return$this->json($softwareAndLinks, JsonResponse::HTTP_OK);
+            return $this->json($softwareAndLinks, JsonResponse::HTTP_OK);
         }
     }
 

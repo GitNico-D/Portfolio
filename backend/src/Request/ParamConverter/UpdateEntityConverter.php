@@ -2,6 +2,7 @@
 
 namespace App\Request\ParamConverter;
 
+use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
@@ -55,9 +56,15 @@ class UpdateEntityConverter implements ParamConverterInterface
             $request->getContent(),
             $configuration->getClass(),
             'json',
-            [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
-            AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
+            [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
         );
+        if($configuration->getName() === "skill" || $configuration->getName() === "software") {
+            $categoryId = json_decode($request->getContent(), true)['category'];
+            $category = $this->entityManager
+                ->getRepository(Category::class)
+                ->find($categoryId);
+            $entity->setCategory($category);
+        }
         $request->attributes->set($configuration->getName(), $entity);
     }
 }

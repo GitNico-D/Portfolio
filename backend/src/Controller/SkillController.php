@@ -43,7 +43,7 @@ class SkillController extends AbstractController
     public function readSkill(Skill $skill, CustomHateoasLinks $customLink)
     {
         $skillAndLinks = $customLink->createLink($skill);
-        return $this->json($skillAndLinks, JsonResponse::HTTP_OK);
+        return $this->json($skillAndLinks, JsonResponse::HTTP_OK, [], ['groups' => 'category:read']);
     }
 
     /**
@@ -67,7 +67,8 @@ class SkillController extends AbstractController
             return $this->json(
                 $skill,
                 JsonResponse::HTTP_CREATED,
-                ["Location" => $this->generateUrl("get_skill", ["id" => $skill->getId()])]
+                ["Location" => $this->generateUrl("get_skill", ["id" => $skill->getId()])],
+                ['groups' => 'category:read']
             );
         }
     }
@@ -76,7 +77,7 @@ class SkillController extends AbstractController
      * UPDATE an existing Skill resource
      * 
      * @Route("/skills/{id}", name="update_skill", methods={"PUT"})
-     * @ParamConverter("project", converter="update_entity_converter")
+     * @ParamConverter("skill", converter="update_entity_converter")
      * @IsGranted("ROLE_ADMIN")
      */
     public function updateSkill(
