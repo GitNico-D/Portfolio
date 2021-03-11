@@ -1,13 +1,14 @@
 <template>
   <div class="cardflip mb-3">
     <b-card
-      overlay 
-      :img-src="imgSrc" 
-      :img-alt="imgAlt" 
+      overlay
+      :img-src="imgSrc"
+      :img-alt="imgAlt"
       :title="title"
-      :date="date" 
-      class="frontcard">
-    </b-card>        
+      :date="date"
+      class="frontcard"
+    >
+    </b-card>
     <b-card class="backcard">
       <b-card-text>
         <p class="card-text-date">{{ formatDate }}</p>
@@ -31,26 +32,34 @@ export default {
     date: String
   },
   computed: {
-    formatDate () {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      let formatDate = new Date(this.date).toLocaleDateString(undefined, options);
+    formatDate() {
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      };
+      let formatDate = new Date(this.date).toLocaleDateString(
+        undefined,
+        options
+      );
       return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
     }
-  },
-}
+  }
+};
 </script>
 
 <style lang="scss">
 .cardflip {
-  font-family: 'Oswald', sans-serif;
+  font-family: "Oswald", sans-serif;
   .card-title {
-    color: $white;       
+    color: $white;
     text-transform: uppercase;
     @include special-text-shadow;
   }
   .frontcard,
   .backcard {
-    transition-timing-function: cubic-bezier(.175, .885, .32, 1.275);
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transition-duration: 1s;
     transition-property: transform, opacity;
     color: white;
@@ -68,7 +77,7 @@ export default {
     .card-body {
       display: flex;
       flex-direction: column;
-      justify-content: center
+      justify-content: center;
     }
   }
   .backcard {
@@ -92,14 +101,14 @@ export default {
       display: flex;
       flex-direction: column;
       .btn {
-        color: $purple!important;
-        background-color: transparent!important;
-        border: 1px solid $purple!important;
+        color: $purple !important;
+        background-color: transparent !important;
+        border: 1px solid $purple !important;
         transform: translateZ(100px);
         &:hover {
-          color: $white!important;
-          background-color: $purple!important;
-          @include box_shadow(0px, 0px, 10px, $purple); 
+          color: $white !important;
+          background-color: $purple !important;
+          @include box_shadow(0px, 0px, 10px, $purple);
         }
       }
     }
@@ -126,8 +135,8 @@ export default {
     }
     .backcard {
       .card-body {
-        padding: unset;   
-        justify-content: center;            
+        padding: unset;
+        justify-content: center;
         .card-text {
           padding: unset;
           font-size: 0.6rem;
@@ -152,12 +161,11 @@ export default {
     }
     .backcard {
       .card-body {
-        padding: 1.25rem;                     
+        padding: 1.25rem;
         .card-text {
           padding: 0.6rem;
           font-size: 1.2rem;
           line-height: 2rem;
-          
         }
       }
     }
@@ -172,8 +180,8 @@ export default {
       }
     }
     .backcard {
-      .card-body {   
-        justify-content: space-around;              
+      .card-body {
+        justify-content: space-around;
         .card-text {
           padding: 0.8rem;
           font-size: 1.4rem;
