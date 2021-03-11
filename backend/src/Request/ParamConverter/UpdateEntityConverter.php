@@ -15,21 +15,21 @@ class UpdateEntityConverter implements ParamConverterInterface
 {
     protected $serializer;
     protected $entityManager;
-    protected $relatedEntity;
+    protected $searchRelatedEntity;
 
     /**
      * @param SerializerInterface $serializer
      * @param EntityManagerInterface $entityManager
-     * @param SearchRelatedEntity $relatedEntity
+     * @param SearchRelatedEntity $searchRelatedEntity
      */
     public function __construct(
         SerializerInterface $serializer,
         EntityManagerInterface $entityManager,
-        SearchRelatedEntity $relatedEntity
+        SearchRelatedEntity $searchRelatedEntity
     ) {
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
-        $this->relatedEntity = $relatedEntity;
+        $this->searchRelatedEntity = $searchRelatedEntity;
     }
 
     /**
@@ -66,7 +66,7 @@ class UpdateEntityConverter implements ParamConverterInterface
             'json',
             [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
         );
-        $relatedEntity = $this->relatedEntity->searchForeignKey($entity, $request);
+        $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $request);
         if ($relatedEntity) {
             $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
             $entity->$setRelatedEntity($relatedEntity);

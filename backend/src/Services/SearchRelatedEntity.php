@@ -26,15 +26,11 @@ class SearchRelatedEntity
         $classAttributesArray = $this->requestContentToArray($request);
         foreach ($classAttributesArray as $classAttribute) {
             $getAttribute = 'get' . ucfirst(str_replace('_', '', ($classAttribute)));
-            if (is_object($entity->$getAttribute())) {
-                if (get_class($entity->$getAttribute()) == "DateTimeImmutable") {
-                    return;
-                } else {
-                    $relatedEntityId = json_decode($request->getContent(), true)[$classAttribute];
-                    return $this->entityManager
+            if (is_object($entity->$getAttribute()) && (get_class($entity->$getAttribute()) !== "DateTimeImmutable")) {
+                $relatedEntityId = json_decode($request->getContent(), true)[$classAttribute];
+                return $this->entityManager
                                 ->getRepository(get_class($entity->$getAttribute()))
                                 ->find($relatedEntityId);
-                }
             }
         }
     }

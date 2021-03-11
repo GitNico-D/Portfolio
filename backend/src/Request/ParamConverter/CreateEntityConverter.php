@@ -9,27 +9,25 @@ use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInte
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
-// use ReflectionClass;
-
 class CreateEntityConverter implements ParamConverterInterface
 {
     protected $serializer;
     protected $entityManager;
-    protected $relatedEntity;
+    protected $searchRelatedEntity;
 
     /**
      * @param SerializerInterface $serializer
      * @param EntityManagerInterface $entityManager
-     * @param SearchRelatedEntity $relatedEntity
+     * @param SearchRelatedEntity $searchRelatedEntity
      */
     public function __construct(
         SerializerInterface $serializer,
         EntityManagerInterface $entityManager,
-        SearchRelatedEntity $relatedEntity
+        SearchRelatedEntity $searchRelatedEntity
     ) {
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
-        $this->relatedEntity = $relatedEntity;
+        $this->searchRelatedEntity = $searchRelatedEntity;
     }
 
     /**
@@ -57,7 +55,7 @@ class CreateEntityConverter implements ParamConverterInterface
             $configuration->getClass(),
             'json'
         );
-        $relatedEntity = $this->relatedEntity->searchForeignKey($entity, $request);
+        $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $request);
         if ($relatedEntity) {
             $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
             $entity->$setRelatedEntity($relatedEntity);

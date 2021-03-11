@@ -73,8 +73,6 @@ class SkillController extends AbstractController
         if ($errors) {
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
-            // dump($skill);
-            // dd($skill->getCategory());
             $em->persist($skill);
             $em->flush();
             return $this->json(
