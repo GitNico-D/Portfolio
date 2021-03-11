@@ -31,8 +31,7 @@ class SoftwareController extends AbstractController
         $softwares = $this->getDoctrine()
             ->getRepository(Software::class)
             ->findAll();
-        foreach($softwares as $software)
-        {
+        foreach ($softwares as $software) {
             $softwaresAndLinks [] = $customLink->createLink($software);
         }
         return $this->json($softwaresAndLinks, JsonResponse::HTTP_OK);
@@ -78,7 +77,7 @@ class SoftwareController extends AbstractController
             $em->flush();
             return $this->json(
                 $software,
-                JsonResponse::HTTP_CREATED, 
+                JsonResponse::HTTP_CREATED,
                 ["Location" => $this->generateUrl("get_software", ["id" => $software->getId()])],
                 ['groups' => 'category:read']
             );

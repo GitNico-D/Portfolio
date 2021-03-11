@@ -23,11 +23,10 @@ class UpdateEntityConverter implements ParamConverterInterface
      * @param SearchRelatedEntity $relatedEntity
      */
     public function __construct(
-        SerializerInterface $serializer, 
+        SerializerInterface $serializer,
         EntityManagerInterface $entityManager,
         SearchRelatedEntity $relatedEntity
-    )
-    {
+    ) {
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
         $this->relatedEntity = $relatedEntity;
@@ -35,31 +34,32 @@ class UpdateEntityConverter implements ParamConverterInterface
 
     /**
      * Try to find the name of the converter
-     * 
+     *
      * @param ParamConverter $configuration
      * @return bool
      */
-    function supports(ParamConverter $configuration)
-    {    
+    public function supports(ParamConverter $configuration)
+    {
         $entity = strtolower((str_replace('App\Entity\\', '', $configuration->getClass())));
         return $configuration->getName() === $entity;
     }
 
     /**
-     * Add request attributes depending of the entity 
-     * 
+     * Add request attributes depending of the entity
+     *
      * @param Request $request
      * @param ParamConverter $configuration
      */
-    function apply(Request $request, ParamConverter $configuration)
+    public function apply(Request $request, ParamConverter $configuration)
     {
         $entity = $this->entityManager
             ->getRepository($configuration->getClass())
-            ->findOneBy(['id' => $request->attributes->get('id')]
-        );
-        if(!$entity) {
+            ->findOneBy(
+                ['id' => $request->attributes->get('id')]
+            );
+        if (!$entity) {
             throw new NotFoundHttpException(ucfirst($configuration->getName()) . ' ' . $request->attributes->get('id') . ' not found');
-        } 
+        }
         $this->serializer->deserialize(
             $request->getContent(),
             $configuration->getClass(),
@@ -67,7 +67,7 @@ class UpdateEntityConverter implements ParamConverterInterface
             [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
         );
         $relatedEntity = $this->relatedEntity->searchForeignKey($entity, $request);
-        if($relatedEntity) {
+        if ($relatedEntity) {
             $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
             $entity->$setRelatedEntity($relatedEntity);
         }

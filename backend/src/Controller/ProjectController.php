@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+
 /**
  * @Route("/api")
  */
@@ -30,8 +31,7 @@ class ProjectController extends AbstractController
         $projects = $this->getDoctrine()
             ->getRepository(Project::class)
             ->findAll();
-        foreach($projects as $project)
-        {
+        foreach ($projects as $project) {
             $projectsAndLinks [] = $customLink->createLink($project);
         }
         return $this->json($projectsAndLinks, JsonResponse::HTTP_OK);
@@ -114,11 +114,11 @@ class ProjectController extends AbstractController
 
     /**
      * DELETE an existing Project resource
-     * 
+     *
      * @Route("/projects/{id}", name="delete_project", methods={"DELETE"})
      * @ParamConverter("project", class="App:project")
      * @IsGranted("ROLE_ADMIN")
-     * 
+     *
      * @param Project $project
      * @param EntityManagerInterface $em
      * @return JsonResponse

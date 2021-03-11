@@ -21,11 +21,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
-        if (($exception instanceof NotFoundHttpException) || ($exception instanceof MethodNotAllowedHttpException)){
+        if (($exception instanceof NotFoundHttpException) || ($exception instanceof MethodNotAllowedHttpException)) {
             $error = [
                 'code' => $exception->getStatusCode(),
                 'message' => $exception->getMessage()
-            ];            
+            ];
             $response = new JsonResponse($error, JsonResponse::HTTP_NOT_FOUND);
         } elseif ($exception instanceof AccessDeniedHttpException) {
             $response = new JsonResponse(['message' => 'Access denied'], JsonResponse::HTTP_BAD_REQUEST);

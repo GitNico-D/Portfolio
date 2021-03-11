@@ -23,9 +23,10 @@ class CustomHateoasLinks
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        UrlGeneratorInterface $urlGenerator, 
-        RouterInterface $routerInterface, 
-        SerializerInterface $serializer)
+        UrlGeneratorInterface $urlGenerator,
+        RouterInterface $routerInterface,
+        SerializerInterface $serializer
+    )
     {
         $this->urlGenerator = $urlGenerator;
         $this->routerInterface = $routerInterface;
@@ -50,7 +51,7 @@ class CustomHateoasLinks
      * @return string
      * @throws ReflectionException
      */
-    public function getEntityName($entity) 
+    public function getEntityName($entity)
     {
         $reflectionEntity = new ReflectionClass($entity);
         return strtolower($reflectionEntity->getShortName());
@@ -64,13 +65,13 @@ class CustomHateoasLinks
      * @throws ReflectionException
      */
     public function createObjectWithLinks($entity, array $links)
-    {   
+    {
         if ($this->getEntityName($entity) === "category" || $this->getEntityName($entity) === "skill" || $this->getEntityName($entity) === "software") {
-            $entityArray = json_decode($this->serializer->serialize($entity, 'json', ['groups' => 'category:read']), true );
+            $entityArray = json_decode($this->serializer->serialize($entity, 'json', ['groups' => 'category:read']), true);
         } elseif ($this->getEntityName($entity) === "contact" || $this->getEntityName($entity) === "presentation") {
-            $entityArray = json_decode($this->serializer->serialize($entity, 'json', ['groups' => 'presentation:read']), true );
+            $entityArray = json_decode($this->serializer->serialize($entity, 'json', ['groups' => 'presentation:read']), true);
         } else {
-            $entityArray = json_decode($this->serializer->serialize($entity, 'json'), true );
+            $entityArray = json_decode($this->serializer->serialize($entity, 'json'), true);
         }
         return array_merge($entityArray, $links);
     }
@@ -92,7 +93,7 @@ class CustomHateoasLinks
                     if ((!str_contains($action, "List")) && (!str_contains($action, "create"))) {
                         if (str_contains($route, $entityName)) {
                             $routesList [] = $route;
-                        } 
+                        }
                     }
                 }
             }

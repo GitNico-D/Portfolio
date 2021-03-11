@@ -31,8 +31,7 @@ class CategoryController extends AbstractController
         $categories = $this->getDoctrine()
             ->getRepository(Category::class)
             ->findAll();
-        foreach($categories as $category)
-        {
+        foreach ($categories as $category) {
             $categoriesAndLinks [] = $customLink->createLink($category);
         }
         return $this->json($categoriesAndLinks, JsonResponse::HTTP_OK);

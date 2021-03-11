@@ -31,8 +31,7 @@ class SkillController extends AbstractController
         $skills = $this->getDoctrine()
             ->getRepository(Skill::class)
             ->findAll();
-        foreach($skills as $skill)
-        {
+        foreach ($skills as $skill) {
             $skillsAndLinks [] = $customLink->createLink($skill);
         }
         return $this->json($skillsAndLinks, JsonResponse::HTTP_OK);
@@ -66,7 +65,7 @@ class SkillController extends AbstractController
      * @return JsonResponse
      */
     public function createSkill(
-        Skill $skill, 
+        Skill $skill,
         EntityManagerInterface $em,
         ErrorValidator $errorValidator
     ): JsonResponse {
@@ -105,12 +104,12 @@ class SkillController extends AbstractController
         EntityManagerInterface $em,
         ErrorValidator $errorValidator,
         CustomHateoasLinks $customLink
-    ): JsonResponse { 
+    ): JsonResponse {
         $errors = $errorValidator->errorsViolations($skill);
         if ($errors) {
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
-        } else {      
-            $skillAndLinks = $customLink->createLink($skill);              
+        } else {
+            $skillAndLinks = $customLink->createLink($skill);
             $em->flush($skill);
             return $this->json($skillAndLinks, JsonResponse::HTTP_OK);
         }

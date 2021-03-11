@@ -33,8 +33,7 @@ class ExperienceController extends AbstractController
         $experiences = $this->getDoctrine()
             ->getRepository(Experience::class)
             ->findAll();
-        foreach($experiences as $experience)
-        {
+        foreach ($experiences as $experience) {
             $experiencesAndLinks [] = $customLink->createLink($experience);
         }
         return $this->json($experiencesAndLinks, JsonResponse::HTTP_OK);
@@ -51,7 +50,7 @@ class ExperienceController extends AbstractController
      * @throws ReflectionException
      */
     public function readExperience(Experience $experience, CustomHateoasLinks $customLink): JsonResponse
-    { 
+    {
         $experienceAndLinks = $customLink->createLink($experience);
         return $this->json($experienceAndLinks, JsonResponse::HTTP_OK);
     }
@@ -104,8 +103,7 @@ class ExperienceController extends AbstractController
         EntityManagerInterface $em,
         ErrorValidator $errorValidator,
         CustomHateoasLinks $customLink
-        ): JsonResponse
-    {       
+    ): JsonResponse {
         $errors = $errorValidator->errorsViolations($experience);
         if ($errors) {
             return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);

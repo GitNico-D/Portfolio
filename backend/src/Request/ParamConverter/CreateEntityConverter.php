@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
+
 // use ReflectionClass;
 
 class CreateEntityConverter implements ParamConverterInterface
@@ -22,11 +23,10 @@ class CreateEntityConverter implements ParamConverterInterface
      * @param SearchRelatedEntity $relatedEntity
      */
     public function __construct(
-        SerializerInterface $serializer, 
+        SerializerInterface $serializer,
         EntityManagerInterface $entityManager,
         SearchRelatedEntity $relatedEntity
-        )
-    {
+    ) {
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
         $this->relatedEntity = $relatedEntity;
@@ -34,31 +34,31 @@ class CreateEntityConverter implements ParamConverterInterface
 
     /**
      * Try to find the name of the converter
-     * 
+     *
      * @param ParamConverter $configuration
      * @return bool
      */
-    function supports(ParamConverter $configuration)
-    {    
+    public function supports(ParamConverter $configuration)
+    {
         $entity = strtolower((str_replace('App\Entity\\', '', $configuration->getClass())));
         return $configuration->getName() === $entity;
     }
 
     /**
-     * Add request attributes depending of the entity 
-     * 
+     * Add request attributes depending of the entity
+     *
      * @param Request $request
      * @param ParamConverter $configuration
      */
-    function apply(Request $request, ParamConverter $configuration)
+    public function apply(Request $request, ParamConverter $configuration)
     {
         $entity = $this->serializer->deserialize(
-            $request->getContent(), 
-            $configuration->getClass(), 
+            $request->getContent(),
+            $configuration->getClass(),
             'json'
         );
         $relatedEntity = $this->relatedEntity->searchForeignKey($entity, $request);
-        if($relatedEntity) {
+        if ($relatedEntity) {
             $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
             $entity->$setRelatedEntity($relatedEntity);
         }

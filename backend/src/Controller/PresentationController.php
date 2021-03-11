@@ -31,8 +31,7 @@ class PresentationController extends AbstractController
         $presentations = $this->getDoctrine()
             ->getRepository(Presentation::class)
             ->findAll();
-        foreach($presentations as $presentation)
-        {
+        foreach ($presentations as $presentation) {
             $presentationsAndLinks [] = $customLink->createLink($presentation);
         }
         return $this->json($presentationsAndLinks, JsonResponse::HTTP_OK);

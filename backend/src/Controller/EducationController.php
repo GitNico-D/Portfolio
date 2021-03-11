@@ -31,8 +31,7 @@ class EducationController extends AbstractController
         $educations = $this->getDoctrine()
             ->getRepository(Education::class)
             ->findAll();
-        foreach($educations as $education)
-        {
+        foreach ($educations as $education) {
             $educationsAndLinks [] = $customLink->createLink($education);
         }
         return $this->json($educationsAndLinks, JsonResponse::HTTP_OK);
@@ -49,8 +48,8 @@ class EducationController extends AbstractController
      * @throws ReflectionException
      */
     public function readEducation(Education $education, CustomHateoasLinks $customLink)
-    {     
-        $educationAndLinks = $customLink->createLink($education);   
+    {
+        $educationAndLinks = $customLink->createLink($education);
         return $this->json($educationAndLinks, JsonResponse::HTTP_OK);
     }
 

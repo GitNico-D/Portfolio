@@ -31,8 +31,7 @@ class ContactController extends AbstractController
         $contacts = $this->getDoctrine()
             ->getRepository(Contact::class)
             ->findAll();
-        foreach($contacts as $contact)
-        {
+        foreach ($contacts as $contact) {
             $contactsAndLinks [] = $customLink->createLink($contact);
         }
         return $this->json($contactsAndLinks, JsonResponse::HTTP_OK);
