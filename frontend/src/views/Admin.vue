@@ -1,6 +1,6 @@
 <template>
     <b-container fluid>
-        <Header title="Admin" color="#485DA6" class="header"/>
+        <Header title="Page Administrateur" color="#485DA6" class="header"/>
         <BackgroundPage circleColor="#485DA6"/>
     </b-container>
 </template>

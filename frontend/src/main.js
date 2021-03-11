@@ -9,12 +9,14 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import Vuex from 'vuex';
 import store from './store';
+import VeeValidate from 'vee-validate';
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
+Vue.use(VeeValidate)
 
 new Vue({
   router,
