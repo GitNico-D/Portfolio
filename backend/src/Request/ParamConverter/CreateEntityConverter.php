@@ -2,8 +2,6 @@
 
 namespace App\Request\ParamConverter;
 
-use App\Entity\Category;
-use App\Entity\Presentation;
 use App\Services\SearchRelatedEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -17,13 +15,17 @@ class CreateEntityConverter implements ParamConverterInterface
     protected $serializer;
     protected $entityManager;
     protected $relatedEntity;
+
     /**
      * @param SerializerInterface $serializer
+     * @param EntityManagerInterface $entityManager
+     * @param SearchRelatedEntity $relatedEntity
      */
     public function __construct(
         SerializerInterface $serializer, 
         EntityManagerInterface $entityManager,
-        SearchRelatedEntity $relatedEntity)
+        SearchRelatedEntity $relatedEntity
+        )
     {
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
@@ -56,8 +58,10 @@ class CreateEntityConverter implements ParamConverterInterface
             'json'
         );
         $relatedEntity = $this->relatedEntity->searchForeignKey($entity, $request);
-        dd($relatedEntity->getName());
-        $entity->setCategory($relatedEntity);
+        if($relatedEntity) {
+            $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
+            $entity->$setRelatedEntity($relatedEntity);
+        }
         $request->attributes->set($configuration->getName(), $entity);
     }
 }

@@ -2,8 +2,7 @@
 
 namespace App\Request\ParamConverter;
 
-use App\Entity\Category;
-use App\Entity\Presentation;
+use App\Services\SearchRelatedEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
@@ -16,14 +15,22 @@ class UpdateEntityConverter implements ParamConverterInterface
 {
     protected $serializer;
     protected $entityManager;
-    
+    protected $relatedEntity;
+
     /**
      * @param SerializerInterface $serializer
+     * @param EntityManagerInterface $entityManager
+     * @param SearchRelatedEntity $relatedEntity
      */
-    public function __construct(SerializerInterface $serializer, EntityManagerInterface $entityManager)
+    public function __construct(
+        SerializerInterface $serializer, 
+        EntityManagerInterface $entityManager,
+        SearchRelatedEntity $relatedEntity
+    )
     {
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
+        $this->relatedEntity = $relatedEntity;
     }
 
     /**
@@ -59,19 +66,10 @@ class UpdateEntityConverter implements ParamConverterInterface
             'json',
             [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
         );
-        if($configuration->getName() === "skill" || $configuration->getName() === "software") {
-            $categoryId = json_decode($request->getContent(), true)['category'];
-            $category = $this->entityManager
-                ->getRepository(Category::class)
-                ->find($categoryId);
-            $entity->setCategory($category);
-        }
-        if($configuration->getName() === "presentation") {
-            $presentationId = json_decode($request->getContent(), true)['presentation'];
-            $presentation = $this->entityManager
-                ->getRepository(Presentation::class)
-                ->find($presentationId);
-            $entity->setpresentation($presentation);
+        $relatedEntity = $this->relatedEntity->searchForeignKey($entity, $request);
+        if($relatedEntity) {
+            $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
+            $entity->$setRelatedEntity($relatedEntity);
         }
         $request->attributes->set($configuration->getName(), $entity);
     }
