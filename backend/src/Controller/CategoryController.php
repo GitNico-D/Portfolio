@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -19,8 +20,11 @@ class CategoryController extends AbstractController
 {
     /**
      * GET a Category resource List
-     * 
+     *
      * @Route("/categories", name="get_category_list", methods={"GET"})
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function readCategoryList(CustomHateoasLinks $customLink)
     {
@@ -36,9 +40,13 @@ class CategoryController extends AbstractController
 
     /**
      * GET a Category resource
-     *  
+     *
      * @Route("/categories/{id}", name="get_category", methods={"GET"})
      * @ParamConverter("category", class="App:category")
+     * @param Category $category
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function readCategory(Category $category, CustomHateoasLinks $customLink)
     {
@@ -48,10 +56,14 @@ class CategoryController extends AbstractController
 
     /**
      * CREATE a new Category resource
-     * 
+     *
      * @Route("/categories", name="create_category", methods={"POST"})
      * @ParamConverter("category", converter="create_entity_Converter")
      * @IsGranted("ROLE_ADMIN")
+     * @param Category $category
+     * @param EntityManagerInterface $em
+     * @param ErrorValidator $errorValidator
+     * @return JsonResponse
      */
     public function createCategory(
         Category $category,
@@ -74,10 +86,16 @@ class CategoryController extends AbstractController
 
     /**
      * UPDATE an existing Category resource
-     * 
+     *
      * @Route("/categories/{id}", name="update_category", methods={"PUT"})
      * @ParamConverter("category", converter="update_entity_converter")
      * @IsGranted("ROLE_ADMIN")
+     * @param Category $category
+     * @param EntityManagerInterface $em
+     * @param ErrorValidator $errorValidator
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function updateCategory(
         Category $category,
@@ -97,10 +115,13 @@ class CategoryController extends AbstractController
 
     /**
      * DELETE an existing Category resource
-     * 
+     *
      * @Route("/categories/{id}", name="delete_category", methods={"DELETE"})
      * @ParamConverter("category", class="App:category")
      * @IsGranted("ROLE_ADMIN")
+     * @param Category $category
+     * @param EntityManagerInterface $em
+     * @return JsonResponse
      */
     public function deleteCategory(Category $category, EntityManagerInterface $em)
     {

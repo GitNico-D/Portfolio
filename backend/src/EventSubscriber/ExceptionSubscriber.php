@@ -15,8 +15,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
      * Return JsonResponse depending of the Exception catch
      * An error 404 for no Route found
      * An error 400 for specific Exception like 'Json Syntax error'
-     * 
-     * @param Exception $event
+     *
+     * @param ExceptionEvent $event
      */
     public function onKernelException(ExceptionEvent $event)
     {

@@ -7,6 +7,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ErrorValidator
 {
     private $errorsViolations = [];
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
 
     public function __construct(ValidatorInterface $validator)
     {
@@ -15,8 +19,9 @@ class ErrorValidator
 
     /**
      * Return all validation errors when an entity is Created or Updated
-     * 
-     * @param $entity 
+     *
+     * @param $entity
+     * @return array
      */
     public function errorsViolations($entity)
     {

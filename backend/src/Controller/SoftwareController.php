@@ -6,6 +6,7 @@ use App\Entity\Software;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -19,8 +20,11 @@ class SoftwareController extends AbstractController
 {
     /**
      * GET a Software resources list
-     * 
+     *
      * @Route("/softwares", name="get_software_list", methods={"GET"})
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function readSoftwareList(CustomHateoasLinks $customLink)
     {
@@ -36,9 +40,13 @@ class SoftwareController extends AbstractController
 
     /**
      * GET a Software resource
-     * 
+     *
      * @Route("/softwares/{id}", name="get_software", methods={"GET"})
      * @ParamConverter("software", class="App:software")
+     * @param Software $software
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function readSoftware(Software $software, CustomHateoasLinks $customLink)
     {
@@ -46,12 +54,16 @@ class SoftwareController extends AbstractController
         return $this->json($softwareAndLinks, JsonResponse::HTTP_OK, [], ['groups' => 'category:read']);
     }
 
-    /** 
+    /**
      * CREATE a new Software resource
-     * 
+     *
      * @Route("/softwares", name="create_software", methods={"POST"})
      * @ParamConverter("software", converter="create_entity_Converter")
      * @IsGranted("ROLE_ADMIN")
+     * @param Software $software
+     * @param EntityManagerInterface $em
+     * @param ErrorValidator $errorValidator
+     * @return JsonResponse
      */
     public function createSoftware(
         Software $software,
@@ -75,10 +87,16 @@ class SoftwareController extends AbstractController
 
     /**
      * UPDATE an existing Software resource
-     * 
+     *
      * @Route("/softwares/{id}", name="update_software", methods={"PUT"})
      * @ParamConverter("software", converter="update_entity_converter")
      * @IsGranted("ROLE_ADMIN")
+     * @param Software $software
+     * @param EntityManagerInterface $em
+     * @param ErrorValidator $errorValidator
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function updateSoftware(
         Software $software,
@@ -98,10 +116,13 @@ class SoftwareController extends AbstractController
 
     /**
      * DELETE an existing Software resource
-     * 
+     *
      * @Route("/softwares/{id}", name="delete_software", methods={"DELETE"})
      * @ParamConverter("software", class="App:software")
      * @IsGranted("ROLE_ADMIN")
+     * @param Software $software
+     * @param EntityManagerInterface $em
+     * @return JsonResponse
      */
     public function deleteSoftware(Software $software, EntityManagerInterface $em)
     {

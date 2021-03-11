@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -18,8 +19,11 @@ class ProjectController extends AbstractController
 {
     /**
      * GET a Project resources list
-     * 
+     *
      * @Route("/projects", name="get_project_list", methods={"GET"})
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function readProjectList(CustomHateoasLinks $customLink): JsonResponse
     {
@@ -35,22 +39,30 @@ class ProjectController extends AbstractController
 
     /**
      * GET a Project resource
-     * 
+     *
      * @Route("/projects/{id}", name="get_project", methods={"GET"})
      * @ParamConverter("project", class="App:project")
+     * @param Project $project
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function readProject(Project $project, CustomHateoasLinks $customLink): JsonResponse
     {
         $projectAndLinks = $customLink->createLink($project);
         return $this->json($projectAndLinks, JsonResponse::HTTP_OK);
     }
-    
+
     /**
      * CREATE a new Project resource
-     * 
+     *
      * @Route("/projects", name="create_project", methods={"POST"})
      * @ParamConverter("project", converter="create_entity_Converter")
      * @IsGranted("ROLE_ADMIN")
+     * @param Project $project
+     * @param EntityManagerInterface $em
+     * @param ErrorValidator $errorValidator
+     * @return JsonResponse
      */
     public function createProject(
         Project $project,
@@ -73,10 +85,16 @@ class ProjectController extends AbstractController
 
     /**
      * UPDATE an existing Project resource
-     * 
-     * @Route("/projects/{id}", name="update_project", methods={"PUT"}) 
+     *
+     * @Route("/projects/{id}", name="update_project", methods={"PUT"})
      * @ParamConverter("project", converter="update_entity_converter")
      * @IsGranted("ROLE_ADMIN")
+     * @param Project $project
+     * @param EntityManagerInterface $em
+     * @param ErrorValidator $errorValidator
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function updateProject(
         Project $project,
