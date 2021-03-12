@@ -19,7 +19,7 @@ const actions = {
       }
     );
   },
-  logout({ commit }) {
+  logOut({ commit }) {
     AuthServices.logout();
     commit('logout');
   }

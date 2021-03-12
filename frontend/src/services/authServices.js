@@ -4,24 +4,24 @@ class AuthServices
 {
 	login(user)
 	{
-		return axios.post(
-			process.env.VUE_APP_API_URL + '/login_check',
-			{
+		console.log(user);
+		return axios
+			.post(process.env.VUE_APP_API_URL + '/login_check', {
 				email: user.email,
 				password: user.password
-			}
+			})
 			.then(response => {
-				if(response.data.accessToken) {
+				if(response.data.token) {
 					localStorage.setItem('user', JSON.stringify(response.data));
 				}
 				return response.data;
-			})
-		)
+			});
+		
 	}
 
 	logout() 
 	{
-			localStorage.removeItem('user');
+		localStorage.removeItem('user');
 	}
 }
 

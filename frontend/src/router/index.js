@@ -64,6 +64,20 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const publicPages = ['/login', '/', '/projects', '/presentation', '/skills', '/career'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('user');
+
+  // trying to access a restricted page + not logged in
+  // redirect to login page
+  if (authRequired && !loggedIn) {
+    next('/login');
+  } else {
+    next();
+  }
+});
+
+router.beforeEach((to, from, next) => {
   console.log('from', from.fullPath)
   console.log('going to', to.fullPath)
   if (to.query.wait) {

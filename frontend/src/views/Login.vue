@@ -6,55 +6,57 @@
 			<b-card title="Connexion">
 					<hr>
 				<b-card-body class="border-lg">
-					<b-form @submit.prevent="handleLogin">
-						<b-form-group id="input-group-1" label="Email" label-for="input-1">
-							<b-form-input 
-								id="input-1" 
-								v-model="user.email" 
-								v-validate="'required'"
-								type="email" 
-								name="email"
-								placeholder="Enter email" 
-								>
-							</b-form-input>
-							<b-alert 
-								v-if="errors.has('email')" 
-								variant="danger" 
-								show 
-								dismissible
-								>Un email est requis !</b-alert>
-						</b-form-group>
-					<b-form-group id="input-group-2" label="Mot de Passe" label-for="input-2" class="mb-5">
-							<b-form-input 
-								id="input-2" 
-								v-model="user.password" 
-								v-validate="'required'"
-								type="password"
-								name="password"
-								placeholder="Entrer mot de passe">
-							</b-form-input>
-							<b-alert 
-								v-if="errors.has('password')"
-								variant="danger" 
-								show 
-								dismissible
-								>Un mot de passe est requis !</b-alert>
-						</b-form-group>
-						<b-form-group>
-							<b-button block type="submit" variant="info" :disabled="loading">
-								<b-spinner v-show="loading" label="Spinning"></b-spinner>
-								<span>Se connecter</span>
-							</b-button>
-						</b-form-group>
-						<b-form-group>
-							<b-alert 
-								v-if="message"
-								variant="danger" 
-								show 
-								dismissible
-								>{{ message }}</b-alert>
-						</b-form-group>
-					</b-form>
+					<ValidationObserver ref="form" v-slot="{ }">
+						<form @submit.prevent="onSubmit">
+							<ValidationProvider :rules="{ required: true, email: true }" name="e-mail" v-slot="{ errors }">
+								<b-form-group id="input-group-1" label="Email" label-for="input-1">
+									<b-form-input 
+										id="input-1" 
+										v-model="user.email" 
+										type="email"
+										placeholder="Entrer email">
+									</b-form-input>
+									<b-alert  
+										variant="danger" 
+										v-if="errors[0]"
+										show>
+										{{ errors[0] }}
+									</b-alert>
+								</b-form-group>
+							</ValidationProvider>
+							<ValidationProvider rules="required" v-slot="{ errors }">
+								<b-form-group id="input-group-2" label="Mot de Passe" label-for="input-2" class="mb-5">
+									<b-form-input 
+										id="input-2" 
+										v-model="user.password" 
+										type="password"
+										name="password"
+										placeholder="Entrer mot de passe">
+									</b-form-input>
+									<b-alert 
+										variant="danger" 
+										v-if="errors[0]"
+										show>
+										{{ errors[0] }}
+									</b-alert>
+								</b-form-group>
+							</ValidationProvider>
+							<b-form-group>
+								<b-button block type="submit" variant="info" :disabled="loading">
+									<b-spinner v-show="loading" label="Spinning"></b-spinner>
+									<span>Se connecter</span>
+								</b-button>
+							</b-form-group>
+							<b-form-group>
+								<b-alert 
+									v-if="message"
+									variant="danger" 
+									show 
+									dismissible
+									>{{ message }}</b-alert>
+							</b-form-group>
+						</form>
+					</ValidationObserver>
 				</b-card-body>
 			</b-card>
 		</b-row>
@@ -65,22 +67,27 @@
 import BackgroundPage from '@/components/BackgroundPage.vue'
 // import Transition from '@/components/Transition.vue'
 // import errorRedirection from '@/services/errorRedirection'
-import User from '@/models/user'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { mapActions } from 'vuex'
 
 export default {
 	name: 'Login',
 	components: {
 		BackgroundPage,
+		ValidationProvider,
+		ValidationObserver
 		// Transition
 	},
 	data() {
 		return {
 			// showTransition: true,
-			// form: {
-				user: new User('', ''),
-				loading: false,
-				message: ''
-			// }
+			email: '',
+			user: {
+				email: '',
+				password: ''
+			},
+			loading: false,
+			message: ''
 		}
 	},
 	computed: {
@@ -94,53 +101,40 @@ export default {
 		}
 	},
 	methods: {
-		handleLogin() {
+		...mapActions([
+			'login'
+			]),
+		onSubmit() {
 			this.loading = true;
-			this.$validator.validateAll
+			this.$refs.form.validate()
 				.then(isValid => {
 					if(!isValid) {
 						this.loading = false;
 						return;
 					}
-
 					if(this.user.email && this.user.password) {
-						this.$store.dispatch('auth/login', this.user).then (
-							() => { 
-								this.$router.push('admin');
-							},
-							error => {
+						this.$store.dispatch('auth/login', this.user)
+							.then(() => {
+								this.$router.push('/admin');
+							})
+							.catch(() => {
 								this.loading =false;
-								this.message =
-								(error.response && error.response.data) || 
-								error.message || 
-								error.toString();
-							}
-						)
-					}
-				})
+								this.message = "Identifiants invalides !"
+								// this.message = error.message
+							})
+						}
+					})
+				}
 		}
+				
+		// },
 			// actionTransition () {
 			//     this.showTransition = true;
 			//     setTimeout(() => {
 			//         this.showTransition = false;
 			//     },1300);
-			// },
-		// onSubmit(event) {
-		// 	event.preventDefault()
-		// 	this.axios.post(process.env.VUE_APP_API_URL + '/login_check', {
-		// 		email: this.email,
-		// 		username: this.email,
-		// 		password: this.password
-		// 	})
-		// 	.then(function (response) {
-		// 		console.log(response);
-		// 	})
-		// 	.catch(function (error) {
-		// 		errorRedirection(error);
-		// 		console.log(error);
-		// 	})
-		// },        
-	},
+			// },       
+	// },
     // mounted() {
     //     setTimeout(() => {
     //         this.showTransition = false;
