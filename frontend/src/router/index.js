@@ -5,9 +5,9 @@ import Project from "../views/Project.vue";
 import Skill from "../views/Skill.vue";
 import Presentation from "../views/Presentation.vue";
 import Career from "../views/Career.vue";
-import ErrorView from '../views/ErrorView.vue';
-import Login from '../views/Login.vue'
-import Admin from '../views/Admin.vue'
+import ErrorView from "../views/ErrorView.vue";
+import Login from "../views/Login.vue";
+import Admin from "../views/Admin.vue";
 
 Vue.use(VueRouter);
 
@@ -59,36 +59,43 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   routes
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/', '/projects', '/presentation', '/skills', '/career'];
+  const publicPages = [
+    "/login",
+    "/",
+    "/projects",
+    "/presentation",
+    "/skills",
+    "/career"
+  ];
   const authRequired = !publicPages.includes(to.path);
-  const loggedIn = localStorage.getItem('user');
+  const loggedIn = localStorage.getItem("user");
 
   // trying to access a restricted page + not logged in
   // redirect to login page
   if (authRequired && !loggedIn) {
-    next('/login');
+    next("/login");
   } else {
     next();
   }
 });
 
 router.beforeEach((to, from, next) => {
-  console.log('from', from.fullPath)
-  console.log('going to', to.fullPath)
+  console.log("from", from.fullPath);
+  console.log("going to", to.fullPath);
   if (to.query.wait) {
-    setTimeout(() => next(), 100)
+    setTimeout(() => next(), 100);
   } else if (to.query.redirect) {
-    next(to.query.redirect)
+    next(to.query.redirect);
   } else if (to.query.abort) {
-    next(false)
+    next(false);
   } else {
-    next()
+    next();
   }
-})
+});
 
 export default router;

@@ -1,29 +1,28 @@
-import AuthServices from '../../services/authServices'
+import AuthServices from "../../services/authServices";
 
-const user = JSON.parse(localStorage.getItem('user'));
-const state = 
-    user ? { status: { loggedIn: true },user } : { status: { loggedIn: false}, user: null };
-
+const user = JSON.parse(localStorage.getItem("user"));
+const state = user
+  ? { status: { loggedIn: true }, user }
+  : { status: { loggedIn: false }, user: null };
 
 const actions = {
   login({ commit }, user) {
-    return AuthServices.login(user)
-    .then (
+    return AuthServices.login(user).then(
       user => {
-        commit('loginSuccess', user);
+        commit("loginSuccess", user);
         return Promise.resolve(user);
       },
       error => {
-        commit('loginFailure');
+        commit("loginFailure");
         return Promise.reject(error);
       }
     );
   },
-  logOut({ commit }) {
+  logout({ commit }) {
     AuthServices.logout();
-    commit('logout');
+    commit("logout");
   }
-}
+};
 
 const mutations = {
   loginSuccess(state, user) {
@@ -38,11 +37,11 @@ const mutations = {
     state.status.loggedIn = false;
     state.user = null;
   }
-}
+};
 
 export default {
-    namespaced: true,
-    state, 
-    actions, 
-    mutations
-}
+  namespaced: true,
+  state,
+  actions,
+  mutations
+};
