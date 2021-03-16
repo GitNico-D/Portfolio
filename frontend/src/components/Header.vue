@@ -10,7 +10,9 @@
           class="p-3"
           :style="{ '--color': color }"
         >
-          <router-link to="/"> <font-awesome-icon icon="home" /> </router-link
+          <router-link to="/" v-b-popover.hover.leftbottom="'Accueil'">
+            <font-awesome-icon icon="home" /> 
+          </router-link
           ><span class="px-3" :style="{ '--color': color }"> | </span>
           <router-link to="/presentation">Présentation</router-link
           ><span class="px-3" :style="{ '--color': color }"> | </span>
@@ -82,20 +84,7 @@ export default {
         color: $white;
         text-transform: uppercase;
         transition: ease-out 0.2s;
-        animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.61, 0.355, 1)
-          both;
-        &:nth-child(1) {
-          animation-delay: 1.2s;
-        }
-        &:nth-child(3) {
-          animation-delay: 1.4s;
-        }
-        &:nth-child(5) {
-          animation-delay: 1.4s;
-        }
-        &:nth-child(7) {
-          animation-delay: 1.2s;
-        }
+        animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 1.3s both;
         &::after {
           position: absolute;
           content: " ";

@@ -1,5 +1,31 @@
 <template>
   <b-container fluid>
+      <b-link
+        v-if="loggedIn"
+        to="/admin"
+        type="button"
+        class="btn btn-admin"
+        v-b-popover.hover.leftbottom="'Vers page administrateur'"
+      >
+        <font-awesome-icon icon="user-shield" />
+      </b-link>
+      <b-link
+        to="/login"
+        v-if="!loggedIn"
+        type="button"
+        class="btn btn-login"
+        v-b-popover.hover.rightbottom="'Connexion'"
+      >
+        <font-awesome-icon icon="sign-out-alt" /> </b-link>
+      <b-button
+        to=""
+        v-if="loggedIn"
+        @click.prevent="logOut"
+        class="btn btn-logout"
+        v-b-popover.hover.rightbottom="'Déconnexion'"
+      >
+        <font-awesome-icon icon="sign-in-alt" />
+      </b-button>
     <b-row>
       <div class="circle_box">
         <div class="circle circle-blue"></div>
@@ -73,6 +99,14 @@ export default {
       setTimeout(() => {
         this.showTransition = false;
       }, 1300);
+    },
+    logOut() {
+      this.$store.dispatch("auth/logout");
+    }
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
     }
   },
   created() {
@@ -137,6 +171,36 @@ export default {
           background-color: $green !important;
           box-shadow: 0 0 10px $white !important;
         }
+      }
+    }
+  }
+  .btn {
+    &-admin {
+      color: $green;
+      background-color: transparent;
+      &:hover {
+        color: $white !important;
+        background-color: $green !important;
+        box-shadow: 0 0 10px $white !important;
+      }
+    }
+    &-login {
+      color: $green;
+      background-color: transparent;
+      &:hover {
+        color: $white !important;
+        background-color: $green !important;
+        box-shadow: 0 0 10px $white !important;
+      }
+    }
+    &-logout {
+      color: $red;
+      border: none;
+      background-color: transparent;
+      &:hover {
+        color: $white !important;
+        background-color: $red !important;
+        box-shadow: 0 0 10px $white !important;
       }
     }
   }
