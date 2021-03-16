@@ -8,7 +8,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav
           class="p-3"
-          :style="{ '--color': color, '--color': color }"
+          :style="{ '--color': color }"
         >
           <router-link to="/"> <font-awesome-icon icon="home" /> </router-link
           ><span class="px-3" :style="{ '--color': color }"> | </span>
