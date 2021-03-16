@@ -6,6 +6,8 @@ import Skill from "../views/Skill.vue";
 import Presentation from "../views/Presentation.vue";
 import Career from "../views/Career.vue";
 import ErrorView from "../views/ErrorView.vue";
+import Login from "../views/Login.vue";
+import Admin from "../views/Admin.vue";
 
 Vue.use(VueRouter);
 
@@ -41,6 +43,16 @@ const routes = [
     component: ErrorView
   },
   {
+    path: "/login",
+    name: "Login",
+    component: Login
+  },
+  {
+    path: "/admin",
+    name: "Admin",
+    component: Admin
+  },
+  {
     path: "*",
     redirect: "/ErrorView/404"
   }
@@ -49,6 +61,27 @@ const routes = [
 const router = new VueRouter({
   mode: "history",
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  const publicPages = [
+    "/login",
+    "/",
+    "/projects",
+    "/presentation",
+    "/skills",
+    "/career"
+  ];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem("user");
+
+  // trying to access a restricted page + not logged in
+  // redirect to login page
+  if (authRequired && !loggedIn) {
+    next("/login");
+  } else {
+    next();
+  }
 });
 
 router.beforeEach((to, from, next) => {
