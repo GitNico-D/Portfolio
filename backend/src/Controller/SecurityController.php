@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,10 +16,15 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @Route("/api")
  */
 class SecurityController extends AbstractController
-{    
+{
     /**
      * @Route("/register", name="register", methods={"POST"})
      * @ParamConverter("user", converter="create_entity_Converter")
+     * @param User $user
+     * @param EntityManagerInterface $entityManager
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param ErrorValidator $errorValidator
+     * @return JsonResponse
      */
     public function register(
         User $user,
@@ -40,7 +46,7 @@ class SecurityController extends AbstractController
                     ["Location" => $this->generateUrl("get_project", ["id" => $user->getId()])]
                 );
             }
-        } catch (\Exception $error) {
+        } catch (Exception $error) {
             $error = ['Message' => 'Email or Username already used'];
             return $this->json($error, JsonResponse::HTTP_BAD_REQUEST);
         }
@@ -49,6 +55,8 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="login", methods={"POST"})
      * @ParamConverter("user", converter="create_entity_Converter")
+     * @param User $user
+     * @return JsonResponse
      */
     public function login(User $user)
     {

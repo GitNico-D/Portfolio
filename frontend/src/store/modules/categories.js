@@ -1,39 +1,40 @@
-import axios from 'axios'
-import errorRedirection from '../../services/errorRedirection'
+import axios from "axios";
+import errorRedirection from "../../services/errorRedirection";
 
-const headers = { "Content-Type": "application/json" }
+const headers = { "Content-Type": "application/json" };
 
 const state = () => ({
-    categories: [],
-})
+  categories: []
+});
 
 const getters = {
-    allCategories: (state) => state.categories
-}
+  allCategories: state => state.categories
+};
 
 const actions = {
-    getAllCategories ({ commit }) {
-        axios.get(process.env.VUE_APP_API_URL + '/categories', {
-            headers: headers
-        })
-        .then(response => {
-            commit('ADD_CATEGORIES', response.data);
-        })
-        .catch(error => { 
-            errorRedirection(error);
-        });
-    }
-}
+  getAllCategories({ commit }) {
+    axios
+      .get(process.env.VUE_APP_API_URL + "/categories", {
+        headers: headers
+      })
+      .then(response => {
+        commit("ADD_CATEGORIES", response.data);
+      })
+      .catch(error => {
+        errorRedirection(error);
+      });
+  }
+};
 
 const mutations = {
-    ADD_CATEGORIES(state, categories) {
-        state.categories = categories
-    }
-}
+  ADD_CATEGORIES(state, categories) {
+    state.categories = categories;
+  }
+};
 
 export default {
-    state,
-    getters,
-    actions,
-    mutations
+  state,
+  getters,
+  actions,
+  mutations
 };

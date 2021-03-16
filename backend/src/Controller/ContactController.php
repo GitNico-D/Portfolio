@@ -6,6 +6,7 @@ use App\Entity\Contact;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -19,16 +20,18 @@ class ContactController extends AbstractController
 {
     /**
      * GET a Contact resource List
-     * 
+     *
      * @Route("/contacts", name="get_contact_list", methods={"GET"})
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function readContactList(CustomHateoasLinks $customLink)
     {
         $contacts = $this->getDoctrine()
             ->getRepository(Contact::class)
             ->findAll();
-        foreach($contacts as $contact)
-        {
+        foreach ($contacts as $contact) {
             $contactsAndLinks [] = $customLink->createLink($contact);
         }
         return $this->json($contactsAndLinks, JsonResponse::HTTP_OK);
@@ -36,11 +39,15 @@ class ContactController extends AbstractController
 
     /**
      * GET a Contacts resource
-     *  
+     *
      * @Route("/contacts/{id}", name="get_contact", methods={"GET"})
      * @ParamConverter("contact", class="App:contact")
+     * @param Contact $contact
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
-    public function readcontacts(Contact $contact, CustomHateoasLinks $customLink)
+    public function readContacts(Contact $contact, CustomHateoasLinks $customLink)
     {
         $contactAndLinks = $customLink->createLink($contact);
         return $this->json($contactAndLinks, JsonResponse::HTTP_OK, [], ['groups' => 'presentation:read']);
@@ -48,10 +55,14 @@ class ContactController extends AbstractController
 
     /**
      * CREATE a new Contact resource
-     * 
+     *
      * @Route("/contacts", name="create_contact", methods={"POST"})
      * @ParamConverter("contact", converter="create_entity_Converter")
      * @IsGranted("ROLE_ADMIN")
+     * @param Contact $contact
+     * @param EntityManagerInterface $em
+     * @param ErrorValidator $errorValidator
+     * @return JsonResponse
      */
     public function createContact(
         Contact $contact,
@@ -75,10 +86,16 @@ class ContactController extends AbstractController
 
     /**
      * UPDATE an existing Contact resource
-     * 
+     *
      * @Route("/contacts/{id}", name="update_contact", methods={"PUT"})
      * @ParamConverter("contact", converter="update_entity_converter")
      * @IsGranted("ROLE_ADMIN")
+     * @param Contact $contact
+     * @param EntityManagerInterface $em
+     * @param ErrorValidator $errorValidator
+     * @param CustomHateoasLinks $customLink
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function updateContact(
         Contact $contact,
@@ -98,10 +115,13 @@ class ContactController extends AbstractController
 
     /**
      * DELETE an existing Contact resource
-     * 
+     *
      * @Route("/contacts/{id}", name="delete_contact", methods={"DELETE"})
      * @ParamConverter("contact", class="App:contact")
      * @IsGranted("ROLE_ADMIN")
+     * @param Contact $contact
+     * @param EntityManagerInterface $em
+     * @return JsonResponse
      */
     public function deleteContact(Contact $contact, EntityManagerInterface $em)
     {

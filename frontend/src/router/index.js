@@ -5,7 +5,7 @@ import Project from "../views/Project.vue";
 import Skill from "../views/Skill.vue";
 import Presentation from "../views/Presentation.vue";
 import Career from "../views/Career.vue";
-import ErrorView from '../views/ErrorView.vue';
+import ErrorView from "../views/ErrorView.vue";
 
 Vue.use(VueRouter);
 
@@ -47,22 +47,22 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   routes
 });
 
 router.beforeEach((to, from, next) => {
-  console.log('from', from.fullPath)
-  console.log('going to', to.fullPath)
+  console.log("from", from.fullPath);
+  console.log("going to", to.fullPath);
   if (to.query.wait) {
-    setTimeout(() => next(), 100)
+    setTimeout(() => next(), 100);
   } else if (to.query.redirect) {
-    next(to.query.redirect)
+    next(to.query.redirect);
   } else if (to.query.abort) {
-    next(false)
+    next(false);
   } else {
-    next()
+    next();
   }
-})
+});
 
 export default router;
