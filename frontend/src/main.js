@@ -9,9 +9,14 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 import Vuex from "vuex";
 import store from "./store";
-import { ValidationObserver, ValidationProvider, extend, localize } from 'vee-validate';
-import fr from 'vee-validate/dist/locale/fr.json';
-import * as rules from 'vee-validate/dist/rules';
+import {
+  ValidationObserver,
+  ValidationProvider,
+  extend,
+  localize
+} from "vee-validate";
+import fr from "vee-validate/dist/locale/fr.json";
+import * as rules from "vee-validate/dist/rules";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
@@ -24,12 +29,12 @@ import {
 Object.keys(rules).forEach(rule => {
   extend(rule, rules[rule]);
 });
-localize('fr', fr);
+localize("fr", fr);
 
 library.add(faHome, faUserShield, faSignInAlt, faSignOutAlt);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
-Vue.component('ValidationObserver', ValidationObserver);
-Vue.component('ValidationProvider', ValidationProvider);
+Vue.component("ValidationObserver", ValidationObserver);
+Vue.component("ValidationProvider", ValidationProvider);
 
 Vue.use(BootstrapVue);
 Vue.use(VueAxios, axios);
