@@ -7,11 +7,11 @@
         ><font-awesome-icon icon="user-shield" size="4x" class="my-3" />
         <hr />
         <b-card-body>
-          <ValidationObserver ref="form" v-slot="{}">
-            <form @submit.prevent="onSubmit">
+          <ValidationObserver ref="form" v-slot="{ handleSubmit }">
+            <form @submit.prevent="handleSubmit(onSubmit)">
               <ValidationProvider
                 ref="email"
-                :rules="{ required: true, email: true }"
+                rules="required|email"
                 name="Email"
                 v-slot="{ errors }"
               >
@@ -33,13 +33,14 @@
                     v-if="errors[0]"
                     v-text="errors[0]"
                     show
+                    dismissible
                   >
                   </b-alert>
                 </b-form-group>
               </ValidationProvider>
               <ValidationProvider
-                :rules="{ required: true }"
-                name="password"
+                rules="required"
+                name="Mot de passe"
                 v-slot="{ errors }"
               >
                 <b-form-group
@@ -61,6 +62,7 @@
                     v-if="errors[0]"
                     v-text="errors[0]"
                     show
+                    dismissible
                   >
                   </b-alert>
                 </b-form-group>
