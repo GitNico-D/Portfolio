@@ -13,16 +13,33 @@ export default {
       return this.$store.state.auth.status.loggedIn;
     }
   },
-  beforeCreate() {
+  methods: {
+    dateDiff(date1, date2) {
+      var diff = {}                           
+      var tmp = date2 - date1;
+      tmp = Math.floor(tmp/1000);             
+      diff.sec = tmp % 60;                    
+
+      tmp = Math.floor((tmp-diff.sec)/60);   
+      diff.min = tmp % 60;                   
+  
+      tmp = Math.floor((tmp-diff.min)/60);    
+      diff.hour = tmp % 24;                   
+  
+      tmp = Math.floor((tmp-diff.hour)/24);
+      diff.day = tmp;
+  
+      return diff;
+    }
+  },
+  mounted() {
     if(this.loggedIn) {
       let decodedToken = jwt_decode(localStorage.getItem("user"));
       let tokenDateExpiration = new Date(decodedToken.exp * 1000);
       let actualDate = new Date();
-      let timeDifference = tokenDateExpiration - actualDate;
-      console.log(new Date(timeDifference).getHours() + " heures");
-      if (timeDifference === 0) {
+      let expTime = this.dateDiff(actualDate, tokenDateExpiration)
+      if (expTime.sec <= 0) {
         this.$store.dispatch("auth/logout");
-        this.$router.push("/login");
       }
     }
   }
