@@ -2,18 +2,21 @@
   <b-container fluid>
     <Header title="Page Administrateur" color="#485DA6" class="header" />
     <BackgroundPage circleColor="#485DA6" />
+    <SidebarAdmin />
   </b-container>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
 import BackgroundPage from "@/components/BackgroundPage.vue";
+import SidebarAdmin from "@/components/SidebarAdmin.vue";
 import jwt_decode from "jwt-decode";
 
 export default {
   components: {
     Header,
-    BackgroundPage
+    BackgroundPage,
+    SidebarAdmin
   },
   computed: {
     loggedIn() {
@@ -54,4 +57,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.container-fluid {
+  height: 100vh;
+}
+</style>
