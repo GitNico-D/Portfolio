@@ -3,6 +3,7 @@
     <Header title="Page Administrateur" color="#485DA6" class="header" />
     <BackgroundPage circleColor="#485DA6" />
     <SidebarAdmin />
+    <ProjectForm />
   </b-container>
 </template>
 
@@ -10,13 +11,15 @@
 import Header from "@/components/Header.vue";
 import BackgroundPage from "@/components/BackgroundPage.vue";
 import SidebarAdmin from "@/components/SidebarAdmin.vue";
+import ProjectForm from "@/components/ProjectForm.vue";
 import jwt_decode from "jwt-decode";
 
 export default {
   components: {
     Header,
     BackgroundPage,
-    SidebarAdmin
+    SidebarAdmin,
+    ProjectForm
   },
   computed: {
     loggedIn() {

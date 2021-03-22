@@ -23,7 +23,8 @@ import {
   faHome,
   faUserShield,
   faSignInAlt,
-  faSignOutAlt
+  faSignOutAlt,
+  faAngleDoubleRight
 } from "@fortawesome/free-solid-svg-icons";
 
 Object.keys(rules).forEach(rule => {
@@ -31,7 +32,7 @@ Object.keys(rules).forEach(rule => {
 });
 localize("fr", fr);
 
-library.add(faHome, faUserShield, faSignInAlt, faSignOutAlt);
+library.add(faHome, faUserShield, faSignInAlt, faSignOutAlt, faAngleDoubleRight);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.component("ValidationObserver", ValidationObserver);
 Vue.component("ValidationProvider", ValidationProvider);
