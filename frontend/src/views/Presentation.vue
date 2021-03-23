@@ -129,6 +129,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container-fluid {
+  background-color: $dark-gray;
+  perspective: 1000px;
+  position: relative;
+}
 .header {
   height: 12vh;
 }

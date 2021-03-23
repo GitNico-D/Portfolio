@@ -169,6 +169,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container-fluid {
+  background-color: $dark-gray;
+  perspective: 1000px;
+  position: relative;
+  min-height: 100vh;
+}
 hr {
   background: $white;
 }
@@ -201,5 +207,8 @@ hr {
     bottom: -15%;
     transform: translateX(-50%) scale(0.8);
   }
+}
+.row {
+  height: 100vh;
 }
 </style>

@@ -118,10 +118,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container-fluid {
   background-color: $dark-gray;
-  width: 100vh;
   position: relative;
   perspective: 1000px;
   overflow: hidden;

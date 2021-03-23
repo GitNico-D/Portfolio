@@ -73,6 +73,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container-fluid {
+  background-color: $dark-gray;
+  position: relative;
+  perspective: 1000px;
+}
 .bottom {
   height: 16vh !important;
   position: relative;

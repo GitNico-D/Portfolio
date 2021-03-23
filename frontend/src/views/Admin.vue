@@ -60,9 +60,12 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container-fluid {
   min-height: 100vh;
+  background-color: $dark-gray;
+  position: relative;
+  perspective: 1000px;
   .row {
     height: unset;
   }

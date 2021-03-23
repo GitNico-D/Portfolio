@@ -76,6 +76,7 @@ export default {
 .container-fluid {
   position: relative;
   background-color: $dark-gray;
+  perspective: 1000px;
   .back {
     position: relative;
     height: 10vh;
