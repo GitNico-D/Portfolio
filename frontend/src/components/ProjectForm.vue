@@ -2,116 +2,268 @@
   <b-row class="justify-content-center my-4">
     <b-col cols="8">
       <b-tabs
-        active-nav-item-class="font-weight-bold text-sucess"
-        active-tab-class="font-weight-bold text-left text-white"
-        content-class="mt-3"
+        active-nav-item-class="font-weight-bold text-uppercase text-success"
+        active-tab-class="text-left text-white"
         align="center"
+        class="mt-5"
+        fill
       >
-        <b-tab title="Ajouter un nouveau projet" active>
-          <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-            <b-form-group id="title" label="Titre du projet" label-for="input-title" class="mt-5">
-              <b-form-input 
-                id="input-title" 
-                v-model="form.title" 
-                type="email" 
-                placeholder="Entrer titre" 
-                required>
-              </b-form-input>
-            </b-form-group>
-            <b-form-group id="textarea" label="Description du projet" label-for="input-textarea" class="mt-5">
-              <b-form-textarea
-                id="input-textarea"
-                v-model="form.description"
-                type="text"
-                placeholder="Entrer description"
-                required
-              ></b-form-textarea>
-            </b-form-group>
-            <b-form-group id="url" label="Url du projet" label-for="input-url" class="mt-5">
-              <b-form-input
-                id="input-url"
-                v-model="form.name"
-                placeholder="Enter url"
-                required
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group id="img" label="Image de présentation du projet" label-for="input-img" class="mt-5">
-              <b-form-file
-                id="input-img"
-                v-model="form.imgStatic"
-                :state="Boolean(form.imgStatic)"
-                placeholder="Choisir un fichier ou glisser-déposer ici"
-                drop-placeholder="Choisir un fichier"
-              ></b-form-file>
-            <div class="mt-3">Fichier sélectionné: {{ form.imgStatic ? form.imgStatic.name : '' }}</div>
-            </b-form-group>
-            <b-form-group id="description-img" label="Description de l'image du projet" label-for="input-description-img" class="mt-5">
-              <b-form-input 
-                id="input-description-img" 
-                v-model="form.descriptionImg" 
-                type="text" 
-                placeholder="Entrer description" 
-                required>
-              </b-form-input>
-            </b-form-group>
-            <b-form-group id="creation-date" label="Date de création du projet" label-for="input-creation-date" class="mt-5">
-              <b-form-datepicker id="creation-date" v-model="form.creationDate" class="mb-2"></b-form-datepicker>
-              <p>Date de création: '{{ form.creationDate }}'</p>
-            </b-form-group>
-            <b-button class="text-center" type="submit" variant="primary">Submit</b-button>
-            <b-button type="reset" variant="danger">Reset</b-button>
-          </b-form>
+        <b-tab class="mt-5 justify-content-center">
+          <template #title>
+            <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
+            <span>Ajouter un nouveau projet</span>
+          </template> 
+          <ValidationObserver ref="addForm" v-slot="{ handleSubmit }">
+            <b-form @submit.prevent="handleSubmit(onSubmit)" @reset="onReset" >
+              <ValidationProvider ref="name" rules="" name="Titre" v-slot="{ errors }">
+                <b-form-group id="name" label="Titre du projet" label-for="input-name" class="mt-4">
+                  <b-form-input 
+                    id="input-name" 
+                    v-model="newProject.name" 
+                    placeholder="Entrer nom du projet">
+                  </b-form-input>
+                  <b-alert
+                    variant="danger"
+                    v-if="errors[0]"
+                    v-text="errors[0]"
+                    show>
+                  </b-alert>
+                </b-form-group>
+              </ValidationProvider>
+              <ValidationProvider ref="description" rules="" name="Description" v-slot="{ errors }">
+                <b-form-group id="textarea" label="Description du projet" label-for="input-textarea" class="mt-4">
+                  <b-form-textarea
+                    id="input-textarea"
+                    v-model="newProject.description"
+                    placeholder="Entrer description"
+                    size="lg">
+                    </b-form-textarea>
+                  <b-alert
+                    variant="danger"
+                    v-if="errors[0]"
+                    v-text="errors[0]"
+                    show
+                    dismissible>
+                  </b-alert>
+                </b-form-group>
+              </ValidationProvider>
+              <ValidationProvider ref="url" rules="" name="Url" v-slot="{ errors }">
+                <b-form-group id="url" label="Url du projet" label-for="input-url" class="mt-4">
+                  <b-form-input
+                    id="input-url"
+                    v-model="newProject.url"
+                    placeholder="Entrer url du projet">
+                  </b-form-input>
+                  <b-alert
+                    variant="danger"
+                    v-if="errors[0]"
+                    v-text="errors[0]"
+                    show
+                    dismissible>
+                  </b-alert>
+                </b-form-group>
+              </ValidationProvider>
+              <!-- <ValidationProvider ref="img" rules="" name="Image" v-slot="{ errors }">
+                <b-form-group id="img" label="Image de présentation du projet" label-for="input-img" class="mt-4">
+                  <b-form-file
+                    id="input-img"
+                    v-model="newProject.imgStatic"
+                    :state="Boolean(newProject.imgStatic)"
+                    browse-text="Parcourir"
+                    placeholder="Choisir un fichier ou glisser-déposer ici"
+                    drop-placeholder="Choisir un fichier"
+                  ></b-form-file>
+                <div class="mt-3">Fichier sélectionné: {{ newProject.imgStatic ? newProject.imgStatic.name : '' }}</div>
+                </b-form-group>
+                <b-alert
+                  variant="danger"
+                  v-if="errors[0]"
+                  v-text="errors[0]"
+                  show
+                  dismissible>
+                </b-alert>
+              </ValidationProvider> -->
+              <ValidationProvider ref="description-image" rules="" name="Description de l'image" v-slot="{ errors }">
+                <b-form-group id="altStatic" label="Description de l'image du projet" label-for="input-altStatic" class="mt-4">
+                  <b-form-input 
+                    id="input-altStatic" 
+                    v-model="newProject.altStatic" 
+                    placeholder="Entrer description" 
+                    >
+                  </b-form-input>
+                  <b-alert
+                    variant="danger"
+                    v-if="errors[0]"
+                    v-text="errors[0]"
+                    show
+                    dismissible>
+                  </b-alert>
+                </b-form-group>
+              </ValidationProvider>
+              <ValidationProvider ref="creation-date" rules="" name="Date de création " v-slot="{ errors }">
+                <b-form-group id="creation-date" label="Date de création du projet" label-for="input-creation-date" class="mt-4">
+                  <b-form-datepicker id="creation-date" v-model="newProject.creationDate" class="mb-2"></b-form-datepicker>
+                  <p>Date de création: '{{ newProject.creationDate }}'</p>
+                </b-form-group>
+                <b-alert
+                  variant="danger"
+                  v-if="errors[0]"
+                  v-text="errors[0]"
+                  show
+                  dismissible>
+                </b-alert>
+              </ValidationProvider>
+              <div class="d-flex justify-content-center">
+                <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading">
+                  <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
+                  <span class="pl-2 pb-2">Ajouter projet</span>
+                </b-button>
+                <b-button type="reset" variant="danger" class="m-3 p-3">
+                  Réinitialiser formulaire
+                </b-button>
+              </div>
+              <b-alert
+                variant="success"
+                v-show="successMessage"
+                v-text="successMessage"
+                show>
+              </b-alert>
+              <b-alert
+                variant="danger"
+                v-show="errorMessage"
+                v-text="errorMessage"
+                show>
+              </b-alert>
+            </b-form>
+          </ValidationObserver>
         </b-tab>
-        <b-tab title="Modifier un projet">
+        <b-tab class="mt-3 justify-content-center">
+          <template #title>
+            <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
+            <span>Modifier un projet</span>
+          </template> 
+          <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }">
+            <b-form @submit.prevent="handleSubmit(modifyProject)" @reset="onReset">
+              <ValidationProvider ref="id" rules="required|numeric" name="ID du projet" v-slot="{ errors }">
+                <b-form-group id="id" label="ID du projet" label-for="input-id" class="mt-4">
+                  <b-form-input 
+                    id="input-id" 
+                    v-model="modifyForm.id"
+                    placeholder="Entrer ID" 
+                    required>
+                  </b-form-input>
+                  <b-alert
+                    variant="danger"
+                    v-if="errors[0]"
+                    v-text="errors[0]"
+                    show
+                    dismissible>
+                  </b-alert>
+                </b-form-group>
+              </ValidationProvider>
+            </b-form>
+          </ValidationObserver>
         </b-tab>
       </b-tabs>
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ form }}</pre>
+      <b-card class="mt-3" header="New Project">
+        <pre class="m-0">{{ newProject }}</pre>
       </b-card>
     </b-col>
   </b-row>
 </template>
 
 <script>
-  export default {
-    name: "ProjectForm",
-    data() {
-      return {
-        form: {
-          title: '',
-          description: '',
-          imgStatic: null,
-          descriptionImg: '',
-          creationDate: '',
-          value: ''
-        },
-        show: true
-      }
-    },
-    methods: {
-      onSubmit(event) {
-        event.preventDefault()
-        alert(JSON.stringify(this.form))
+import { ValidationProvider, ValidationObserver } from "vee-validate";
+import { mapActions, mapGetters } from "vuex";
+
+export default {
+  name: "ProjectForm",
+  data() {
+    return {
+      newProject: {
+        name: '',
+        description: '',
+        // imgStatic: null,
+        altStatic: '',
+        creationDate: ''
       },
-      onReset(event) {
-        event.preventDefault()
-        // Reset our form values
-        this.form.title = ''
-        this.form.description = ''
-        this.form.imgStatic = null
-        this.form.descriptionImg = ''
-        this.form.creationDate = ''
-        this.show = false
-        this.$nextTick(() => {
-          this.show = true
-        })
-      }
+      loading: false,
+      modifyForm: {
+        id: ''
+      },
+      successMessage: '',
+      errorMessage: ''
     }
-  }
+  },
+  components: { 
+    ValidationProvider,
+    ValidationObserver
+  },
+  methods: {
+    ...mapActions(["addProject"]),
+    onSubmit() {
+      this.loading = true;
+      this.$refs.addForm.validate()
+        .then(isValid => {
+          if (!isValid) {
+            this.loading = false;
+            return
+          }
+          if(this.newProject) {
+            this.addProject(this.newProject)
+            .then(() => {
+              this.successMessage = "Le projet a été ajouté !";
+              this.loading = false;            
+            })
+            .catch((error) => {
+              
+              console.log(JSON.stringify(error))
+              // error.forEach(error => {
+              //   console.log(error);
+                
+              // });
+              this.errorMessage = error;
+              this.loading = false;  
+            })
+          }
+      });
+    },
+    onReset(event) {
+      event.preventDefault()
+      this.newProject.name = ''
+      this.newProject.description = ''
+      // this.newProject.imgStatic = null
+      this.newProject.altStatic = ''
+      this.newProject.creationDate = ''
+      this.errorMessage = ''
+    }
+  },
+  computed: {
+    ...mapGetters([])
+  },
+}
 </script>
 
 <style lang="scss" scoped>
+.card {
+  &-body {
+    background-color: transparent; 
+  }
+}
 .row {
   height: unset;
+}
+form {
+  width: 90%;
+  margin: auto;
+  padding: 1.5rem;
+  border:  1px solid $white;
+}
+.nav-link {
+  color: $white!important;
+}
+.tabs {
+  font-family: "Oswald", sans-serif;
+  letter-spacing: 1px;
 }
 </style>
