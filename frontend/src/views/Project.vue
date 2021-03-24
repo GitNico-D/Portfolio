@@ -4,7 +4,7 @@
     <Header title="Projets" color="#6d327c" />
     <BackgroundPage circleColor="#6d327c" />
     <Transition v-show="showTransition" directionAnimation="right" />
-    <b-row v-if="!errors" class="cards m-auto">
+    <b-row class="cards m-auto">
       <ProjectCard
         v-for="project in allProjects"
         :key="project.id"
@@ -46,9 +46,7 @@ export default {
   },
   data() {
     return {
-      showTransition: true,
-      projects: null,
-      errors: null
+      showTransition: true
     };
   },
   methods: {
