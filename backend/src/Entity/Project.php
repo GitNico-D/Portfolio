@@ -49,26 +49,12 @@ class Project
     private $img_static;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(min="2", max="255")
-     */
-    private $img_hover;
-
-    /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank
      * @Assert\Length(min="2", max="100")
      */
     private $alt_static;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     * @Assert\NotBlank
-     * @Assert\Length(min="2", max="100")
-     */
-    private $alt_hover;
-  
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank
@@ -128,18 +114,6 @@ class Project
         return $this;
     }
 
-    public function getImgHover(): ?string
-    {
-        return $this->img_hover;
-    }
-
-    public function setImgHover(string $img_hover): self
-    {
-        $this->img_hover = $img_hover;
-
-        return $this;
-    }
-
     public function getAltStatic(): ?string
     {
         return $this->alt_static;
@@ -148,18 +122,6 @@ class Project
     public function setAltStatic(string $alt_static): self
     {
         $this->alt_static = $alt_static;
-
-        return $this;
-    }
-
-    public function getAltHover(): ?string
-    {
-        return $this->alt_hover;
-    }
-
-    public function setAltHover(string $alt_hover): self
-    {
-        $this->alt_hover = $alt_hover;
 
         return $this;
     }

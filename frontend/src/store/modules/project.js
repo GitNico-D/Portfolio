@@ -30,11 +30,11 @@ const actions = {
       headers: authHeader()
     })
     .then(response => {
+      console.log(response.data);
       commit("NEW_PROJECT", response.data);
       return Promise(response.data);
     })
     .catch(error => {
-      console.log(error.response.data);
       if (error.response.data.code === "401") {
         dispatch("logout")
       }

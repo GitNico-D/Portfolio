@@ -15,7 +15,7 @@
           </template> 
           <ValidationObserver ref="addForm" v-slot="{ handleSubmit }">
             <b-form @submit.prevent="handleSubmit(onSubmit)" @reset="onReset" >
-              <ValidationProvider ref="name" rules="" name="Titre" v-slot="{ errors }">
+              <ValidationProvider ref="name" rules="required|min:2" name="Titre" v-slot="{ errors }">
                 <b-form-group id="name" label="Titre du projet" label-for="input-name" class="mt-4">
                   <b-form-input 
                     id="input-name" 
@@ -30,7 +30,7 @@
                   </b-alert>
                 </b-form-group>
               </ValidationProvider>
-              <ValidationProvider ref="description" rules="" name="Description" v-slot="{ errors }">
+              <ValidationProvider ref="description" rules="required|min:2" name="Description" v-slot="{ errors }">
                 <b-form-group id="textarea" label="Description du projet" label-for="input-textarea" class="mt-4">
                   <b-form-textarea
                     id="input-textarea"
@@ -47,7 +47,7 @@
                   </b-alert>
                 </b-form-group>
               </ValidationProvider>
-              <ValidationProvider ref="url" rules="" name="Url" v-slot="{ errors }">
+              <ValidationProvider ref="url" rules="required" name="Url" v-slot="{ errors }">
                 <b-form-group id="url" label="Url du projet" label-for="input-url" class="mt-4">
                   <b-form-input
                     id="input-url"
@@ -63,18 +63,16 @@
                   </b-alert>
                 </b-form-group>
               </ValidationProvider>
-              <!-- <ValidationProvider ref="img" rules="" name="Image" v-slot="{ errors }">
-                <b-form-group id="img" label="Image de présentation du projet" label-for="input-img" class="mt-4">
+              <ValidationProvider ref="imgStatic" rules="required" name="Image" v-slot="{ errors }">
+                <b-form-group id="imgStatic" label="Image de présentation du projet" label-for="input-imgStatic" class="mt-4">
                   <b-form-file
-                    id="input-img"
+                    id="input-imgStatic"
                     v-model="newProject.imgStatic"
                     :state="Boolean(newProject.imgStatic)"
                     browse-text="Parcourir"
                     placeholder="Choisir un fichier ou glisser-déposer ici"
                     drop-placeholder="Choisir un fichier"
                   ></b-form-file>
-                <div class="mt-3">Fichier sélectionné: {{ newProject.imgStatic ? newProject.imgStatic.name : '' }}</div>
-                </b-form-group>
                 <b-alert
                   variant="danger"
                   v-if="errors[0]"
@@ -82,8 +80,10 @@
                   show
                   dismissible>
                 </b-alert>
-              </ValidationProvider> -->
-              <ValidationProvider ref="description-image" rules="" name="Description de l'image" v-slot="{ errors }">
+                <div class="mt-3">Fichier sélectionné: {{ newProject.imgStatic ? newProject.imgStatic.name : '' }}</div>
+                </b-form-group>
+              </ValidationProvider>
+              <ValidationProvider ref="description-image" rules="required" name="Description de l'image" v-slot="{ errors }">
                 <b-form-group id="altStatic" label="Description de l'image du projet" label-for="input-altStatic" class="mt-4">
                   <b-form-input 
                     id="input-altStatic" 
@@ -100,18 +100,18 @@
                   </b-alert>
                 </b-form-group>
               </ValidationProvider>
-              <ValidationProvider ref="creation-date" rules="" name="Date de création " v-slot="{ errors }">
+              <ValidationProvider ref="creation-date" rules="required" name="Date de création " v-slot="{ errors }">
                 <b-form-group id="creation-date" label="Date de création du projet" label-for="input-creation-date" class="mt-4">
                   <b-form-datepicker id="creation-date" v-model="newProject.creationDate" class="mb-2"></b-form-datepicker>
                   <p>Date de création: '{{ newProject.creationDate }}'</p>
                 </b-form-group>
-                <b-alert
-                  variant="danger"
-                  v-if="errors[0]"
-                  v-text="errors[0]"
-                  show
-                  dismissible>
-                </b-alert>
+                  <b-alert
+                    variant="danger"
+                    v-if="errors[0]"
+                    v-text="errors[0]"
+                    show
+                    dismissible>
+                  </b-alert>
               </ValidationProvider>
               <div class="d-flex justify-content-center">
                 <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading">
@@ -183,7 +183,7 @@ export default {
       newProject: {
         name: '',
         description: '',
-        // imgStatic: null,
+        imgStatic: null,
         altStatic: '',
         creationDate: ''
       },
@@ -209,6 +209,9 @@ export default {
             this.loading = false;
             return
           }
+          console.log(typeof(this.newProject));
+          const formData = new FormData();
+            console.log(formData);
           if(this.newProject) {
             this.addProject(this.newProject)
             .then(() => {
@@ -218,10 +221,6 @@ export default {
             .catch((error) => {
               
               console.log(JSON.stringify(error))
-              // error.forEach(error => {
-              //   console.log(error);
-                
-              // });
               this.errorMessage = error;
               this.loading = false;  
             })
@@ -232,7 +231,7 @@ export default {
       event.preventDefault()
       this.newProject.name = ''
       this.newProject.description = ''
-      // this.newProject.imgStatic = null
+      this.newProject.imgStatic = null
       this.newProject.altStatic = ''
       this.newProject.creationDate = ''
       this.errorMessage = ''

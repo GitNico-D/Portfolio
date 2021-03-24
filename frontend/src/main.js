@@ -28,6 +28,7 @@ import {
   faFolderPlus,
   faEdit
 } from "@fortawesome/free-solid-svg-icons";
+import "./validation-config";
 
 Object.keys(rules).forEach(rule => {
   extend(rule, rules[rule]);
