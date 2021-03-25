@@ -63,7 +63,7 @@
                   </b-alert>
                 </b-form-group>
               </ValidationProvider>
-              <ValidationProvider ref="imgStatic" rules="required" name="Image" v-slot="{ errors }">
+              <ValidationProvider ref="imgStatic" rules="" name="Image" v-slot="{ errors }">
                 <b-form-group id="imgStatic" label="Image de présentation du projet" label-for="input-imgStatic" class="mt-4">
                   <b-form-file
                     id="input-imgStatic"
@@ -175,6 +175,7 @@
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
+// import { setFormWithFile } from "../mixins/formMixin";
 
 export default {
   name: "ProjectForm",
@@ -195,6 +196,7 @@ export default {
       errorMessage: ''
     }
   },
+  // mixins : [ setFormWithFile ],
   components: { 
     ValidationProvider,
     ValidationObserver
@@ -209,9 +211,22 @@ export default {
             this.loading = false;
             return
           }
-          console.log(typeof(this.newProject));
-          const formData = new FormData();
-            console.log(formData);
+          // let fd = setFormWithFile(this.imgStatic, this.newProject);
+          // console.log(fd);
+          const fd = new FormData();
+          fd.append('imgStatic', this.imgStatic);
+          // Append form values inside
+          console.log(fd);
+          Object.entries(this.newProject).forEach(
+            ([key, value]) => {
+              console.log(key);
+              console.log(value);
+              if (value !== null && value !== '') {
+                fd.append(`${key}`, value);
+              }
+            },
+          );
+          console.log(fd);
           if(this.newProject) {
             this.addProject(this.newProject)
             .then(() => {
