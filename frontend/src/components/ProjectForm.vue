@@ -67,6 +67,7 @@
                 <b-form-group id="imgStatic" label="Image de présentation du projet" label-for="input-imgStatic" class="mt-4">
                   <b-form-file
                     id="input-imgStatic"
+                    name="imgStatic"
                     v-model="newProject.imgStatic"
                     :state="Boolean(newProject.imgStatic)"
                     browse-text="Parcourir"
@@ -211,35 +212,35 @@ export default {
             this.loading = false;
             return
           }
-          // let fd = setFormWithFile(this.imgStatic, this.newProject);
-          // console.log(fd);
           const fd = new FormData();
-          fd.append('imgStatic', this.imgStatic);
-          // Append form values inside
-          console.log(fd);
+          // fd.append('imgStatic', this.newProject.imgStatic);
           Object.entries(this.newProject).forEach(
             ([key, value]) => {
-              console.log(key);
-              console.log(value);
+              console.log(key + " => " + value)
               if (value !== null && value !== '') {
                 fd.append(`${key}`, value);
               }
             },
           );
-          console.log(fd);
-          if(this.newProject) {
-            this.addProject(this.newProject)
-            .then(() => {
-              this.successMessage = "Le projet a été ajouté !";
-              this.loading = false;            
-            })
-            .catch((error) => {
-              
-              console.log(JSON.stringify(error))
-              this.errorMessage = error;
-              this.loading = false;  
-            })
-          }
+          //
+          var object = {};
+          fd.forEach(function(value, key){
+              object[key] = value;
+          });
+          var json = JSON.stringify(object);
+          console.log(json);
+          //
+          this.addProject(fd)
+          .then(() => {
+            this.successMessage = "Le projet a été ajouté !";
+            this.loading = false;            
+          })
+          .catch((error) => {
+            
+            console.log(JSON.stringify(error))
+            this.errorMessage = error;
+            this.loading = false;  
+          })
       });
     },
     onReset(event) {
