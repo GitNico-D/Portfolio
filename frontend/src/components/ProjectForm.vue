@@ -212,24 +212,15 @@ export default {
             this.loading = false;
             return
           }
-          const fd = new FormData();
-          // fd.append('imgStatic', this.newProject.imgStatic);
+          let fd = new FormData();
+          fd.append('imgStatic', this.newProject.imgStatic)
           Object.entries(this.newProject).forEach(
             ([key, value]) => {
-              console.log(key + " => " + value)
               if (value !== null && value !== '') {
                 fd.append(`${key}`, value);
               }
             },
-          );
-          //
-          var object = {};
-          fd.forEach(function(value, key){
-              object[key] = value;
-          });
-          var json = JSON.stringify(object);
-          console.log(json);
-          //
+          );          
           this.addProject(fd)
           .then(() => {
             this.successMessage = "Le projet a été ajouté !";

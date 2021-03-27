@@ -6,9 +6,10 @@ use App\Services\SearchRelatedEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
-
+Use Exception;
 class CreateEntityConverter implements ParamConverterInterface
 {
     protected $serializer;
@@ -49,17 +50,17 @@ class CreateEntityConverter implements ParamConverterInterface
      * @param ParamConverter $configuration
      */
     public function apply(Request $request, ParamConverter $configuration)
-    {
+    {       
         $entity = $this->serializer->deserialize(
-            $request->getContent(),
+            json_encode($request->request->all()),
             $configuration->getClass(),
             'json'
         );
-        $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $request);
-        if ($relatedEntity) {
-            $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
-            $entity->$setRelatedEntity($relatedEntity);
-        }
+        // $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $request);
+        // if ($relatedEntity) {
+        //     $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
+        //     $entity->$setRelatedEntity($relatedEntity);
+        // }
         $request->attributes->set($configuration->getName(), $entity);
     }
 }

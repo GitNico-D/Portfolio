@@ -27,7 +27,6 @@ const actions = {
       });
   },
   addProject({ commit, dispatch }, formData) {
-    console.log(formData.get('name'));
     return axios.post(process.env.VUE_APP_API_URL + '/projects', formData, {
       headers: authHeader()
     })
