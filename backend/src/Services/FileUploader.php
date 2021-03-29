@@ -19,20 +19,46 @@ class FileUploader
 
     public function upload(UploadedFile $file)
     {
-        // dump('upload');
         $destination = $this->uploadPath;
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
-        // dd($originalFilename);
         try {
-            // dump($fileName);
             $file->move($destination, $fileName);
         } catch (FileException $e) {
             // dd($e);
-            // ... handle exception if something happens during file upload
         }
-        // dd($fileName);
         return $fileName;
+    }
+
+    /**
+     * Get the File from the request and upload on server
+     * 
+     * @param File $file
+     */
+    public function getUploadFile($files) 
+    {
+        foreach($files as $file) {
+            $uploadFile = $file;
+            $uploadFileName = $this->upload($uploadFile);
+        }
+        return $uploadFileName;
+    }
+
+    /**
+     * Attach the File to the right entity
+     * 
+     * @param File $file
+     * @param Entity $entity
+     * @param Configuration $configuration 
+     */
+    public function setUploadFile($file, $entity, $configuration) 
+    {
+        if($configuration->getName() == 'project') {
+            return $entity->setImgStatic($file);
+        }
+        if ($configuration->getName()  == 'skill') {
+            return $entity->setIcon($file);
+        }
     }
 }

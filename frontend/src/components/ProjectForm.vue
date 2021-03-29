@@ -13,6 +13,20 @@
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter un nouveau projet</span>
           </template> 
+          <div id="alert">
+            <b-alert 
+              variant="success"
+              v-show="successMessage"
+              v-text="successMessage"
+              show>
+            </b-alert>
+            <b-alert
+              variant="danger"
+              v-show="errorMessage"
+              v-text="errorMessage"
+              show>
+            </b-alert>
+          </div>
           <ValidationObserver ref="addForm" v-slot="{ handleSubmit }">
             <b-form @submit.prevent="handleSubmit(onSubmit)" @reset="onReset" >
               <ValidationProvider ref="name" rules="required|min:2" name="Titre" v-slot="{ errors }">
@@ -123,18 +137,7 @@
                   Réinitialiser formulaire
                 </b-button>
               </div>
-              <b-alert
-                variant="success"
-                v-show="successMessage"
-                v-text="successMessage"
-                show>
-              </b-alert>
-              <b-alert
-                variant="danger"
-                v-show="errorMessage"
-                v-text="errorMessage"
-                show>
-              </b-alert>
+              
             </b-form>
           </ValidationObserver>
         </b-tab>
@@ -166,9 +169,6 @@
           </ValidationObserver>
         </b-tab>
       </b-tabs>
-      <b-card class="mt-3" header="New Project">
-        <pre class="m-0">{{ newProject }}</pre>
-      </b-card>
     </b-col>
   </b-row>
 </template>
@@ -221,16 +221,17 @@ export default {
               }
             },
           );          
-          this.addProject(fd)
+        this.addProject(fd)
           .then(() => {
-            this.successMessage = "Le projet a été ajouté !";
-            this.loading = false;            
+              this.successMessage = "Le projet a été ajouté !";
+              document.getElementById("alert").scrollIntoView();
+              this.loading = false;
           })
-          .catch((error) => {
-            
-            console.log(JSON.stringify(error))
-            this.errorMessage = error;
-            this.loading = false;  
+          .catch((error) => {          
+            if(error) {
+              this.errorMessage = error;
+              this.loading = false;
+            }  
           })
       });
     },
@@ -241,6 +242,7 @@ export default {
       this.newProject.imgStatic = null
       this.newProject.altStatic = ''
       this.newProject.creationDate = ''
+      this.successMessage = ''
       this.errorMessage = ''
     }
   },

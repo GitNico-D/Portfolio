@@ -11,8 +11,8 @@
         :title="project.name"
         :content="project.description"
         :url="project.url"
-        :imgSrc="require('../assets/img-test-1.jpg')"
-        imgAlt="Image Projet 1"
+        :imgSrc="'http://portfolio/img/' + project.imgStatic"
+        :imgAlt="project.altStatic"
         :date="project.creationDate"
       />
     </b-row>

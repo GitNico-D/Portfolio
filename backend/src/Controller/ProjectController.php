@@ -5,14 +5,11 @@ namespace App\Controller;
 use App\Entity\Project;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
-use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -70,16 +67,12 @@ class ProjectController extends AbstractController
     public function createProject(
         Project $project,
         EntityManagerInterface $em,
-        ErrorValidator $errorValidator,
-        FileUploader $fileUploader
+        ErrorValidator $errorValidator
     ): JsonResponse {
         $errors = $errorValidator->errorsViolations($project);
         if ($errors) {
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
-            $uploadedFile = new uploadedFile($project->getImgStatic(), 'project');
-            $imgStatic = $fileUploader->upload($uploadedFile);
-            $project->setImgStatic($imgStatic);
             $em->persist($project);
             $em->flush();
             return $this->json(

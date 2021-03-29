@@ -2,19 +2,20 @@
 
 namespace App\Request\ParamConverter;
 
+use App\Services\FileUploader;
 use App\Services\SearchRelatedEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
-Use Exception;
+
 class CreateEntityConverter implements ParamConverterInterface
 {
     protected $serializer;
     protected $entityManager;
     protected $searchRelatedEntity;
+    protected $fileUploader;
 
     /**
      * @param SerializerInterface $serializer
@@ -24,11 +25,13 @@ class CreateEntityConverter implements ParamConverterInterface
     public function __construct(
         SerializerInterface $serializer,
         EntityManagerInterface $entityManager,
-        SearchRelatedEntity $searchRelatedEntity
+        SearchRelatedEntity $searchRelatedEntity,
+        FileUploader $fileUploader
     ) {
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
         $this->searchRelatedEntity = $searchRelatedEntity;
+        $this->fileUploader = $fileUploader;
     }
 
     /**
@@ -51,16 +54,52 @@ class CreateEntityConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {       
+        $jsonEntity = json_encode($request->request->all());
         $entity = $this->serializer->deserialize(
-            json_encode($request->request->all()),
+            $jsonEntity,
             $configuration->getClass(),
             'json'
         );
-        // $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $request);
-        // if ($relatedEntity) {
-        //     $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
-        //     $entity->$setRelatedEntity($relatedEntity);
-        // }
+        if($request->files) {
+            $uploadFile = $this->fileUploader->getUploadFile($request->files);
+            $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);
+        }
+        $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonEntity);
+        if ($relatedEntity) {
+            $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
+            $entity->$setRelatedEntity($relatedEntity);
+        }
         $request->attributes->set($configuration->getName(), $entity);
+    }
+
+    /**
+     * Get the File from the request and upload on server
+     * 
+     * @param File $file
+     */
+    public function getUploadFile($files) 
+    {
+        foreach($files as $file) {
+            $uploadFile = $file;
+            $uploadFileName = $this->fileUploader->upload($uploadFile);
+        }
+        return $uploadFileName;
+    }
+
+    /**
+     * Attach the File to the right entity
+     * 
+     * @param File $file
+     * @param Entity $entity
+     * @param Configuration $configuration 
+     */
+    public function setUploadFile($file, $entity, $configuration) 
+    {
+        if($configuration->getName() == 'project') {
+            return $entity->setImgStatic($file);
+        }
+        if ($configuration->getName()  == 'skill') {
+            return $entity->setIcon($file);
+        }
     }
 }

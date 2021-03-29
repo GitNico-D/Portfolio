@@ -4,6 +4,12 @@
     <BackgroundPage circleColor="#485DA6" />
     <SidebarAdmin />
     <ProjectForm />
+    <b-row class="footer justify-content-center align-items-center">
+      <HomePageLink action="Retour"
+        url="/"
+        direction="animated-arrowLtr"
+        textColor="#485DA6"/>
+    </b-row>
   </b-container>
 </template>
 
@@ -12,6 +18,7 @@ import Header from "@/components/Header.vue";
 import BackgroundPage from "@/components/BackgroundPage.vue";
 import SidebarAdmin from "@/components/SidebarAdmin.vue";
 import ProjectForm from "@/components/ProjectForm.vue";
+import HomePageLink from "@/components/HomePageLink.vue";
 import jwt_decode from "jwt-decode";
 
 export default {
@@ -19,7 +26,8 @@ export default {
     Header,
     BackgroundPage,
     SidebarAdmin,
-    ProjectForm
+    ProjectForm,
+    HomePageLink
   },
   computed: {
     loggedIn() {
@@ -68,6 +76,9 @@ export default {
   perspective: 1000px;
   .row {
     height: unset;
+  }
+  .footer {
+    height: 15vh;
   }
 }
 </style>
