@@ -19,25 +19,23 @@ const actions = {
         headers: headers
       })
       .then(response => {
+        console.log(response);
         commit("ADD_PROJECT", response.data);
       })
       .catch(error => {
         errorRedirection(error);
       });
   },
-  addProject({ commit, dispatch }, formData) {
+  addProject({ commit }, formData) {
     return axios.post(process.env.VUE_APP_API_URL + '/projects', formData, {
       headers: authHeader()
     })
     .then(response => {
-      console.log(response.data);
       commit("NEW_PROJECT", response.data);
-      return Promise(response.data);
+      // return Promise(response.data);
     })
     .catch(error => {
-      if (error.response.data.code === "401") {
-        dispatch("logout")
-      }
+      // console.log(error.response);
       return Promise.reject(error.response.data);
     })
   }

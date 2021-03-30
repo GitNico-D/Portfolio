@@ -43,7 +43,7 @@ class SearchRelatedEntity
     public function requestContentToArray($request)
     {
         $requestContentKeys = [];
-        $requestContent = json_decode($request->getContent(), true);
+        $requestContent = json_decode($request, true);
         foreach ($requestContent as $requestContentKey => $requestContentValue) {
             $requestContentKeys [] = $requestContentKey;
         }
