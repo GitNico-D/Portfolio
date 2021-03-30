@@ -54,17 +54,26 @@ class CreateEntityConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {       
-        $jsonEntity = json_encode($request->request->all());
-        $entity = $this->serializer->deserialize(
-            $jsonEntity,
-            $configuration->getClass(),
-            'json'
-        );
-        if($request->files) {
-            $uploadFile = $this->fileUploader->getUploadFile($request->files);
-            $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);
+        if($request->headers->get('Content-Type') == "application/json") {
+            $entity = $this->serializer->deserialize(
+                $request->getContent(),
+                $configuration->getClass(),
+                'json'
+            );
+            $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $request->getContent());
+        } else {
+            $jsonRequest = json_encode($request->request->all());
+            $entity = $this->serializer->deserialize(
+                $jsonRequest,
+                $configuration->getClass(),
+                'json'
+            );
+            if($request->files) {
+                $uploadFile = $this->fileUploader->getUploadFile($request->files);
+                $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);
+            }
+            $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonRequest);
         }
-        $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonEntity);
         if ($relatedEntity) {
             $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
             $entity->$setRelatedEntity($relatedEntity);
