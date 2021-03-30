@@ -9,18 +9,29 @@ const state = () => ({
 });
 
 const getters = {
-  allProjects: state => state.projects
+  allProjects: state => state.projects,
+  oneProject: state => state.project
 };
 
 const actions = {
   getAllProjects({ commit }) {
-    axios
-      .get(process.env.VUE_APP_API_URL + "/projects", {
+    axios.get(process.env.VUE_APP_API_URL + "/projects", {
+        headers: headers
+      })
+      .then(response => {
+        commit("SET_ALL_PROJECT", response.data);
+      })
+      .catch(error => {
+        errorRedirection(error);
+      });
+  },
+  getProject({ commit }, id) {
+    axios.get(process.env.VUE_APP_API_URL + `/projects/${id}`, {
         headers: headers
       })
       .then(response => {
         console.log(response);
-        commit("ADD_PROJECT", response.data);
+        commit("SET_ONE_PROJECT", response.data);
       })
       .catch(error => {
         errorRedirection(error);
@@ -32,21 +43,56 @@ const actions = {
     })
     .then(response => {
       commit("NEW_PROJECT", response.data);
-      // return Promise(response.data);
+      return Promise(response.data);
     })
     .catch(error => {
-      // console.log(error.response);
+      return Promise.reject(error.response.data);
+    })
+  },
+  updateProject({ commit }, { id, formData }) {
+    return axios.put(process.env.VUE_APP_API_URL + `/projects/${id}`, formData, {
+      headers: authHeader()
+    })
+    .then(response => {
+      commit("UPDATE_PROJECT", response.data);
+      return Promise(response.data);
+    })
+    .catch(error => {
+      return Promise.reject(error.response.data);
+    })
+  },
+  deleteProject({ commit }, id) {
+    return axios.delete(process.env.VUE_APP_API_URL + `/projects/${id}`, {
+      headers: authHeader()
+    })
+    .then(response => {
+      commit("DELETE_PROJECT", response.data);
+      return Promise(response.data);
+    })
+    .catch(error => {
       return Promise.reject(error.response.data);
     })
   }
 };
 
 const mutations = {
-  ADD_PROJECT(state, projects) {
+  SET_ALL_PROJECT(state, projects) {
     state.projects = projects;
+  },
+  SET_ONE_PROJECT(state, project) {
+    state.project = project;
   },
   NEW_PROJECT(state, newProject) {
     state.projects.unshift(newProject)
+  },
+  DELETE_PROJECT(state, id) {
+    let projectPosition = '';
+    state.projects.forEach((project, index) => {
+      if(project.id === id) {
+        projectPosition = index;
+      }
+    });
+    state.projects.splice(projectPosition, 1);
   }
 };
 
