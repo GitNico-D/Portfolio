@@ -223,9 +223,16 @@ export default {
           );          
         this.addProject(fd)
           .then(() => {
-              this.successMessage = "Le projet a été ajouté !";
-              document.getElementById("alert").scrollIntoView();
-              this.loading = false;
+            this.successMessage = "Le projet a été ajouté !";
+            document.getElementById("alert").scrollIntoView();
+            this.loading = false;
+            this.newProject.name = ''
+            this.newProject.description = ''
+            this.newProject.imgStatic = null
+            this.newProject.altStatic = ''
+            this.newProject.creationDate = ''
+            this.successMessage = ''
+            this.errorMessage = ''
           })
           .catch((error) => {          
             if(error) {
