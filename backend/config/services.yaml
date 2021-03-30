@@ -36,7 +36,3 @@ services:
     App\Request\ParamConverter\UpdateEntityConverter:
         tags:
             - { name: 'request.param_converter', converter: 'update_entity_converter'}
-
-    # App\Services\FileUploader:
-    #     arguments:
-    #         $uploadPath: '%kernel.project_dir%/public/img'
