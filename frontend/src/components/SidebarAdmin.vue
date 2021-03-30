@@ -13,14 +13,18 @@
             <b-list-group-item 
               button 
               :style="{'--color': '#6d327c'}"    
-              class="my-3"           
+              class="my-3"
+              @click="{$emit('showProjectForm', '#6d327c')}"
+              v-b-toggle.sidebar
               >
               Section Projet
               </b-list-group-item>
             <b-list-group-item 
               button
               :style="{ '--color': '#00a1ba' }"
-              class="my-3"  
+              class="my-3"
+              @click="$emit('showCareerForm', '#00a1ba')" 
+              v-b-toggle.sidebar  
               >
               Section Carrières
               </b-list-group-item>
@@ -28,6 +32,8 @@
               button
               :style="{ '--color': '#36C486' }"
               class="my-3"  
+              @click="$emit('showProjectForm', '#36C486')"
+              v-b-toggle.sidebar
               >
               Section Compétences
               </b-list-group-item>
@@ -35,6 +41,8 @@
               button 
               :style="{ '--color': '#485DA6' }"
               class="my-3"  
+              @click="$emit('showProjectForm', '#485DA6')"
+              v-b-toggle.sidebar
               >
               Section Présentation
               </b-list-group-item>

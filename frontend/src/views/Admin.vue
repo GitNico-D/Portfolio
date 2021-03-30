@@ -1,14 +1,19 @@
 <template>
   <b-container fluid>
-    <Header title="Page Administrateur" color="#485DA6" class="header" />
-    <BackgroundPage circleColor="#485DA6" />
-    <SidebarAdmin />
-    <ProjectForm />
+    <Header  :color="pageColor" class="header" />
+    <BackgroundPage :circleColor="pageColor" />
+    <AdminPresentation />
+    <SidebarAdmin 
+      v-on:showProjectForm="showProjectForm"
+      v-on:showCareerForm="showCareerForm"
+      />
+    <ProjectForm v-show="displayProjectForm"/>
+    <CareerForm v-show="displayCareerForm"/>
     <b-row class="footer justify-content-center align-items-center">
       <HomePageLink action="Retour"
         url="/"
         direction="animated-arrowLtr"
-        textColor="#485DA6"/>
+        :textColor="pageColor"/>
     </b-row>
   </b-container>
 </template>
@@ -17,7 +22,9 @@
 import Header from "@/components/Header.vue";
 import BackgroundPage from "@/components/BackgroundPage.vue";
 import SidebarAdmin from "@/components/SidebarAdmin.vue";
-import ProjectForm from "@/components/ProjectForm.vue";
+import AdminPresentation from "@/components/admin/AdminPresentation.vue";
+import ProjectForm from "@/components/admin/ProjectForm.vue";
+import CareerForm from "@/components/admin/CareerForm.vue";
 import HomePageLink from "@/components/HomePageLink.vue";
 import jwt_decode from "jwt-decode";
 
@@ -26,13 +33,24 @@ export default {
     Header,
     BackgroundPage,
     SidebarAdmin,
+    HomePageLink,
+    AdminPresentation,
     ProjectForm,
-    HomePageLink
+    CareerForm
+  },
+  data() {
+    return {
+      pageColor: "red",
+      displayProjectForm: false,
+      displayCareerForm: false,
+      displayPresentationForm: false,
+      displaySkillForm: false
+    }
   },
   computed: {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
-    }
+    },
   },
   methods: {
     dateDiff(date1, date2) {
@@ -40,17 +58,41 @@ export default {
       var tmp = date2 - date1;
       tmp = Math.floor(tmp / 1000);
       diff.sec = tmp % 60;
-
       tmp = Math.floor((tmp - diff.sec) / 60);
       diff.min = tmp % 60;
-
       tmp = Math.floor((tmp - diff.min) / 60);
       diff.hour = tmp % 24;
-
       tmp = Math.floor((tmp - diff.hour) / 24);
       diff.day = tmp;
-
       return diff;
+    },
+    showProjectForm: function(color) {
+      this.pageColor = color;
+      this.displayProjectForm = true;
+      this.displayCareerForm = false;
+      this.displayPresentationForm = false;
+      this.displaySkillForm = false;
+    },
+    showCareerForm: function(color) {
+      this.pageColor = color;
+      this.displayCareerForm = true;
+      this.displayPresentationForm = false;
+      this.displaySkillForm = false;
+      this.displayProjectForm = false;
+    },
+    showPresentationForm: function(color) {
+      this.pageColor = color;
+      this.displayCareerForm = false;
+      this.displayPresentationForm = false;
+      this.displaySkillForm = false;
+      this.displayProjectForm = false;
+    },
+    showSkillForm: function(color) {
+      this.pageColor = color;
+      this.displayCareerForm = false;
+      this.displayPresentationForm = false;
+      this.displaySkillForm = true;
+      this.displayProjectForm = false;
     }
   },
   mounted() {
@@ -65,7 +107,7 @@ export default {
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

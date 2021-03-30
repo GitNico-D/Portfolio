@@ -11,7 +11,7 @@
         <b-tab class="mt-5 justify-content-center">
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
-            <span>Ajouter un nouveau projet</span>
+            <span>Ajouter une nouvelle étape de carrière</span>
           </template> 
           <div id="alert">
             <b-alert 
