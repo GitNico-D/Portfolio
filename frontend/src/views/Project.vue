@@ -11,7 +11,7 @@
         :title="project.name"
         :content="project.description"
         :url="project.url"
-        :imgSrc="'http://portfolio/img/' + project.imgStatic"
+        :imgSrc="project.imgStatic"
         :imgAlt="project.altStatic"
         :date="project.creationDate"
       />

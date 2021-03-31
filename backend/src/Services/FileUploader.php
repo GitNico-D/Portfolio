@@ -9,11 +9,13 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class FileUploader
 {
     private $uploadPath;
+    private $baseUrl;
     private $slugger;
 
-    public function __construct($uploadPath, SluggerInterface $slugger)
+    public function __construct($uploadPath, $baseUrl, SluggerInterface $slugger)
     {
         $this->uploadPath = $uploadPath;
+        $this->baseUrl = $baseUrl;
         $this->slugger = $slugger;
     }
 
@@ -24,7 +26,11 @@ class FileUploader
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
         try {
-            $file->move($destination, $fileName);
+            if(str_contains($fileName, "project")) {
+                $file->move($destination . '/project', $fileName);
+            } else {
+                $file->move($destination, $fileName);
+            }
         } catch (FileException $e) {
             // dd($e);
         }
@@ -55,7 +61,7 @@ class FileUploader
     public function setUploadFile($file, $entity, $configuration) 
     {
         if($configuration->getName() == 'project') {
-            return $entity->setImgStatic($file);
+            return $entity->setImgStatic($this->baseUrl . 'project/' . $file);
         }
         if ($configuration->getName()  == 'skill') {
             return $entity->setIcon($file);

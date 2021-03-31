@@ -70,7 +70,7 @@ class CreateEntityConverter implements ParamConverterInterface
             );
             if($request->files) {
                 $uploadFile = $this->fileUploader->getUploadFile($request->files);
-                $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);
+                $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);                
             }
             $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonRequest);
         }
@@ -79,36 +79,5 @@ class CreateEntityConverter implements ParamConverterInterface
             $entity->$setRelatedEntity($relatedEntity);
         }
         $request->attributes->set($configuration->getName(), $entity);
-    }
-
-    /**
-     * Get the File from the request and upload on server
-     * 
-     * @param File $file
-     */
-    public function getUploadFile($files) 
-    {
-        foreach($files as $file) {
-            $uploadFile = $file;
-            $uploadFileName = $this->fileUploader->upload($uploadFile);
-        }
-        return $uploadFileName;
-    }
-
-    /**
-     * Attach the File to the right entity
-     * 
-     * @param File $file
-     * @param Entity $entity
-     * @param Configuration $configuration 
-     */
-    public function setUploadFile($file, $entity, $configuration) 
-    {
-        if($configuration->getName() == 'project') {
-            return $entity->setImgStatic($file);
-        }
-        if ($configuration->getName()  == 'skill') {
-            return $entity->setIcon($file);
-        }
     }
 }
