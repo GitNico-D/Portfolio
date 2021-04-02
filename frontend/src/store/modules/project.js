@@ -43,11 +43,11 @@ const actions = {
       headers: authHeader()
     })
     .then(response => {
-      commit("NEW_PROJECT", response.data);
-      return Promise(response.data);
+      commit("NEW_PROJECT", response);
+      return Promise(response);
     })
     .catch(error => {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response);
     })
   },
   updateProject({ commit }, { id, formData }) {

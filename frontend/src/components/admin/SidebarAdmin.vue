@@ -9,43 +9,52 @@
           <h4 class="sidebar-title my-2 font-weight-b">Administrateur</h4>
           <hr>
           <div class="my-5"><font-awesome-icon icon="user-shield" size="6x"/></div>
+            <b-list-group-item 
+              button 
+              :style="{'--bg-color': '#BE8C2E'}"    
+              class="my-3 btn-overview"
+              @click="{$emit('returnToOverview', '#BE8C2E')}"
+              v-b-toggle.sidebar
+              >
+              Tableau de bord
+            </b-list-group-item>
           <b-list-group  >
             <b-list-group-item 
               button 
-              :style="{'--color': '#6d327c'}"    
-              class="my-3"
+              :style="{'--bg-color': '#6d327c'}"    
+              class="my-3 btn-project"
               @click="{$emit('showProjectForm', '#6d327c')}"
               v-b-toggle.sidebar
               >
               Section Projet
-              </b-list-group-item>
+            </b-list-group-item>
             <b-list-group-item 
               button
-              :style="{ '--color': '#00a1ba' }"
-              class="my-3"
+              :style="{ '--bg-color': '#00a1ba' }"
+              class="my-3 btn-career"
               @click="$emit('showCareerForm', '#00a1ba')" 
               v-b-toggle.sidebar  
               >
               Section Carrières
-              </b-list-group-item>
+            </b-list-group-item>
             <b-list-group-item 
               button
-              :style="{ '--color': '#36C486' }"
+              :style="{ '--bg-color': '#36C486' }"
               class="my-3"  
               @click="$emit('showProjectForm', '#36C486')"
               v-b-toggle.sidebar
               >
               Section Compétences
-              </b-list-group-item>
+            </b-list-group-item>
             <b-list-group-item 
               button 
-              :style="{ '--color': '#485DA6' }"
+              :style="{ '--bg-color': '#485DA6' }"
               class="my-3"  
               @click="$emit('showProjectForm', '#485DA6')"
               v-b-toggle.sidebar
               >
               Section Présentation
-              </b-list-group-item>
+            </b-list-group-item>
           </b-list-group>
           <b-button variant="primary" class="mt-5 btn-close" block @click="hide">Fermer</b-button>
         </div>
@@ -70,10 +79,9 @@ export default {
 }
 .list-group-item {
   color: $dark-gray!important;
-  font-family: "Oswald", sans-serif;
-  
+  font-family: "Oswald", sans-serif;  
   &.active {
-    background: var(--color)!important;
+    background: var(--bg-color)!important;
     color: $white!important;
     border: none;
   }
@@ -83,7 +91,7 @@ export default {
     &:active, &:focus {
       color: $white!important;
       border: none;
-      background: var(--color)!important;
+      background: var(--bg-color)!important;
     }
   }
 }
@@ -114,6 +122,12 @@ export default {
       background: $white!important;
       border : 1px solid $dark-gray; 
       color: $dark-gray;
+    }
+  }
+  &-overview, &-project, &-career {
+    &:hover {
+      background-color: var(--bg-color);
+      color: $white!important;
     }
   }
 }

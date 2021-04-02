@@ -1,5 +1,5 @@
 <template>
-  <b-row class="justify-content-center my-4">
+  <b-row class="justify-content-center mt-5">
     <b-col cols="8">
       <b-tabs
         active-nav-item-class="font-weight-bold text-uppercase text-success"
@@ -26,6 +26,7 @@
               v-text="errorMessage"
               show>
             </b-alert>
+          <AlertForm v-show="successMessage" :text="successMessage"/>
           </div>
           <ValidationObserver ref="addForm" v-slot="{ handleSubmit }">
             <b-form @submit.prevent="handleSubmit(onCreate)" @reset.prevent="onReset" >
@@ -61,7 +62,7 @@
                   </b-alert>
                 </b-form-group>
               </ValidationProvider>
-              <ValidationProvider ref="url" rules="required" name="Url" v-slot="{ errors }">
+              <ValidationProvider ref="url" rules="required|url" name="Url" v-slot="{ errors }">
                 <b-form-group id="url" label="Url du projet" label-for="input-url" class="mt-4">
                   <b-form-input
                     id="input-url"
@@ -77,7 +78,7 @@
                   </b-alert>
                 </b-form-group>
               </ValidationProvider>
-              <ValidationProvider ref="imgStatic" rules="" name="Image" v-slot="{ errors }">
+              <ValidationProvider ref="imgStatic" rules="required" name="Image" v-slot="{ errors }">
                 <b-form-group id="imgStatic" label="Image de présentation du projet" label-for="input-imgStatic" class="mt-4">
                   <b-form-file
                     id="input-imgStatic"
@@ -98,7 +99,7 @@
                 <div class="mt-3">Fichier sélectionné: {{ newProject.imgStatic ? newProject.imgStatic.name : '' }}</div>
                 </b-form-group>
               </ValidationProvider>
-              <ValidationProvider ref="description-image" rules="required" name="Description de l'image" v-slot="{ errors }">
+              <ValidationProvider ref="description-image" rules="required|min:2" name="Description de l'image" v-slot="{ errors }">
                 <b-form-group id="altStatic" label="Description de l'image du projet" label-for="input-altStatic" class="mt-4">
                   <b-form-input 
                     id="input-altStatic" 
@@ -138,6 +139,9 @@
                 </b-button>
               </div>
             </b-form>
+            <b-card class="mt-3" header="Form Data Result">
+              <pre class="m-0">{{ newProject }}</pre>
+            </b-card>
           </ValidationObserver>
         </b-tab>
         <b-tab class="mt-3 justify-content-center">
@@ -191,7 +195,7 @@
             </div>
             <b-card
               :title="oneProject.name + ' ' + oneProject.id"
-              :img-src="'http://portfolio/img/' + oneProject.imgStatic"
+              :img-src="oneProject.imgStatic"
               :img-alt="oneProject.altStatic"
               img-top
               class="mt-2 text-dark text-center"
@@ -217,14 +221,21 @@
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
+import AlertForm from "@/components/form/AlertForm";
 // import { setFormWithFile } from "../mixins/formMixin";
 
 export default {
   name: "ProjectForm",
+  components: { 
+    ValidationProvider,
+    ValidationObserver,
+    AlertForm
+  },
   data() {
     return {
       newProject: {
         name: '',
+        titre: '',
         description: '',
         imgStatic: null,
         altStatic: '',
@@ -247,10 +258,6 @@ export default {
     }
   },
   // mixins : [ setFormWithFile ],
-  components: { 
-    ValidationProvider,
-    ValidationObserver
-  },
   computed: {
     ...mapGetters(["oneProject"])
   },
@@ -290,7 +297,7 @@ export default {
           })
           .catch((error) => {          
             if(error) {
-              this.errorMessage = error;
+              // this.errorMessage = error;
               this.loading = false;
             }  
           })
