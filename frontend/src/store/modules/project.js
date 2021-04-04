@@ -42,9 +42,9 @@ const actions = {
     return axios.post(process.env.VUE_APP_API_URL + '/projects', formData, {
       headers: authHeader()
     })
-    .then(response => {
-      commit("NEW_PROJECT", response);
-      return Promise(response);
+    .then(formData => {
+      commit("NEW_PROJECT", formData);
+      return Promise.resolve(formData);
     })
     .catch(error => {
       return Promise.reject(error.response);
@@ -56,7 +56,7 @@ const actions = {
     })
     .then(response => {
       commit("UPDATE_PROJECT", response.data);
-      return Promise(response.data);
+      return Promise.resolve(response.data);
     })
     .catch(error => {
       return Promise.reject(error.response.data);
@@ -69,7 +69,7 @@ const actions = {
     .then(response => {
       console.log(response);
       commit("DELETE_PROJECT", response.data);
-      return Promise(response.data);
+      return Promise.resolve(response.data);
     })
     .catch(error => {
       return Promise.reject(error.response.data);
