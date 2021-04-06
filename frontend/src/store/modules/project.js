@@ -43,10 +43,12 @@ const actions = {
       headers: authHeader()
     })
     .then(formData => {
+      console.log(formData);
       commit("NEW_PROJECT", formData);
       return Promise.resolve(formData);
     })
     .catch(error => {
+      console.log(error.response);
       return Promise.reject(error.response);
     })
   },
@@ -74,6 +76,9 @@ const actions = {
     .catch(error => {
       return Promise.reject(error.response.data);
     })
+  },
+  resetStateProject({ commit }) {
+    commit("RESET_STATE_PROJECT")
   }
 };
 
@@ -96,6 +101,9 @@ const mutations = {
       }
     });
     state.projects.splice(projectPosition, 1);
+  }, 
+  RESET_STATE_PROJECT(state) {
+    state.project = '';
   }
 };
 

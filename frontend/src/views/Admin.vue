@@ -8,14 +8,15 @@
       v-on:showCareerForm="showCareerForm"
       v-on:returnToOverview="returnToOverview"
       />
-    <ProjectForm v-show="displayProjectForm"/>
+    <!-- <ProjectForm v-show="displayProjectForm"/> -->
+    <AllProjectForm v-show="displayProjectForm"/>
     <CareerForm v-show="displayCareerForm"/>
     <h2 class="text-center text-white mb-4" v-show="showOverview">Aperçu</h2>
     <b-row>
       <b-card-group deck v-show="showOverview">
         <b-card title="Project" img-src="https://picsum.photos/300/300/?image=41" img-alt="Image" img-top>
           <b-card-text>
-            {{allProjects}}
+            <!-- {{allProjects}} -->
           </b-card-text>
           <template #footer>
             <small class="text-muted">Last updated 3 mins ago</small>
@@ -54,7 +55,8 @@ import Header from "@/components/Header.vue";
 import BackgroundPage from "@/components/BackgroundPage.vue";
 import SidebarAdmin from "@/components/admin/SidebarAdmin.vue";
 import AdminPresentation from "@/components/admin/AdminPresentation.vue";
-import ProjectForm from "@/components/form/ProjectForm.vue";
+// import ProjectForm from "@/components/form/ProjectForm.vue";
+import AllProjectForm from "@/components/form/AllProjectForm.vue";
 import CareerForm from "@/components/admin/CareerForm.vue";
 import HomePageLink from "@/components/HomePageLink.vue";
 import { mapGetters } from "vuex";
@@ -67,8 +69,9 @@ export default {
     SidebarAdmin,
     HomePageLink,
     AdminPresentation,
-    ProjectForm,
-    CareerForm
+    // ProjectForm,
+    CareerForm,
+    AllProjectForm
 
   },
   data() {

@@ -1,0 +1,397 @@
+<template>
+<div> 
+  <div id="alert">
+    <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
+    <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
+  </div>
+  <h2 v-if="!oneProject.id" id="modifyForm-title" class="text-center fw-bold mt-5" >
+    <p>Aucun <span class="font-weight-bold font-style-italic">Projet</span> sélectionné.</p>
+    <p> Rendez-vous sur l'onglet <span class="font-style-italic">"Récupérer un projet"</span> afin de pouvoir modifier le projet récupérer.</p>
+    
+  </h2>
+  <h2 v-else id="modifyForm-title" class="text-center fw-bold my-5" >
+    Modification du project {{ oneProject.id }}
+  </h2>
+  <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" v-show="oneProject.id || showForm">
+    <b-form @submit.prevent="handleSubmit(onModify)" @reset.prevent="onReset" >
+      <ValidationProvider ref="name" rules="required|min:2" name="Titre" v-slot="{ errors }">
+        <b-form-group id="name" class="mt-4">
+          <label for="input-name" class="text-uppercase">Nouveau titre du projet</label>
+          <b-form-input 
+            id="input-name" 
+            v-model="modifyProject.name"
+            :value="(statusName == 'true') ? (modifyProject.name = oneProject.name) : modifyProject.name = ''"
+            >
+          </b-form-input>
+          <p class="m-3"><u>Titre actuel du projet :</u> {{ oneProject.name }}</p>
+          <b-form-checkbox
+              id="checkbox-name"
+              name="checkbox-name"
+              v-model="statusName"
+              value = "true"
+              unchecked-value = "false"
+            >
+              Garder le titre actuel ?
+            </b-form-checkbox>
+          <b-alert
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show>
+          </b-alert>
+        </b-form-group>
+      </ValidationProvider>
+      <ValidationProvider ref="description" rules="required|min:2" name="Description" v-slot="{ errors }">
+        <b-form-group id="textarea" class="mt-4">
+          <label for="input-name" class="text-uppercase">Nouvelle description du projet</label>
+          <b-form-textarea
+            id="input-textarea"
+            v-model="modifyProject.description"
+            :value="(statusDescription == 'true') ? (modifyProject.description = oneProject.description) : modifyProject.description = ''"
+            size="lg">
+            </b-form-textarea>
+            <p class="m-3"><u>Description actuel du projet :</u> {{ oneProject.description }}</p>
+            <b-form-checkbox
+              id="checkbox-description"
+              name="checkbox-description"
+              v-model="statusDescription"
+              value = "true"
+              unchecked-value = "false"
+            >
+              Garder la description actuel ?
+            </b-form-checkbox>
+          <b-alert
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show
+            dismissible>
+          </b-alert>
+        </b-form-group>
+      </ValidationProvider>
+      <hr>
+      <ValidationProvider ref="url" rules="required|url" name="Url" v-slot="{ errors }">
+        <b-form-group id="url" class="mt-4">
+          <label for="input-url" class="text-uppercase">Nouvelle Url du projet</label>
+          <b-form-input
+            id="input-url"
+            v-model="modifyProject.url"
+            :value="(statusUrl == 'true') ? (modifyProject.url = oneProject.url) : modifyProject.url = ''"
+            >
+          </b-form-input>
+          <p class="m-3"><u>Description actuel du projet :</u> {{ oneProject.url }}</p>
+          <b-form-checkbox
+              id="checkbox-url"
+              name="checkbox-url"
+              v-model="statusUrl"
+              value = "true"
+              unchecked-value = "false"
+            >
+              Garder l'url actuel ?
+            </b-form-checkbox>
+          <b-alert
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show
+            dismissible>
+          </b-alert>
+        </b-form-group>
+      </ValidationProvider>
+      <hr>
+      <ValidationProvider name="image-name" v-slot="{ errors }">
+        <b-form-group id="image" class="mt-4" v-show="checkboxStatus == 'not_change'">
+          <label for="input-image" class="text-uppercase">Image actuelle du projet</label>
+          <b-form-input
+            id="input-image"
+            
+            size="lg">
+            </b-form-input>
+            <!-- :value="(statusImage == 'true') ? (modifyProject.imgStatic = oneProject.imgStatic) : modifyProject.imgStatic = [{}, '']" -->
+            <b-img :src="oneProject.imgStatic" fluid alt="Fluid image"></b-img>
+            <p class="m-3"><u>Image actuelle du projet :</u> {{ oneProject.imgStatic }}</p>
+            <b-form-checkbox
+              id="checkbox-image"
+              name="checkbox-image"
+              v-model="statusImage"
+              value = "true"
+              unchecked-value = "false"
+            >
+              Garder l'image actuelle ?
+            </b-form-checkbox>
+          <b-alert
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show
+            dismissible
+          >
+          </b-alert>
+        </b-form-group>
+      </ValidationProvider>
+      <ValidationProvider ref="new-imgStatic" rules="required" name="Image" v-slot="{ errors }">
+        <b-form-group id="new-imgStatic" class="mt-4" v-show="checkboxStatus == 'change'">
+          <label for="input-imgStatic" class="text-uppercase">Nouvelle image de présentation du projet</label>
+          <b-form-file
+            id="input-new-imgStatic"
+            name="new-imgStatic"
+            v-model="modifyProject.imgStatic"
+            :state="Boolean(modifyProject.imgStatic)"
+            browse-text="Parcourir"
+            placeholder="Choisir un fichier ou glisser-déposer ici"
+            drop-placeholder="Choisir un fichier"
+          ></b-form-file>
+        <b-alert
+          variant="danger"
+          v-if="errors[0]"
+          v-text="errors[0]"
+          show
+          dismissible>
+        </b-alert>
+        <div class="mt-3">Fichier sélectionné: {{ modifyProject.imgStatic ? modifyProject.imgStatic.name : '' }}</div>
+        </b-form-group>
+        <b-form-checkbox
+          id="checkbox-1"
+          name="checkbox-1"
+          v-model="checkboxStatus"
+          value="change"
+          unchecked-value="not_change"
+        >
+        Modifier l'image du projet
+      </b-form-checkbox>
+      </ValidationProvider>
+      <hr>
+      <ValidationProvider ref="description-image" rules="required|min:2" name="Description de l'image" v-slot="{ errors }">
+        <b-form-group id="altStatic" class="mt-4">
+          <label for="input-altStatic" class="text-uppercase">Nouvelle description de l'image du projet</label>
+          <b-form-input 
+            id="input-altStatic" 
+            v-model="modifyProject.altStatic"
+            :value="(statusAltImage == 'true') ? (modifyProject.altStatic = oneProject.altStatic) : modifyProject.altStatic = ''" 
+            >
+          </b-form-input>
+          <p class="m-3"><u>Description de l'image du projet actuelle :</u> {{ oneProject.altStatic }}</p>
+          <b-form-checkbox
+              id="checkbox-altStatic"
+              name="checkbox-altStatic"
+              v-model="statusAltImage"
+              value = "true"
+              unchecked-value = "false"
+            >
+              Garder la description actuel de l'image ?
+          </b-form-checkbox>
+          <b-alert
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show
+            dismissible>
+          </b-alert>
+        </b-form-group>
+      </ValidationProvider>
+      <hr>
+      <ValidationProvider ref="creation-date" rules="required" name="Date de création " v-slot="{ errors }">
+        <b-form-group id="creation-date" class="mt-4">
+          <label for="input-creation-date" class="text-uppercase">Date de création du projet</label>
+          <b-form-datepicker id="creation-date" v-model="modifyProject.creationDate" bg-variant="light" class="mb-2"></b-form-datepicker>
+          <p>Date de création: '{{ modifyProject.creationDate }}'</p>
+          <p class="m-3"><u>Description de l'image du projet actuelle :</u> {{ oneProject.creationDate }}</p>
+          <b-form-checkbox
+              id="checkbox-altStatic"
+              name="checkbox-altStatic"
+              v-model="statusAltImage"
+              value = "true"
+              unchecked-value = "false"
+            >
+              Garder la date de création actuelle ?
+          </b-form-checkbox>
+        </b-form-group>
+          <b-alert
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show
+            dismissible>
+          </b-alert>
+      </ValidationProvider>
+      <div class="d-flex justify-content-center">
+        <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading">
+          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
+          <span class="pl-2 pb-2">Modifier projet {{ modifyProject.id }}</span>
+        </b-button>
+        <b-button type="reset" variant="danger" class="m-3 p-3" @click="onReset">
+          Réinitialiser formulaire
+        </b-button>
+        <b-button variant="warning" class="m-3 p-3" @click="onCancel">
+          Annuler
+        </b-button>
+      </div>
+    </b-form>
+    
+    <b-card class="mt-3" header="Form Data Result">
+      <pre class="m-0">{{ modifyProject }}</pre>
+    </b-card>
+    <b-card class="mt-3" header="Form Data Result">
+      <pre class="m-0">{{ oneProject }}</pre>
+    </b-card>
+  </ValidationObserver>
+</div>
+</template>
+
+<script>
+import { ValidationProvider, ValidationObserver } from "vee-validate";
+import { mapActions, mapGetters } from "vuex";
+import AlertForm from "@/components/form/AlertForm";
+// import { setFormWithFile } from "../mixins/formMixin";
+
+export default {
+  name: "UpdateProjectForm",
+  components: { 
+    ValidationProvider,
+    ValidationObserver,
+    AlertForm
+  },
+  data() {
+    return {
+      loading: false,
+      modifyProject: {
+        id: '',
+        name: '',
+        description: '',
+        imgStatic: [{}, ''],
+        altStatic: '',
+        creationDate: ''
+      },
+      successMessage: '',
+      errorMessage: '',
+      checkboxStatus: "not_change",
+      statusName: "false",
+      statusDescription: "false",
+      statusUrl: "false",
+      statusImage: 'false',
+      statusAltImage: "false",
+      statusCreationDate: "false",
+      showForm: false 
+    }
+  },
+  // mixins : [ setFormWithFile ],
+  computed: {
+    ...mapGetters(["oneProject"])
+  },
+  methods: {
+    ...mapActions(["updateProject", "resetStateProject"]),
+    onModify() {
+      this.loading = true;
+      this.$refs.modifyForm.validate()
+        .then(isValid => {
+          if (!isValid) {
+            this.loading = false;
+            return
+          }
+        let fd = new FormData();
+        fd.append('imgStatic', this.modifyProject.imgStatic);
+        Object.entries(this.modifyProject).forEach(
+          ([key, value]) => {
+            if (value !== null && value !== '') {
+              fd.append(`${key}`, value);
+            }
+          },
+        );
+        this.updateProject(this.modifyProject.id, fd)
+          .then(() => {
+            this.successMessage = 'Le projet ' + this.modifyProject.id + ' a été modifier'
+            document.getElementById("alertModify").scrollIntoView();  
+          })
+          .catch((error) => {
+            this.errorMessage = error.data[0];
+          })
+        });
+    },
+    fillForm(){
+      this.recoverForm = false;
+      this.modifyForm = true;
+      this.showProjectCard =false;
+      document.getElementById("modifyForm-title").scrollIntoView();
+    },
+    toFetchProject() {
+
+    },
+    onReset(event) {
+      event.preventDefault()
+      console.log("click reset");
+      this.newProject.name = ''
+      this.newProject.description = ''
+      this.newProject.url = ''
+      this.newProject.imgStatic = null
+      this.newProject.altStatic = ''
+      this.newProject.creationDate = ''
+      // this.successMessage = ''
+      // this.errorMessage = ''
+    },
+    onCancel() {
+      this.resetStateProject();
+      this.showForm = false;
+    }
+  },
+  
+}
+</script>
+
+<style lang="scss" scoped>
+.card {
+  &-body {
+    background-color: transparent; 
+  }
+}
+.row {
+  height: unset;
+}
+form {
+  width: 90%;
+  margin: auto;
+  padding: 1.5rem;
+}
+.form-group {
+  margin-bottom: 2rem;
+  label {
+    font-size: 1.3rem;
+    @include text-shadow(0px, 0px, 10px, $purple); 
+  }
+}
+.custom-file-label {
+  background-color: transparent!important;
+  color: $white;
+  border: unset;
+  border-bottom: 1px solid $white;
+  border-radius: unset;
+  &:focus {
+    @include box_shadow(0px, 0px, 5px, $purple);
+    background-color: transparent;
+    border-bottom: 1px solid $purple;
+  }
+}
+.form-control {
+  background-color: transparent;
+  color: $white;
+  border: unset;
+  border-bottom: 1px solid $white;
+  border-radius: unset;
+  &:focus {
+    @include box_shadow(0px, 0px, 5px, $purple);
+    background-color: transparent;
+    border-bottom: 1px solid $purple;
+    color: $white;
+  }
+}
+hr{
+  background-color: $purple;
+  width: 80%;
+}
+.nav-link {
+  color: $white!important;
+}
+.tabs {
+  font-family: "Oswald", sans-serif;
+  letter-spacing: 1px;
+}
+</style>
