@@ -43,18 +43,19 @@ const actions = {
       headers: authHeader()
     })
     .then(formData => {
-      console.log(formData);
       commit("NEW_PROJECT", formData);
       return Promise.resolve(formData);
     })
     .catch(error => {
-      console.log(error.response);
       return Promise.reject(error.response);
     })
   },
   updateProject({ commit }, { id, formData }) {
-    return axios.put(process.env.VUE_APP_API_URL + `/projects/${id}`, formData, {
-      headers: authHeader()
+    return axios.post(process.env.VUE_APP_API_URL + `/projects/${id}`, formData, {
+      headers: authHeader(),
+      params: {
+        "_method": "PUT"
+      }
     })
     .then(response => {
       commit("UPDATE_PROJECT", response.data);
@@ -69,7 +70,6 @@ const actions = {
       headers: authHeader()
     })
     .then(response => {
-      console.log(response);
       commit("DELETE_PROJECT", response.data);
       return Promise.resolve(response.data);
     })
@@ -92,6 +92,15 @@ const mutations = {
   },
   NEW_PROJECT(state, newProject) {
     state.projects.unshift(newProject)
+  },
+  UPDATE_PROJECT(state, updateProject) {
+    let projectPosition = '';
+    state.projects.forEach((project, index) => {
+      if(project.id === updateProject.id) {
+        projectPosition = index;
+      }
+    });
+    state.projects.splice(projectPosition, 1, updateProject);
   },
   DELETE_PROJECT(state, id) {
     let projectPosition = '';
