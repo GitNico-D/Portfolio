@@ -4,7 +4,7 @@
     <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
-  <h2 id="modifyForm-title" class="text-center fw-bold mt-5">
+  <h2 id="modifyForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter un nouveau 
     <span class="font-weight-bold font-style-italic">Projet !</span>
   </h2>

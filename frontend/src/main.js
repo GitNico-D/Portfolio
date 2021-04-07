@@ -26,7 +26,11 @@ import {
   faSignOutAlt,
   faAngleDoubleRight,
   faFolderPlus,
-  faEdit
+  faEdit,
+  faDatabase,
+  faChartPie,
+  faLaptopCode,
+  faAddressBook
 } from "@fortawesome/free-solid-svg-icons";
 import "./validation-config";
 
@@ -42,7 +46,11 @@ library.add(
   faSignOutAlt, 
   faAngleDoubleRight, 
   faFolderPlus,
-  faEdit
+  faEdit,
+  faDatabase,
+  faChartPie,
+  faLaptopCode,
+  faAddressBook
   );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.component("ValidationObserver", ValidationObserver);

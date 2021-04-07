@@ -1,6 +1,6 @@
 <template>
   <b-row class="justify-content-center mt-5">
-    <b-col cols="8">
+    <b-col cols md="12" lg="8" >
       <b-tabs
         active-nav-item-class="font-weight-bold text-uppercase text-success"
         active-tab-class="text-left text-white"
@@ -12,7 +12,7 @@
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Récupérer un projet</span>
           </template> 
-          <h2 id="modifyForm-title" class="text-center fw-bold mt-5">
+          <h2 id="modifyForm-title" class="text-center fw-bold my-5">
             Pour récupérer un <span class="font-weight-bold font-style-italic">Projet</span> 
             existant entrer son ID dans le champ ci-dessous
           </h2>
