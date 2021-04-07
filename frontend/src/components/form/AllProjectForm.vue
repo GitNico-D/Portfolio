@@ -53,7 +53,7 @@
               :img-alt="oneProject.altStatic"
               img-top
               class="mt-2 text-dark text-center"
-              v-show="showProjectCard"
+              v-show="showProjectCard && oneProject.id"
             >
             <b-card-body class="text-left fst-italic">
               <p>Ajouté le : {{oneProject.createdAt}}</p>

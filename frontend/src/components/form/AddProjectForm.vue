@@ -185,12 +185,13 @@ export default {
             this.successMessage = "Le projet a été ajouté !";
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
-            // this.errorMessage = '';
+            this.errorMessage = '';
           })
           .catch((error) => {
             this.errorMessage = error.data[0];
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
+            this.successMessage  = '';
           })
       });
     },
@@ -203,8 +204,8 @@ export default {
       this.newProject.imgStatic = null
       this.newProject.altStatic = ''
       this.newProject.creationDate = ''
-      // this.successMessage = ''
-      // this.errorMessage = ''
+      this.successMessage = ''
+      this.errorMessage = ''
     }
   },
   
