@@ -9,7 +9,7 @@
       v-on:showCareerForm="showCareerForm"
       v-on:returnToOverview="returnToOverview"
       />
-    <AllProjectForm v-show="displayProjectForm"/>
+    <ProjectForm v-show="displayProjectForm"/>
     <CareerForm v-show="displayCareerForm"/>
     <h2 class="text-center text-white mb-4 text-uppercase font-weight-bold" v-show="showOverview">Aperçu</h2>
       <b-row>
@@ -23,10 +23,12 @@
               Il y a un total de <span class="text-justify font-weight-bold">{{allProjects.length}}</span> projets présent sur le site.
               <hr>
               <p class="text-left"><u><i>Dernier projet ajouté</i></u> :
-                <b-card title="projectName" sub-title="projectCreatedAt" class="mt-3"></b-card>
+                <span v-for="(project, index) in allProjects" :key="index">
+                  <b-card v-if="index === allProjects.length - 1" :title="project.name" :sub-title="formatDate(project.createdAt)" class="mt-3"></b-card>
+                </span>
               </p>
               <p class="text-left"><u><i>Dernier projet modifié</i></u> :
-                <b-card title="projectName" sub-title="projectUpdatedAt" class="mt-3"> </b-card>
+                  <b-card :title="lastUpdatedProject().name" :sub-title="formatDate(lastUpdatedProject().updatedAt)" class="mt-3"> </b-card>
               </p>
             </b-card-text>
             <template #footer>
@@ -112,7 +114,7 @@ import BackgroundPage from "@/components/BackgroundPage.vue";
 import Transition from "@/components/Transition.vue";
 import SidebarAdmin from "@/components/admin/SidebarAdmin.vue";
 import AdminPresentation from "@/components/admin/AdminPresentation.vue";
-import AllProjectForm from "@/components/form/AllProjectForm.vue";
+import ProjectForm from "@/components/form/ProjectForm.vue";
 import CareerForm from "@/components/admin/CareerForm.vue";
 import HomePageLink from "@/components/HomePageLink.vue";
 import { mapGetters } from "vuex";
@@ -127,7 +129,7 @@ export default {
     HomePageLink,
     AdminPresentation,
     CareerForm,
-    AllProjectForm
+    ProjectForm
 
   },
   data() {
@@ -146,7 +148,7 @@ export default {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
     },
-    ...mapGetters(["allProjects"])
+    ...mapGetters(["allProjects"]),
   },
   methods: {
     dateDiff(date1, date2) {
@@ -209,6 +211,30 @@ export default {
       setTimeout(() => {
         this.showTransition = false;
       }, 1300);
+    },
+    formatDate(date) {
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      };
+      let formatDate = new Date(date).toLocaleDateString(
+        undefined,
+        options
+      );
+      return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
+    },
+    lastUpdatedProject() {
+      let dateDiffArray = [];
+      let lastProjectUpdated;
+      this.allProjects.forEach(project => {
+        dateDiffArray.push(new Date(project.updatedAt).getTime());
+        if(new Date(project.updatedAt).getTime() == Math.max(...dateDiffArray)) {
+          lastProjectUpdated = project;
+        }
+      });
+      return lastProjectUpdated;
     }
   },
   created() {
