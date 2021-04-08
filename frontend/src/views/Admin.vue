@@ -7,10 +7,13 @@
     <SidebarAdmin 
       v-on:showProjectForm="showProjectForm"
       v-on:showCareerForm="showCareerForm"
+      v-on:showSkillForm="showSkillForm"
+      v-on:showPresentationForm="showPresentationForm"
       v-on:returnToOverview="returnToOverview"
       />
     <ProjectForm v-show="displayProjectForm"/>
     <CareerForm v-show="displayCareerForm"/>
+    <SkillForm v-show="displaySkillForm"/>
     <h2 class="text-center text-white mb-4 text-uppercase font-weight-bold" v-show="showOverview">Aperçu</h2>
       <b-row>
         <b-card-group deck v-show="showOverview" class="p-4 rounded flex-wrap">
@@ -114,8 +117,9 @@ import BackgroundPage from "@/components/BackgroundPage.vue";
 import Transition from "@/components/Transition.vue";
 import SidebarAdmin from "@/components/admin/SidebarAdmin.vue";
 import AdminPresentation from "@/components/admin/AdminPresentation.vue";
-import ProjectForm from "@/components/form/ProjectForm.vue";
+import ProjectForm from "@/components/admin/ProjectForm.vue";
 import CareerForm from "@/components/admin/CareerForm.vue";
+import SkillForm from "@/components/admin/SkillForm.vue";
 import HomePageLink from "@/components/HomePageLink.vue";
 import { mapGetters } from "vuex";
 import jwt_decode from "jwt-decode";
@@ -129,7 +133,8 @@ export default {
     HomePageLink,
     AdminPresentation,
     CareerForm,
-    ProjectForm
+    ProjectForm,
+    SkillForm
 
   },
   data() {
@@ -188,14 +193,16 @@ export default {
       this.displayPresentationForm = false;
       this.displaySkillForm = false;
       this.displayProjectForm = false;
-      this.sectionSelected = "Section expérience"
+      this.showOverview = false;
+      this.sectionSelected = "Section carrière"
     },
     showPresentationForm: function(color) {
       this.pageColor = color;
       this.displayCareerForm = false;
-      this.displayPresentationForm = false;
+      this.displayPresentationForm = true;
       this.displaySkillForm = false;
       this.displayProjectForm = false;
+      this.showOverview = false;
       this.sectionSelected = "Section presentation"
     },
     showSkillForm: function(color) {
@@ -204,6 +211,7 @@ export default {
       this.displayPresentationForm = false;
       this.displaySkillForm = true;
       this.displayProjectForm = false;
+      this.showOverview = false;
       this.sectionSelected = "Section compétence"
     },
     actionTransition() {

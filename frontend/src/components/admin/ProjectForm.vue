@@ -62,7 +62,6 @@
               <b-card-text>
                 {{oneProject.description }}
               </b-card-text>
-              <b-button variant="primary" class="m-2" @click="toModifyForm">Modifier</b-button>
               <b-button variant="danger" class="m-2" @click="onDelete">Supprimer</b-button>
               <b-button type="reset" variant="info" class="m-2" @click="toFetchProject">
                   Récupérer un autre projet

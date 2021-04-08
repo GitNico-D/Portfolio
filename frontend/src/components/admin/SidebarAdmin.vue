@@ -32,7 +32,7 @@
               button
               :style="{ '--bg-color': '#00a1ba' }"
               class="my-3 btn-career"
-              @click="$emit('showCareerForm', '#00a1ba')" 
+              @click="{$emit('showCareerForm', '#00a1ba')}" 
               v-b-toggle.sidebar  
               >
               Section Carrières
@@ -40,8 +40,8 @@
             <b-list-group-item 
               button
               :style="{ '--bg-color': '#36C486' }"
-              class="my-3"  
-              @click="$emit('showProjectForm', '#36C486')"
+              class="my-3 btn-skill"  
+              @click="{$emit('showSkillForm', '#36C486')}"
               v-b-toggle.sidebar
               >
               Section Compétences
@@ -49,8 +49,8 @@
             <b-list-group-item 
               button 
               :style="{ '--bg-color': '#485DA6' }"
-              class="my-3"  
-              @click="$emit('showProjectForm', '#485DA6')"
+              class="my-3 btn-presentation"  
+              @click="$emit('showPresentationForm', '#485DA6')"
               v-b-toggle.sidebar
               >
               Section Présentation
@@ -124,7 +124,7 @@ export default {
       color: $dark-gray;
     }
   }
-  &-overview, &-project, &-career {
+  &-overview, &-project, &-career, &-skill, &-presentation {
     &:hover {
       background-color: var(--bg-color);
       color: $white!important;

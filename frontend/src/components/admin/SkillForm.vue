@@ -10,20 +10,20 @@
         <b-tab class="mt-5 justify-content-center">
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
-            <span>Récupérer une étape de carrière</span>
+            <span>Récupérer une compétence</span>
           </template> 
           <h2 id="modifyForm-title" class="text-center fw-bold my-5">
-            Pour récupérer une <span class="font-weight-bold font-style-italic">Étape de carrière</span> 
+            Pour récupérer une <span class="font-weight-bold font-style-italic">Compétence</span> 
             existante, entré son ID dans le champ ci-dessous.
           </h2>
           <ValidationObserver ref="recoverForm" v-slot="{ handleSubmit }">
-            <b-form @submit.prevent="handleSubmit(fetchCareer)" >
+            <b-form @submit.prevent="handleSubmit(fetchSkill)" >
               <ValidationProvider ref="id" rules="required|numeric" name="ID du projet" v-slot="{ errors }">
                 <b-form-group id="id">
-                  <label for="input-id" class="text-uppercase">ID de l'étape de carrière</label>
+                  <label for="input-id" class="text-uppercase">ID de la compétence</label>
                   <b-form-input 
                     id="input-id" 
-                    v-model="careerId"
+                    v-model="skillId"
                     placeholder="Entrer ID" 
                     required>
                   </b-form-input>
@@ -39,7 +39,7 @@
               <div class="d-flex justify-content-center">
                 <b-button type="submit" variant="success" class="m-3" :disabled="loading">
                   <b-spinner v-show="loading" label="Spinning" class="pt-4"></b-spinner>
-                  <span class="pl-2 pb-2">Récupérer l'étape de carrière {{ stageId }}</span>
+                  <span class="pl-2 pb-2">Récupérer la compétence {{ skillId }}</span>
                 </b-button>
               </div>
             </b-form>
@@ -48,22 +48,22 @@
               <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
             </div>
             <b-card
-              :title="oneCareer.name + ' ' + oneCareer.id"
-              :img-src="oneCareer.logoCompany"
+              :title="oneSkill.name + ' ' + oneSkill.id"
+              :img-src="oneSkill.icon"
               img-top
               class="mt-2 text-dark text-center"
-              v-show="showCareerCard && oneCareer.id"
+              v-show="showSkillCard && oneSkill.id"
             >
             <b-card-body class="text-left fst-italic">
-              <p>Ajouté le : {{oneCareer.createdAt}}</p>
-              <p>Mise à jour le : {{oneCareer.updatedAt}}</p>
+              <p>Ajouté le : {{oneSkill.createdAt}}</p>
+              <p>Mise à jour le : {{oneSkill.updatedAt}}</p>
             </b-card-body>
               <b-card-text>
-                {{oneCareer.description }}
+                {{oneSkill.description }}
               </b-card-text>
               <b-button variant="danger" class="m-2" @click="onDelete">Supprimer</b-button>
-              <b-button type="reset" variant="info" class="m-2" @click="toFetchCareer">
-                  Récupérer une autre étape de carrière
+              <b-button type="reset" variant="info" class="m-2" @click="toFetchSkill">
+                  Récupérer une autre compétence
               </b-button>
             </b-card>
           </ValidationObserver>
@@ -71,17 +71,17 @@
         <b-tab class="mt-5 justify-content-center">
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
-            <span>Ajouter une nouvelle étape de carrière</span>
+            <span>Ajouter une nouvelle compétence</span>
           </template> 
-          <AddCareerForm />
+          <AddSkillForm />
         </b-tab>
         <b-tab class="mt-3 justify-content-center">
           <template #title>
             <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
-            <span v-if="!careerId">Modifier une étape de carrière</span>
-            <span v-else>Modifier l'étape de carrière {{ oneCareer.id }}</span>
+            <span v-if="!skillId">Modifier une compétence</span>
+            <span v-else>Modifier la compétence {{ oneSkill.id }}</span>
           </template>           
-          <UpdateCareerForm />
+          <UpdateSkillForm />
         </b-tab>
       </b-tabs>
     </b-col>
@@ -92,77 +92,77 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
-import AddCareerForm from "@/components/form/AddCareerForm"
-import UpdateCareerForm from "@/components/form/UpdateCareerForm"
+import AddSkillForm from "@/components/form/AddSkillForm"
+import UpdateSkillForm from "@/components/form/UpdateSkillForm"
 // import { setFormWithFile } from "../mixins/formMixin";
 
 export default {
-  name: "CareerForm",
+  name: "SkillForm",
   components: { 
     ValidationProvider,
     ValidationObserver,
     AlertForm,
-    AddCareerForm,
-    UpdateCareerForm
+    AddSkillForm,
+    UpdateSkillForm
   },
   data() {
     return {
       loading: false,
-      showCareerCard: false,
+      showSkillCard: false,
       successMessage: '',
       errorMessage: '',
-      careerId: ''
+      skillId: ''
     }
   },
   // mixins : [ setFormWithFile ],
   computed: {
-    ...mapGetters(["oneCareer"])
+    ...mapGetters(["oneSkill"])
   },
   methods: {
-    ...mapActions(["deleteCareer", "getCareer", "resetStateCareer"]),
-    fetchCareer() {      
-      this.getCareer(this.careerId)
+    ...mapActions(["deleteSkill", "getSkill", "resetStateSkill"]),
+    fetchSkill() {      
+      this.getSkill(this.skillId)
         .then(() => {
-          this.successMessage = 'Voici l\'étape de carrière' + this.careerId + ' !' 
-          this.showCareerCard = true;
-          console.log(this.showCareerCard);
+          this.successMessage = 'Voici la compétence' + this.skillId + ' !' 
+          this.showSkillCard = true;
+          console.log(this.showSkillCard);
           document.getElementById("alertModify").scrollIntoView();  
           this.errorMessage = '';
         })
         .catch((error) => {   
-          console.log(this.careerId);
+          console.log(this.skillId);
           if(error.code == "404") {
-            this.errorMessage = 'Le l\'étape de carrière ' + this.careerId  + ' n\'existe pas !';
+            this.errorMessage = 'La compétence ' + this.skillId  + ' n\'existe pas !';
             this.successMessage = '';
             this.loading = false;
-            this.showCareerCard = false;       
+            this.showSkillCard = false;       
           }  
         })
     },
     onDelete() {
-      console.log(this.careerId);
-      this.deleteCareer(this.careerId) 
+      console.log(this.skillId);
+      this.deleteSkill(this.skillId) 
         .then(() => {
-          console.log(this.careerId);
-          this.successMessage = 'l\'étape de carrière ' + this.careerId  + ' a bien été supprimé !';
-          this.showCareerCard = false;
-          this.resetStateCareer();
+          console.log(this.skillId);
+          this.successMessage = 'La compétence ' + this.skillId  + ' a bien été supprimé !';
+          this.showSkillCard = false;
+          this.resetStateSkill();
           document.getElementById("alertModify").scrollIntoView(); 
         })
         .catch((error) => {   
           if(error.code == "404") {
-            this.errorMessage = 'l\'étape de carrière ' + this.careerId  + ' n\'existe pas !';
+            this.errorMessage = 'La compétence ' + this.skillId  + ' n\'existe pas !';
             this.successMessage = '';
             this.loading = false;
-            this.showCareerCard = false;       
+            this.showSkillCard = false;       
           }  
         }
       )
     },
-    toFetchCareer() {
-      this.showCareerCard = false;
+    toFetchSkill() {
+      this.showSkillCard = false;
       document.getElementById("modifyForm-title").scrollIntoView(); 
-      this.resetStateCareer();
+      this.resetStateSkill();
       this.successMessage = '';
     },
     toModifyForm() {

@@ -50,12 +50,25 @@ const actions = {
       return Promise.reject(error.response);
     })
   },
-  updateProject({ commit }, { id, formData }) {
+  updateProjectWithFile({ commit }, { id, formData }) {
     return axios.post(process.env.VUE_APP_API_URL + `/projects/${id}`, formData, {
       headers: authHeader(),
       params: {
         "_method": "PUT"
       }
+    })
+    .then(response => {
+      commit("UPDATE_PROJECT", response.data);
+      return Promise.resolve(response.data);
+    })
+    .catch(error => {
+      return Promise.reject(error.response.data);
+    })
+  },
+  updateProjectWithoutFile({ commit }, { id, form }) {
+    return axios.put(process.env.VUE_APP_API_URL + `/projects/${id}`, form, {
+      headers: authHeader(),
+              "Content-Type": "application/json"
     })
     .then(response => {
       commit("UPDATE_PROJECT", response.data);

@@ -80,7 +80,6 @@
             >
               Garder la description actuel ?
             </b-form-checkbox>
-          
         </b-form-group>
       </ValidationProvider>
       <hr>
@@ -111,17 +110,15 @@
             >
               Garder l'url actuel ?
             </b-form-checkbox>
-          
         </b-form-group>
       </ValidationProvider>
       <hr>
-      <!-- :value="(statusImage == 'true') ? (modifyProject.imgStatic = oneProject.imgStatic) : modifyProject.imgStatic = [{}, '']" -->
       <div v-show="statusImage == 'not_change'">
         <h5 class="text-left text-uppercase">Image actuelle du projet</h5>
         <b-img :src="oneProject.imgStatic" fluid alt="Fluid image" class="mt-1"></b-img>
         <p class="m-3"><u>Url de l'image :</u> {{ oneProject.imgStatic }}</p>
       </div>
-      <ValidationProvider ref="new-imgStatic" rules="required" name="Image" v-slot="{ errors }">
+      <ValidationProvider ref="new-imgStatic" rules="" name="Image" v-slot="{ errors }">
         <b-form-group id="new-imgStatic" class="mt-4" v-show="statusImage == 'change'">
           <label for="input-imgStatic" class="text-uppercase">Nouvelle image de présentation du projet</label>
           <b-form-file
@@ -264,6 +261,7 @@ export default {
         altStatic: '',
         creationDate: ''
       },
+      oldImgStatic: '',
       successMessage: '',
       errorMessage: '',
       statusImage: "not_change",
@@ -290,10 +288,11 @@ export default {
         options
       );
       return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
-    }
+    },
+    
   },
   methods: {
-    ...mapActions(["updateProject", "resetStateProject"]),
+    ...mapActions(["updateProjectWithFile", "updateProjectWithoutFile", "resetStateProject"]),
     onModify() {
       this.loading = true;
       this.$refs.modifyForm.validate()
@@ -302,28 +301,44 @@ export default {
             this.loading = false;
             return
           }
-        let fd = new FormData();
-        fd.append('imgStatic', this.modifyProject.imgStatic);
-        Object.entries(this.modifyProject).forEach(
-          ([key, value]) => {
-            if (value !== null && value !== '') {
-              fd.append(`${key}`, value);
-            }
-          },
-        );
-        this.updateProject({
-            id: this.projectId, 
-            formData: fd
-          })
-          .then(() => {
-            this.successMessage = 'Le projet ' + this.projectId + ' a été modifier';
-            this.loading = false;
-            document.getElementById("alert").scrollIntoView();  
-          })
-          .catch((error) => {
-            this.errorMessage = error.message;
-          })
-        });
+          if(this.statusImage == "not_change") {
+            this.modifyProject.imgStatic = this.oldImgStatic;
+            this.updateProjectWithoutFile({
+              id: this.projectId, 
+              form: this.modifyProject
+            })
+            .then(() => {
+              this.successMessage = 'Le projet ' + this.projectId + ' a été modifier';
+              this.loading = false;
+              document.getElementById("alert").scrollIntoView();  
+            })
+            .catch((error) => {
+              this.errorMessage = error.message;
+            })
+          } else {
+            let fd = new FormData();
+            fd.append('imgStatic', this.modifyProject.imgStatic);
+            Object.entries(this.modifyProject).forEach(
+              ([key, value]) => {
+                if (value !== null && value !== '') {
+                  fd.append(`${key}`, value);
+                }
+              },
+            );
+            this.updateProjectWithFile({
+              id: this.projectId, 
+              formData: fd
+            })
+            .then(() => {
+              this.successMessage = 'Le projet ' + this.projectId + ' a été modifier';
+              this.loading = false;
+              document.getElementById("alert").scrollIntoView();  
+            })
+            .catch((error) => {
+              this.errorMessage = error.message;
+            })
+          }
+      })
     },
     fillForm(){
       this.recoverForm = false;
@@ -344,6 +359,12 @@ export default {
       this.modifyProject.creationDate = ''
       this.successMessage = ''
       this.errorMessage = ''
+      this.statusImage = "not_change",
+      this.statusName = "false",
+      this.statusDescription = "false",
+      this.statusUrl = "false",
+      this.statusAltImage = "false",
+      this.statusCreationDate = "false"
     },
     onCancel: function() {
       console.log("click");
