@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -66,5 +69,17 @@ class FileUploader
         if ($configuration->getName()  == 'skill') {
             return $entity->setIcon($file);
         }
+    }
+
+    /**
+     * Delete a File
+     */
+    public function deleteFile($file, $entity) 
+    {
+        $fileName = pathinfo($file)['basename'];
+        $originalPathFile = ($this->uploadPath . '/' . $entity . '/' . $fileName);
+        $fileToRemove = new File($originalPathFile);
+        $filesystem = new Filesystem();
+        $filesystem->remove($fileToRemove);
     }
 }
