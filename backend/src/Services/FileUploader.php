@@ -73,6 +73,8 @@ class FileUploader
 
     /**
      * Delete a File
+     * @param $file
+     * @param $entity
      */
     public function deleteFile($file, $entity) 
     {

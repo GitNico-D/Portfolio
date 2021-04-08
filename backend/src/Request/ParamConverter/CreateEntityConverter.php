@@ -21,6 +21,7 @@ class CreateEntityConverter implements ParamConverterInterface
      * @param SerializerInterface $serializer
      * @param EntityManagerInterface $entityManager
      * @param SearchRelatedEntity $searchRelatedEntity
+     * @param FileUploader $fileUploader
      */
     public function __construct(
         SerializerInterface $serializer,
