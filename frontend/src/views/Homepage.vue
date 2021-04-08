@@ -1,32 +1,34 @@
 <template>
   <b-container fluid>
-    <b-link
-      v-if="loggedIn"
-      to="/admin"
-      type="button"
-      class="btn btn-admin"
-      v-b-popover.hover.leftbottom="'Vers page administrateur'"
-    >
-      <font-awesome-icon icon="user-shield" />
-    </b-link>
-    <b-link
-      to="/login"
-      v-if="!loggedIn"
-      type="button"
-      class="btn btn-login"
-      v-b-popover.hover.rightbottom="'Connexion'"
-    >
-      <font-awesome-icon icon="sign-out-alt" />
-    </b-link>
-    <b-button
-      to=""
-      v-if="loggedIn"
-      @click.prevent="logOut"
-      class="btn btn-logout"
-      v-b-popover.hover.rightbottom="'Déconnexion'"
-    >
-      <font-awesome-icon icon="sign-in-alt" />
-    </b-button>
+    <div class="position-absolute div-button">
+      <b-link
+        v-if="loggedIn"
+        to="/admin"
+        type="button"
+        class="btn btn-admin"
+        v-b-popover.hover.leftbottom="'Vers page administrateur'"
+      >
+        <font-awesome-icon icon="user-shield" />
+      </b-link>
+      <b-link
+        to="/login"
+        v-if="!loggedIn"
+        type="button"
+        class="btn btn-login"
+        v-b-popover.hover.rightbottom="'Connexion'"
+      >
+        <font-awesome-icon icon="sign-out-alt" />
+      </b-link>
+      <b-button
+        to=""
+        v-if="loggedIn"
+        @click.prevent="logOut"
+        class="btn btn-logout"
+        v-b-popover.hover.rightbottom="'Déconnexion'"
+      >
+        <font-awesome-icon icon="sign-in-alt" />
+      </b-button>
+      </div>
     <b-row>
       <div class="circle_box">
         <div class="circle circle-blue"></div>
@@ -203,6 +205,10 @@ export default {
         box-shadow: 0 0 10px $white !important;
       }
     }
+  }
+  .div-button {
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 @keyframes slideH1 {
