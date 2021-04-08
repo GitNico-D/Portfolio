@@ -30,7 +30,7 @@ class Project
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank
-     * @Assert\Length(min="2", max="150")
+     * @Assert\Length(min="2")
      */
     private $description;
 
