@@ -27,11 +27,11 @@
               <hr>
               <p class="text-left"><u><i>Dernier projet ajouté</i></u> :
                 <span v-for="(project, index) in allProjects" :key="index">
-                  <b-card v-if="index === allProjects.length - 1" :title="project.name" :sub-title="formatDate(project.createdAt)" class="mt-3"></b-card>
+                  <b-card v-if="index === allProjects.length - 1" :title="project.name" :sub-title="formatDate(project.createdAt)" class="mt-3">{{project.name}}</b-card>
                 </span>
               </p>
-              <p class="text-left"><u><i>Dernier projet modifié</i></u> :
-                  <b-card :title="lastUpdatedProject().name" :sub-title="formatDate(lastUpdatedProject().updatedAt)" class="mt-3"> </b-card>
+              <p class="text-left" v-if="!lastUpdatedProject"><u><i>Dernier projet modifié</i></u> :
+                  <b-card :title="lastUpdatedProject().name" :sub-title="formatDate(lastUpdatedProject().updatedAt)" class="mt-3">{{lastUpdatedProject().name}}</b-card>
               </p>
             </b-card-text>
             <template #footer>
