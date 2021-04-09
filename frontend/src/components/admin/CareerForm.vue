@@ -16,57 +16,39 @@
             Pour récupérer une <span class="font-weight-bold font-style-italic">Étape de carrière</span> 
             existante, entré son ID dans le champ ci-dessous.
           </h2>
-          <ValidationObserver ref="recoverForm" v-slot="{ handleSubmit }">
-            <b-form @submit.prevent="handleSubmit(fetchCareer)" >
-              <ValidationProvider ref="id" rules="required|numeric" name="ID du projet" v-slot="{ errors }">
-                <b-form-group id="id">
-                  <label for="input-id" class="text-uppercase">ID de l'étape de carrière</label>
-                  <b-form-input 
-                    id="input-id" 
-                    v-model="careerId"
-                    placeholder="Entrer ID" 
-                    required>
-                  </b-form-input>
-                  <b-alert
-                    variant="danger"
-                    v-if="errors[0]"
-                    v-text="errors[0]"
-                    show
-                  >
-                  </b-alert>
-                </b-form-group>
-              </ValidationProvider>
-              <div class="d-flex justify-content-center">
-                <b-button type="submit" variant="success" class="m-3" :disabled="loading">
-                  <b-spinner v-show="loading" label="Spinning" class="pt-4"></b-spinner>
-                  <span class="pl-2 pb-2">Récupérer l'étape de carrière {{ stageId }}</span>
-                </b-button>
-              </div>
-            </b-form>
-            <div id="alertModify">
-              <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
-              <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
-            </div>
-            <b-card
-              :title="oneCareer.name + ' ' + oneCareer.id"
-              :img-src="oneCareer.logoCompany"
-              img-top
-              class="mt-2 text-dark text-center"
-              v-show="showCareerCard && oneCareer.id"
-            >
-            <b-card-body class="text-left fst-italic">
-              <p>Ajouté le : {{oneCareer.createdAt}}</p>
-              <p>Mise à jour le : {{oneCareer.updatedAt}}</p>
-            </b-card-body>
-              <b-card-text>
-                {{oneCareer.description }}
-              </b-card-text>
-              <b-button variant="danger" class="m-2" @click="onDelete">Supprimer</b-button>
-              <b-button type="reset" variant="info" class="m-2" @click="toFetchCareer">
-                  Récupérer une autre étape de carrière
-              </b-button>
-            </b-card>
-          </ValidationObserver>
+          <div>
+            <b-table striped hover :items="allCareerStages" :fields="fields">
+              <template #cell(createdAt)="data">
+                {{ formatDate(data.value) }}
+              </template>
+              <template #cell(updatedAt)="data">
+                {{ formatDate(data.value) }}
+              </template>
+            </b-table>
+          </div>
+          <div id="alertModify">
+            <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
+            <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
+          </div>
+          <b-card
+            :title="oneCareer.name + ' ' + oneCareer.id"
+            :img-src="oneCareer.logoCompany"
+            img-top
+            class="mt-2 text-dark text-center"
+            v-show="showCareerCard && oneCareer.id"
+          >
+          <b-card-body class="text-left fst-italic">
+            <p>Ajouté le : {{oneCareer.createdAt}}</p>
+            <p>Mise à jour le : {{oneCareer.updatedAt}}</p>
+          </b-card-body>
+            <b-card-text>
+              {{oneCareer.description }}
+            </b-card-text>
+            <b-button variant="danger" class="m-2" @click="onDelete">Supprimer</b-button>
+            <b-button type="reset" variant="info" class="m-2" @click="toFetchCareer">
+                Récupérer une autre étape de carrière
+            </b-button>
+          </b-card>
         </b-tab>
         <b-tab class="mt-5 justify-content-center">
           <template #title>
@@ -89,18 +71,16 @@
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
 import AddCareerForm from "@/components/form/AddCareerForm"
 import UpdateCareerForm from "@/components/form/UpdateCareerForm"
+import formatDate from "../../services/formatDate";
 // import { setFormWithFile } from "../mixins/formMixin";
 
 export default {
   name: "CareerForm",
   components: { 
-    ValidationProvider,
-    ValidationObserver,
     AlertForm,
     AddCareerForm,
     UpdateCareerForm
@@ -111,15 +91,45 @@ export default {
       showCareerCard: false,
       successMessage: '',
       errorMessage: '',
-      careerId: ''
+      careerId: '',
+      fields: [
+        {
+          key: 'id',
+          label: 'Id',
+          sortable: true
+        },
+        { 
+          key: "name",
+          label: "Nom",
+          sortable: true
+        },
+        {
+          key: "company",
+          label: "Société"
+        },
+        {
+          key: "createdAt",
+          label: "Date d'ajout",
+          sortable: true
+        },
+        {
+          key: "updatedAt",
+          label: "Date de modification",
+          sortable: true
+        }
+      ],
+      items: []
     }
   },
   // mixins : [ setFormWithFile ],
   computed: {
-    ...mapGetters(["oneCareer"])
+    ...mapGetters(["oneCareer", "allCareerStages"])
   },
   methods: {
     ...mapActions(["deleteCareer", "getCareer", "resetStateCareer"]),
+    formatDate(date) {
+      return formatDate(date);
+    },
     fetchCareer() {      
       this.getCareer(this.careerId)
         .then(() => {
@@ -165,10 +175,6 @@ export default {
       this.resetStateCareer();
       this.successMessage = '';
     },
-    toModifyForm() {
-      console.log(document.getElementById("__BVID__62___BV_tab_button__"));
-      document.getElementById("__BVID__62___BV_tab_button__").classList.add('active');
-    }
   }
 }
 </script>

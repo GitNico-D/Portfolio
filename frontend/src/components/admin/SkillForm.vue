@@ -164,10 +164,6 @@ export default {
       document.getElementById("modifyForm-title").scrollIntoView(); 
       this.resetStateSkill();
       this.successMessage = '';
-    },
-    toModifyForm() {
-      console.log(document.getElementById("__BVID__62___BV_tab_button__"));
-      document.getElementById("__BVID__62___BV_tab_button__").classList.add('active');
     }
   }
 }
