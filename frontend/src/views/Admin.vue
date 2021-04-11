@@ -30,8 +30,8 @@
                   <b-card v-if="index === allProjects.length - 1" :title="project.name" :sub-title="formatDate(project.createdAt)" class="mt-3">{{project.name}}</b-card>
                 </span>
               </p>
-              <p class="text-left" v-if="!lastUpdatedProject"><u><i>Dernier projet modifié</i></u> :
-                  <b-card :title="lastUpdatedProject().name" :sub-title="formatDate(lastUpdatedProject().updatedAt)" class="mt-3">{{lastUpdatedProject().name}}</b-card>
+              <p class="text-left" v-if="lastUpdatedProject"><u><i>Dernier projet modifié</i></u> :
+                  <b-card :title="lastUpdatedProject.name" :sub-title="formatDate(lastUpdatedProject.updatedAt)" class="mt-3">{{lastUpdatedProject.name}}</b-card>
               </p>
             </b-card-text>
             <template #footer>
@@ -154,6 +154,17 @@ export default {
       return this.$store.state.auth.status.loggedIn;
     },
     ...mapGetters(["allProjects"]),
+    lastUpdatedProject() {
+      let dateDiffArray = [];
+      let lastProjectUpdated;
+      this.allProjects.forEach(project => {
+        dateDiffArray.push(new Date(project.updatedAt).getTime());
+        if(new Date(project.updatedAt).getTime() == Math.max(...dateDiffArray)) {
+          lastProjectUpdated = project;
+        }
+      });
+      return lastProjectUpdated;
+    }
   },
   methods: {
     dateDiff(date1, date2) {
@@ -179,6 +190,7 @@ export default {
       this.sectionSelected = "Tableau de bord"
     },
     showProjectForm: function(color) {
+      console.log("emit");
       this.pageColor = color;
       this.displayProjectForm = true;
       this.displayCareerForm = false;
@@ -232,17 +244,6 @@ export default {
         options
       );
       return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
-    },
-    lastUpdatedProject() {
-      let dateDiffArray = [];
-      let lastProjectUpdated;
-      this.allProjects.forEach(project => {
-        dateDiffArray.push(new Date(project.updatedAt).getTime());
-        if(new Date(project.updatedAt).getTime() == Math.max(...dateDiffArray)) {
-          lastProjectUpdated = project;
-        }
-      });
-      return lastProjectUpdated;
     }
   },
   created() {

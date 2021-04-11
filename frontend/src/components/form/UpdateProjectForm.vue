@@ -17,7 +17,7 @@
   <p class="mt-4 text-left" v-show="oneProject.id">
     ID du <span class="text-uppercase font-weight-bold">projet : </span>
     {{oneProject.id}}
-  </p>
+  </p>''
   <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" v-show="oneProject.id || showForm">
     <b-form @submit.prevent="handleSubmit(onModify)" @reset.prevent="onReset" >
       <ValidationProvider ref="name" rules="required|min:2" name="Titre" v-slot="{ errors }">
@@ -76,15 +76,16 @@
         </b-form-group>
       </ValidationProvider>
       <hr>
-      <div>
+      <div >
         <h5 class="text-left text-uppercase">Image du projet</h5>
-        <b-img :src="oneProject.imgStatic" fluid alt="Fluid image" class="mt-1" v-show="!modifyProject.imgStatic"></b-img>
+        <b-img :src="oneProject.imgStatic" fluid alt="Fluid image" class="mt-1" ></b-img>
       </div>
       <ValidationProvider ref="new-imgStatic" rules="" name="Image" v-slot="{ errors }">
         <b-form-group id="new-imgStatic" class="mt-4">
           <label for="input-imgStatic" class="text-uppercase">Nouvelle image de présentation du projet</label>
           <b-form-file
             id="input-new-imgStatic"
+            ref="file"
             name="new-imgStatic"
             v-model="modifyProject.imgStatic"
             :state="Boolean(modifyProject.imgStatic)"
@@ -92,15 +93,15 @@
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
           ></b-form-file>
-        <b-alert
-          class="mt-1"
-          variant="danger"
-          v-if="errors[0]"
-          v-text="errors[0]"
-          show
-        >
-        </b-alert>
-        <div class="mt-3">Fichier sélectionné: {{ modifyProject.imgStatic ? modifyProject.imgStatic.name : '' }}</div>
+          <b-alert
+            class="mt-1"
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show
+          >
+          </b-alert>
+          <div class="mt-3">Fichier sélectionné: {{ modifyProject.imgStatic ? modifyProject.imgStatic.name : '' }}</div>
         </b-form-group>
       </ValidationProvider>
       <hr>
@@ -171,7 +172,6 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
-// import formatDate from "../../services/formatDate";
 // import { setFormWithFile } from "../mixins/formMixin";
 
 export default {
@@ -202,22 +202,10 @@ export default {
   // mixins : [ setFormWithFile ],
   computed: {
     ...mapGetters(["oneProject"]),
+    
   },
   methods: {
     ...mapActions(["updateProjectWithFile", "updateProjectWithoutFile", "resetStateProject"]),
-    formatDate() {
-      const options = {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      };
-      let formatDate = new Date(this.oneProject.creationDate).toLocaleDateString(
-        undefined,
-        options
-      );
-      return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
-    },
     onModify() {
       this.loading = true;
       this.$refs.modifyForm.validate()
@@ -226,7 +214,7 @@ export default {
             this.loading = false;
             return
           }
-          if(this.statusImage == "not_change") {
+          if(this.modifyProject.imgStatic) {
             this.modifyProject.imgStatic = this.oldImgStatic;
             this.updateProjectWithoutFile({
               id: this.projectId, 

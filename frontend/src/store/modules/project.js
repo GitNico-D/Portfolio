@@ -100,7 +100,6 @@ const mutations = {
     state.projects = projects;
   },
   SET_ONE_PROJECT(state, project) {
-    console.log(project);
     state.project = project;
   },
   NEW_PROJECT(state, newProject) {

@@ -82,6 +82,7 @@ class UpdateEntityConverter implements ParamConverterInterface
                 [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
             );
             if($request->files) {
+                $this->fileUploader->deleteFile($entity->getImgStatic(), $configuration->getName());
                 $uploadFile = $this->fileUploader->getUploadFile($request->files);
                 $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);                
             }

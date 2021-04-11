@@ -116,7 +116,7 @@
           </b-alert>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading">
+        <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading" @click="$emit('addProject')">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
           <span class="pl-2 pb-2">Ajouter projet</span>
         </b-button>

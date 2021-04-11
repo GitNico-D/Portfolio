@@ -6,8 +6,9 @@
         active-tab-class="text-left text-white"
         align="center"
         class="mt-5"
-        fill>
-        <b-tab class="mt-5 justify-content-center">
+        fill
+        v-model="tabIndex">
+        <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Listes de tous les Projets</span>
@@ -16,7 +17,12 @@
             Tous les <span class="font-weight-bold font-style-italic">Projets</span>
           </h2>
           <div>
-            <b-table responsive hover no-collpase bordered dark :items="allProjects" :fields="fields">
+            <b-button @click="refreshTab" variant="info" class="m-2"> Refresh</b-button>
+            <div id="alertModify">
+              <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
+              <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
+            </div>
+            <b-table id="table-list" responsive hover no-collpase bordered dark :items="allProjects" :fields="fields">
               <b-thead class="p-5"></b-thead>
               <template #cell(creationDate)="data">
                 {{ formatDate(data.value) }}
@@ -28,7 +34,7 @@
                 {{ formatDate(data.value) }}
               </template>
               <template #cell(actions)="row">
-                <b-button variant="info" @click="toModifyForm" class="m-1 p-2 btn-modify">
+                <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
                   <font-awesome-icon icon="edit"/> Modifier
                 </b-button>
                 <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-details">
@@ -50,24 +56,26 @@
                     <b-card-text>
                       {{row.item.description }}
                     </b-card-text>
-                    <b-button variant="danger" class="m-2" @click="onDelete">Supprimer</b-button>
+                    <b-button variant="info" @click="toModifyForm" class="m-1 p-2 btn-modify">
+                      <font-awesome-icon icon="edit"/> Modifier
+                    </b-button>
+                    <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDelete(row.item.id)">
+                      <font-awesome-icon icon="trash-alt"/> Supprimer
+                    </b-button>
                   </b-card>
                 </template>
             </b-table>
           </div>
-            <div id="alertModify">
-              <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
-              <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
-            </div>
+            
         </b-tab>
         <b-tab class="mt-5 justify-content-center">
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter un nouveau projet</span>
           </template> 
-          <AddProjectForm />
+          <AddProjectForm v-on:addProject="refreshTab"/>
         </b-tab>
-        <b-tab class="mt-3 justify-content-center">
+        <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
             <span v-if="!projectId">Modifier un projet</span>
@@ -128,7 +136,8 @@ export default {
           label: 'Actions' 
         }
       ],
-      items: []
+      items: [],
+      tabIndex: 0
     }
   },
   // mixins : [ setFormWithFile ],
@@ -136,42 +145,29 @@ export default {
     ...mapGetters(["oneProject", "allProjects"]),
   },
   methods: {
-    ...mapActions(["deleteProject", "getProject", "resetStateProject"]),
+    ...mapActions(["getAllProjects", "deleteProject", "getProject", "resetStateProject"]),
     formatDate(date) {
       return formatDate(date);
     },
-    fetchProject() {      
-      this.getProject(this.projectId)
-        .then(() => {
-          this.successMessage = 'Voici le projet ' + this.projectId + ' !' 
-          this.showProjectCard = true;
-          console.log(this.showProjectCard);
-          document.getElementById("alertModify").scrollIntoView();  
-          this.errorMessage = '';
-        })
-        .catch((error) => {   
-          console.log(this.projectId);
-          if(error.code == "404") {
-            this.errorMessage = 'Le projet ' + this.projectId  + ' n\'existe pas !';
-            this.successMessage = '';
-            this.loading = false;
-            this.showProjectCard = false;       
-          }  
-        })
+    refreshTab() {
+      console.log("emit");
+      this.$store.dispatch("getAllProjects");
+      this.errorMessage = '';
+      this.successMessage = '';
     },
-    onDelete() {
-      console.log(this.projectId);
-      this.deleteProject(this.projectId) 
+    onDelete(id) {
+      console.log(id);
+      this.deleteProject(id) 
         .then(() => {
-          console.log(this.projectId);
-          this.successMessage = 'Le projet ' + this.projectId  + ' a bien été supprimé !';
+          this.successMessage = 'Le projet ' + id + ' a bien été supprimé !';
           this.showProjectCard = false;
-          this.resetStateProject();
+          this.$store.dispatch("getAllProjects");
+          this.errorMessage = '';
           document.getElementById("alertModify").scrollIntoView(); 
         })
         .catch((error) => {   
           if(error.code == "404") {
-            this.errorMessage = 'Le projet ' + this.projectId  + ' n\'existe pas !';
+            this.errorMessage = 'Le projet ' + id + ' n\'existe pas !';
             this.successMessage = '';
             this.loading = false;
             this.showProjectCard = false;       
@@ -179,12 +175,21 @@ export default {
         }
       )
     },
-    toFetchProject() {
-      this.showProjectCard = false;
-      document.getElementById("modifyForm-title").scrollIntoView(); 
-      this.resetStateProject();
-      this.successMessage = '';
-    },
+    toModifyForm(data){
+      this.projectId = data;
+      this.getProject(this.projectId)
+        .then(() => { 
+          this.tabIndex = 2;
+          document.getElementById("alertModify").scrollIntoView(); 
+        })
+        .catch((error) => {   
+          if(error.code == "404") {
+            this.errorMessage = 'Le projet ' + this.projectId  + ' n\'existe pas !';
+            this.successMessage = '';
+            this.showProjectCard = false;       
+          }  
+        })
+    }
   }
 }
 </script>
@@ -211,7 +216,7 @@ table {
     color: $white;
     border: 1px solid $purple;
     &:hover {
-      color: $white;
+      color: $purple;
       background-color: transparent;
       border: 1px solid $purple;
     } 
@@ -219,6 +224,18 @@ table {
       box-shadow: unset;
       border: 1px solid $purple;
       background-color: $purple;
+    }
+  }
+  &-delete {
+    &:hover {
+      color: $red;
+      background-color: transparent;
+      border: 1px solid $red;
+    }
+    &:focus, :active {
+      box-shadow: unset;
+      border: 1px solid $red;
+      background-color: $red;
     }
   }
 }
