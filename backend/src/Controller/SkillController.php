@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Skill;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
+use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -123,9 +124,13 @@ class SkillController extends AbstractController
      * @param EntityManagerInterface $em
      * @return JsonResponse
      */
-    public function deleteSkill(Skill $skill, EntityManagerInterface $em)
-    {
+    public function deleteSkill(
+        Skill $skill, 
+        EntityManagerInterface $em, 
+        FileUploader $fileUploader
+    ): JsonResponse {
         $id = $skill->getId();
+        $fileUploader->deleteFile($skill->getIcon(), 'skill');
         $em->remove($skill);
         $em->flush();
         return $this->json(['Message' => 'Skill id ' . $id . ' deleted'], JsonResponse::HTTP_OK);

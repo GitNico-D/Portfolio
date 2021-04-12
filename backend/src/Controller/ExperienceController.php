@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Experience;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
+use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -124,9 +125,13 @@ class ExperienceController extends AbstractController
      * @param EntityManagerInterface $em
      * @return JsonResponse
      */
-    public function deleteExperience(Experience $experience, EntityManagerInterface $em): JsonResponse
-    {
+    public function deleteExperience(
+        Experience $experience, 
+        EntityManagerInterface $em, 
+        FileUploader $fileUploader
+    ): JsonResponse {
         $id = $experience->getId();
+        $fileUploader->deleteFile($experience->getLogoCompany(), 'experience');
         $em->remove($experience);
         $em->flush();
         return $this->json(['Message' => 'Experience id ' . $id . ' deleted'], JsonResponse::HTTP_OK);

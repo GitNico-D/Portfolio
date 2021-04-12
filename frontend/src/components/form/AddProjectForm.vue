@@ -186,6 +186,7 @@ export default {
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.errorMessage = '';
+            this.onReset(event);
           })
           .catch((error) => {
             this.errorMessage = error.data[0];
@@ -198,14 +199,13 @@ export default {
     onReset(event) {
       event.preventDefault()
       console.log("click reset");
+      this.loading = false;
       this.newProject.name = ''
       this.newProject.description = ''
       this.newProject.url = ''
       this.newProject.imgStatic = null
       this.newProject.altStatic = ''
       this.newProject.creationDate = ''
-      this.successMessage = ''
-      this.errorMessage = ''
     }
   },
   

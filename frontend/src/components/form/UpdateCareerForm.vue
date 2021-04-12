@@ -1,34 +1,36 @@
 <template>
 <div> 
   <div id="alert">
-    <AlertForm v-if="successMessage" v-show="oneProject.id" :message="successMessage" variant="success"/>
-    <AlertForm v-if="errorMessage" v-show="oneProject.id" :message="errorMessage" variant="danger"/>
+    <AlertForm v-if="successMessage" v-show="oneCareer.id" :message="successMessage" variant="success"/>
+    <AlertForm v-if="errorMessage" v-show="oneCareer.id" :message="errorMessage" variant="danger"/>
   </div>
-  <h2 v-if="!oneProject.id" id="modifyForm-title" class="text-center fw-bold mt-5" >
-    <p>Aucun <span class="font-weight-bold font-style-italic">Projet</span> sélectionné.</p>
+  <h2 v-if="!oneCareer.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
+    <p>Aucun <span class="font-weight-bold font-style-italic">Étape de carrière </span> sélectionné.</p>
     <p>Rendez-vous sur l'onglet 
-      <span class="font-style-italic">"Liste des projets"</span> 
-      pour sélectionné le projet que vous souhaitez modifier.
+      <span class="font-style-italic">"Liste des étapes de carrière "</span> 
+      pour sélectionné l'étape de carrière que vous souhaitez modifier.
     </p>
   </h2>
   <h2 v-else id="modifyForm-title" class="text-center fw-bold my-5" >
-    Modification du project "{{ oneProject.name }}"
+    Modification du CareerStage "{{ currentName }}"
   </h2>
-  <p class="mt-4 text-left" v-show="oneProject.id">
-    ID du <span class="text-uppercase font-weight-bold">projet : </span>
-    {{oneProject.id}}
+  <p class="mt-4 text-left" v-show="oneCareer.id">
+    ID de <span class="text-uppercase font-weight-bold">l'étape de carrière : </span>
+    {{oneCareer.id}}
   </p>
-  <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" v-show="oneProject.id || showForm">
-    <b-form @submit.prevent="handleSubmit(onModify)" @reset.prevent="onReset" >
-      <ValidationProvider ref="name" rules="required|min:2" name="Titre" v-slot="{ errors }">
-        <b-form-group id="name" class="mt-4">
-          <label for="input-name" class="text-uppercase">Nouveau titre du projet</label>
+  <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" v-show="oneCareer.id || showForm">
+    <b-form @submit.prevent="handleSubmit(onModify)" >
+      <ValidationProvider ref="name" rules="required|min:2" name="Intitulé" v-slot="{ errors }">
+        <b-form-group id="name" class="mb-5">
+          <label for="input-name" class="text-uppercase">Nouveau intitulé de l'étape de carrière </label>
           <b-form-input 
             id="input-name" 
-            v-model="modifyProject.name"
+            v-model="modifyCareerStage.name"
+            ref="inputName" 
           >
           </b-form-input>
           <b-alert
+            id="alert-name"
             class="mt-1"
             variant="danger"
             v-if="errors[0]"
@@ -39,11 +41,11 @@
       </ValidationProvider>
       <hr>
       <ValidationProvider ref="description" rules="required|min:2" name="Description" v-slot="{ errors }">
-        <b-form-group id="textarea" class="mt-4">
-          <label for="input-name" class="text-uppercase">Nouvelle description du projet</label>
+        <b-form-group id="textarea" class="mb-5">
+          <label for="input-name" class="text-uppercase">Nouvelle description de l'étape de carrière</label>
           <b-form-textarea
             id="input-textarea"
-            v-model="modifyProject.description"
+            v-model="modifyCareerStage.description"
             size="lg">
             </b-form-textarea>
             <b-alert
@@ -57,12 +59,12 @@
         </b-form-group>
       </ValidationProvider>
       <hr>
-      <ValidationProvider ref="url" rules="required|url" name="Url" v-slot="{ errors }">
-        <b-form-group id="url" class="mt-4">
-          <label for="input-url" class="text-uppercase">Nouvelle Url du projet</label>
+      <ValidationProvider ref="company" rules="required" name="Société" v-slot="{ errors }">
+        <b-form-group id="company" class="mb-5">
+          <label for="input-company" class="text-uppercase">Nouvelle société de l'étape de carrière</label>
           <b-form-input
-            id="input-url"
-            v-model="modifyProject.url"
+            id="input-company"
+            v-model="modifyCareerStage.company"
             >
           </b-form-input>
           <b-alert
@@ -76,59 +78,42 @@
         </b-form-group>
       </ValidationProvider>
       <hr>
-      <div>
-        <h5 class="text-left text-uppercase">Image du projet</h5>
-        <b-img :src="oneProject.imgStatic" fluid alt="Fluid image" class="mt-1" v-show="!modifyProject.imgStatic"></b-img>
+      <div >
+        <h5 v-show="!modifyCareerStage.logoCompany && oldLogoCompany" class="text-left text-uppercase">Logo de la société</h5>
+        <b-img :src="oldLogoCompany" fluid alt="Fluid image" class="mt-1" v-show="!modifyCareerStage.logoCompany && oldLogoCompany"></b-img>
       </div>
-      <ValidationProvider ref="new-imgStatic" rules="" name="Image" v-slot="{ errors }">
-        <b-form-group id="new-imgStatic" class="mt-4">
-          <label for="input-imgStatic" class="text-uppercase">Nouvelle image de présentation du projet</label>
+      <ValidationProvider ref="new-logoCompany" rules="required_if:modifyCareerStage.logoCompany" v-if="modifyCareerStage" name="Image" v-slot="{ validate, errors }">
+        <b-form-group id="new-logoCompany" class="mt-3 mb-5">
+          <label for="input-logoCompany" class="text-uppercase">Nouveau logo de la société</label>
           <b-form-file
-            id="input-new-imgStatic"
-            name="new-imgStatic"
-            v-model="modifyProject.imgStatic"
-            :state="Boolean(modifyProject.imgStatic)"
+            id="input-new-logoCompany"
+            ref="file"
+            name="new-logoCompany"
+            v-model="modifyCareerStage.logoCompany"
             browse-text="Parcourir"
+            accept="image/*"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
-          ></b-form-file>
-        <b-alert
-          class="mt-1"
-          variant="danger"
-          v-if="errors[0]"
-          v-text="errors[0]"
-          show
-        >
-        </b-alert>
-        <div class="mt-3">Fichier sélectionné: {{ modifyProject.imgStatic ? modifyProject.imgStatic.name : '' }}</div>
-        </b-form-group>
-      </ValidationProvider>
-      <hr>
-      <ValidationProvider ref="description-image" rules="required|min:2" name="Description de l'image" v-slot="{ errors }">
-        <b-form-group id="altStatic" class="mt-4">
-          <label for="input-altStatic" class="text-uppercase">Nouvelle description de l'image du projet</label>
-          <b-form-input 
-            id="input-altStatic" 
-            v-model="modifyProject.altStatic"
-            >
-          </b-form-input>
+            @change="showPreview($event), validate"
+          >{{modifyCareerStage.logoCompany}}</b-form-file>
           <b-alert
             class="mt-1"
             variant="danger"
             v-if="errors[0]"
             v-text="errors[0]"
             show
-            dismissible>
+          >
           </b-alert>
+          <div class="mt-3">Fichier sélectionné: {{ modifyCareerStage.logoCompany ? modifyCareerStage.logoCompany.name : '' }}</div>
+          <b-img thumbnail fluid id="previewImage" v-show="previewImageUrl && modifyCareerStage.logoCompany" :src="previewImageUrl"></b-img>
         </b-form-group>
       </ValidationProvider>
-      <hr>
-      <ValidationProvider ref="creation-date" rules="required" name="Date de création " v-slot="{ errors }">
-        <b-form-group id="creation-date" class="mt-4">
-          <label for="input-creation-date" class="text-uppercase">Nouvelle date de création du projet</label>
+      <ValidationProvider ref="start-date" rules="required" name="Date de début" v-slot="{ errors }">
+        <b-form-group id="start-date" class="mb-5">
+          <label for="input-start-date" class="text-uppercase">Nouvelle date de début de l'étape de carrière</label>
           <b-form-datepicker 
-            id="creation-date" 
-            v-model="modifyProject.creationDate" 
+            id="start-date" 
+            v-model="modifyCareerStage.startDate" 
             bg-variant="light" 
             class="mb-2"
           >
@@ -141,28 +126,42 @@
             show
             dismissible>
           </b-alert>
-          <p>Nouvelle date de création: '{{ modifyProject.creationDate }}'</p>
+          <p>Nouvelle date de début: '{{ formatDate(modifyCareerStage.startDate) }}'</p>
+        </b-form-group>
+      </ValidationProvider>
+      <ValidationProvider ref="end-date" rules="required" name="Date de début" v-slot="{ errors }">
+        <b-form-group id="end-date" class="mb-5">
+          <label for="input-end-date" class="text-uppercase">Nouvelle date de fin de l'étape de carrière</label>
+          <b-form-datepicker 
+            id="end-date" 
+            v-model="modifyCareerStage.endDate" 
+            bg-variant="light" 
+            class="mb-2"
+          >
+          </b-form-datepicker>
+          <b-alert
+            class="mt-1"
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show
+            dismissible>
+          </b-alert>
+          <p>Nouvelle date de fin: '{{ formatDate(modifyCareerStage.endDate) }}'</p>
         </b-form-group>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading">
+        <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showmodifyCareerStage')">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
-          <span class="pl-2 pb-2">Modifier projet {{ projectId }}</span>
+            <font-awesome-icon icon="edit"/>
+            <span class="pl-2 pb-2">Modifier projet</span>
         </b-button>
-        <b-button type="reset" variant="danger" class="m-3 p-3" @click="onReset">
-          Réinitialiser formulaire
-        </b-button>
-        <b-button variant="warning" class="m-3 p-3" @click="onCancel">
-          Annuler
+        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancelModify'), onCancel">
+          <font-awesome-icon icon="times"/>
+          <span class="pl-2 pb-2">Annuler</span>
         </b-button>
       </div>
     </b-form>
-    <b-card class="mt-3" header="Form Data Result">
-      <pre class="m-0">{{ modifyProject }}</pre>
-    </b-card>
-    <b-card class="mt-3" header="Form Data Result">
-      <pre class="m-0">{{ oneProject }}</pre>
-    </b-card>
   </ValidationObserver>
 </div>
 </template>
@@ -171,11 +170,11 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
-// import formatDate from "../../services/formatDate";
+import formatDate from "../../services/formatDate";
 // import { setFormWithFile } from "../mixins/formMixin";
 
 export default {
-  name: "UpdateProjectForm",
+  name: "UpdateCareerStageForm",
   components: { 
     ValidationProvider,
     ValidationObserver,
@@ -184,16 +183,18 @@ export default {
   data() {
     return {
       loading: false,
-      projectId: null,
-      modifyProject: {
+      careerStageId: null,
+      modifyCareerStage: {
         name: '',
         description: '',
-        url: '',
-        imgStatic: null,
-        altStatic: '',
-        creationDate: ''
+        company: '',
+        logoCompany: null,
+        startDate: '',
+        endDate: ''
       },
-      oldImgStatic: '',
+      oldLogoCompany: '',
+      currentName: '',
+      previewImageUrl: null,
       successMessage: '',
       errorMessage: '',
       showForm: false 
@@ -201,22 +202,18 @@ export default {
   },
   // mixins : [ setFormWithFile ],
   computed: {
-    ...mapGetters(["oneProject"]),
+    ...mapGetters(["oneCareer"]),    
   },
   methods: {
-    ...mapActions(["updateProjectWithFile", "updateProjectWithoutFile", "resetStateProject"]),
-    formatDate() {
-      const options = {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      };
-      let formatDate = new Date(this.oneProject.creationDate).toLocaleDateString(
-        undefined,
-        options
-      );
-      return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
+    ...mapActions(["updateCareerStageWithFile", "updateCareerStageWithoutFile", "resetStateCareerStage"]),
+    showPreview(event) {
+      const file = event.target.files[0];
+      if(file) {
+        this.previewImageUrl = URL.createObjectURL(file);
+        document.getElementById("previewImage").onload = function () {
+          window.URL.revokeObjectURL(this.previewImageUrl);
+        }
+      }
     },
     onModify() {
       this.loading = true;
@@ -226,37 +223,39 @@ export default {
             this.loading = false;
             return
           }
-          if(this.statusImage == "not_change") {
-            this.modifyProject.imgStatic = this.oldImgStatic;
-            this.updateProjectWithoutFile({
-              id: this.projectId, 
-              form: this.modifyProject
+          if(!this.modifyCareerStage.logoCompany) {
+            this.modifyCareerStage.logoCompany = this.oldLogoCompany;
+            this.updateCareerStageWithoutFile({
+              id: this.oneCareer.id, 
+              form: this.modifyCareerStage
             })
             .then(() => {
-              this.successMessage = 'Le projet ' + this.projectId + ' a été modifier';
+              this.successMessage = 'L\'étape de carrière ' + this.oneCareer.id + ' a été modifier';
               this.loading = false;
-              document.getElementById("alert").scrollIntoView();  
+              this.resetForm();
+              document.getElementById("alert").scrollIntoView(); 
             })
             .catch((error) => {
               this.errorMessage = error.message;
             })
           } else {
             let fd = new FormData();
-            fd.append('imgStatic', this.modifyProject.imgStatic);
-            Object.entries(this.modifyProject).forEach(
+            fd.append('logoCompany', this.modifyCareerStage.logoCompany);
+            Object.entries(this.modifyCareerStage).forEach(
               ([key, value]) => {
                 if (value !== null && value !== '') {
                   fd.append(`${key}`, value);
                 }
               },
             );
-            this.updateProjectWithFile({
-              id: this.projectId, 
+            this.updateCareerStageWithFile({
+              id: this.oneCareer.id, 
               formData: fd
             })
             .then(() => {
-              this.successMessage = 'Le projet ' + this.projectId + ' a été modifier';
+              this.successMessage = 'L\'étape de carrière ' + this.oneCareer.id + ' a été modifier';
               this.loading = false;
+              this.resetForm();
               document.getElementById("alert").scrollIntoView();  
             })
             .catch((error) => {
@@ -265,37 +264,35 @@ export default {
           }
       })
     },
-    fillForm(){
-      this.recoverForm = false;
-      this.modifyForm = true;
-      this.showProjectCard =false;
-      document.getElementById("modifyForm-title").scrollIntoView();
-    },
-    toFetchProject() {
-
-    },
-    onReset(event) {
-      event.preventDefault()
-      this.modifyProject.name = ''
-      this.modifyProject.description = ''
-      this.modifyProject.url = ''
-      this.modifyProject.imgStatic = null
-      this.modifyProject.altStatic = ''
-      this.modifyProject.creationDate = ''
-      this.successMessage = ''
-      this.errorMessage = ''
+    resetForm() {
+      this.$refs.modifyForm.reset;
+      this.modifyCareerStage.name = ''
+      this.modifyCareerStage.description = ''
+      this.modifyCareerStage.company = ''
+      this.modifyCareerStage.logoCompany = null
+      this.modifyCareerStage.altStatic = ''
+      this.modifyCareerStage.creationDate = ''
+      this.oldLogoCompany = ''
     },
     onCancel: function() {
-      console.log("click");
-      this.resetStateProject();
       this.onReset(event);
-      this.showForm = false;
-      this.successMessage = ''
-    }
+    },
+    formatDate(date) {
+      return formatDate(date);
+    },
   },
   mounted() {
-    if(this.oneProject.id) {
-      this.modifyProject = this.oneProject;
+    console.log(this.oneCareer)
+    if(this.oneCareer.id) {
+      this.modifyCareerStage.name = this.oneCareer.name;
+      this.currentName = this.oneCareer.name;
+      this.modifyCareerStage.description = this.oneCareer.description;
+      this.modifyCareerStage.company = this.oneCareer.company;
+      this.modifyCareerStage.logoCompany = this.oneCareer.logoCompany;
+      this.modifyCareerStage.startDate = this.oneCareer.startDate;
+      this.modifyCareerStage.endDate = this.oneCareer.endDate;
+      this.oldLogoCompany = this.oneCareer.logoCompany;
+      this.modifyCareerStage.logoCompany = null;
     }
   },
   
@@ -303,24 +300,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.btn {
+  &-modify {
+    color: $white;
+    background-color: $green;
+    border: 1px solid $green;
+    &:hover {
+      color: $green;
+      background-color: transparent;
+      border: 1px solid $green;
+    }
+  }
+  &-delete {
+    color: $white;
+    background-color: $yellow;
+    border: 1px solid $yellow;
+    &:hover {
+      color: $yellow;
+      background-color: transparent;
+      border: 1px solid $yellow;
+    }
+  }
+}
 .card {
   &-body {
     background-color: transparent; 
-  }
-}
-.row {
-  height: unset;
-}
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
-}
-.form-group {
-  margin-bottom: 2rem;
-  label {
-    font-size: 1.3rem;
-    @include text-shadow(0px, 0px, 10px, $purple); 
   }
 }
 .custom-file-label {
@@ -333,6 +337,17 @@ form {
     @include box_shadow(0px, 0px, 5px, $purple);
     background-color: transparent;
     border-bottom: 1px solid $purple;
+  }
+}
+form {
+  width: 90%;
+  margin: auto;
+  padding: 1.5rem;
+}
+.form-group {
+  label {
+    font-size: 1.3rem;
+    @include text-shadow(0px, 0px, 10px, $purple); 
   }
 }
 .form-control {
@@ -350,10 +365,13 @@ form {
 }
 hr{
   background-color: $purple;
-  width: 80%;
+  width: 60%;
 }
 .nav-link {
   color: $white!important;
+}
+.row {
+  height: unset;
 }
 .tabs {
   font-family: "Oswald", sans-serif;

@@ -56,7 +56,7 @@
                     <b-card-text>
                       {{row.item.description }}
                     </b-card-text>
-                    <b-button variant="info" @click="toModifyForm" class="m-1 p-2 btn-modify">
+                    <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
                       <font-awesome-icon icon="edit"/> Modifier
                     </b-button>
                     <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDelete(row.item.id)">
@@ -78,10 +78,10 @@
         <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
-            <span v-if="!projectId">Modifier un projet</span>
-            <span v-else>Modifier le projet {{ oneProject.id }}</span>
+            <span v-if="!projectId">Modifier le projet</span>
+            <span v-else>Modification du projet {{ oneProject.id }}</span>
           </template>           
-          <UpdateProjectForm />
+          <UpdateProjectForm v-on:onCancelModify="onCancelModify" v-on:showModifyProject="showModifyProject"/>
         </b-tab>
       </b-tabs>
     </b-col>
@@ -105,7 +105,6 @@ export default {
   },
   data() {
     return {
-      loading: false,
       showProjectCard: false,
       successMessage: '',
       errorMessage: '',
@@ -150,8 +149,10 @@ export default {
       return formatDate(date);
     },
     refreshTab() {
-      console.log("emit");
       this.$store.dispatch("getAllProjects");
+      setTimeout(() => {
+        this.tabIndex = 0;
+      }, 5000);
       this.errorMessage = '';
       this.successMessage = '';
     },
@@ -169,7 +170,6 @@ export default {
           if(error.code == "404") {
             this.errorMessage = 'Le projet ' + id + ' n\'existe pas !';
             this.successMessage = '';
-            this.loading = false;
             this.showProjectCard = false;       
           }  
         }
@@ -180,7 +180,6 @@ export default {
       this.getProject(this.projectId)
         .then(() => { 
           this.tabIndex = 2;
-          document.getElementById("alertModify").scrollIntoView(); 
         })
         .catch((error) => {   
           if(error.code == "404") {
@@ -189,7 +188,17 @@ export default {
             this.showProjectCard = false;       
           }  
         })
-    }
+    },
+    showModifyProject() {
+    //   setTimeout(() => {
+    //     this.tabIndex = 0;
+    //     this.resetStateProject()
+    //   }, 5000);
+    },
+    onCancelModify() {
+      this.tabIndex = 0;
+      this.resetStateProject()
+    },
   }
 }
 </script>

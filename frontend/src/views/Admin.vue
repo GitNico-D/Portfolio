@@ -65,14 +65,16 @@
             <hr>
             <b-card-text class="my-4">
               Il y a un total de 
-              <span class="font-weight-bold">allCareers</span>
+              <span class="font-weight-bold">{{allCareerStages.length}}</span>
               étapes de carrières ajoutées sur le site.
               <hr>
               <p class="text-left"><u><i>Dernière étape de carrière ajoutée</i></u> :
-                <b-card title="careerName" sub-title="careerCreatedAt" class="mt-3"></b-card>
+                <span v-for="(careerStage, index) in allCareerStages" :key="index">
+                  <b-card v-if="index === allCareerStages.length - 1" :title="careerStage.name" :sub-title="formatDate(careerStage.createdAt)" class="mt-3">{{careerStage.name}}</b-card>
+                </span>
               </p>
-              <p class="text-left"><u><i>Dernière étape de carrière modifiée</i></u> :
-                <b-card title="careerName" sub-title="careerUpdatedAt" class="mt-3"> </b-card>
+              <p class="text-left" v-if="lastUpdatedCareerStage"><u><i>Dernière étape de carrière modifiée</i></u> :
+                  <b-card :title="lastUpdatedCareerStage.name" :sub-title="formatDate(lastUpdatedCareerStage.updatedAt)" class="mt-3">{{lastUpdatedCareerStage.name}}</b-card>
               </p>
             </b-card-text>
             <template #footer>
@@ -153,7 +155,7 @@ export default {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
     },
-    ...mapGetters(["allProjects"]),
+    ...mapGetters(["allProjects", "allCareerStages"]),
     lastUpdatedProject() {
       let dateDiffArray = [];
       let lastProjectUpdated;
@@ -164,6 +166,17 @@ export default {
         }
       });
       return lastProjectUpdated;
+    },
+    lastUpdatedCareerStage() {
+      let dateDiffArray = [];
+      let lastCareerStageUpdated;
+      this.allCareerStages.forEach(careerStage => {
+        dateDiffArray.push(new Date(careerStage.updatedAt).getTime());
+        if(new Date(careerStage.updatedAt).getTime() == Math.max(...dateDiffArray)) {
+          lastCareerStageUpdated = careerStage;
+        }
+      });
+      return lastCareerStageUpdated;
     }
   },
   methods: {
@@ -190,7 +203,6 @@ export default {
       this.sectionSelected = "Tableau de bord"
     },
     showProjectForm: function(color) {
-      console.log("emit");
       this.pageColor = color;
       this.displayProjectForm = true;
       this.displayCareerForm = false;
@@ -253,6 +265,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getAllProjects");
+    this.$store.dispatch("getAllCareerStage");
     if (this.loggedIn) {
       let decodedToken = jwt_decode(localStorage.getItem("user"));
       let tokenDateExpiration = new Date(decodedToken.exp * 1000);

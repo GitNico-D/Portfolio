@@ -6,64 +6,77 @@
         active-tab-class="text-left text-white"
         align="center"
         class="mt-5"
-        fill>
-        <b-tab class="mt-5 justify-content-center">
+        fill
+        v-model="tabIndex">
+        <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
-            <span>Récupérer une étape de carrière</span>
+            Listes des <span class="font-weight-bold font-style-italic">étapes de carrière</span>
           </template> 
           <h2 id="modifyForm-title" class="text-center fw-bold my-5">
-            Pour récupérer une <span class="font-weight-bold font-style-italic">Étape de carrière</span> 
-            existante, entré son ID dans le champ ci-dessous.
+            Toutes les <span class="font-weight-bold font-style-italic">Étape de carrière</span>
           </h2>
           <div>
-            <b-table striped hover :items="allCareerStages" :fields="fields">
-              <template #cell(createdAt)="data">
+            <b-button @click="refreshTab" variant="info" class="m-2"> Refresh</b-button>
+            <div id="alertModify">
+              <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
+              <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
+            </div>
+            <b-table responsive hover no-collpase bordered dark :items="allCareerStages" :fields="fields">
+              <template #cell(startDate)="data">
+                {{ formatDate(data.value)}}
+              </template>
+              <template #cell(endDate)="data">
                 {{ formatDate(data.value) }}
               </template>
-              <template #cell(updatedAt)="data">
-                {{ formatDate(data.value) }}
+              <template #cell(actions)="row">
+                <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
+                  <font-awesome-icon icon="edit"/> Modifier
+                </b-button>
+                <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-details">
+                  <font-awesome-icon icon="database" /><span class="pl-2">Détail du l'expérience</span>
+                </b-button>
               </template>
+                <template #row-details="row">
+                  <b-card
+                    :title="row.item.name"
+                    :img-src="row.item.logoCompany"
+                    img-top
+                    class="mt-2 text-dark text-center"
+                  >
+                  <b-card-body class="text-left fst-italic">
+                    <p>Ajouté le : {{row.item.createdAt}}</p>
+                    <p>Mise à jour le : {{formatDate(row.item.updatedAt)}}</p>
+                  </b-card-body>
+                    <b-card-text>
+                      {{oneCareer.description }}
+                    </b-card-text>
+                    <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
+                      <font-awesome-icon icon="edit"/> Modifier
+                    </b-button>
+                    <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDelete(row.item.id)">
+                      <font-awesome-icon icon="trash-alt"/> Supprimer
+                    </b-button>
+                  </b-card>
+                </template>
             </b-table>
           </div>
-          <div id="alertModify">
-            <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
-            <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
-          </div>
-          <b-card
-            :title="oneCareer.name + ' ' + oneCareer.id"
-            :img-src="oneCareer.logoCompany"
-            img-top
-            class="mt-2 text-dark text-center"
-            v-show="showCareerCard && oneCareer.id"
-          >
-          <b-card-body class="text-left fst-italic">
-            <p>Ajouté le : {{oneCareer.createdAt}}</p>
-            <p>Mise à jour le : {{oneCareer.updatedAt}}</p>
-          </b-card-body>
-            <b-card-text>
-              {{oneCareer.description }}
-            </b-card-text>
-            <b-button variant="danger" class="m-2" @click="onDelete">Supprimer</b-button>
-            <b-button type="reset" variant="info" class="m-2" @click="toFetchCareer">
-                Récupérer une autre étape de carrière
-            </b-button>
-          </b-card>
+          
         </b-tab>
         <b-tab class="mt-5 justify-content-center">
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter une nouvelle étape de carrière</span>
           </template> 
-          <AddCareerForm />
+          <AddCareerForm v-on:addCareerStage="refreshTab"/>
         </b-tab>
-        <b-tab class="mt-3 justify-content-center">
+        <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
             <span v-if="!careerId">Modifier une étape de carrière</span>
             <span v-else>Modifier l'étape de carrière {{ oneCareer.id }}</span>
           </template>           
-          <UpdateCareerForm />
+          <UpdateCareerForm v-on:onCancelModify="onCancelModify" v-on:showModifyCareerStage="showModifyCareerStage"/>
         </b-tab>
       </b-tabs>
     </b-col>
@@ -96,29 +109,30 @@ export default {
         {
           key: 'id',
           label: 'Id',
-          sortable: true
         },
         { 
           key: "name",
-          label: "Nom",
-          sortable: true
+          label: "Intitulé",
         },
         {
           key: "company",
           label: "Société"
         },
         {
-          key: "createdAt",
-          label: "Date d'ajout",
-          sortable: true
+          key: "startDate",
+          label: "Date de début",
         },
         {
-          key: "updatedAt",
-          label: "Date de modification",
-          sortable: true
+          key: "endDate",
+          label: "Date de fin",
+        },
+        {
+          key: 'actions', 
+          label: 'Actions' 
         }
       ],
-      items: []
+      items: [],
+      tabIndex: 0
     }
   },
   // mixins : [ setFormWithFile ],
@@ -126,60 +140,96 @@ export default {
     ...mapGetters(["oneCareer", "allCareerStages"])
   },
   methods: {
-    ...mapActions(["deleteCareer", "getCareer", "resetStateCareer"]),
+    ...mapActions(["getAllCareerStage", "deleteCareerStage", "getCareerStage", "resetStateCareerStage"]),
     formatDate(date) {
       return formatDate(date);
     },
-    fetchCareer() {      
-      this.getCareer(this.careerId)
-        .then(() => {
-          this.successMessage = 'Voici l\'étape de carrière' + this.careerId + ' !' 
-          this.showCareerCard = true;
-          console.log(this.showCareerCard);
-          document.getElementById("alertModify").scrollIntoView();  
-          this.errorMessage = '';
-        })
-        .catch((error) => {   
-          console.log(this.careerId);
-          if(error.code == "404") {
-            this.errorMessage = 'Le l\'étape de carrière ' + this.careerId  + ' n\'existe pas !';
-            this.successMessage = '';
-            this.loading = false;
-            this.showCareerCard = false;       
-          }  
-        })
+    refreshTab() {
+      this.$store.dispatch("getAllCareerStage");
+      setTimeout(() => {
+        this.tabIndex = 0;
+      }, 5000);
+      this.errorMessage = '';
+      this.successMessage = '';
     },
-    onDelete() {
-      console.log(this.careerId);
-      this.deleteCareer(this.careerId) 
+    onDelete(id) {
+      console.log(id);
+      this.deleteCareer(id) 
         .then(() => {
-          console.log(this.careerId);
-          this.successMessage = 'l\'étape de carrière ' + this.careerId  + ' a bien été supprimé !';
+          this.successMessage = 'l\'étape de carrière ' + id  + ' a bien été supprimé !';
           this.showCareerCard = false;
-          this.resetStateCareer();
+          this.$store.dispatch("allCareerStages");
+          this.errorMessage = '';
           document.getElementById("alertModify").scrollIntoView(); 
         })
         .catch((error) => {   
           if(error.code == "404") {
-            this.errorMessage = 'l\'étape de carrière ' + this.careerId  + ' n\'existe pas !';
+            this.errorMessage = 'L\'étape de carrière ' + this.careerId  + ' n\'existe pas !';
             this.successMessage = '';
-            this.loading = false;
             this.showCareerCard = false;       
           }  
         }
       )
     },
-    toFetchCareer() {
-      this.showCareerCard = false;
-      document.getElementById("modifyForm-title").scrollIntoView(); 
-      this.resetStateCareer();
-      this.successMessage = '';
+    toModifyForm(data) {
+      this.careerId = data;
+      console.log(this.careerId);
+      this.getCareerStage(this.careerId)
+        .then(() => { 
+          this.tabIndex = 2;
+        })
+        .catch((error) => {   
+          if(error.code == "404") {
+            this.errorMessage = 'L\'étape de carrière ' + this.careerId  + ' n\'existe pas !';
+            this.successMessage = '';
+            this.showCareerCard = false;       
+          }  
+        })
     },
-  }
+    showModifyCareerStage() {
+    //   setTimeout(() => {
+    //     this.tabIndex = 0;
+    //     this.resetStateCareerStage()
+    //   }, 5000);
+    },
+    onCancelModify() {
+      this.tabIndex = 0;
+      this.resetStateCareerStage()
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
+.btn {
+  &-modify {
+    background-color: $light-blue; 
+    color: $white;
+    border: 1px solid $light-blue;
+    &:hover {
+      color: $light-blue;
+      background-color: transparent;
+      border: 1px solid $light-blue;
+    } 
+    &:focus, :active {
+      box-shadow: unset;
+      border: 1px solid $light-blue;
+      background-color: $light-blue;
+    }
+  }
+  &-delete {
+    &:hover {
+      color: $red;
+      background-color: transparent;
+      border: 1px solid $red;
+    }
+    &:focus, :active {
+      box-shadow: unset;
+      border: 1px solid $red;
+      background-color: $red;
+    }
+  }
+}
 .card {
   &-body {
     background-color: transparent; 

@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
-
+use Exception;
 class UpdateEntityConverter implements ParamConverterInterface
 {
     protected $serializer;
@@ -65,7 +65,7 @@ class UpdateEntityConverter implements ParamConverterInterface
         if (!$entity) {
             throw new NotFoundHttpException(ucfirst($configuration->getName()) . ' ' . $request->attributes->get('id') . ' not found');
         }
-        if($request->headers->get('Content-Type') == "application/json") {
+        if($request->getContent()) {
             $entity = $this->serializer->deserialize(
                 $request->getContent(),
                 $configuration->getClass(),
@@ -84,10 +84,10 @@ class UpdateEntityConverter implements ParamConverterInterface
             if($request->files) {
                 $this->fileUploader->deleteFile($entity->getImgStatic(), $configuration->getName());
                 $uploadFile = $this->fileUploader->getUploadFile($request->files);
-                $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);                
-            }
+                $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);
+                }
             $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonRequest);
-        }
+            }
         if ($relatedEntity) {
             $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
             $entity->$setRelatedEntity($relatedEntity);

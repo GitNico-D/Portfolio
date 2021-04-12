@@ -112,7 +112,7 @@
           </b-alert>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading">
+        <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading" @click="$emit('addCareerStage')">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
           <span class="pl-2 pb-2">Ajouter étape de carrière</span>
         </b-button>
@@ -158,7 +158,7 @@ export default {
   },
   // mixins : [ setFormWithFile ],
   methods: {
-    ...mapActions(["addCareer"]),
+    ...mapActions(["addCareerStage"]),
     onCreate() {
       this.loading = true;
       this.$refs.addForm.validate()
@@ -169,7 +169,6 @@ export default {
           }
           let fd = new FormData();
           fd.append('logoCompany', this.newCareer.logoCompany)
-          console.log(fd);
           Object.entries(this.newCareer).forEach(
             ([key, value]) => {
               if (value !== null && value !== '') {
@@ -177,12 +176,13 @@ export default {
               }
             },
           );          
-        this.addCareer(fd)
+        this.addCareerStage(fd)
           .then(() => {
-            this.successMessage = "LendDate'étape de carrière a été ajouté !";
+            this.successMessage = "L'étape de carrière a été ajoutée !";
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.errorMessage = '';
+            this.onReset(event);
           })
           .catch((error) => {
             this.errorMessage = error.data[0];
@@ -195,14 +195,13 @@ export default {
     onReset(event) {
       event.preventDefault()
       console.log("click reset");
+      this.loading = false;
       this.newCareer.name = ''
       this.newCareer.description = ''
       this.newCareer.company = ''
       this.newCareer.logoCompany = null
       this.newCareer.startDate = ''
       this.newCareer.endDate = ''
-      this.successMessage = ''
-      this.errorMessage = ''
     }
   },
   

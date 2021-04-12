@@ -31,7 +31,8 @@ import {
   faChartPie,
   faLaptopCode,
   faAddressBook,
-  faTrashAlt
+  faTrashAlt,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import "./validation-config";
 
@@ -52,7 +53,8 @@ library.add(
   faChartPie,
   faLaptopCode,
   faAddressBook,
-  faTrashAlt
+  faTrashAlt,
+  faTimes
   );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.component("ValidationObserver", ValidationObserver);

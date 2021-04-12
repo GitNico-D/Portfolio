@@ -29,8 +29,14 @@ class FileUploader
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
         try {
-            if(str_contains($fileName, "project")) {
+            if (str_contains($fileName, "project")) {
                 $file->move($destination . '/project', $fileName);
+            } elseif (str_contains($fileName, "experience")) {
+                $file->move($destination . '/experience', $fileName);
+            } elseif (str_contains($fileName, "skill")) {
+                $file->move($destination . '/skill', $fileName);
+            } elseif (str_contains($fileName, "software")) {
+                $file->move($destination . '/software', $fileName);
             } else {
                 $file->move($destination, $fileName);
             }
@@ -66,8 +72,14 @@ class FileUploader
         if($configuration->getName() == 'project') {
             return $entity->setImgStatic($this->baseUrl . 'project/' . $file);
         }
+        if ($configuration->getName()  == 'experience') {
+            return $entity->setLogoCompany($this->baseUrl . 'experience/' .$file);
+        }
         if ($configuration->getName()  == 'skill') {
-            return $entity->setIcon($file);
+            return $entity->setIcon($this->baseUrl . 'skill/' .$file);
+        }
+        if ($configuration->getName()  == 'software') {
+            return $entity->setIcon($this->baseUrl . 'software/' .$file);
         }
     }
 

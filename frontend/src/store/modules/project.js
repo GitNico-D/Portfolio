@@ -68,7 +68,6 @@ const actions = {
   updateProjectWithoutFile({ commit }, { id, form }) {
     return axios.put(process.env.VUE_APP_API_URL + `/projects/${id}`, form, {
       headers: authHeader(),
-              "Content-Type": "application/json"
     })
     .then(response => {
       commit("UPDATE_PROJECT", response.data);

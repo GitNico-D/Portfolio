@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Software;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
+use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -123,9 +124,13 @@ class SoftwareController extends AbstractController
      * @param EntityManagerInterface $em
      * @return JsonResponse
      */
-    public function deleteSoftware(Software $software, EntityManagerInterface $em)
-    {
+    public function deleteSoftware(
+        Software $software, 
+        EntityManagerInterface $em,
+        FileUploader $fileUploader
+    ): JsonResponse {
         $id = $software->getId();
+        $fileUploader->deleteFile($software->getIcon(), 'software');
         $em->remove($software);
         $em->flush();
         return $this->json(['Message' => 'Software id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
