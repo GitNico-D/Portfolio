@@ -6,82 +6,82 @@
         active-tab-class="text-left text-white"
         align="center"
         class="mt-5"
-        fill>
-        <b-tab class="mt-5 justify-content-center">
+        fill
+        v-model="tabIndex">
+        <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
-            <span>Récupérer une compétence</span>
+            <span>Listes de tous les compétences</span>
           </template> 
           <h2 id="modifyForm-title" class="text-center fw-bold my-5">
-            Pour récupérer une <span class="font-weight-bold font-style-italic">Compétence</span> 
-            existante, entré son ID dans le champ ci-dessous.
+            Toutes les <span class="font-weight-bold font-style-italic">compétences</span>
           </h2>
-          <ValidationObserver ref="recoverForm" v-slot="{ handleSubmit }">
-            <b-form @submit.prevent="handleSubmit(fetchSkill)" >
-              <ValidationProvider ref="id" rules="required|numeric" name="ID du projet" v-slot="{ errors }">
-                <b-form-group id="id">
-                  <label for="input-id" class="text-uppercase">ID de la compétence</label>
-                  <b-form-input 
-                    id="input-id" 
-                    v-model="skillId"
-                    placeholder="Entrer ID" 
-                    required>
-                  </b-form-input>
-                  <b-alert
-                    variant="danger"
-                    v-if="errors[0]"
-                    v-text="errors[0]"
-                    show
-                  >
-                  </b-alert>
-                </b-form-group>
-              </ValidationProvider>
-              <div class="d-flex justify-content-center">
-                <b-button type="submit" variant="success" class="m-3" :disabled="loading">
-                  <b-spinner v-show="loading" label="Spinning" class="pt-4"></b-spinner>
-                  <span class="pl-2 pb-2">Récupérer la compétence {{ skillId }}</span>
-                </b-button>
-              </div>
-            </b-form>
+          <div>
+            <b-button @click="refreshTab" variant="info" class="m-2"> Refresh</b-button>
             <div id="alertModify">
               <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
               <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
             </div>
-            <b-card
-              :title="oneSkill.name + ' ' + oneSkill.id"
-              :img-src="oneSkill.icon"
-              img-top
-              class="mt-2 text-dark text-center"
-              v-show="showSkillCard && oneSkill.id"
-            >
-            <b-card-body class="text-left fst-italic">
-              <p>Ajouté le : {{oneSkill.createdAt}}</p>
-              <p>Mise à jour le : {{oneSkill.updatedAt}}</p>
-            </b-card-body>
-              <b-card-text>
-                {{oneSkill.description }}
-              </b-card-text>
-              <b-button variant="danger" class="m-2" @click="onDelete">Supprimer</b-button>
-              <b-button type="reset" variant="info" class="m-2" @click="toFetchSkill">
-                  Récupérer une autre compétence
-              </b-button>
-            </b-card>
-          </ValidationObserver>
+            <b-table id="table-list" responsive hover no-collpase bordered dark :items="allSkills" :fields="fields">
+              <b-thead class="p-5"></b-thead>
+              <template #cell(creationDate)="data">
+                {{ formatDate(data.value) }}
+              </template>
+              <template #cell(createdAt)="data">
+                {{ formatDate(data.value) }}
+              </template>
+              <template #cell(updatedAt)="data">
+                {{ formatDate(data.value) }}
+              </template>
+              <template #cell(actions)="row">
+                <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
+                  <font-awesome-icon icon="edit"/> Modifier
+                </b-button>
+                <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-details">
+                  <font-awesome-icon icon="database" /><span class="pl-2">Détail de la compétence</span>
+                </b-button>
+              </template>
+                <template #row-details="row">
+                  <b-card
+                    :title="row.item.name"
+                    :img-src="row.item.imgStatic"
+                    :img-alt="row.item.altStatic"
+                    img-top
+                    class="mt-2 text-dark text-center"
+                  >
+                  <b-card-body class="text-left fst-italic">
+                    <p>Ajouté le : {{row.item.createdAt}}</p>
+                    <p>Mise à jour le : {{formatDate(row.item.updatedAt)}}</p>
+                  </b-card-body>
+                    <b-card-text>
+                      {{row.item.description }}
+                    </b-card-text>
+                    <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
+                      <font-awesome-icon icon="edit"/> Modifier
+                    </b-button>
+                    <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDelete(row.item.id)">
+                      <font-awesome-icon icon="trash-alt"/> Supprimer
+                    </b-button>
+                  </b-card>
+                </template>
+            </b-table>
+          </div>
+            
         </b-tab>
         <b-tab class="mt-5 justify-content-center">
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter une nouvelle compétence</span>
           </template> 
-          <AddSkillForm />
+          <AddSkillForm v-on:addSkill="refreshTab"/>
         </b-tab>
-        <b-tab class="mt-3 justify-content-center">
+        <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
-            <span v-if="!skillId">Modifier une compétence</span>
-            <span v-else>Modifier la compétence {{ oneSkill.id }}</span>
+            <span v-if="!skillId">Modifier la compétence</span>
+            <span v-else>Modification de la compétence {{ oneSkill.id }}</span>
           </template>           
-          <UpdateSkillForm />
+          <UpdateSkillForm v-on:onCancelModify="onCancelModify" v-on:showModifySkill="showModifySkill"/>
         </b-tab>
       </b-tabs>
     </b-col>
@@ -89,87 +89,161 @@
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
 import AddSkillForm from "@/components/form/AddSkillForm"
 import UpdateSkillForm from "@/components/form/UpdateSkillForm"
+import formatDate from "../../services/formatDate";
 // import { setFormWithFile } from "../mixins/formMixin";
 
 export default {
   name: "SkillForm",
   components: { 
-    ValidationProvider,
-    ValidationObserver,
     AlertForm,
     AddSkillForm,
     UpdateSkillForm
   },
   data() {
     return {
-      loading: false,
       showSkillCard: false,
       successMessage: '',
       errorMessage: '',
-      skillId: ''
+      skillId: '',
+      fields: [
+        {
+          key: 'id',
+          label: 'Id',
+        },
+        { 
+          key: "name",
+          label: "Nom",
+        },
+        {
+          key: "category",
+          label: "Catégories"
+        },
+        {
+          key: "knwoledgeLevel",
+          label: "Niveau de connaissance",
+        },
+        {
+          key: 'actions', 
+          label: 'Actions' 
+        }
+      ],
+      items: [],
+      tabIndex: 0
     }
   },
   // mixins : [ setFormWithFile ],
   computed: {
-    ...mapGetters(["oneSkill"])
+    ...mapGetters(["oneSkill", "allSkills"]),
   },
   methods: {
-    ...mapActions(["deleteSkill", "getSkill", "resetStateSkill"]),
-    fetchSkill() {      
-      this.getSkill(this.skillId)
-        .then(() => {
-          this.successMessage = 'Voici la compétence' + this.skillId + ' !' 
-          this.showSkillCard = true;
-          console.log(this.showSkillCard);
-          document.getElementById("alertModify").scrollIntoView();  
-          this.errorMessage = '';
-        })
-        .catch((error) => {   
-          console.log(this.skillId);
-          if(error.code == "404") {
-            this.errorMessage = 'La compétence ' + this.skillId  + ' n\'existe pas !';
-            this.successMessage = '';
-            this.loading = false;
-            this.showSkillCard = false;       
-          }  
-        })
+    ...mapActions(["getAllSkills", "deleteSkill", "getSkill", "resetStateSkill"]),
+    formatDate(date) {
+      return formatDate(date);
     },
-    onDelete() {
-      console.log(this.skillId);
-      this.deleteSkill(this.skillId) 
+    refreshTab() {
+      this.$store.dispatch("getAllSkills");
+      setTimeout(() => {
+        this.tabIndex = 0;
+      }, 5000);
+      this.errorMessage = '';
+      this.successMessage = '';
+    },
+    onDelete(id) {
+      console.log(id);
+      this.deleteSkill(id) 
         .then(() => {
-          console.log(this.skillId);
-          this.successMessage = 'La compétence ' + this.skillId  + ' a bien été supprimé !';
+          this.successMessage = 'La compétence ' + id + ' a bien été supprimé !';
           this.showSkillCard = false;
-          this.resetStateSkill();
+          this.$store.dispatch("getAllSkills");
+          this.errorMessage = '';
           document.getElementById("alertModify").scrollIntoView(); 
         })
         .catch((error) => {   
           if(error.code == "404") {
-            this.errorMessage = 'La compétence ' + this.skillId  + ' n\'existe pas !';
+            this.errorMessage = 'La compétence ' + id + ' n\'existe pas !';
             this.successMessage = '';
-            this.loading = false;
             this.showSkillCard = false;       
           }  
         }
       )
     },
-    toFetchSkill() {
-      this.showSkillCard = false;
-      document.getElementById("modifyForm-title").scrollIntoView(); 
-      this.resetStateSkill();
-      this.successMessage = '';
-    }
+    toModifyForm(data){
+      this.skillId = data;
+      this.getSkill(this.skillId)
+        .then(() => { 
+          this.tabIndex = 2;
+        })
+        .catch((error) => {   
+          if(error.code == "404") {
+            this.errorMessage = 'La compétence ' + this.skillId  + ' n\'existe pas !';
+            this.successMessage = '';
+            this.showSkillCard = false;       
+          }  
+        })
+    },
+    showModifySkill() {
+    //   setTimeout(() => {
+    //     this.tabIndex = 0;
+    //     this.resetStateSkill()
+    //   }, 5000);
+    },
+    onCancelModify() {
+      this.tabIndex = 0;
+      this.resetStateSkill()
+    },
   }
 }
 </script>
 
 <style lang="scss" scoped>
+table {
+  color: $white;
+  tr {
+    padding: 1rem;
+  }
+  .table-hover {
+    tbody {
+      tr {
+        &:hover {
+          color: $purple!important;
+        }
+      }
+    }
+  }
+}
+.btn {
+  &-modify {
+    background-color: $purple; 
+    color: $white;
+    border: 1px solid $purple;
+    &:hover {
+      color: $purple;
+      background-color: transparent;
+      border: 1px solid $purple;
+    } 
+    &:focus, :active {
+      box-shadow: unset;
+      border: 1px solid $purple;
+      background-color: $purple;
+    }
+  }
+  &-delete {
+    &:hover {
+      color: $red;
+      background-color: transparent;
+      border: 1px solid $red;
+    }
+    &:focus, :active {
+      box-shadow: unset;
+      border: 1px solid $red;
+      background-color: $red;
+    }
+  }
+}
 .card {
   &-body {
     background-color: transparent; 

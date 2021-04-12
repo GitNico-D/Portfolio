@@ -16,7 +16,7 @@
           <b-form-input 
             id="input-name" 
             v-model="newCareer.name" 
-            placeholder="Entrer nom de l'étape de carrière">
+            placeholder="Entrer un nom">
           </b-form-input>
           <b-alert
             variant="danger"
@@ -32,7 +32,7 @@
           <b-form-textarea
             id="input-textarea"
             v-model="newCareer.description"
-            placeholder="Entrer description"
+            placeholder="Entrer une description"
             size="lg">
             </b-form-textarea>
           <b-alert
@@ -50,7 +50,7 @@
           <b-form-input
             id="input-company"
             v-model="newCareer.company"
-            placeholder="Entrer company de l'étape de carrière">
+            placeholder="Entrer un nom">
           </b-form-input>
           <b-alert
             variant="danger"
