@@ -6,6 +6,7 @@ import software from "./modules/software";
 import categories from "./modules/categories";
 import career from "./modules/career";
 import project from "./modules/project";
+import presentation from "./modules/presentation";
 import auth from "./modules/auth";
 
 Vue.use(Vuex);
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     categories,
     career,
     project,
-    auth
+    auth,
+    presentation
   }
 });

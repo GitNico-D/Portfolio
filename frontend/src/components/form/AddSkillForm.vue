@@ -86,12 +86,9 @@
       <ValidationProvider ref="category" rules="required|min:2" name="Catégorie" v-slot="{ errors }">
         <b-form-group id="category" class="mt-5 text">
           <label for="input-category" class="text-uppercase">Nom de la category</label>
-          <b-form-input 
-            id="input-category" 
-            v-model="newSkill.category" 
-            placeholder="Sélectionner une catégorie" 
-            >
-          </b-form-input>
+            <b-form-select v-model="selected" :options="options"></b-form-select>
+            <b-form-select v-model="selected" :options="options" size="sm" class="mt-3"></b-form-select>
+            <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>
           <b-alert
             variant="danger"
             v-if="errors[0]"
@@ -143,6 +140,13 @@ export default {
       loading: false,
       successMessage: '',
       errorMessage: '',
+      selected: null,
+      options: [
+        {value: null, text: 'Choisir une catégorie' },
+        {value: "1", text:'Informatique'},
+        {value: "2", text:'Son'},
+        {value: "3", text:'Vidéo'}
+      ]
     }
   },
   // mixins : [ setFormWithFile ],

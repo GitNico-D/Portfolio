@@ -82,7 +82,7 @@
         <h5 v-show="!modifyProject.imgStatic && oldImgStatic" class="text-left text-uppercase">Image du projet</h5>
         <b-img :src="oldImgStatic" fluid alt="Fluid image" class="mt-1" v-show="!modifyProject.imgStatic && oldImgStatic"></b-img>
       </div>
-      <ValidationProvider ref="new-imgStatic" rules="required_if:modifyProject.imgStatic" v-if="modifyProject" name="Image" v-slot="{ validate, errors }">
+      <ValidationProvider ref="new-imgStatic" v-if="modifyProject" name="Image" v-slot="{ errors }">
         <b-form-group id="new-imgStatic" class="mt-3 mb-5">
           <label for="input-imgStatic" class="text-uppercase">Nouvelle image de présentation du projet</label>
           <b-form-file
@@ -94,8 +94,8 @@
             accept="image/*"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
-            @change="showPreview($event), validate"
-          >{{modifyProject.imgStatic}}</b-form-file>
+            @change="showPreview($event)"
+          ></b-form-file>
           <b-alert
             class="mt-1"
             variant="danger"
@@ -170,7 +170,7 @@ import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
 import formatDate from "../../services/formatDate";
-// import { setFormWithFile } from "../mixins/formMixin";
+import setFormWithFile from "../../mixins/formMixin";
 
 export default {
   name: "UpdateProjectForm",
@@ -199,7 +199,7 @@ export default {
       showForm: false 
     }
   },
-  // mixins : [ setFormWithFile ],
+  mixins : [ setFormWithFile ],
   computed: {
     ...mapGetters(["oneProject"]),    
   },
@@ -223,7 +223,8 @@ export default {
             return
           }
           if(!this.modifyProject.imgStatic) {
-            this.modifyProject.imgStatic = this.oldImgStatic;
+            // this.modifyProject.imgStatic = this.oldImgStatic;
+            console.log(this.modifyProject);
             this.updateProjectWithoutFile({
               id: this.oneProject.id, 
               form: this.modifyProject
@@ -238,15 +239,13 @@ export default {
               this.errorMessage = error.message;
             })
           } else {
-            let fd = new FormData();
-            fd.append('imgStatic', this.modifyProject.imgStatic);
-            Object.entries(this.modifyProject).forEach(
-              ([key, value]) => {
-                if (value !== null && value !== '') {
-                  fd.append(`${key}`, value);
-                }
-              },
-            );
+            let fd = this.setFormWithFile(this.modifyProject.imgStatic, this.modifyProject)
+            var object = {};
+            fd.forEach(function(value, key){
+                object[key] = value;
+            });
+            var jsonFormData = JSON.stringify(object);
+            console.log(jsonFormData)
             this.updateProjectWithFile({
               id: this.oneProject.id, 
               formData: fd
@@ -282,14 +281,10 @@ export default {
   },
   mounted() {
     if(this.oneProject.id) {
-      this.modifyProject.name = this.oneProject.name;
-      this.currentName = this.oneProject.name;
-      this.modifyProject.description = this.oneProject.description;
-      this.modifyProject.url = this.oneProject.url;
-      this.modifyProject.altStatic = this.oneProject.altStatic;
-      this.modifyProject.creationDate = this.oneProject.creationDate;
+      this.modifyProject = this.oneProject;
       this.oldImgStatic = this.oneProject.imgStatic;
       this.modifyProject.imgStatic = null;
+      console.log(this.modifyProject);
     }
   },
   

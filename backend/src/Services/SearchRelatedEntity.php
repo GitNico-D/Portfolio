@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Doctrine\ORM\EntityManagerInterface;
-
+use Exception;
 class SearchRelatedEntity
 {
     protected $entityManager;
@@ -26,11 +26,14 @@ class SearchRelatedEntity
         $classAttributesArray = $this->requestContentToArray($request);
         foreach ($classAttributesArray as $classAttribute) {
             $getAttribute = 'get' . ucfirst(str_replace('_', '', ($classAttribute)));
-            if (is_object($entity->$getAttribute()) && (get_class($entity->$getAttribute()) !== "DateTimeImmutable")) {
-                $relatedEntityId = json_decode($request->getContent(), true)[$classAttribute];
-                return $this->entityManager
-                                ->getRepository(get_class($entity->$getAttribute()))
-                                ->find($relatedEntityId);
+            if($getAttribute !== "getLinks") {
+                if (is_object($entity->$getAttribute()) && (get_class($entity->$getAttribute()) !== "DateTimeImmutable") && 
+                    (get_class($entity->$getAttribute()) !== "DateTime")) {
+                    $relatedEntityId = json_decode($request, true)[$classAttribute];
+                    return $this->entityManager
+                                    ->getRepository(get_class($entity->$getAttribute()))
+                                    ->find($relatedEntityId);
+                }
             }
         }
     }

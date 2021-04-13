@@ -21,7 +21,7 @@
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry.
             <div class="d-flex flex-wrap justify-content-around my-4">
-              <Button
+              <ContactButton
                 v-for="(contact, index) in presentation.contacts"
                 :key="contact.id"
                 :name="contact.title"
@@ -81,7 +81,7 @@ import BackgroundPage from "@/components/BackgroundPage.vue";
 import Header from "@/components/Header.vue";
 import HomePageLink from "@/components/HomePageLink.vue";
 import Transition from "@/components/Transition.vue";
-import Button from "@/components/Button.vue";
+import ContactButton from "@/components/ContactButton.vue";
 import errorRedirection from "@/services/errorRedirection";
 
 export default {
@@ -90,7 +90,7 @@ export default {
     Header,
     HomePageLink,
     Transition,
-    Button
+    ContactButton
   },
   data() {
     return {

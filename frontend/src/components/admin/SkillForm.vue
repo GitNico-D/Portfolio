@@ -22,17 +22,19 @@
               <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
               <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
             </div>
-            <b-table id="table-list" responsive hover no-collpase bordered dark :items="allSkills" :fields="fields">
-              <b-thead class="p-5"></b-thead>
-              <template #cell(creationDate)="data">
-                {{ formatDate(data.value) }}
-              </template>
-              <template #cell(createdAt)="data">
-                {{ formatDate(data.value) }}
-              </template>
-              <template #cell(updatedAt)="data">
-                {{ formatDate(data.value) }}
-              </template>
+            <div v-for="category in allCategories" :key="category.id">
+              <h3>{{category.name}}</h3>
+              <b-table id="table-list" responsive hover no-collpase bordered dark :items="category.skills" :fields="fields">
+                <b-thead class="p-5"></b-thead>
+                <template #cell(knowledgeLevel)="data">
+                  {{ data.value }}
+                </template>
+                <template #cell(createdAt)="data">
+                  {{ formatDate(data.value) }}
+                </template>
+                <template #cell(updatedAt)="data">
+                  {{ formatDate(data.value) }}
+                </template>
               <template #cell(actions)="row">
                 <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
                   <font-awesome-icon icon="edit"/> Modifier
@@ -64,7 +66,8 @@
                     </b-button>
                   </b-card>
                 </template>
-            </b-table>
+              </b-table>
+            </div>
           </div>
             
         </b-tab>
@@ -119,12 +122,16 @@ export default {
           label: "Nom",
         },
         {
-          key: "category",
-          label: "Catégories"
+          key: "knowledgeLevel",
+          label: "Niveau de connaissance",
         },
         {
-          key: "knwoledgeLevel",
-          label: "Niveau de connaissance",
+          key: "createdAt",
+          label: "Créé le"
+        },
+        {
+          key: "updatedAt",
+          label: "Modifiée le"
         },
         {
           key: 'actions', 
@@ -137,10 +144,17 @@ export default {
   },
   // mixins : [ setFormWithFile ],
   computed: {
-    ...mapGetters(["oneSkill", "allSkills"]),
+    ...mapGetters(["oneCategory", "allCategories", "oneSkill", "allSkills"]),
   },
   methods: {
-    ...mapActions(["getAllSkills", "deleteSkill", "getSkill", "resetStateSkill"]),
+    ...mapActions([
+      "getOneCategories", 
+      "getAllCategories", 
+      "deleteCategories", 
+      "resetStateCategories",
+      "deleteSkill", 
+      "getSkill", 
+      "resetStateSkill"]),
     formatDate(date) {
       return formatDate(date);
     },

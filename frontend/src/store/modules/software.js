@@ -1,5 +1,8 @@
 import axios from "axios";
 import errorRedirection from "../../services/errorRedirection";
+import authHeader from "../../services/authHeader";
+
+const headers = { "Content-Type": "application/json" };
 
 const state = () => ({
   softwares: [],

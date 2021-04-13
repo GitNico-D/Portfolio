@@ -90,7 +90,7 @@ const actions = {
       return Promise.reject(error.response.data);
     })
   },
-  resetStateskill({ commit }) {
+  resetStateSkill({ commit }) {
     commit("RESET_STATE_SKILL")
   }
 };
