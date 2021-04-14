@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
-use Exception;
+
 class UpdateEntityConverter implements ParamConverterInterface
 {
     protected $serializer;
@@ -82,8 +82,8 @@ class UpdateEntityConverter implements ParamConverterInterface
                 [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
             );
             if($request->files) {
-                $this->fileUploader->deleteFile($entity->getImgStatic(), $configuration->getName());
-                $uploadFile = $this->fileUploader->getUploadFile($request->files);
+                $this->fileUploader->deleteFile($entity, $configuration->getName());
+                $uploadFile = $this->fileUploader->getUploadFile($request->files, $configuration->getName());
                 $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);
                 }
             $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonRequest);

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
@@ -22,26 +21,20 @@ class FileUploader
         $this->slugger = $slugger;
     }
 
-    public function upload(UploadedFile $file)
+    /**
+     * Upload a new file and move it to the directory corresponding at entity
+     * @param UploadFile $file
+     * @param Entity $entity
+     */
+    public function upload(UploadedFile $file, $entity)
     {
         $destination = $this->uploadPath;
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
         try {
-            if (str_contains($fileName, "project")) {
-                $file->move($destination . '/project', $fileName);
-            } elseif (str_contains($fileName, "experience")) {
-                $file->move($destination . '/experience', $fileName);
-            } elseif (str_contains($fileName, "skill")) {
-                $file->move($destination . '/skill', $fileName);
-            } elseif (str_contains($fileName, "software")) {
-                $file->move($destination . '/software', $fileName);
-            } else {
-                $file->move($destination, $fileName);
-            }
+            $file->move($destination . '/' . $entity, $fileName);
         } catch (FileException $e) {
-            // dd($e);
         }
         return $fileName;
     }
@@ -51,17 +44,17 @@ class FileUploader
      * 
      * @param File $file
      */
-    public function getUploadFile($files) 
+    public function getUploadFile($files, $entity) 
     {
         foreach($files as $file) {
             $uploadFile = $file;
-            $uploadFileName = $this->upload($uploadFile);
+            $uploadFileName = $this->upload($uploadFile, $entity);
         }
         return $uploadFileName;
     }
 
     /**
-     * Attach the File to the right entity
+     * Attach the File to the right entity and save his url
      * 
      * @param File $file
      * @param Entity $entity
@@ -69,31 +62,73 @@ class FileUploader
      */
     public function setUploadFile($file, $entity, $configuration) 
     {
-        if($configuration->getName() == 'project') {
-            return $entity->setImgStatic($this->baseUrl . 'project/' . $file);
-        }
-        if ($configuration->getName()  == 'experience') {
-            return $entity->setLogoCompany($this->baseUrl . 'experience/' .$file);
-        }
-        if ($configuration->getName()  == 'skill') {
-            return $entity->setIcon($this->baseUrl . 'skill/' .$file);
-        }
-        if ($configuration->getName()  == 'software') {
-            return $entity->setIcon($this->baseUrl . 'software/' .$file);
+        switch($configuration->getName()) {
+            case 'project':
+                return $entity->setImgStatic($this->baseUrl . 'project/' . $file);
+                break;
+            case 'experience':
+                return $entity->setLogoCompany($this->baseUrl . 'experience/' . $file);
+                break;
+            case 'skill':
+                return $entity->setIcon($this->baseUrl . 'skill/' . $file);
+                break;
+            case 'software':
+                return $entity->setIcon($this->baseUrl . 'software/' . $file);
+                break;
+            case 'contact':
+                return $entity->setIcon($this->baseUrl . 'contact/' . $file);
+                break;
+            case 'presentation':
+                return $entity->setPicture($this->baseUrl . 'presentation/' . $file);
+                break;
+            default:
+                break;
         }
     }
 
     /**
-     * Delete a File
+     * Delete an existing File
      * @param $file
      * @param $entity
      */
-    public function deleteFile($file, $entity) 
+    public function deleteFile($entity, $entityName) 
     {
+        $file = $this->findImage($entity);
         $fileName = pathinfo($file)['basename'];
-        $originalPathFile = ($this->uploadPath . '/' . $entity . '/' . $fileName);
+        $originalPathFile = ($this->uploadPath . '/' . $entityName . '/' . $fileName);
         $fileToRemove = new File($originalPathFile);
         $filesystem = new Filesystem();
         $filesystem->remove($fileToRemove);
     }
-}
+
+    /**
+     * Get entity image to find his name
+     * @param $entity
+     */
+    public function findImage($entity) 
+    {
+        switch (strtolower((str_replace('App\Entity\\', '', get_class($entity))))) {
+            case 'project': 
+                return $entity->getImgStatic();
+                break;
+            case 'experience':
+                return $entity->getLogoCompany();
+                break;
+            case 'skill':
+                return $entity->getIcon();
+                break;
+            case 'software':
+                return $entity->getIcon();
+                break;
+            case 'contact':
+                return $entity->getIcon();
+                break;
+            case 'presentation':
+                return $entity->getPicture();
+                break;
+            default:
+                return null;
+                break;
+            }
+        }
+    }

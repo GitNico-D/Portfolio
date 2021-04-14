@@ -70,7 +70,7 @@ class CreateEntityConverter implements ParamConverterInterface
                 'json'
             );
             if($request->files) {
-                $uploadFile = $this->fileUploader->getUploadFile($request->files);
+                $uploadFile = $this->fileUploader->getUploadFile($request->files, $configuration->getName());
                 $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);                
             }
             $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonRequest);
