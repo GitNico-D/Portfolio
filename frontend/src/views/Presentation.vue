@@ -9,17 +9,16 @@
       :key="presentation.id"
     >
       <b-col cols="10" md="5" xl="3">
-        <b-card :img-src="require('../assets/img-test-1.jpg')" img-top>
+        <b-card :img-src="presentation.picture" img-top>
           <b-card-title class="text-uppercase">
-            <span class="card-title-first">{{ presentation.lastName }}</span>
-            <span class="card-title-last font-weight-bold">{{
+            <p class="card-title-first">{{ presentation.lastName }}</p>
+            <p class="card-title-last font-weight-bold">{{
               presentation.firstName
-            }}</span>
+            }}</p>
           </b-card-title>
           <hr />
           <b-card-text>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
+            {{presentation.quote}}
             <div class="d-flex flex-wrap justify-content-around my-4">
               <ContactButton
                 v-for="(contact, index) in presentation.contacts"

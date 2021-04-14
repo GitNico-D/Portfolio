@@ -7,7 +7,6 @@
   <h2 id="modifyForm-title" class="text-center fw-bold my-5" >
     Modification du contact "{{ currentTitle }}"
   </h2>
-  {{oneContact}}
   <p class="mt-4 text-left" v-show="oneContact.id">
     ID du <span class="text-uppercase font-weight-bold">contact : </span>
     {{oneContact.id}}
@@ -17,7 +16,6 @@
       <ValidationProvider ref="name" rules="required|min:2" name="Name" v-slot="{ errors }">
         <b-form-group id="name">
           <label for="input-name" class="text-uppercase">Nouveau nom du contact</label>
-          {{oneContact.title}}
           <b-form-input 
             id="input-name" 
             v-model="modifyContact.title" 
@@ -34,7 +32,6 @@
       <ValidationProvider ref="link" rules="required|url" name="Lien" v-slot="{ errors }">
         <b-form-group id="link" class="mt-4">
           <label for="input-link" class="text-uppercase">Nouveau lien du contact</label>
-          {{oneContact.link}}
           <b-form-input
             id="input-link"
             v-model="modifyContact.link"
@@ -77,12 +74,12 @@
         </b-form-group>
       </ValidationProvider> 
       <div class="d-flex justify-content-center">
-        <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showModifyContact')">
-          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
+        <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('updateContact')">
+          <b-spinner v-show="loading" label="Spinning" class="pt-4"></b-spinner>
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier contact</span>
         </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancelUpdateContact'), onCancel">
+        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
           <font-awesome-icon icon="times"/>
           <span class="pl-2 pb-2">Annuler</span>
         </b-button>
@@ -193,9 +190,7 @@ export default {
   },
   mounted() {
     if(this.oneContact) {
-      this.modifyContact.title = this.oneContact.title;
-      console.log(this.modifyContact);
-      console.log(this.oneContact);
+      this.modifyContact = this.oneContact;
       this.currentTitle = this.oneContact.title;
       this.oldIcon = this.oneContact.icon;
       this.modifyContact.icon = null;

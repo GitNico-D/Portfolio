@@ -66,14 +66,14 @@
         </b-form-group>
       </ValidationProvider>      
       <div class="d-flex justify-content-center">
-        <b-button type="submit" variant="success" class="m-3" :disabled="loading" @click="$emit('addContact', 'Contact ajoutée'), onAdd">
-          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
-          <span class="pl-2 pb-2">Ajouter contact</span>
+        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addContact'), onAdd">
+          <b-spinner v-show="loading" label="Spinning" class="pt-4 pl-2"></b-spinner>
+          <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter contact</span>
         </b-button>
-        <b-button type="reset" variant="danger" class="m-3" @click="onReset">
-          Réinitialiser formulaire
+        <b-button type="reset" class="m-3 p-3 btn-reset" @click="onReset">
+          <font-awesome-icon icon="trash-alt"/><span class="pl-2">Réinitialiser formulaire</span>
         </b-button>
-        <b-button class="m-3 btn-delete" @click="$emit('onCancelAdd'), onCancel">
+        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
           <font-awesome-icon icon="times"/>
           <span class="pl-2 pb-2">Annuler</span>
         </b-button>
@@ -169,6 +169,16 @@ export default {
 
 <style lang="scss" scoped>
 .btn {
+  &-add {
+    color: $white;
+    background-color: $blue;
+    border: 1px solid $blue;
+    &:hover {
+      color: $blue;
+      background-color: transparent;
+      border: 1px solid $blue;
+    }
+  }
   &-delete {
     color: $white;
     background-color: $yellow;
@@ -177,6 +187,16 @@ export default {
       color: $yellow;
       background-color: transparent;
       border: 1px solid $yellow;
+    }
+  }
+  &-reset {
+    color: $white;
+    background-color: $red;
+    border: 1px solid $red;
+    &:hover {
+      color: $red;
+      background-color: transparent;
+      border: 1px solid $red;
     }
   }
 }

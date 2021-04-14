@@ -65,8 +65,7 @@
                   </b-card>
                 </template>
             </b-table>
-          </div>
-            
+          </div>            
         </b-tab>
         <b-tab class="mt-5 justify-content-center">
           <template #title>
