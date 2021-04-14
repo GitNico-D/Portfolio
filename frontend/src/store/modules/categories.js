@@ -99,11 +99,11 @@ const mutations = {
   ADD_CATEGORIES(state, categories) {
     state.categories = categories;
   },
-  SET_ONE_CATEGORIES(state, categories) {
-    state.category = categories;
+  SET_ONE_CATEGORIES(state, category) {
+    state.category = category;
   },
-  NEW_CATEGORIES(state, newcategories) {
-    state.categories.unshift(newcategories)
+  NEW_CATEGORIES(state, newCategories) {
+    state.categories.unshift(newCategories)
   },
   UPDATE_CATEGORIES(state, updateCategories) {
     let categoriesPosition = '';

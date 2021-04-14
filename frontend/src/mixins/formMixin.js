@@ -2,10 +2,9 @@ export default {
   methods: {
     setFormWithFile(file, form) {
       const formData = new FormData();
-      formData.append('imgStatic', file);
       Object.entries(form).forEach(
         ([key, value]) => {
-          if (value !== null && value !== '' && key !== "id") {
+          if (value !== null && value !== '' && key !== "id" && key !== 'contacts') {
             formData.append(`${key}`, value);
           }
         }
