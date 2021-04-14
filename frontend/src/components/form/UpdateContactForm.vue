@@ -1,0 +1,287 @@
+<template>
+<div> 
+  <div id="alert">
+    <AlertForm v-if="successMessage" v-show="oneContact.id" :message="successMessage" variant="success"/>
+    <AlertForm v-if="errorMessage" v-show="oneContact.id" :message="errorMessage" variant="danger"/>
+  </div>
+  <h2 id="modifyForm-title" class="text-center fw-bold my-5" >
+    Modification du contact "{{ currentTitle }}"
+  </h2>
+  {{oneContact}}
+  <p class="mt-4 text-left" v-show="oneContact.id">
+    ID du <span class="text-uppercase font-weight-bold">contact : </span>
+    {{oneContact.id}}
+  </p>
+  <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" >
+    <b-form @submit.prevent="handleSubmit(onModify)" >
+      <ValidationProvider ref="name" rules="required|min:2" name="Name" v-slot="{ errors }">
+        <b-form-group id="name">
+          <label for="input-name" class="text-uppercase">Nouveau nom du contact</label>
+          {{oneContact.title}}
+          <b-form-input 
+            id="input-name" 
+            v-model="modifyContact.title" 
+            placeholder="Entrer un nom">
+          </b-form-input>
+          <b-alert
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show>
+          </b-alert>
+        </b-form-group>
+      </ValidationProvider>
+      <ValidationProvider ref="link" rules="required|url" name="Lien" v-slot="{ errors }">
+        <b-form-group id="link" class="mt-4">
+          <label for="input-link" class="text-uppercase">Nouveau lien du contact</label>
+          {{oneContact.link}}
+          <b-form-input
+            id="input-link"
+            v-model="modifyContact.link"
+            placeholder="Entrer un lien/url">
+          </b-form-input>
+          <b-alert
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show
+            dismissible>
+          </b-alert>
+        </b-form-group>
+      </ValidationProvider>
+      <div >
+        <h5 v-show="!modifyContact.icon && oldIcon" class="text-left text-uppercase">Image du projet</h5>
+        <b-img :src="oldIcon" fluid alt="Fluid image" class="mt-1" v-show="!modifyContact.icon && oldIcon"></b-img>
+      </div>
+      <ValidationProvider ref="logo-contact" rules="required" name="Icone" v-slot="{ errors }">
+        <b-form-group id="logo-contact" class="mt-4">
+          <label for="input-logo-contact" class="text-uppercase">Nouvelle icone du contact</label>
+          {{oneContact.icon}}
+          <b-form-file
+            id="input-logo-contact"
+            name="logo-contact"
+            v-model="modifyContact.icon"
+            :state="Boolean(modifyContact.icon)"
+            browse-text="Parcourir"
+            placeholder="Choisir un fichier ou glisser-déposer ici"
+            drop-placeholder="Choisir un fichier"
+          ></b-form-file>
+        <b-alert
+          variant="danger"
+          v-if="errors[0]"
+          v-text="errors[0]"
+          show
+          dismissible>
+        </b-alert>
+        <div class="mt-3">Icone sélectionné: {{ modifyContact.icon ? modifyContact.icon.name : '' }}</div>
+        </b-form-group>
+      </ValidationProvider> 
+      <div class="d-flex justify-content-center">
+        <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showModifyContact')">
+          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
+            <font-awesome-icon icon="edit"/>
+            <span class="pl-2 pb-2">Modifier contact</span>
+        </b-button>
+        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancelUpdateContact'), onCancel">
+          <font-awesome-icon icon="times"/>
+          <span class="pl-2 pb-2">Annuler</span>
+        </b-button>
+      </div>
+    </b-form>
+  </ValidationObserver>
+</div>
+</template>
+
+<script>
+import { ValidationProvider, ValidationObserver } from "vee-validate";
+import { mapActions, mapGetters } from "vuex";
+import AlertForm from "@/components/form/AlertForm";
+import formatDate from "../../services/formatDate";
+import setFormWithFile from "../../mixins/formMixin";
+
+export default {
+  name: "UpdateContactForm",
+  components: { 
+    ValidationProvider,
+    ValidationObserver,
+    AlertForm
+  },
+  data() {
+    return {
+      loading: false,
+      contactId: null,
+      modifyContact: {
+        title: '',
+        link: '',
+        icon: null,
+      },
+      oldIcon: '',
+      currentTitle: '',
+      previewImageUrl: null,
+      successMessage: '',
+      errorMessage: ''
+    }
+  },
+  mixins : [ setFormWithFile ],
+  computed: {
+    ...mapGetters(["oneContact"]), 
+  },
+  methods: {
+    ...mapActions(["updateContactWithFile", "updateContactWithoutFile", "resetStateContact"]),
+    showPreview(event) {
+      const file = event.target.files[0];
+      if(file) {
+        this.previewImageUrl = URL.createObjectURL(file);
+        document.getElementById("previewImage").onload = function () {
+          window.URL.revokeObjectURL(this.previewImageUrl);
+        }
+      }
+    },
+    onModify() {
+      this.loading = true;
+      this.$refs.modifyForm.validate()
+        .then(isValid => {
+          if (!isValid) {
+            this.loading = false;
+            return
+          }
+          if(!this.modifyContact.icon) {
+            this.updateContactWithoutFile({
+              id: this.oneContact.id, 
+              form: this.modifyContact
+            })
+            .then(() => {
+              this.successMessage = 'Le contact ' + this.oneContact.id + ' a été modifié';
+              this.loading = false;
+              this.resetForm();
+              document.getElementById("alert").scrollIntoView(); 
+            })
+            .catch((error) => {
+              this.errorMessage = error.message;
+            })
+          } else {
+            let fd = this.setFormWithFile(this.modifyContact.icon, this.modifyContact)
+            this.updateContactWithFile({
+              id: this.oneContact.id, 
+              formData: fd
+            })
+            .then(() => {
+              this.successMessage = 'Le contact ' + this.oneContact.id + ' a été modifié';
+              this.loading = false;
+              this.resetForm();
+              document.getElementById("alert").scrollIntoView();  
+            })
+            .catch((error) => {
+              this.errorMessage = error.message;
+            })
+          }
+      })
+    },
+    resetForm() {
+      this.$refs.modifyForm.reset;
+      this.modifyContact.title = ''
+      this.modifyContact.link = ''
+      this.modifyContact.icon = null
+      this.oldicon = ''
+    },
+    onCancel: function() {
+      this.onReset(event);
+    },
+    formatDate(date) {
+      return formatDate(date);
+    },
+  },
+  mounted() {
+    if(this.oneContact) {
+      this.modifyContact.title = this.oneContact.title;
+      console.log(this.modifyContact);
+      console.log(this.oneContact);
+      this.currentTitle = this.oneContact.title;
+      this.oldIcon = this.oneContact.icon;
+      this.modifyContact.icon = null;
+      console.log(this.modifyContact);
+    }
+  },
+  
+}
+</script>
+
+<style lang="scss" scoped>
+.btn {
+  &-modify {
+    color: $white;
+    background-color: $green;
+    border: 1px solid $green;
+    &:hover {
+      color: $green;
+      background-color: transparent;
+      border: 1px solid $green;
+    }
+  }
+  &-delete {
+    color: $white;
+    background-color: $yellow;
+    border: 1px solid $yellow;
+    &:hover {
+      color: $yellow;
+      background-color: transparent;
+      border: 1px solid $yellow;
+    }
+  }
+}
+.card {
+  &-body {
+    background-color: transparent; 
+  }
+}
+.custom-file-label {
+  background-color: transparent!important;
+  color: $white;
+  border: unset;
+  border-bottom: 1px solid $white;
+  border-radius: unset;
+  &:focus {
+    @include box_shadow(0px, 0px, 5px, $purple);
+    background-color: transparent;
+    border-bottom: 1px solid $purple;
+  }
+}
+form {
+  width: 90%;
+  margin: auto;
+  padding: 1.5rem;
+}
+.form-group {
+  label {
+    font-size: 1.3rem;
+    @include text-shadow(0px, 0px, 10px, $purple); 
+  }
+}
+.form-control {
+  background-color: transparent;
+  color: $white;
+  border: unset;
+  border-bottom: 1px solid $white;
+  border-radius: unset;
+  &:focus {
+    @include box_shadow(0px, 0px, 5px, $purple);
+    background-color: transparent;
+    border-bottom: 1px solid $purple;
+    color: $white;
+  }
+}
+hr{
+  background-color: $purple;
+  width: 60%;
+}
+.nav-link {
+  color: $white!important;
+}
+.row {
+  height: unset;
+}
+.tabs {
+  font-family: "Oswald", sans-serif;
+  letter-spacing: 1px;
+}
+</style>

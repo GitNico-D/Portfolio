@@ -75,11 +75,11 @@
           </b-alert>
         </b-form-group>
       </ValidationProvider>
-      <div >
-        <h5 v-show="!modifyPresentation.picture && oldpicture" class="text-left text-uppercase">Image du présentation</h5>
-        <b-img :src="oldpicture" fluid alt="Fluid image" class="mt-1" v-show="!modifyPresentation.picture && oldpicture"></b-img>
+      <div v-show="oldPicture">
+        <h5 v-show="oldPicture" class="text-left text-uppercase">Image du présentation</h5>
+        <b-img :src="oldPicture" fluid alt="Fluid image" class="mt-1" v-show="!modifyPresentation.picture && oldPicture"></b-img>
       </div>
-      <ValidationProvider ref="new-picture" rules="required_if:modifyPresentation.picture" v-if="modifyPresentation" name="Image" v-slot="{ validate, errors }">
+      <ValidationProvider ref="new-picture" v-if="modifyPresentation" name="Image" v-slot="{ errors }">
         <b-form-group id="new-picture" class="mt-3 mb-5">
           <label for="input-picture" class="text-uppercase">Nouvelle image de présentation du présentation</label>
           <b-form-file
@@ -91,8 +91,8 @@
             accept="image/*"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
-            @change="showPreview($event), validate"
-          >{{modifyPresentation.picture}}</b-form-file>
+            @change="showPreview($event)"
+          ></b-form-file>
           <b-alert
             class="mt-1"
             variant="danger"
@@ -102,7 +102,7 @@
           >
           </b-alert>
           <div class="mt-3">Fichier sélectionné: {{ modifyPresentation.picture ? modifyPresentation.picture.name : '' }}</div>
-          <b-img thumbnail fluid id="previewImage" v-show="previewImageUrl && modifyPresentation.picture" :src="previewImageUrl"></b-img>
+          <b-img thumbnail fluid id="previewPicture" v-show="previewPictureUrl && modifyPresentation.picture" :src="previewPictureUrl"></b-img>
         </b-form-group>
       </ValidationProvider>
       <hr>
@@ -220,7 +220,7 @@
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier présentation</span>
         </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancelModify'), onCancel">
+        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancelModify')">
           <font-awesome-icon icon="times"/>
           <span class="pl-2 pb-2">Annuler</span>
         </b-button>
@@ -235,7 +235,7 @@ import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
 import formatDate from "../../services/formatDate";
-// import { setFormWithFile } from "../mixins/formMixin";
+import setFormWithFile from "../../mixins/formMixin";
 
 export default {
   name: "UpdatePresentationForm",
@@ -252,7 +252,7 @@ export default {
         firstName: '',
         lastName: '',
         quote: '',
-        picture: '',
+        picture: null,
         titleFirstText: '',
         firstText: '',
         titleSecondText: '',
@@ -261,25 +261,25 @@ export default {
         thirdText: ''
       },
       oldPicture: '',
-      previewImageUrl: null,
+      previewPictureUrl: null,
       successMessage: '',
       errorMessage: '',
       showForm: false 
     }
   },
-  // mixins : [ setFormWithFile ],
+  mixins : [ setFormWithFile ],
   computed: {
     ...mapGetters(["onePresentation"]),    
   },
   methods: {
-    ...mapActions(["updatePresentationWithFile", "updatePresentationWithoutFile"]),
+    ...mapActions(["updatePresentationWithFile", "updatePresentationWithoutFile", "resetStatePresentation"]),
     // Show a preview of the selected file of input file
     showPreview(event) {
       const file = event.target.files[0];
       if(file) {
-        this.previewImageUrl = URL.createObjectURL(file);
-        document.getElementById("previewImage").onload = function () {
-          window.URL.revokeObjectURL(this.previewImageUrl);
+        this.previewPictureUrl = URL.createObjectURL(file);
+        document.getElementById("previewPicture").onload = function () {
+          window.URL.revokeObjectURL(this.previewPictureUrl);
         }
       }
     },
@@ -293,7 +293,7 @@ export default {
             return
           }
           if(!this.modifyPresentation.picture) {
-            this.modifyPresentation.picture = this.oldpicture;
+            // this.modifyPresentation.picture = this.oldPicture;
             this.updatePresentationWithoutFile({
               id: this.onePresentation.id, 
               form: this.modifyPresentation
@@ -301,73 +301,46 @@ export default {
             .then(() => {
               this.successMessage = 'Le présentation ' + this.onePresentation.id + ' a été modifier';
               this.loading = false;
-              this.resetForm();
               document.getElementById("alert").scrollIntoView(); 
             })
             .catch((error) => {
               this.errorMessage = error.message;
             })
           } else {
-            let fd = new FormData();
-            fd.append('picture', this.modifyPresentation.picture);
-            Object.entries(this.modifyPresentation).forEach(
-              ([key, value]) => {
-                if (value !== null && value !== '') {
-                  fd.append(`${key}`, value);
-                }
-              },
-            );
+            let fd = this.setFormWithFile(this.modifyPresentation.picture, this.modifyPresentation)
+            console.log(this.modifyPresentation);
+            console.log(fd);
+            var object = {};
+            fd.forEach(function(value, key){
+                object[key] = value;
+            });
+            var json = JSON.stringify(object);
+            console.log(json);
             this.updatePresentationWithFile({
               id: this.onePresentation.id, 
               formData: fd
             })
             .then(() => {
+              console.log("c'est ok")
               this.successMessage = 'Le présentation ' + this.onePresentation.id + ' a été modifier';
               this.loading = false;
-              this.resetForm();
               document.getElementById("alert").scrollIntoView();  
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              this.errorMessage = error;
             })
           }
       })
-    },
-    resetForm() {
-      this.$refs.modifyForm.reset;
-      this.modifyPresentation.firstName = ''
-      this.modifyPresentation.lastName = ''
-      this.modifyPresentation.quote = ''
-      this.modifyPresentation.picture = null
-      this.modifyPresentation.titleFirstText = ''
-      this.modifyPresentation.firstText = ''
-      this.modifyPresentation.titleSecondText = ''
-      this.modifyPresentation.secondText = ''
-      this.modifyPresentation.titleThirdText= ''
-      this.modifyPresentation.thirdText = ''
-      this.oldpicture = ''
-    },
-    onCancel: function() {
-      this.onReset(event);
     },
     formatDate(date) {
       return formatDate(date);
     },
   },
   mounted() {
-    this.$store.dispatch("onePresentation");
     if(this.onePresentation.id) {
-      this.modifyPresentation.firstName = this.onePresentation.firstName
-      this.modifyPresentation.lastName = this.onePresentation.lastName
-      this.modifyPresentation.quote = this.onePresentation.quote
-      this.modifyPresentation.picture = null
-      this.modifyPresentation.titleFirstText = this.onePresentation.titleFirstText
-      this.modifyPresentation.firstText = this.onePresentation.firstText
-      this.modifyPresentation.titleSecondText = this.onePresentation.titleSecondText
-      this.modifyPresentation.secondText = this.onePresentation.secondText
-      this.modifyPresentation.titleThirdText= this.onePresentation.titleThirdText
-      this.modifyPresentation.thirdText = this.onePresentation.thirdText
-      this.oldpicture = this.onePresentation.picture;
+      this.modifyPresentation = this.onePresentation;
+      this.oldPicture = this.onePresentation.picture;
+      console.log(this.onePresentation.picture);
       this.modifyPresentation.picture = null;
     }
   },

@@ -284,7 +284,6 @@ export default {
       this.modifyProject = this.oneProject;
       this.oldImgStatic = this.oneProject.imgStatic;
       this.modifyProject.imgStatic = null;
-      console.log(this.modifyProject);
     }
   },
   

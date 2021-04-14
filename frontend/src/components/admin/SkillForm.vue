@@ -22,9 +22,11 @@
               <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
               <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
             </div>
+            {{allSkills}}
             <div v-for="category in allCategories" :key="category.id">
               <h3>{{category.name}}</h3>
-              <b-table id="table-list" responsive hover no-collpase bordered dark :items="category.skills" :fields="fields">
+              <span v-for="skill in allSkills" :key="skill.id">
+              <b-table id="table-list" responsive hover no-collpase bordered dark :items="allSkills" :fields="fields">
                 <b-thead class="p-5"></b-thead>
                 <template #cell(knowledgeLevel)="data">
                   {{ data.value }}
@@ -67,6 +69,7 @@
                   </b-card>
                 </template>
               </b-table>
+              </span>
             </div>
           </div>
             
