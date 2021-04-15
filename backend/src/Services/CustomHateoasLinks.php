@@ -68,8 +68,12 @@ class CustomHateoasLinks
     {
         if ($this->getEntityName($entity) === "category" || $this->getEntityName($entity) === "skill" || $this->getEntityName($entity) === "software") {
             $entityArray = json_decode($this->serializer->serialize($entity, 'json', ['groups' => 'category:read']), true);
+            $entityArray["createdAt"] = $entity->getCreatedAt();
+            $entityArray["updatedAt"] = $entity->getUpdatedAt();
         } elseif ($this->getEntityName($entity) === "contact" || $this->getEntityName($entity) === "presentation") {
             $entityArray = json_decode($this->serializer->serialize($entity, 'json', ['groups' => 'presentation:read']), true);
+            $entityArray["createdAt"] = $entity->getCreatedAt();
+            $entityArray["updatedAt"] = $entity->getUpdatedAt();
         } else {
             $entityArray = json_decode($this->serializer->serialize($entity, 'json'), true);
         }

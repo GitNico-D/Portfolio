@@ -220,13 +220,19 @@
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier présentation</span>
         </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancelModify')">
+        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel')">
           <font-awesome-icon icon="times"/>
           <span class="pl-2 pb-2">Annuler</span>
         </b-button>
       </div>
     </b-form>
   </ValidationObserver>
+  <b-card class="mt-3" header="Form Data Result">
+        <pre class="m-0">{{ modifyPresentation }}</pre>
+      </b-card>
+      <b-card class="mt-3" header="Form Data Result">
+        <pre class="m-0">{{ onePresentation }}</pre>
+      </b-card>
 </div>
 </template>
 
@@ -264,7 +270,8 @@ export default {
       previewPictureUrl: null,
       successMessage: '',
       errorMessage: '',
-      showForm: false 
+      showForm: false
+      
     }
   },
   mixins : [ setFormWithFile ],
@@ -293,7 +300,6 @@ export default {
             return
           }
           if(!this.modifyPresentation.picture) {
-            // this.modifyPresentation.picture = this.oldPicture;
             this.updatePresentationWithoutFile({
               id: this.onePresentation.id, 
               form: this.modifyPresentation
@@ -340,7 +346,6 @@ export default {
     if(this.onePresentation.id) {
       this.modifyPresentation = this.onePresentation;
       this.oldPicture = this.onePresentation.picture;
-      console.log(this.onePresentation.picture);
       this.modifyPresentation.picture = null;
     }
   },

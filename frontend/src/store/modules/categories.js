@@ -11,7 +11,7 @@ const state = () => ({
 
 const getters = {
   allCategories: state => state.categories,
-  oneCategories: state => state.categories
+  oneCategory: state => state.category
 };
 
 const actions = {
@@ -27,12 +27,12 @@ const actions = {
         errorRedirection(error);
       });
   },
-  getCategories({ commit }, id) {
-    return axios.get(process.env.VUE_APP_API_URL + `/categoriess/${id}`, {
+  getCategory({ commit }, id) {
+    return axios.get(process.env.VUE_APP_API_URL + `/categories/${id}`, {
         headers: headers
       })
       .then(response => {
-        commit("SET_ONE_CATEGORIES", response.data);
+        commit("SET_ONE_CATEGORY", response.data);
       })
       .catch(error => {
         console.log(error.response.data);
@@ -40,7 +40,7 @@ const actions = {
       });
   },
   addCategories({ commit }, formData) {
-    return axios.post(process.env.VUE_APP_API_URL + '/categoriess', formData, {
+    return axios.post(process.env.VUE_APP_API_URL + '/categories', formData, {
       headers: authHeader()
     })
     .then(formData => {
@@ -52,7 +52,7 @@ const actions = {
     })
   },
   updateCategoriesWithFile({ commit }, { id, formData }) {
-    return axios.post(process.env.VUE_APP_API_URL + `/categoriess/${id}`, formData, {
+    return axios.post(process.env.VUE_APP_API_URL + `/categories/${id}`, formData, {
       headers: authHeader(),
       params: {
         "_method": "PUT"
@@ -67,7 +67,7 @@ const actions = {
     })
   },
   updateCategoriesWithoutFile({ commit }, { id, form }) {
-    return axios.put(process.env.VUE_APP_API_URL + `/categoriess/${id}`, form, {
+    return axios.put(process.env.VUE_APP_API_URL + `/categories/${id}`, form, {
       headers: authHeader(),
     })
     .then(response => {
@@ -79,7 +79,7 @@ const actions = {
     })
   },
   deleteCategories({ commit }, id) {
-    return axios.delete(process.env.VUE_APP_API_URL + `/categoriess/${id}`, {
+    return axios.delete(process.env.VUE_APP_API_URL + `/categories/${id}`, {
       headers: authHeader()
     })
     .then(response => {
@@ -90,8 +90,8 @@ const actions = {
       return Promise.reject(error.response.data);
     })
   },
-  resetStateCategories({ commit }) {
-    commit("RESET_STATE_CATEGORIES")
+  resetStateCategory({ commit }) {
+    commit("RESET_STATE_CATEGORY")
   }
 };
 
@@ -99,7 +99,7 @@ const mutations = {
   ADD_CATEGORIES(state, categories) {
     state.categories = categories;
   },
-  SET_ONE_CATEGORIES(state, category) {
+  SET_ONE_CATEGORY(state, category) {
     state.category = category;
   },
   NEW_CATEGORIES(state, newCategories) {
@@ -123,7 +123,7 @@ const mutations = {
     });
     state.categories.splice(categoriesPosition, 1);
   }, 
-  RESET_STATE_CATEGORIES(state) {
+  RESET_STATE_CATEGORY(state) {
     state.category = '';
   }
 };

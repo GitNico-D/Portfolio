@@ -59,7 +59,7 @@
               </template>
             </b-table>
             <div class="text-center">
-              <b-button type="btn" @click="onAddContact" class="m-1 p-2 btn-add rounded text-center">
+              <b-button type="btn" @click="toAddForm" class="m-1 p-2 btn-add rounded text-center">
                   <font-awesome-icon icon="plus"/> Ajouter
               </b-button>
             </div>
@@ -78,14 +78,14 @@
             <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
             <span>Modification de la présentation</span>
           </template>           
-          <UpdatePresentationForm v-on:onCancelModify="onCancelModify" v-on:showModifyPresentation="showModifyPresentation"/>
+          <UpdatePresentationForm v-on:onCancel="onCancel" v-on:showModifyPresentation="showModifyPresentation"/>
         </b-tab>
         <b-tab lazy>
           <template #title>
             <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter un Contact</span>
           </template> 
-          <AddContactForm v-on:addContact="onAddContact" v-on:onCancel="onCancel"/>
+          <AddContactForm v-on:addContact="refreshTab" v-on:onCancel="onCancel"/>
         </b-tab>
         <b-tab lazy>
           <template #title>
@@ -211,22 +211,15 @@ export default {
     showModifyPresentation() {
       this.$store.dispatch("getPresentation");
     },
-    onAddContact() {
+    toAddForm() {
       this.tabIndex = 2
-      this.$store.dispatch("getPresentation")
     },
     onUpdateContact() {
       this.$store.dispatch("getPresentation");
     },
-    onCancelModify() {
-      console.log("on cancel Modify")
-      this.$store.dispatch("getPresentation");
-      this.tabIndex = 0;
-      this.showUpdateCardForm = false;
-      this.showAddCardForm = false
-    },
     onCancel() {
       this.tabIndex = 0;
+      this.$store.dispatch("getPresentation");
       this.resetStateContact();
     },
   },

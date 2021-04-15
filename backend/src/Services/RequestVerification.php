@@ -28,7 +28,7 @@ class RequestVerification
         if($request->getContent()) {
             $jsonRequest = $request->getContent();
         } else {
-            $jsonRequest = json_encode($request->request->all());
+            $jsonRequest = json_encode($this->specificException($request->request->all()));
         }
         return $jsonRequest;
     }
@@ -52,7 +52,7 @@ class RequestVerification
             }
             $jsonRequest = json_encode($requestArray);
         } else {
-            $jsonRequest = json_encode($request->request->all());
+            $jsonRequest = json_encode($this->specificException($request->request->all()));
             if ($request->files) {
                 $this->fileUploader->deleteFile($entity, $configuration->getName());
                 $uploadFile = $this->fileUploader->getUploadFile($request->files, $configuration->getName());
@@ -60,5 +60,28 @@ class RequestVerification
             }
         }
         return $jsonRequest;
+    }
+
+    /**
+     * Specific project function to convert string receive by FormData into 
+     * integer.
+     * @param $requestContent
+     */
+    public function specificException($requestContent)
+    {
+        foreach ($requestContent as $key => $value) {
+            if ($key == 'knowledgeLevel') {
+                $requestContent[$key] = (int)$value;
+            } elseif ($key == 'knowledge_level') {
+                $requestContent[$key] = (int)$value;
+            } elseif ($key == 'category') {
+                $requestContent[$key] = (int)$value;
+            } elseif ($key == 'presentation') {
+                $requestContent[$key] = (int)$value;
+            } elseif ($key == 'masteryOf') {
+                $requestContent[$key] = (int)$value;
+            }
+        }
+        return $requestContent;
     }
 }

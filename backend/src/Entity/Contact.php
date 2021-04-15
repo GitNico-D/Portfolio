@@ -39,7 +39,7 @@ class Contact
     private $link;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank
      * @Assert\Length(min="2", max="255")
      * @Groups({"presentation:read"})

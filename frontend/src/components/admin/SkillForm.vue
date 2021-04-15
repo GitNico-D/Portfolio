@@ -22,11 +22,18 @@
               <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
               <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
             </div>
-            {{allSkills}}
             <div v-for="category in allCategories" :key="category.id">
-              <h3>{{category.name}}</h3>
-              <span v-for="skill in allSkills" :key="skill.id">
-              <b-table id="table-list" responsive hover no-collpase bordered dark :items="allSkills" :fields="fields">
+              <div class="d-flex justify-content-around my-4">
+                <h3 > Compétences de catégorie : <span class="font-weight-bold">{{category.name}}</span></h3>
+                <b-button type="btn" @click="toAddForm(category.id)" class=" btn-add rounded text-center">
+                    <font-awesome-icon icon="plus"/> Ajouter compétence {{category.name}}
+                </b-button>
+            </div>
+              <!-- <span v-for="skill in allSkills" :key="skill.id"> -->
+              <b-table id="table-list" responsive hover no-collpase bordered dark 
+                :items="category.skills" 
+                :fields="fields"
+                >
                 <b-thead class="p-5"></b-thead>
                 <template #cell(knowledgeLevel)="data">
                   {{ data.value }}
@@ -38,7 +45,7 @@
                   {{ formatDate(data.value) }}
                 </template>
               <template #cell(actions)="row">
-                <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
+                <b-button variant="info" @click="toModifyForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
                   <font-awesome-icon icon="edit"/> Modifier
                 </b-button>
                 <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-details">
@@ -48,8 +55,7 @@
                 <template #row-details="row">
                   <b-card
                     :title="row.item.name"
-                    :img-src="row.item.imgStatic"
-                    :img-alt="row.item.altStatic"
+                    :img-src="row.item.icon"
                     img-top
                     class="mt-2 text-dark text-center"
                   >
@@ -58,9 +64,12 @@
                     <p>Mise à jour le : {{formatDate(row.item.updatedAt)}}</p>
                   </b-card-body>
                     <b-card-text>
-                      {{row.item.description }}
+                      <p class="my-4">Niveau  de compétence</p> 
+                      {{row.item.knowledgeLevel}}
+                      <b-progress :value="row.item.knowledgeLevel" :max="maxValue" show-progress animated></b-progress>
+                      <p class="my-4">{{row.item.description }}</p>
                     </b-card-text>
-                    <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
+                    <b-button variant="info" @click="toModifyForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
                       <font-awesome-icon icon="edit"/> Modifier
                     </b-button>
                     <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDelete(row.item.id)">
@@ -69,17 +78,16 @@
                   </b-card>
                 </template>
               </b-table>
-              </span>
+              <!-- </span> -->
             </div>
           </div>
-            
         </b-tab>
-        <b-tab class="mt-5 justify-content-center">
+        <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter une nouvelle compétence</span>
           </template> 
-          <AddSkillForm v-on:addSkill="refreshTab"/>
+          <AddSkillForm v-on:addSkill="refreshTab" v-on:onCancel="onCancel" :category="categoryId"/>
         </b-tab>
         <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
@@ -87,7 +95,7 @@
             <span v-if="!skillId">Modifier la compétence</span>
             <span v-else>Modification de la compétence {{ oneSkill.id }}</span>
           </template>           
-          <UpdateSkillForm v-on:onCancelModify="onCancelModify" v-on:showModifySkill="showModifySkill"/>
+          <UpdateSkillForm v-on:onCancel="onCancel" v-on:showModifySkill="showModifySkill"/>
         </b-tab>
       </b-tabs>
     </b-col>
@@ -100,7 +108,6 @@ import AlertForm from "@/components/form/AlertForm";
 import AddSkillForm from "@/components/form/AddSkillForm"
 import UpdateSkillForm from "@/components/form/UpdateSkillForm"
 import formatDate from "../../services/formatDate";
-// import { setFormWithFile } from "../mixins/formMixin";
 
 export default {
   name: "SkillForm",
@@ -119,6 +126,7 @@ export default {
         {
           key: 'id',
           label: 'Id',
+          sortable: true
         },
         { 
           key: "name",
@@ -130,11 +138,13 @@ export default {
         },
         {
           key: "createdAt",
-          label: "Créé le"
+          label: "Créé le",
+          sortable: true
         },
         {
           key: "updatedAt",
-          label: "Modifiée le"
+          label: "Modifiée le",
+          sortable: true
         },
         {
           key: 'actions', 
@@ -142,27 +152,30 @@ export default {
         }
       ],
       items: [],
-      tabIndex: 0
+      tabIndex: 0,
+      maxValue: 100,
+      categoryId: 0
     }
   },
-  // mixins : [ setFormWithFile ],
   computed: {
     ...mapGetters(["oneCategory", "allCategories", "oneSkill", "allSkills"]),
   },
   methods: {
     ...mapActions([
-      "getOneCategories", 
+      "getCategory", 
       "getAllCategories", 
       "deleteCategories", 
-      "resetStateCategories",
+      "resetStateCategory",
       "deleteSkill", 
-      "getSkill", 
+      "getSkill",
+      "getAllSkills", 
       "resetStateSkill"]),
     formatDate(date) {
       return formatDate(date);
     },
     refreshTab() {
       this.$store.dispatch("getAllSkills");
+      this.$store.dispatch("getAllCategories");
       setTimeout(() => {
         this.tabIndex = 0;
       }, 5000);
@@ -188,11 +201,13 @@ export default {
         }
       )
     },
-    toModifyForm(data){
-      this.skillId = data;
-      this.getSkill(this.skillId)
+    toModifyForm(skillId, categoryId) {
+      this.getSkill(skillId)
         .then(() => { 
-          this.tabIndex = 2;
+          this.getCategory(categoryId)
+          .then(() => { 
+            this.tabIndex = 2;
+          })
         })
         .catch((error) => {   
           if(error.code == "404") {
@@ -201,18 +216,35 @@ export default {
             this.showSkillCard = false;       
           }  
         })
+      this.getCategory(categoryId)
+        .then(() => { 
+          this.tabIndex = 2;
+        })
+        .catch((error) => {   
+          if(error.code == "404") {
+            this.errorMessage = 'La categorie ' + this.categoryId  + ' n\'existe pas !';
+            this.successMessage = '';
+            this.showSkillCard = false;       
+          }  
+        })
     },
     showModifySkill() {
-    //   setTimeout(() => {
-    //     this.tabIndex = 0;
-    //     this.resetStateSkill()
-    //   }, 5000);
+      this.$store.dispatch("getSkills");
     },
-    onCancelModify() {
+    toAddForm(categoryId) {
+      this.tabIndex = 1
+      this.categoryId = categoryId;
+    },
+    onCancel() {
       this.tabIndex = 0;
       this.resetStateSkill()
+      this.resetStateCategory()
     },
-  }
+  },
+  mounted() {
+    this.$store.dispatch("getAllCategories");
+    this.$store.dispatch("getAllSkills");
+  },
 }
 </script>
 
@@ -233,19 +265,36 @@ table {
   }
 }
 .btn {
-  &-modify {
-    background-color: $purple; 
+  &-add {
+    background-color: $green; 
     color: $white;
-    border: 1px solid $purple;
+    border: 1px solid $green;
     &:hover {
-      color: $purple;
+      color: $green;
       background-color: transparent;
-      border: 1px solid $purple;
+      border: 1px solid $green;
+    } 
+    &:focus, &:active {
+      color: $white!important;
+      box-shadow: unset;
+      border: 1px solid $green;
+      background-color: $green;
+    }
+  }
+  &-modify {
+    background-color: $green; 
+    color: $white;
+    border: 1px solid $green;
+    &:hover {
+      color: $green;
+      background-color: transparent;
+      border: 1px solid $green;
     } 
     &:focus, :active {
+      color: $white!important;
       box-shadow: unset;
-      border: 1px solid $purple;
-      background-color: $purple;
+      border: 1px solid $green;
+      background-color: $green;
     }
   }
   &-delete {
@@ -255,9 +304,22 @@ table {
       border: 1px solid $red;
     }
     &:focus, :active {
+      color: $white!important;
       box-shadow: unset;
       border: 1px solid $red;
       background-color: $red;
+    }
+  }
+  &-detail {
+    &:hover {
+      color: $light-blue;
+      background-color: transparent;
+      border: 1px solid $light-blue;
+    }
+    &:focus, :active {
+      box-shadow: unset;
+      border: 1px solid $light-blue;
+      background-color: $light-blue;
     }
   }
 }

@@ -114,7 +114,6 @@ export default {
   methods: {
     ...mapActions(["addContact"]),
     onCreate() {
-      console.log("addContact");
       this.loading = true;
       this.$refs.addContactForm.validate()
         .then(isValid => {

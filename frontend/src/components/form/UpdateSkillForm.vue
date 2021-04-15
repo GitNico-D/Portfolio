@@ -20,7 +20,7 @@
   </p>
   <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" v-show="oneSkill.id || showForm">
     <b-form @submit.prevent="handleSubmit(onModify)" >
-      <ValidationProvider ref="name" rules="required|min:2" name="Titre" v-slot="{ errors }">
+      <ValidationProvider ref="name" rules="required|min:2" name="Nom" v-slot="{ errors }">
         <b-form-group id="name" class="mb-5">
           <label for="input-name" class="text-uppercase">Nouveau nom de la compétence</label>
           <b-form-input 
@@ -62,7 +62,7 @@
         <h5 v-show="!modifySkill.icon && oldIcon" class="text-left text-uppercase">Icone de la compétence</h5>
         <b-img :src="oldIcon" fluid alt="Fluid image" class="mt-1" v-show="!modifySkill.icon && oldIcon"></b-img>
       </div>
-      <ValidationProvider ref="new-icon" rules="required_if:modifySkill.icon" v-if="modifySkill" name="Image" v-slot="{ validate, errors }">
+      <ValidationProvider ref="new-icon" name="Icone" v-slot="{ validate, errors }">
         <b-form-group id="new-icon" class="mt-3 mb-5">
           <label for="input-icon" class="text-uppercase">Nouvelle Icone de la compétence</label>
           <b-form-file
@@ -75,7 +75,8 @@
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
             @change="showPreview($event), validate"
-          >{{modifySkill.icon}}</b-form-file>
+          >
+          </b-form-file>
           <b-alert
             class="mt-1"
             variant="danger"
@@ -85,14 +86,15 @@
           >
           </b-alert>
           <div class="mt-3">Icone sélectionnée: {{ modifySkill.icon ? modifySkill.icon.name : '' }}</div>
-          <b-img thumbnail fluid id="previewImage" v-show="previewImageUrl && modifySkill.icon" :src="previewImageUrl"></b-img>
+          <b-img thumbnail fluid id="previewIcon" v-show="previewIconUrl && modifySkill.icon" :src="previewIconUrl"></b-img>
         </b-form-group>
       </ValidationProvider>
       <hr>
-      <ValidationProvider ref="knowledge-level" rules="required|number" name="Niveau de compétence" v-slot="{ errors }">
+      <ValidationProvider ref="knowledge-level" rules="required|numeric" name="Niveau de compétence" v-slot="{ errors }">
         <b-form-group id="knowledge-level" class="mb-5">
           <label for="input-knowledge-level" class="text-uppercase">Nouveau niveau de la compétence</label>
           <b-form-input 
+            type="number"
             id="input-knowledge-level" 
             v-model="modifySkill.knowledgeLevel"
             >
@@ -107,17 +109,37 @@
           </b-alert>
         </b-form-group>
       </ValidationProvider>
+      <ValidationProvider ref="category" rules="required" name="Catégorie" v-slot="{ errors }">
+        <b-form-group id="category" class="mt-5 text">
+          <label for="input-category" class="text-uppercase">Choix de la categorie</label>
+            <b-form-select v-model="selected" :options="options" @change="setCategory">
+            </b-form-select>
+          <b-alert
+            variant="danger"
+            v-if="errors[0]"
+            v-text="errors[0]"
+            show
+            dismissible>
+          </b-alert>
+        </b-form-group>
+      </ValidationProvider>
       <div class="d-flex justify-content-center">
         <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showModifySkill')">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier compétence</span>
         </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancelModify'), onCancel">
+        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
           <font-awesome-icon icon="times"/>
           <span class="pl-2 pb-2">Annuler</span>
         </b-button>
       </div>
+      <b-card class="mt-3" header="Form Data Result">
+        <pre class="m-0">{{ modifySkill }}</pre>
+      </b-card>
+      <b-card class="mt-3" header="Form Data Result">
+        <pre class="m-0">{{ oneSkill }}</pre>
+      </b-card>
     </b-form>
   </ValidationObserver>
 </div>
@@ -128,7 +150,7 @@ import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
 import formatDate from "../../services/formatDate";
-// import { setFormWithFile } from "../mixins/formMixin";
+import setFormWithFile from "../../mixins/formMixin";
 
 export default {
   name: "UpdateSkillForm",
@@ -146,29 +168,40 @@ export default {
         description: '',
         icon: null,
         knowledgeLevel: 0,
+        category: null
       },
       oldIcon: '',
       currentName: '',
-      previewImageUrl: null,
+      previewIconUrl: null,
       successMessage: '',
       errorMessage: '',
-      showForm: false 
+      showForm: false,
+      selected: null,
+      options: [
+        {value: null, text: 'Choisir une catégorie' },
+        {value: 1, text:'Informatique'},
+        {value: 2, text:'Son'},
+        {value: 3, text:'Vidéo'}
+      ] 
     }
   },
-  // mixins : [ setFormWithFile ],
+  mixins : [ setFormWithFile ],
   computed: {
-    ...mapGetters(["oneSkill"]),    
+    ...mapGetters(["oneSkill", "oneCategory"]),    
   },
   methods: {
-    ...mapActions(["updateSkillWithFile", "updateSkillWithoutFile", "resetStateSkill"]),
+    ...mapActions(["getCategory", "updateSkillWithFile", "updateSkillWithoutFile", "resetStateSkill"]),
     showPreview(event) {
       const file = event.target.files[0];
       if(file) {
-        this.previewImageUrl = URL.createObjectURL(file);
-        document.getElementById("previewImage").onload = function () {
-          window.URL.revokeObjectURL(this.previewImageUrl);
+        this.previewIconUrl = URL.createObjectURL(file);
+        document.getElementById("previewIcon").onload = function () {
+          window.URL.revokeObjectURL(this.previewIconUrl);
         }
       }
+    },
+    setCategory() {
+      return this.modifySkill.category = this.selected;
     },
     onModify() {
       this.loading = true;
@@ -179,7 +212,6 @@ export default {
             return
           }
           if(!this.modifySkill.icon) {
-            this.modifySkill.icon = this.oldIcon;
             this.updateSkillWithoutFile({
               id: this.oneSkill.id, 
               form: this.modifySkill
@@ -194,15 +226,7 @@ export default {
               this.errorMessage = error.message;
             })
           } else {
-            let fd = new FormData();
-            fd.append('icon', this.modifySkill.icon);
-            Object.entries(this.modifySkill).forEach(
-              ([key, value]) => {
-                if (value !== null && value !== '') {
-                  fd.append(`${key}`, value);
-                }
-              },
-            );
+            let fd = this.setFormWithFile(this.modifySkill.icon, this.modifySkill);
             this.updateSkillWithFile({
               id: this.oneSkill.id, 
               formData: fd
@@ -235,11 +259,11 @@ export default {
     },
   },
   mounted() {
-    if(this.oneSkill.id) {
-      this.modifySkill.name = this.oneSkill.name;
+    console.log(this.oneSkill);
+    if(this.oneSkill && this.oneCategory) {
+      this.modifySkill= this.oneSkill;
       this.currentName = this.oneSkill.name;
-      this.modifySkill.description = this.oneSkill.description;
-      this.modifySkill.knowledgeLevel = this.oneSkill.knowledgeLevel;
+      this.selected = this.oneCategory.id;
       this.oldIcon = this.oneSkill.icon;
       this.modifySkill.icon = null;
     }

@@ -4,7 +4,7 @@
     <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
-  <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+  <h2 id="addForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter une nouvelle 
     <span class="font-weight-bold font-style-italic">Compétence !</span>
   </h2>
@@ -48,9 +48,11 @@
         <b-form-group id="knowledge-level" class="mt-4">
           <label for="input-knowledge-level" class="text-uppercase">Niveau de compétence</label>
           <b-form-input
+            type="number"
             id="input-knowledge-level"
             v-model="newSkill.knowledgeLevel"
-            placeholder="Entrer le niveau de compétence">
+            placeholder="Entrer le niveau de compétence"
+            >
           </b-form-input>
           <b-alert
             variant="danger"
@@ -63,7 +65,7 @@
       </ValidationProvider>
       <ValidationProvider ref="icon" rules="required" name="Image" v-slot="{ errors }">
         <b-form-group id="icon" class="mt-4">
-          <label for="input-icon" class="text-uppercase">Image de l'icone de la compétence</label>
+          <label for="input-icon" class="text-uppercase">Icone de la compétence</label>
           <b-form-file
             id="input-icon"
             name="icon"
@@ -72,6 +74,7 @@
             browse-text="Parcourir"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
+            @change="showPreview($event)"
           ></b-form-file>
         <b-alert
           variant="danger"
@@ -81,14 +84,14 @@
           dismissible>
         </b-alert>
         <div class="mt-3">Fichier sélectionné: {{ newSkill.icon ? newSkill.icon.name : '' }}</div>
+        <b-img thumbnail fluid id="previewIcon" v-show="previewIconUrl && newSkill.icon" :src="previewIconUrl"></b-img>
         </b-form-group>
       </ValidationProvider>
-      <ValidationProvider ref="category" rules="required|min:2" name="Catégorie" v-slot="{ errors }">
+      <ValidationProvider ref="category" rules="required" name="Catégorie" v-slot="{ errors }">
         <b-form-group id="category" class="mt-5 text">
-          <label for="input-category" class="text-uppercase">Nom de la category</label>
-            <b-form-select v-model="selected" :options="options"></b-form-select>
-            <b-form-select v-model="selected" :options="options" size="sm" class="mt-3"></b-form-select>
-            <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>
+          <label for="input-category" class="text-uppercase">Choix de la categorie</label>
+            <b-form-select v-model="selected" :options="options" @change="setCategory">
+            </b-form-select>
           <b-alert
             variant="danger"
             v-if="errors[0]"
@@ -99,12 +102,16 @@
         </b-form-group>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading" @click="$emit('addSkill')">
-          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
-          <span class="pl-2 pb-2">Ajouter compétence</span>
+        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addSkill'), onAdd">
+          <b-spinner v-show="loading" label="Spinning" class="pt-4 pl-2"></b-spinner>
+          <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter compétence</span>
         </b-button>
-        <b-button type="reset" variant="danger" class="m-3 p-3" @click="onReset">
-          Réinitialiser formulaire
+        <b-button type="reset" class="m-3 p-3 btn-reset" @click="onReset">
+          <font-awesome-icon icon="trash-alt"/><span class="pl-2">Réinitialiser formulaire</span>
+        </b-button>
+        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
+          <font-awesome-icon icon="times"/>
+          <span class="pl-2 pb-2">Annuler</span>
         </b-button>
       </div>
     </b-form>
@@ -119,7 +126,7 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
-// import { setFormWithFile } from "../mixins/formMixin";
+import setFormWithFile from "../../mixins/formMixin";
 
 export default {
   name: "AddSkillForm",
@@ -135,23 +142,38 @@ export default {
         description: '',
         icon: null,
         knowledgeLevel: 0,
-        category: ''
+        category: null
       },
       loading: false,
       successMessage: '',
       errorMessage: '',
+      previewIconUrl: null,
       selected: null,
       options: [
         {value: null, text: 'Choisir une catégorie' },
-        {value: "1", text:'Informatique'},
-        {value: "2", text:'Son'},
-        {value: "3", text:'Vidéo'}
+        {value: 1, text:'Informatique'},
+        {value: 2, text:'Son'},
+        {value: 3, text:'Vidéo'}
       ]
     }
   },
-  // mixins : [ setFormWithFile ],
+  mixins : [ setFormWithFile ],
+  computed: {    
+    },
   methods: {
     ...mapActions(["addSkill"]),
+    setCategory() {
+      return this.newSkill.category = this.selected;
+    },
+    showPreview(event) {
+      const file = event.target.files[0];
+      if(file) {
+        this.previewIconUrl = URL.createObjectURL(file);
+        document.getElementById("previewIcon").onload = function () {
+          window.URL.revokeObjectURL(this.previewIconUrl);
+        }
+      }
+    },
     onCreate() {
       this.loading = true;
       this.$refs.addForm.validate()
@@ -160,16 +182,7 @@ export default {
             this.loading = false;
             return
           }
-          let fd = new FormData();
-          fd.append('icon', this.newSkill.icon)
-          console.log(fd);
-          Object.entries(this.newSkill).forEach(
-            ([key, value]) => {
-              if (value !== null && value !== '') {
-                fd.append(`${key}`, value);
-              }
-            },
-          );          
+          let fd = this.setFormWithFile(this.newSkill.icon, this.newSkill);     
         this.addSkill(fd)
           .then(() => {
             this.successMessage = "La compétence a été ajoutée !";
@@ -179,7 +192,7 @@ export default {
             this.onReset(event);
           })
           .catch((error) => {
-            this.errorMessage = error.data[0];
+            this.errorMessage = error.message; //.data[0];
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.successMessage  = '';
@@ -188,21 +201,64 @@ export default {
     },
     onReset(event) {
       event.preventDefault()
-      console.log("click reset");
       this.loading = false;
       this.newSkill.name = ''
       this.newSkill.description = ''
       this.newSkill.url = ''
       this.newSkill.icon = null
-      this.newSkill.altStatic = ''
+      this.newSkill.knowledgeLevel = 0
       this.newSkill.creationDate = ''
+    },
+    onAdd() {
+      this.loading = false;
+      this.newSkill.title = ''
+      this.newSkill.link = ''
+      this.newSkill.icon = null
+    },
+    onCancel() {
+      this.$refs.addForm.reset
+      this.loading = false;
+      this.newSkill.title = ''
+      this.newSkill.link = ''
+      this.newSkill.icon = null
     }
-  },
-  
+  }  
 }
 </script>
 
 <style lang="scss" scoped>
+.btn {
+  &-add {
+    color: $white;
+    background-color: $green;
+    border: 1px solid $green;
+    &:hover {
+      color: $green;
+      background-color: transparent;
+      border: 1px solid $green;
+    }
+  }
+  &-delete {
+    color: $white;
+    background-color: $yellow;
+    border: 1px solid $yellow;
+    &:hover {
+      color: $yellow;
+      background-color: transparent;
+      border: 1px solid $yellow;
+    }
+  }
+  &-reset {
+    color: $white;
+    background-color: $red;
+    border: 1px solid $red;
+    &:hover {
+      color: $red;
+      background-color: transparent;
+      border: 1px solid $red;
+    }
+  }
+}
 .card {
   &-body {
     background-color: transparent; 

@@ -59,7 +59,7 @@ class CreateEntityConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {    
-        $jsonRequest = $this->requestVerification->checkAddContent($request, $configuration);   
+        $jsonRequest = $this->requestVerification->checkAddContent($request, $configuration);
         $entity = $this->serializer->deserialize(
             $jsonRequest,
             $configuration->getClass(),

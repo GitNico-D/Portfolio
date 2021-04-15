@@ -47,15 +47,15 @@
         </b-form-group>
       </ValidationProvider>
       <div >
-        <h5 v-show="!modifyContact.icon && oldIcon" class="text-left text-uppercase">Image du projet</h5>
+        <h5 v-show="!modifyContact.icon && oldIcon" class="text-left text-uppercase">Icone du contact</h5>
         <b-img :src="oldIcon" fluid alt="Fluid image" class="mt-1" v-show="!modifyContact.icon && oldIcon"></b-img>
       </div>
-      <ValidationProvider ref="logo-contact" name="Icone" v-slot="{ errors }">
-        <b-form-group id="logo-contact" class="mt-4">
-          <label for="input-logo-contact" class="text-uppercase">Nouvelle icone du contact</label>
+      <ValidationProvider ref="icon" name="Icone" v-slot="{ errors }">
+        <b-form-group id="icon" class="mt-4">
+          <label for="input-icon" class="text-uppercase">Nouvelle icone du contact</label>
           <b-form-file
-            id="input-logo-contact"
-            name="logo-contact"
+            id="input-icon"
+            name="icon"
             v-model="modifyContact.icon"
             :state="Boolean(modifyContact.icon)"
             browse-text="Parcourir"
@@ -70,6 +70,7 @@
           dismissible>
         </b-alert>
         <div class="mt-3">Icone sélectionné: {{ modifyContact.icon ? modifyContact.icon.name : '' }}</div>
+        <b-img thumbnail fluid id="previewIcon" v-show="previewIconUrl && modifyPresentation.Icon" :src="previewIconUrl"></b-img>
         </b-form-group>
       </ValidationProvider> 
       <div class="d-flex justify-content-center">
@@ -113,7 +114,7 @@ export default {
       },
       oldIcon: '',
       currentTitle: '',
-      previewImageUrl: null,
+      previewIconUrl: null,
       successMessage: '',
       errorMessage: ''
     }
