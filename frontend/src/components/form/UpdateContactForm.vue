@@ -1,6 +1,6 @@
 <template>
 <div> 
-  <div id="alert">
+  <div id="alert" class="mt-2">
     <AlertForm v-if="successMessage" v-show="oneContact.id" :message="successMessage" variant="success"/>
     <AlertForm v-if="errorMessage" v-show="oneContact.id" :message="errorMessage" variant="danger"/>
   </div>
@@ -50,10 +50,9 @@
         <h5 v-show="!modifyContact.icon && oldIcon" class="text-left text-uppercase">Image du projet</h5>
         <b-img :src="oldIcon" fluid alt="Fluid image" class="mt-1" v-show="!modifyContact.icon && oldIcon"></b-img>
       </div>
-      <ValidationProvider ref="logo-contact" rules="required" name="Icone" v-slot="{ errors }">
+      <ValidationProvider ref="logo-contact" name="Icone" v-slot="{ errors }">
         <b-form-group id="logo-contact" class="mt-4">
           <label for="input-logo-contact" class="text-uppercase">Nouvelle icone du contact</label>
-          {{oneContact.icon}}
           <b-form-file
             id="input-logo-contact"
             name="logo-contact"
@@ -110,7 +109,7 @@ export default {
       modifyContact: {
         title: '',
         link: '',
-        icon: null,
+        icon: null
       },
       oldIcon: '',
       currentTitle: '',
@@ -194,7 +193,6 @@ export default {
       this.currentTitle = this.oneContact.title;
       this.oldIcon = this.oneContact.icon;
       this.modifyContact.icon = null;
-      console.log(this.modifyContact);
     }
   },
   

@@ -82,7 +82,7 @@
         <h5 v-show="!modifyCareerStage.logoCompany && oldLogoCompany" class="text-left text-uppercase">Logo de la société</h5>
         <b-img :src="oldLogoCompany" fluid alt="Fluid image" class="mt-1" v-show="!modifyCareerStage.logoCompany && oldLogoCompany"></b-img>
       </div>
-      <ValidationProvider ref="new-logoCompany" rules="required_if:modifyCareerStage.logoCompany" v-if="modifyCareerStage" name="Image" v-slot="{ validate, errors }">
+      <ValidationProvider ref="new-logoCompany" name="Image" v-slot="{ validate, errors }">
         <b-form-group id="new-logoCompany" class="mt-3 mb-5">
           <label for="input-logoCompany" class="text-uppercase">Nouveau logo de la société</label>
           <b-form-file
@@ -171,7 +171,7 @@ import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
 import formatDate from "../../services/formatDate";
-// import { setFormWithFile } from "../mixins/formMixin";
+import setFormWithFile from "../../mixins/formMixin";
 
 export default {
   name: "UpdateCareerStageForm",
@@ -200,7 +200,7 @@ export default {
       showForm: false 
     }
   },
-  // mixins : [ setFormWithFile ],
+  mixins : [ setFormWithFile ],
   computed: {
     ...mapGetters(["oneCareer"]),    
   },
@@ -224,7 +224,6 @@ export default {
             return
           }
           if(!this.modifyCareerStage.logoCompany) {
-            this.modifyCareerStage.logoCompany = this.oldLogoCompany;
             this.updateCareerStageWithoutFile({
               id: this.oneCareer.id, 
               form: this.modifyCareerStage
@@ -239,15 +238,7 @@ export default {
               this.errorMessage = error.message;
             })
           } else {
-            let fd = new FormData();
-            fd.append('logoCompany', this.modifyCareerStage.logoCompany);
-            Object.entries(this.modifyCareerStage).forEach(
-              ([key, value]) => {
-                if (value !== null && value !== '') {
-                  fd.append(`${key}`, value);
-                }
-              },
-            );
+            let fd = this.setFormWithFile(this.modifyCareerStage.logoCompany, this.modifyCareerStage);
             this.updateCareerStageWithFile({
               id: this.oneCareer.id, 
               formData: fd
@@ -284,13 +275,8 @@ export default {
   mounted() {
     console.log(this.oneCareer)
     if(this.oneCareer.id) {
-      this.modifyCareerStage.name = this.oneCareer.name;
+      this.modifyCareerStage = this.oneCareer;
       this.currentName = this.oneCareer.name;
-      this.modifyCareerStage.description = this.oneCareer.description;
-      this.modifyCareerStage.company = this.oneCareer.company;
-      this.modifyCareerStage.logoCompany = this.oneCareer.logoCompany;
-      this.modifyCareerStage.startDate = this.oneCareer.startDate;
-      this.modifyCareerStage.endDate = this.oneCareer.endDate;
       this.oldLogoCompany = this.oneCareer.logoCompany;
       this.modifyCareerStage.logoCompany = null;
     }

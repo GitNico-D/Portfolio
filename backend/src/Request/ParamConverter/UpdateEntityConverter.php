@@ -2,7 +2,7 @@
 
 namespace App\Request\ParamConverter;
 
-use App\Services\FileUploader;
+use App\Services\RequestVerification;
 use App\Services\SearchRelatedEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -17,24 +17,24 @@ class UpdateEntityConverter implements ParamConverterInterface
     protected $serializer;
     protected $entityManager;
     protected $searchRelatedEntity;
-    protected $fileUploader;
+    protected $requestVerification;
 
     /**
      * @param SerializerInterface $serializer
      * @param EntityManagerInterface $entityManager
      * @param SearchRelatedEntity $searchRelatedEntity
-     * @param FileUploader $fileUploader
+     * @param RequestVerification $requestVerification
      */
     public function __construct(
         SerializerInterface $serializer,
         EntityManagerInterface $entityManager,
         SearchRelatedEntity $searchRelatedEntity,
-        FileUploader $fileUploader
+        RequestVerification $requestVerification
     ) {
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
         $this->searchRelatedEntity = $searchRelatedEntity;
-        $this->fileUploader = $fileUploader;
+        $this->requestVerification = $requestVerification;
     }
 
     /**
@@ -65,29 +65,14 @@ class UpdateEntityConverter implements ParamConverterInterface
         if (!$entity) {
             throw new NotFoundHttpException(ucfirst($configuration->getName()) . ' ' . $request->attributes->get('id') . ' not found');
         }
-        if($request->getContent()) {
-            $entity = $this->serializer->deserialize(
-                $request->getContent(),
-                $configuration->getClass(),
-                'json',
-                [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
-            );
-            $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $request->getContent());
-        } else {
-            $jsonRequest = json_encode($request->request->all());
-            $entity = $this->serializer->deserialize(
-                $jsonRequest,
-                $configuration->getClass(),
-                'json',
-                [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
-            );
-            if($request->files) {
-                $this->fileUploader->deleteFile($entity, $configuration->getName());
-                $uploadFile = $this->fileUploader->getUploadFile($request->files, $configuration->getName());
-                $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);
-                }
-            $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonRequest);
-            }
+        $jsonRequest = $this->requestVerification->checkUpdateContent($entity, $request, $configuration);
+        $entity = $this->serializer->deserialize(
+            $jsonRequest,
+            $configuration->getClass(),
+            'json',
+            [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
+        );
+        $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonRequest);
         if ($relatedEntity) {
             $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
             $entity->$setRelatedEntity($relatedEntity);
