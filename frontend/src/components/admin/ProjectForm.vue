@@ -17,10 +17,19 @@
             Tous les <span class="font-weight-bold font-style-italic">Projets</span>
           </h2>
           <div>
-            <b-button @click="refreshTab" variant="info" class="m-2"> Refresh</b-button>
+            <b-button @click="refreshTab" variant="info" class="m-2"> 
+              <font-awesome-icon icon="sync" class="mr-2" spin/>Rafraichir
+            </b-button>
+            <Button action="Rafraichir" :color="projectColor" icon="sync" v-on:action="refreshTab" />
             <div id="alertModify">
               <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
               <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
+            </div>
+            <div class="text-right mb-4">
+              <b-button type="btn" @click="toAddProjectForm" class="btn-add rounded my-1">
+                  <font-awesome-icon icon="plus" class="mr-1"/> Ajouter Projet
+              </b-button>
+              <Button action="Ajouter Projet" :color="projectColor" icon="plus" v-on:action="toAddProjectForm"/>
             </div>
             <b-table id="table-list" responsive hover no-collpase bordered dark :items="allProjects" :fields="fields">
               <b-thead class="p-5"></b-thead>
@@ -37,7 +46,7 @@
                 <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
                   <font-awesome-icon icon="edit"/> Modifier
                 </b-button>
-                <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-details">
+                <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-detail">
                   <font-awesome-icon icon="database" /><span class="pl-2">Détail du projet</span>
                 </b-button>
               </template>
@@ -72,7 +81,7 @@
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter un nouveau projet</span>
           </template> 
-          <AddProjectForm v-on:addProject="refreshTab"/>
+          <AddProjectForm v-on:addProject="refreshTab" v-on:onReturn="returnToList"/>
         </b-tab>
         <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
@@ -80,7 +89,7 @@
             <span v-if="!projectId">Modifier le projet</span>
             <span v-else>Modification du projet {{ oneProject.id }}</span>
           </template>           
-          <UpdateProjectForm v-on:onCancelModify="onCancelModify" v-on:showModifyProject="showModifyProject"/>
+          <UpdateProjectForm v-on:onCancelModify="onCancelModify" v-on:onReturn="returnToList" v-on:showModifyProject="showModifyProject"/>
         </b-tab>
       </b-tabs>
     </b-col>
@@ -91,19 +100,21 @@
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
 import AddProjectForm from "@/components/form/AddProjectForm"
+import Button from "@/components/Button";
 import UpdateProjectForm from "@/components/form/UpdateProjectForm"
 import formatDate from "../../services/formatDate";
-// import { setFormWithFile } from "../mixins/formMixin";
 
 export default {
   name: "ProjectForm",
   components: { 
     AlertForm,
     AddProjectForm,
-    UpdateProjectForm
+    UpdateProjectForm,
+    Button
   },
   data() {
     return {
+      projectColor : "#6d327c",
       showProjectCard: false,
       successMessage: '',
       errorMessage: '',
@@ -138,7 +149,6 @@ export default {
       tabIndex: 0
     }
   },
-  // mixins : [ setFormWithFile ],
   computed: {
     ...mapGetters(["oneProject", "allProjects"]),
   },
@@ -149,14 +159,13 @@ export default {
     },
     refreshTab() {
       this.$store.dispatch("getAllProjects");
-      setTimeout(() => {
-        this.tabIndex = 0;
-      }, 5000);
-      this.errorMessage = '';
-      this.successMessage = '';
+      // setTimeout(() => {
+      //   this.tabIndex = 0;
+      // }, 5000);
+      // this.errorMessage = '';
+      // this.successMessage = '';
     },
     onDelete(id) {
-      console.log(id);
       this.deleteProject(id) 
         .then(() => {
           this.successMessage = 'Le projet ' + id + ' a bien été supprimé !';
@@ -188,11 +197,14 @@ export default {
           }  
         })
     },
+    toAddProjectForm() {
+      this.tabIndex = 1
+    },
+    returnToList() {
+      this.tabIndex = 0;
+    },
     showModifyProject() {
-    //   setTimeout(() => {
-    //     this.tabIndex = 0;
-    //     this.resetStateProject()
-    //   }, 5000);
+      this.$store.dispatch("getAllProjects");
     },
     onCancelModify() {
       this.tabIndex = 0;
@@ -203,32 +215,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-table {
-  color: $white;
-  tr {
-    padding: 1rem;
-  }
-  .table-hover {
-    tbody {
-      tr {
-        &:hover {
-          color: $purple!important;
-        }
-      }
-    }
-  }
-}
 .btn {
-  &-modify {
+  &-modify, &-add {
     background-color: $purple; 
     color: $white;
     border: 1px solid $purple;
     &:hover {
-      color: $purple;
+      color: $white;
       background-color: transparent;
       border: 1px solid $purple;
     } 
-    &:focus, :active {
+    &:focus, &:active {
       box-shadow: unset;
       border: 1px solid $purple;
       background-color: $purple;
@@ -240,10 +237,23 @@ table {
       background-color: transparent;
       border: 1px solid $red;
     }
-    &:focus, :active {
+    &:focus, &:active {
       box-shadow: unset;
       border: 1px solid $red;
       background-color: $red;
+    }
+  }
+  &-detail {
+    &:hover {
+      color: $light-blue;
+      background-color: transparent;
+      border: 1px solid $light-blue;
+    }
+    &:focus, &:active {
+      color: $white;
+      box-shadow: unset;
+      border: 1px solid $light-blue;
+      background-color: $light-blue;
     }
   }
 }

@@ -160,8 +160,8 @@
         <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
-            <span v-if="!skillId">Modifier un logiciel</span>
-            <span v-else>Modification du logiciel {{ oneSkill.id }}</span>
+            <span v-if="!softwareId">Modifier un logiciel</span>
+            <span v-else>Modification du logiciel {{ oneSoftware.id }}</span>
           </template>           
           <UpdateSoftwareForm v-on:onCancel="onCancel" v-on:showModifySoftware="showModifySoftware" v-on:onReturn="returnToList"/>
         </b-tab>
@@ -194,6 +194,7 @@ export default {
       successMessage: '',
       errorMessage: '',
       skillId: '',
+      softwareId: '',
       fields: [
         {
           key: 'id',
@@ -266,7 +267,6 @@ export default {
       this.successMessage = '';
     },
     onDeleteSkill(id) {
-      console.log("delete skill " + id);
       this.deleteSkill(id) 
         .then(() => {
           this.successMessage = 'La compétence ' + id + ' a bien été supprimé !';
@@ -286,7 +286,6 @@ export default {
       )
     },
     onDeleteSoftware(id) {
-      console.log("delete software " + id);
       this.deleteSoftware(id) 
         .then(() => {
           this.successMessage = 'Le logiciel ' + id + ' a bien été supprimé !';
@@ -306,6 +305,7 @@ export default {
       )
     },
     toModifySkillForm(skillId, categoryId) {
+      this.skillId = skillId;
       this.getSkill(skillId)
         .then(() => { 
           this.getCategory(categoryId)
@@ -324,6 +324,7 @@ export default {
       )
     },
     toModifySoftwareForm(softwareId, categoryId) {
+      this.softwareId = softwareId;
       this.getSoftware(softwareId)
         .then(() => { 
           this.getCategory(categoryId)

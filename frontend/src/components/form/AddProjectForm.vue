@@ -4,6 +4,12 @@
     <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
+  <div class="text-center">
+    <b-button class="m-3 p-3 btn-return" @click="$emit('onReturn')">
+      <font-awesome-icon icon="arrow-left"/>
+      <span class="pl-2 pb-2">Retour liste</span>
+    </b-button>
+  </div>
   <h2 id="modifyForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter un nouveau 
     <span class="font-weight-bold font-style-italic">Projet !</span>
@@ -72,7 +78,9 @@
             browse-text="Parcourir"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
-          ></b-form-file>
+            @change="showPreview($event)"
+          >
+          </b-form-file>
         <b-alert
           variant="danger"
           v-if="errors[0]"
@@ -81,6 +89,7 @@
           dismissible>
         </b-alert>
         <div class="mt-3">Fichier sélectionné: {{ newProject.imgStatic ? newProject.imgStatic.name : '' }}</div>
+        <b-img thumbnail fluid id="previewImgStatic" v-show="previewImgStaticUrl && newProject.imgStatic" :src="previewImgStaticUrl"></b-img>
         </b-form-group>
       </ValidationProvider>
       <ValidationProvider ref="description-image" rules="required|min:2" name="Description de l'image" v-slot="{ errors }">
@@ -116,18 +125,19 @@
           </b-alert>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading" @click="$emit('addProject')">
+        <b-button type="submit" class="m-3 p-3 btn-add"  :disabled="loading" @click="$emit('addProject')">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
-          <span class="pl-2 pb-2">Ajouter projet</span>
+          <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter projet</span>
         </b-button>
-        <b-button type="reset" variant="danger" class="m-3 p-3" @click="onReset">
-          Réinitialiser formulaire
+        <b-button type="reset" class="m-3 p-3 btn-reset" @click="onReset">
+          <font-awesome-icon icon="trash-alt"/><span class="pl-2">Réinitialiser formulaire</span>
+        </b-button>
+        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
+          <font-awesome-icon icon="times"/>
+          <span class="pl-2 pb-2">Annuler</span>
         </b-button>
       </div>
     </b-form>
-    <b-card class="mt-3" header="Form Data Result">
-      <pre class="m-0">{{ newProject }}</pre>
-    </b-card>
   </ValidationObserver>
 </div>
 </template>
@@ -136,7 +146,7 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
-// import { setFormWithFile } from "../mixins/formMixin";
+import setFormWithFile from "../../mixins/formMixin";
 
 export default {
   name: "AddProjectForm",
@@ -157,11 +167,21 @@ export default {
       loading: false,
       successMessage: '',
       errorMessage: '',
+      previewImgStaticUrl : ''
     }
   },
-  // mixins : [ setFormWithFile ],
+  mixins : [ setFormWithFile ],
   methods: {
     ...mapActions(["addProject"]),
+    showPreview(event) {
+      const file = event.target.files[0];
+      if(file) {
+        this.previewImgStaticUrl = URL.createObjectURL(file);
+        document.getElementById("previewImgStatic").onload = function () {
+          window.URL.revokeObjectURL(this.previewImgStaticUrl);
+        }
+      }
+    },
     onCreate() {
       this.loading = true;
       this.$refs.addForm.validate()
@@ -170,16 +190,7 @@ export default {
             this.loading = false;
             return
           }
-          let fd = new FormData();
-          fd.append('imgStatic', this.newProject.imgStatic)
-          console.log(fd);
-          Object.entries(this.newProject).forEach(
-            ([key, value]) => {
-              if (value !== null && value !== '') {
-                fd.append(`${key}`, value);
-              }
-            },
-          );          
+          let fd = this.setFormWithFile(this.newProject.imgStatic, this.newProject);    
         this.addProject(fd)
           .then(() => {
             this.successMessage = "Le projet a été ajouté !";
@@ -189,7 +200,7 @@ export default {
             this.onReset(event);
           })
           .catch((error) => {
-            this.errorMessage = error.data[0];
+            this.errorMessage = error.data;
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.successMessage  = '';
@@ -206,13 +217,54 @@ export default {
       this.newProject.imgStatic = null
       this.newProject.altStatic = ''
       this.newProject.creationDate = ''
+    },
+    onCancel() {
+      this.$refs.addForm.reset
+      this.loading = false;
+      this.newProject.name = ''
+      this.newProject.description = ''
+      this.newProject.url = ''
+      this.newProject.imgStatic = null
+      this.newProject.altStatic = ''
+      this.newProject.creationDate = ''
     }
   },
-  
 }
 </script>
 
 <style lang="scss" scoped>
+.btn {
+  &-add, &-return {
+    color: $white;
+    background-color: $purple;
+    border: 1px solid $purple;
+    &:hover {
+      color: $purple;
+      background-color: transparent;
+      border: 1px solid $purple;
+    }
+  }
+  &-delete {
+    color: $white;
+    background-color: $yellow;
+    border: 1px solid $yellow;
+    &:hover {
+      color: $yellow;
+      background-color: transparent;
+      border: 1px solid $yellow;
+    }
+  }
+  &-reset {
+    color: $white;
+    background-color: $red;
+    border: 1px solid $red;
+    &:hover {
+      color: $red;
+      background-color: transparent;
+      border: 1px solid $red;
+    }
+  }
+}
 .card {
   &-body {
     background-color: transparent; 

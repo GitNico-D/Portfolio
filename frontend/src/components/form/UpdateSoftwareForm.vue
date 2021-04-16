@@ -209,6 +209,7 @@ export default {
             })
             .catch((error) => {
               this.errorMessage = error.message;
+              this.successMessage = ''
             })
           } else {
             let fd = this.setFormWithFile(this.modifySoftware.icon, this.modifySoftware);
@@ -219,11 +220,13 @@ export default {
             .then(() => {
               this.successMessage = 'Le logiciel ' + this.oneSoftware.id + ' a été modifier';
               this.loading = false;
+              this.errorMessage = ''
               this.resetForm();
               document.getElementById("alert").scrollIntoView();  
             })
             .catch((error) => {
               this.errorMessage = error.message;
+              this.successMessage = ''
             })
           }
       })

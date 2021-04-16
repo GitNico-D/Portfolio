@@ -4,6 +4,9 @@
     <AlertForm v-if="successMessage" v-show="oneProject.id" :message="successMessage" variant="success"/>
     <AlertForm v-if="errorMessage" v-show="oneProject.id" :message="errorMessage" variant="danger"/>
   </div>
+  <div class="text-center">
+    <Button :color="returnButtonColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+  </div>
   <h2 v-if="!oneProject.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Projet</span> sélectionné.</p>
     <p>Rendez-vous sur l'onglet 
@@ -12,7 +15,8 @@
     </p>
   </h2>
   <h2 v-else id="modifyForm-title" class="text-center fw-bold my-5" >
-    Modification du project "{{ currentName }}"
+    Modification du project 
+    <p class="my-2"><span class="font-weight-bold font-style-italic">"{{ currentName }}"</span></p>
   </h2>
   <p class="mt-4 text-left" v-show="oneProject.id">
     ID du <span class="text-uppercase font-weight-bold">projet : </span>
@@ -151,14 +155,11 @@
       </ValidationProvider>
       <div class="d-flex justify-content-center">
         <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showModifyProject')">
-          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
+          <b-spinner v-show="loading" label="Spinning" class="mr-2"></b-spinner>
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier projet</span>
         </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancelModify'), onCancel">
-          <font-awesome-icon icon="times"/>
-          <span class="pl-2 pb-2">Annuler</span>
-        </b-button>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), onCancel"/>
       </div>
     </b-form>
   </ValidationObserver>
@@ -169,6 +170,7 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
+import Button from "@/components/Button";
 import formatDate from "../../services/formatDate";
 import setFormWithFile from "../../mixins/formMixin";
 
@@ -177,10 +179,13 @@ export default {
   components: { 
     ValidationProvider,
     ValidationObserver,
-    AlertForm
+    AlertForm,
+    Button
   },
   data() {
     return {
+      cancelButtonColor: "#BE8C2E",
+      returnButtonColor: "#6d327c",
       loading: false,
       projectId: null,
       modifyProject: {
@@ -201,7 +206,7 @@ export default {
   },
   mixins : [ setFormWithFile ],
   computed: {
-    ...mapGetters(["oneProject"]),    
+    ...mapGetters(["oneProject"]),   
   },
   methods: {
     ...mapActions(["updateProjectWithFile", "updateProjectWithoutFile", "resetStateProject"]),
@@ -223,8 +228,6 @@ export default {
             return
           }
           if(!this.modifyProject.imgStatic) {
-            // this.modifyProject.imgStatic = this.oldImgStatic;
-            console.log(this.modifyProject);
             this.updateProjectWithoutFile({
               id: this.oneProject.id, 
               form: this.modifyProject
@@ -232,20 +235,16 @@ export default {
             .then(() => {
               this.successMessage = 'Le projet ' + this.oneProject.id + ' a été modifier';
               this.loading = false;
+              this.errorMessage = ''
               this.resetForm();
               document.getElementById("alert").scrollIntoView(); 
             })
             .catch((error) => {
               this.errorMessage = error.message;
+              this.successMessage = ''
             })
           } else {
             let fd = this.setFormWithFile(this.modifyProject.imgStatic, this.modifyProject)
-            var object = {};
-            fd.forEach(function(value, key){
-                object[key] = value;
-            });
-            var jsonFormData = JSON.stringify(object);
-            console.log(jsonFormData)
             this.updateProjectWithFile({
               id: this.oneProject.id, 
               formData: fd
@@ -253,11 +252,13 @@ export default {
             .then(() => {
               this.successMessage = 'Le projet ' + this.oneProject.id + ' a été modifier';
               this.loading = false;
+              this.errorMessage = ''
               this.resetForm();
               document.getElementById("alert").scrollIntoView();  
             })
             .catch((error) => {
               this.errorMessage = error.message;
+              this.successMessage = ''
             })
           }
       })
@@ -271,6 +272,7 @@ export default {
       this.modifyProject.altStatic = ''
       this.modifyProject.creationDate = ''
       this.oldImgStatic = ''
+      this.currentName = ''
     },
     onCancel: function() {
       this.onReset(event);
@@ -282,6 +284,7 @@ export default {
   mounted() {
     if(this.oneProject.id) {
       this.modifyProject = this.oneProject;
+      this.currentName = this.oneProject.name;
       this.oldImgStatic = this.oneProject.imgStatic;
       this.modifyProject.imgStatic = null;
     }

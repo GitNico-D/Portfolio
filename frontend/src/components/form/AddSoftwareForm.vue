@@ -193,12 +193,6 @@ export default {
       this.newSoftware.icon = null
       this.newSoftware.level = 0
     },
-    // onAdd() {
-    //   this.loading = false;
-    //   this.newSoftware.name = ''
-    //   this.newSoftware.icon = null
-    //   this.newSoftware.level = 0
-    // },
     onCancel() {
       this.$refs.addForm.reset
       this.loading = false;

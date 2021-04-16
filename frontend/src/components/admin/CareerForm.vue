@@ -211,7 +211,7 @@ export default {
       background-color: transparent;
       border: 1px solid $light-blue;
     } 
-    &:focus, :active {
+    &:focus, &:active {
       box-shadow: unset;
       border: 1px solid $light-blue;
       background-color: $light-blue;
@@ -223,10 +223,22 @@ export default {
       background-color: transparent;
       border: 1px solid $red;
     }
-    &:focus, :active {
+    &:focus, &:active {
       box-shadow: unset;
       border: 1px solid $red;
       background-color: $red;
+    }
+  }
+  &-detail {
+    &:hover {
+      color: $light-blue;
+      background-color: transparent;
+      border: 1px solid $light-blue;
+    }
+    &:focus, &:active {
+      box-shadow: unset;
+      border: 1px solid $light-blue;
+      background-color: $light-blue;
     }
   }
 }
