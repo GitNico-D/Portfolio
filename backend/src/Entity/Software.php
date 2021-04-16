@@ -45,7 +45,7 @@ class Software
      * @Assert\Type("integer")
      * @Groups({"category:read"})
      */
-    private $mastery_of;
+    private $level;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="softwares", cascade={"persist"})
@@ -81,14 +81,14 @@ class Software
         return $this;
     }
 
-    public function getMasteryOf(): ?int
+    public function getLevel(): ?int
     {
-        return $this->mastery_of;
+        return $this->level;
     }
 
-    public function setMasteryOf(int $mastery_of): self
+    public function setLevel(int $level): self
     {
-        $this->mastery_of = $mastery_of;
+        $this->level = $level;
 
         return $this;
     }
