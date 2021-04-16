@@ -31,11 +31,26 @@ class SearchRelatedEntity
                     (get_class($entity->$getAttribute()) !== "DateTime")) {
                     $relatedEntityId = json_decode($request, true)[$classAttribute];
                     return $this->entityManager
-                                    ->getRepository(get_class($entity->$getAttribute()))
-                                    ->find($relatedEntityId);
+                            ->getRepository(get_class($entity->$getAttribute()))
+                            ->find($relatedEntityId);
                 }
             }
         }
+    }
+
+    /**
+     * Verifying if related entity return an "Proxies" class or an App\Entity class
+     * @param $relatedEntity
+     */
+    public function isProxiesClass($relatedEntity)
+    {
+        $relatedEntityClass = get_class($relatedEntity);
+        if(str_contains($relatedEntityClass, "Proxies")) {
+            $setRelatedEntity = 'set' . str_replace('Proxies\__CG__\App\Entity\\', '', get_class($relatedEntity));
+        } else {
+            $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
+        }
+        return $setRelatedEntity;
     }
 
     /**

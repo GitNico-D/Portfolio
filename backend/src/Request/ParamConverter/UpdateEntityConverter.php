@@ -73,10 +73,8 @@ class UpdateEntityConverter implements ParamConverterInterface
             [AbstractNormalizer::OBJECT_TO_POPULATE => $entity]
         );
         $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonRequest);
-        if ($relatedEntity) {
-            $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
-            $entity->$setRelatedEntity($relatedEntity);
-        }
+        $setRelatedEntity = $this->searchRelatedEntity->isProxiesClass($relatedEntity);
+        $entity->$setRelatedEntity($relatedEntity);
         $request->attributes->set($configuration->getName(), $entity);
     }
 }

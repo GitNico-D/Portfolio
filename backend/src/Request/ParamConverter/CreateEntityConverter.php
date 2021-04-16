@@ -70,10 +70,8 @@ class CreateEntityConverter implements ParamConverterInterface
             $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);                
         }
         $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonRequest);
-        if ($relatedEntity) {
-            $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
-            $entity->$setRelatedEntity($relatedEntity);
-        }
+        $setRelatedEntity = $this->searchRelatedEntity->isProxiesClass($relatedEntity);
+        $entity->$setRelatedEntity($relatedEntity);
         $request->attributes->set($configuration->getName(), $entity);
     }
 }
