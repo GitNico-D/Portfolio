@@ -11,25 +11,29 @@
         <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
-            <span>Listes de tous les compétences</span>
+            <span>Listes des compétences</span>
           </template> 
           <h2 id="modifyForm-title" class="text-center fw-bold my-5">
             Toutes les <span class="font-weight-bold font-style-italic">compétences</span>
           </h2>
-          <div>
+          <!-- <div> -->
             <b-button @click="refreshTab" variant="info" class="m-2"> Refresh</b-button>
             <div id="alertModify">
               <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
               <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
             </div>
             <div v-for="category in allCategories" :key="category.id">
-              <div class="d-flex justify-content-around my-4">
-                <h3 > Compétences de catégorie : <span class="font-weight-bold">{{category.name}}</span></h3>
-                <b-button type="btn" @click="toAddForm(category.id)" class=" btn-add rounded text-center">
-                    <font-awesome-icon icon="plus"/> Ajouter compétence {{category.name}}
+              <div class="d-flex flex-wrap justify-content-around my-5">
+                <h3> Catégorie <span class="font-weight-bold">{{category.name}}</span></h3>
+                <b-button type="btn" @click="toAddSkillForm(category.id)" class="btn-add rounded my-1">
+                    <font-awesome-icon icon="plus"/> Compétence {{category.name}}
                 </b-button>
-            </div>
+                <b-button type="btn" @click="toAddSoftwareForm(category.id)" class="btn-add rounded my-1">
+                    <font-awesome-icon icon="plus"/> Logiciel {{category.name}}
+                </b-button>
+              </div>
               <!-- <span v-for="skill in allSkills" :key="skill.id"> -->
+              <h4 class="m-3">Compétences</h4>
               <b-table id="table-list" responsive hover no-collpase bordered dark 
                 :items="category.skills" 
                 :fields="fields"
@@ -45,7 +49,7 @@
                   {{ formatDate(data.value) }}
                 </template>
               <template #cell(actions)="row">
-                <b-button variant="info" @click="toModifyForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
+                <b-button variant="info" @click="toModifySkillForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
                   <font-awesome-icon icon="edit"/> Modifier
                 </b-button>
                 <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-details">
@@ -64,15 +68,64 @@
                     <p>Mise à jour le : {{formatDate(row.item.updatedAt)}}</p>
                   </b-card-body>
                     <b-card-text>
-                      <p class="my-4">Niveau  de compétence</p> 
+                      <p class="my-4">Niveau de compétence</p> 
                       {{row.item.level}}
                       <b-progress :value="row.item.level" :max="maxValue" show-progress animated></b-progress>
                       <p class="my-4">{{row.item.description }}</p>
                     </b-card-text>
-                    <b-button variant="info" @click="toModifyForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
+                    <b-button variant="info" @click="toModifySkillForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
                       <font-awesome-icon icon="edit"/> Modifier
                     </b-button>
-                    <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDelete(row.item.id)">
+                    <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDeleteSkill(row.item.id)">
+                      <font-awesome-icon icon="trash-alt"/> Supprimer
+                    </b-button>
+                  </b-card>
+                </template>
+              </b-table>
+              <h4 class="m-3">Logiciels</h4>
+              <b-table id="table-list" responsive hover no-collpase bordered dark 
+                :items="category.softwares" 
+                :fields="fields"
+                >
+                <b-thead class="p-5"></b-thead>
+                <template #cell(level)="data">
+                  {{ data.value }}
+                </template>
+                <template #cell(createdAt)="data">
+                  {{ formatDate(data.value) }}
+                </template>
+                <template #cell(updatedAt)="data">
+                  {{ formatDate(data.value) }}
+                </template>
+              <template #cell(actions)="row">
+                <b-button variant="info" @click="toModifySoftwareForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
+                  <font-awesome-icon icon="edit"/> Modifier
+                </b-button>
+                <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-details">
+                  <font-awesome-icon icon="database" /><span class="pl-2">Détail</span>
+                </b-button>
+              </template>
+                <template #row-details="row">
+                  <b-card
+                    :title="row.item.name"
+                    :img-src="row.item.icon"
+                    img-top
+                    class="mt-2 text-dark text-center"
+                  >
+                  <b-card-body class="text-left fst-italic">
+                    <p>Ajouté le : {{row.item.createdAt}}</p>
+                    <p>Mise à jour le : {{formatDate(row.item.updatedAt)}}</p>
+                  </b-card-body>
+                    <b-card-text>
+                      <p class="my-4">Maitrise du logiciel</p> 
+                      {{row.item.level}}
+                      <b-progress :value="row.item.level" :max="maxValue" show-progress animated></b-progress>
+                      <p class="my-4">{{row.item.description }}</p>
+                    </b-card-text>
+                    <b-button variant="info" @click="toModifySoftwareForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
+                      <font-awesome-icon icon="edit"/> Modifier
+                    </b-button>
+                    <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDeleteSoftware(row.item.id)">
                       <font-awesome-icon icon="trash-alt"/> Supprimer
                     </b-button>
                   </b-card>
@@ -80,14 +133,14 @@
               </b-table>
               <!-- </span> -->
             </div>
-          </div>
+          <!-- </div> -->
         </b-tab>
         <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter une nouvelle compétence</span>
           </template> 
-          <AddSkillForm v-on:addSkill="refreshTab" v-on:onCancel="onCancel" :category="categoryId"/>
+          <AddSkillForm v-on:addSkill="refreshTab" v-on:onCancel="onCancel" v-on:onReturn="returnToList"/>
         </b-tab>
         <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
@@ -95,7 +148,22 @@
             <span v-if="!skillId">Modifier la compétence</span>
             <span v-else>Modification de la compétence {{ oneSkill.id }}</span>
           </template>           
-          <UpdateSkillForm v-on:onCancel="onCancel" v-on:showModifySkill="showModifySkill"/>
+          <UpdateSkillForm v-on:onCancel="onCancel" v-on:showModifySkill="showModifySkill" v-on:onReturn="returnToList"/>
+        </b-tab>
+        <b-tab class="mt-5 justify-content-center" lazy>
+          <template #title>
+            <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
+            <span>Ajouter un nouveau logiciel</span>
+          </template> 
+          <AddSoftwareForm v-on:addSkill="refreshTab" v-on:onCancel="onCancel" v-on:onReturn="returnToList"/>
+        </b-tab>
+        <b-tab class="mt-3 justify-content-center" lazy>
+          <template #title>
+            <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
+            <span v-if="!skillId">Modifier un logiciel</span>
+            <span v-else>Modification du logiciel {{ oneSkill.id }}</span>
+          </template>           
+          <UpdateSoftwareForm v-on:onCancel="onCancel" v-on:showModifySoftware="showModifySoftware" v-on:onReturn="returnToList"/>
         </b-tab>
       </b-tabs>
     </b-col>
@@ -107,6 +175,8 @@ import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
 import AddSkillForm from "@/components/form/AddSkillForm"
 import UpdateSkillForm from "@/components/form/UpdateSkillForm"
+import AddSoftwareForm from "@/components/form/AddSoftwareForm"
+import UpdateSoftwareForm from "@/components/form/UpdateSoftwareForm"
 import formatDate from "../../services/formatDate";
 
 export default {
@@ -114,7 +184,9 @@ export default {
   components: { 
     AlertForm,
     AddSkillForm,
-    UpdateSkillForm
+    UpdateSkillForm,
+    AddSoftwareForm,
+    UpdateSoftwareForm
   },
   data() {
     return {
@@ -153,12 +225,18 @@ export default {
       ],
       items: [],
       tabIndex: 0,
-      maxValue: 100,
-      categoryId: 0
+      maxValue: 100
     }
   },
   computed: {
-    ...mapGetters(["oneCategory", "allCategories", "oneSkill", "allSkills"]),
+    ...mapGetters([
+      "oneCategory",
+      "allCategories", 
+      "oneSkill", 
+      "allSkills",
+      "allSoftwares",
+      "oneSoftware"
+    ]),
   },
   methods: {
     ...mapActions([
@@ -166,10 +244,15 @@ export default {
       "getAllCategories", 
       "deleteCategories", 
       "resetStateCategory",
-      "deleteSkill", 
       "getSkill",
       "getAllSkills", 
-      "resetStateSkill"]),
+      "deleteSkill", 
+      "resetStateSkill",
+      "getSoftware",
+      "getAllSoftwares",
+      "deleteSoftware",
+      "resetStateSoftware"
+      ]),
     formatDate(date) {
       return formatDate(date);
     },
@@ -182,17 +265,18 @@ export default {
       this.errorMessage = '';
       this.successMessage = '';
     },
-    onDelete(id) {
-      console.log(id);
+    onDeleteSkill(id) {
+      console.log("delete skill " + id);
       this.deleteSkill(id) 
         .then(() => {
           this.successMessage = 'La compétence ' + id + ' a bien été supprimé !';
           this.showSkillCard = false;
-          this.$store.dispatch("getAllSkills");
+          this.$store.dispatch("getAllCategories");
           this.errorMessage = '';
           document.getElementById("alertModify").scrollIntoView(); 
         })
-        .catch((error) => {   
+        .catch((error) => { 
+          this.error.message = error;  
           if(error.code == "404") {
             this.errorMessage = 'La compétence ' + id + ' n\'existe pas !';
             this.successMessage = '';
@@ -201,12 +285,33 @@ export default {
         }
       )
     },
-    toModifyForm(skillId, categoryId) {
+    onDeleteSoftware(id) {
+      console.log("delete software " + id);
+      this.deleteSoftware(id) 
+        .then(() => {
+          this.successMessage = 'Le logiciel ' + id + ' a bien été supprimé !';
+          this.showSoftwareCard = false;
+          this.$store.dispatch("getAllCategories");
+          this.errorMessage = '';
+          document.getElementById("alertModify").scrollIntoView(); 
+        })
+        .catch((error) => { 
+          this.error.message = error;  
+          if(error.code == "404") {
+            this.errorMessage = 'Le logiciel ' + id + ' n\'existe pas !';
+            this.successMessage = '';
+            this.showSoftwareCard = false;       
+          }  
+        }
+      )
+    },
+    toModifySkillForm(skillId, categoryId) {
       this.getSkill(skillId)
         .then(() => { 
           this.getCategory(categoryId)
           .then(() => { 
             this.tabIndex = 2;
+            this.successMessage = '';
           })
         })
         .catch((error) => {   
@@ -215,10 +320,38 @@ export default {
             this.successMessage = '';
             this.showSkillCard = false;       
           }  
+        }
+      )
+    },
+    toModifySoftwareForm(softwareId, categoryId) {
+      this.getSoftware(softwareId)
+        .then(() => { 
+          this.getCategory(categoryId)
+          .then(() => { 
+            this.tabIndex = 4;
+            this.successMessage = '';
+          })
         })
+        .catch((error) => {   
+          if(error.code == "404") {
+            this.errorMessage = 'La compétence ' + this.softwareId  + ' n\'existe pas !';
+            this.successMessage = '';
+            this.showSoftwareCard = false;       
+          }  
+        }
+      )
+    },
+    showModifySkill() {
+      this.$store.dispatch("getAllSkills");
+    },
+    showModifySoftware() {
+      this.$store.dispatch("getAllSoftwares");
+    },
+    toAddSkillForm(categoryId) {
       this.getCategory(categoryId)
         .then(() => { 
-          this.tabIndex = 2;
+          this.tabIndex = 1
+          this.successMessage = '';
         })
         .catch((error) => {   
           if(error.code == "404") {
@@ -226,24 +359,39 @@ export default {
             this.successMessage = '';
             this.showSkillCard = false;       
           }  
+        }
+      )
+    },
+    toAddSoftwareForm(categoryId) {
+      this.getCategory(categoryId)
+        .then(() => { 
+          this.tabIndex = 3
+          this.successMessage = '';
         })
-    },
-    showModifySkill() {
-      this.$store.dispatch("getSkills");
-    },
-    toAddForm(categoryId) {
-      this.tabIndex = 1
-      this.categoryId = categoryId;
+        .catch((error) => {   
+          if(error.code == "404") {
+            this.errorMessage = 'La categorie ' + this.categoryId  + ' n\'existe pas !';
+            this.successMessage = '';
+            this.showSoftwareCard = false;       
+          }  
+        }
+      )
     },
     onCancel() {
       this.tabIndex = 0;
       this.resetStateSkill()
       this.resetStateCategory()
+      this.resetStateSoftware()
     },
+    returnToList() {
+      this.tabIndex = 0;
+    }
   },
   mounted() {
     this.$store.dispatch("getAllCategories");
     this.$store.dispatch("getAllSkills");
+    this.resetStateSkill()
+      this.resetStateCategory()
   },
 }
 </script>

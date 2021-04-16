@@ -34,6 +34,7 @@ import {
   faTrashAlt,
   faTimes,
   faPlus,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import "./validation-config";
 
@@ -56,7 +57,8 @@ library.add(
   faAddressBook,
   faTrashAlt,
   faTimes,
-  faPlus
+  faPlus,
+  faArrowLeft
   );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.component("ValidationObserver", ValidationObserver);

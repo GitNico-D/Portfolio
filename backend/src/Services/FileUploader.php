@@ -54,7 +54,7 @@ class FileUploader
     }
 
     /**
-     * Attach the File to the right entity and save his url
+     * Attach the File and his url to the associate entity
      * 
      * @param File $file
      * @param Entity $entity
@@ -87,22 +87,32 @@ class FileUploader
     }
 
     /**
-     * Delete an existing File
-     * @param $file
-     * @param $entity
+     * Checks if a file exist and delete it
+     * Works when deleting an entity even if its attached image 
+     * file cannot be found or has already been deleted
+     * @param $file/$entity
+     * @param $entityName
      */
     public function deleteFile($entity, $entityName) 
     {
-        $file = $this->findImage($entity);
+        if(is_object($entity)) {
+            $file = $this->findImage($entity);
+        } else {
+            $file = $entity;
+        }
         $fileName = pathinfo($file)['basename'];
         $originalPathFile = ($this->uploadPath . '/' . $entityName . '/' . $fileName);
-        $fileToRemove = new File($originalPathFile);
-        $filesystem = new Filesystem();
-        $filesystem->remove($fileToRemove);
+        if(file_exists($originalPathFile)) {
+            $fileToRemove = new File($originalPathFile);
+            $filesystem = new Filesystem();
+            $filesystem->remove($fileToRemove);
+        } else {
+            return null;
+        }
     }
 
     /**
-     * Get entity image to find his name
+     * Get entity image to find his name when request->files is null
      * @param $entity
      */
     public function findImage($entity) 

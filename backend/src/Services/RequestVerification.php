@@ -43,7 +43,7 @@ class RequestVerification
     public function checkUpdateContent($entity, $request, $configuration) 
     {
         if ($request->getContent()) {
-            $requestArray = json_decode($request->getContent(), true);
+            $requestArray = $this->specificException(json_decode($request->getContent(), true));
             foreach ($requestArray as $key => $value) {
                 if ($value == null) {
                     $getImage = 'get' . ucfirst($key);

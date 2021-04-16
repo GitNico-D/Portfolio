@@ -61,6 +61,7 @@
             browse-text="Parcourir"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
+            @change="showPreview($event)"
           ></b-form-file>
         <b-alert
           variant="danger"
@@ -70,7 +71,7 @@
           dismissible>
         </b-alert>
         <div class="mt-3">Icone sélectionné: {{ modifyContact.icon ? modifyContact.icon.name : '' }}</div>
-        <b-img thumbnail fluid id="previewIcon" v-show="previewIconUrl && modifyPresentation.Icon" :src="previewIconUrl"></b-img>
+        <b-img thumbnail fluid id="previewIcon" v-show="previewIconUrl && modifyContact.icon" :src="previewIconUrl"></b-img>
         </b-form-group>
       </ValidationProvider> 
       <div class="d-flex justify-content-center">
@@ -128,9 +129,9 @@ export default {
     showPreview(event) {
       const file = event.target.files[0];
       if(file) {
-        this.previewImageUrl = URL.createObjectURL(file);
-        document.getElementById("previewImage").onload = function () {
-          window.URL.revokeObjectURL(this.previewImageUrl);
+        this.previewIconUrl = URL.createObjectURL(file);
+        document.getElementById("previewIcon").onload = function () {
+          window.URL.revokeObjectURL(this.previewIconUrl);
         }
       }
     },
@@ -179,7 +180,8 @@ export default {
       this.modifyContact.title = ''
       this.modifyContact.link = ''
       this.modifyContact.icon = null
-      this.oldicon = ''
+      this.oldIcon = ''
+      this.currentTitle = ''
     },
     onCancel: function() {
       this.onReset(event);

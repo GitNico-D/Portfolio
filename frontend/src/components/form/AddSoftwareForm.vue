@@ -11,17 +11,17 @@
     </b-button>
   </div>
   <h2 id="addForm-title" class="text-center fw-bold my-5">
-    Remplisser le formulaire ci-dessous pour ajouter une nouvelle 
-    <span class="font-weight-bold font-style-italic">Compétence !</span>
+    Remplisser le formulaire ci-dessous pour ajouter un nouveau
+    <span class="font-weight-bold font-style-italic">Logiciel !</span>
   </h2>
   <ValidationObserver ref="addForm" v-slot="{ handleSubmit }">
     <b-form @submit.prevent="handleSubmit(onCreate)" @reset.prevent="onReset" >
-      <ValidationProvider ref="name" rules="required|min:2" name="Titre" v-slot="{ errors }">
+      <ValidationProvider ref="name" rules="required|min:2|max:75" name="Nom" v-slot="{ errors }">
         <b-form-group id="name">
-          <label for="input-name" class="text-uppercase">Nom de la compétence</label>
+          <label for="input-name" class="text-uppercase">Nom du logiciel</label>
           <b-form-input 
             id="input-name" 
-            v-model="newSkill.name" 
+            v-model="newSoftware.name" 
             placeholder="Entrer un nom">
           </b-form-input>
           <b-alert
@@ -32,32 +32,13 @@
           </b-alert>
         </b-form-group>
       </ValidationProvider>
-      <ValidationProvider ref="description" rules="required|min:2" name="Description" v-slot="{ errors }">
-        <b-form-group id="textarea">
-          <label for="input-textarea" class="text-uppercase">Description de la compétence</label>
-          <b-form-textarea
-            id="input-textarea"
-            v-model="newSkill.description"
-            placeholder="Entrer une description"
-            size="lg">
-            </b-form-textarea>
-          <b-alert
-            variant="danger"
-            v-if="errors[0]"
-            v-text="errors[0]"
-            show
-            dismissible>
-          </b-alert>
-        </b-form-group>
-      </ValidationProvider>
-      <ValidationProvider ref="level" rules="required|numeric" name="Niveau de compétence" v-slot="{ errors }">
+      <ValidationProvider ref="level" rules="required|numeric" name="Niveau" v-slot="{ errors }">
         <b-form-group id="level" class="mt-4">
-          <label for="input-level" class="text-uppercase">Niveau de compétence</label>
+          <label for="input-level" class="text-uppercase">Niveau du logiciel</label>
           <b-form-input
             type="number"
             id="input-level"
-            v-model="newSkill.level"
-            placeholder="Entrer le niveau de compétence"
+            v-model="newSoftware.level"
             >
           </b-form-input>
           <b-alert
@@ -69,14 +50,14 @@
           </b-alert>
         </b-form-group>
       </ValidationProvider>
-      <ValidationProvider ref="icon" rules="required" name="Image" v-slot="{ errors }">
+      <ValidationProvider ref="icon" rules="required" name="Icone" v-slot="{ errors }">
         <b-form-group id="icon" class="mt-4">
-          <label for="input-icon" class="text-uppercase">Icone de la compétence</label>
+          <label for="input-icon" class="text-uppercase">Icone du logiciel</label>
           <b-form-file
             id="input-icon"
             name="icon"
-            v-model="newSkill.icon"
-            :state="Boolean(newSkill.icon)"
+            v-model="newSoftware.icon"
+            :state="Boolean(newSoftware.icon)"
             browse-text="Parcourir"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
@@ -89,8 +70,8 @@
           show
           dismissible>
         </b-alert>
-        <div class="mt-3">Fichier sélectionné: {{ newSkill.icon ? newSkill.icon.name : '' }}</div>
-        <b-img thumbnail fluid id="previewIcon" v-show="previewIconUrl && newSkill.icon" :src="previewIconUrl"></b-img>
+        <div class="mt-3">Fichier sélectionné: {{ newSoftware.icon ? newSoftware.icon.name : '' }}</div>
+        <b-img thumbnail fluid id="previewIcon" v-show="previewIconUrl && newSoftware.icon" :src="previewIconUrl"></b-img>
         </b-form-group>
       </ValidationProvider>
       <ValidationProvider ref="category" rules="required" name="Catégorie" v-slot="{ errors }">
@@ -108,9 +89,9 @@
         </b-form-group>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addSkill'), onAdd">
+        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addSoftware')">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 pl-2"></b-spinner>
-          <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter compétence</span>
+          <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter logiciel</span>
         </b-button>
         <b-button type="reset" class="m-3 p-3 btn-reset" @click="onReset">
           <font-awesome-icon icon="trash-alt"/><span class="pl-2">Réinitialiser formulaire</span>
@@ -121,7 +102,7 @@
         </b-button>
       </div>
       <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ newSkill }}</pre>
+        <pre class="m-0">{{ newSoftware }}</pre>
       </b-card>
     </b-form>
   </ValidationObserver>
@@ -135,7 +116,7 @@ import AlertForm from "@/components/form/AlertForm";
 import setFormWithFile from "../../mixins/formMixin";
 
 export default {
-  name: "AddSkillForm",
+  name: "addSoftwareForm",
   components: { 
     ValidationProvider,
     ValidationObserver,
@@ -143,9 +124,8 @@ export default {
   },
   data() {
     return {
-      newSkill: {
+      newSoftware: {
         name: '',
-        description: '',
         icon: null,
         level: 0,
         category: null
@@ -168,9 +148,9 @@ export default {
     ...mapGetters(["oneCategory"]),  
   },
   methods: {
-    ...mapActions(["addSkill"]),
+    ...mapActions(["addSoftware"]),
     setCategory() {
-      return this.newSkill.category = this.selected;
+      return this.newSoftware.category = this.selected;
     },
     showPreview(event) {
       const file = event.target.files[0];
@@ -189,10 +169,10 @@ export default {
             this.loading = false;
             return
           }
-          let fd = this.setFormWithFile(this.newSkill.icon, this.newSkill);     
-        this.addSkill(fd)
+          let fd = this.setFormWithFile(this.newSoftware.icon, this.newSoftware);     
+        this.addSoftware(fd)
           .then(() => {
-            this.successMessage = "La compétence a été ajoutée !";
+            this.successMessage = "Le logiciel a été ajoutée !";
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.errorMessage = '';
@@ -209,28 +189,27 @@ export default {
     onReset(event) {
       event.preventDefault()
       this.loading = false;
-      this.newSkill.name = ''
-      this.newSkill.description = ''
-      this.newSkill.icon = null
-      this.newSkill.level = 0
+      this.newSoftware.name = ''
+      this.newSoftware.icon = null
+      this.newSoftware.level = 0
     },
-    onAdd() {
-      this.loading = false;
-      this.newSkill.title = ''
-      this.newSkill.link = ''
-      this.newSkill.icon = null
-    },
+    // onAdd() {
+    //   this.loading = false;
+    //   this.newSoftware.name = ''
+    //   this.newSoftware.icon = null
+    //   this.newSoftware.level = 0
+    // },
     onCancel() {
       this.$refs.addForm.reset
       this.loading = false;
-      this.newSkill.title = ''
-      this.newSkill.link = ''
-      this.newSkill.icon = null
+      this.newSoftware.name = ''
+      this.newSoftware.icon = null
+      this.newSoftware.level = 0
     }
   },
   mounted() {
     this.selected = this.oneCategory.id;
-    this.newSkill.category = this.oneCategory.id;
+    this.newSoftware.category = this.oneCategory.id;
   },  
 }
 </script>

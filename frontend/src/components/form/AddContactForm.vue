@@ -145,8 +145,6 @@ export default {
       this.newContact.title = ''
       this.newContact.link = ''
       this.newContact.icon = null
-      this.successMessage = ''
-      this.errorMessage = '';
     },
     onAdd() {
       this.loading = false;

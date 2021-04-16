@@ -110,8 +110,8 @@
         </b-col>
     </b-row>
     <b-row class="footer justify-content-center align-items-center">
-      <HomePageLink action="Retour"
-        url="/"
+      <HomePageLink action="Retour accueil"
+        url="/admin"
         direction="animated-arrowLtr"
         :textColor="pageColor"/>
     </b-row>

@@ -1,37 +1,37 @@
 <template>
 <div> 
   <div id="alert">
-    <AlertForm v-if="successMessage" v-show="oneSkill.id" :message="successMessage" variant="success"/>
-    <AlertForm v-if="errorMessage" v-show="oneSkill.id" :message="errorMessage" variant="danger"/>
+    <AlertForm v-if="successMessage" v-show="oneSoftware.id" :message="successMessage" variant="success"/>
+    <AlertForm v-if="errorMessage" v-show="oneSoftware.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <b-button v-if="!oneSkill.id || successMessage" class="m-3 p-3 btn-delete" @click="$emit('onReturn')">
+    <b-button v-if="!oneSoftware.id || successMessage" class="m-3 p-3 btn-return" @click="$emit('onReturn')">
       <font-awesome-icon icon="arrow-left"/>
       <span class="pl-2 pb-2">Retour liste</span>
     </b-button>
   </div>
-  <h2 v-if="!oneSkill.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
-    <p>Aucune <span class="font-weight-bold font-style-italic">Compétence</span> sélectionnée.</p>
+  <h2 v-if="!oneSoftware.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
+    <p>Aucun <span class="font-weight-bold font-style-italic">Logiciel</span> sélectionné.</p>
     <p>Rendez-vous sur l'onglet 
       <span class="font-style-italic">"Liste des Compétences"</span> 
-      pour sélectionné le compétence que vous souhaitez modifier.
+      pour sélectionner le logiciel que vous souhaitez modifier.
     </p>
   </h2>
   <h2 v-else id="modifyForm-title" class="text-center fw-bold my-5" >
-    Modification de la compétence "{{ currentName }}"
+    Modification du logiciel "{{ currentName }}"
   </h2>
-  <p class="mt-4 text-left" v-show="oneSkill.id">
-    ID de la <span class="text-uppercase font-weight-bold">compétence : </span>
-    {{oneSkill.id}}
+  <p class="mt-4 text-left" v-show="oneSoftware.id">
+    ID du <span class="text-uppercase font-weight-bold">logiciel : </span>
+    {{oneSoftware.id}}
   </p>
-  <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" v-show="oneSkill.id || showForm">
+  <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" v-show="oneSoftware.id || showForm">
     <b-form @submit.prevent="handleSubmit(onModify)" >
       <ValidationProvider ref="name" rules="required|min:2" name="Nom" v-slot="{ errors }">
         <b-form-group id="name" class="mb-5">
-          <label for="input-name" class="text-uppercase">Nouveau nom de la compétence</label>
+          <label for="input-name" class="text-uppercase">Nouveau nom du logiciel</label>
           <b-form-input 
             id="input-name" 
-            v-model="modifySkill.name"
+            v-model="modifySoftware.name"
             ref="inputName" 
           >
           </b-form-input>
@@ -45,37 +45,18 @@
           </b-alert>
         </b-form-group>
       </ValidationProvider>
-      <hr>
-      <ValidationProvider ref="description" rules="required|min:2" name="Description" v-slot="{ errors }">
-        <b-form-group id="textarea" class="mb-5">
-          <label for="input-textarea" class="text-uppercase">Nouvelle description de la compétence</label>
-          <b-form-textarea
-            id="input-textarea"
-            v-model="modifySkill.description"
-            size="lg">
-            </b-form-textarea>
-            <b-alert
-              class="mt-1"
-              variant="danger"
-              v-if="errors[0]"
-              v-text="errors[0]"
-              show
-            >
-          </b-alert>
-        </b-form-group>
-      </ValidationProvider>
       <div >
-        <h5 v-show="!modifySkill.icon && oldIcon" class="text-left text-uppercase">Icone de la compétence</h5>
-        <b-img :src="oldIcon" fluid alt="Fluid image" class="mt-1" v-show="!modifySkill.icon && oldIcon"></b-img>
+        <h5 v-show="!modifySoftware.icon && oldIcon" class="text-left text-uppercase">Icone du logiciel</h5>
+        <b-img :src="oldIcon" fluid alt="Fluid image" class="mt-1" v-show="!modifySoftware.icon && oldIcon"></b-img>
       </div>
       <ValidationProvider ref="new-icon" name="Icone" v-slot="{ validate, errors }">
         <b-form-group id="new-icon" class="mt-3 mb-5">
-          <label for="input-icon" class="text-uppercase">Nouvelle Icone de la compétence</label>
+          <label for="input-icon" class="text-uppercase">Nouvelle icone du logiciel</label>
           <b-form-file
             id="input-new-icon"
             ref="file"
             name="new-icon"
-            v-model="modifySkill.icon"
+            v-model="modifySoftware.icon"
             browse-text="Parcourir"
             accept="image/*"
             placeholder="Choisir un fichier ou glisser-déposer ici"
@@ -91,18 +72,17 @@
             show
           >
           </b-alert>
-          <div class="mt-3">Icone sélectionnée: {{ modifySkill.icon ? modifySkill.icon.name : '' }}</div>
-          <b-img thumbnail fluid id="previewIcon" v-show="previewIconUrl && modifySkill.icon" :src="previewIconUrl"></b-img>
+          <div class="mt-3">Icone sélectionnée: {{ modifySoftware.icon ? modifySoftware.icon.name : '' }}</div>
+          <b-img thumbnail fluid id="previewIcon" v-show="previewIconUrl && modifySoftware.icon" :src="previewIconUrl"></b-img>
         </b-form-group>
       </ValidationProvider>
-      <hr>
-      <ValidationProvider ref="level" rules="required|numeric" name="Niveau de compétence" v-slot="{ errors }">
+      <ValidationProvider ref="level" rules="required|numeric" name="Niveau" v-slot="{ errors }">
         <b-form-group id="level" class="mb-5">
-          <label for="input-level" class="text-uppercase">Nouveau niveau de la compétence</label>
+          <label for="input-level" class="text-uppercase">Nouveau niveau du logiciel</label>
           <b-form-input 
             type="number"
             id="input-level" 
-            v-model="modifySkill.level"
+            v-model="modifySoftware.level"
             >
           </b-form-input>
           <b-alert
@@ -130,7 +110,7 @@
         </b-form-group>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showModifySkill')">
+        <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showModifySoftware')">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier compétence</span>
@@ -138,13 +118,13 @@
         <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
           <font-awesome-icon icon="times"/>
           <span class="pl-2 pb-2">Annuler</span>
-        </b-button>
+        </b-button>        
       </div>
       <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ modifySkill }}</pre>
+        <pre class="m-0">{{ modifySoftware }}</pre>
       </b-card>
       <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ oneSkill }}</pre>
+        <pre class="m-0">{{ oneSoftware }}</pre>
       </b-card>
     </b-form>
   </ValidationObserver>
@@ -159,7 +139,7 @@ import formatDate from "../../services/formatDate";
 import setFormWithFile from "../../mixins/formMixin";
 
 export default {
-  name: "UpdateSkillForm",
+  name: "UpdateSoftwareForm",
   components: { 
     ValidationProvider,
     ValidationObserver,
@@ -168,8 +148,7 @@ export default {
   data() {
     return {
       loading: false,
-      skillId: null,
-      modifySkill: {
+      modifySoftware: {
         name: '',
         description: '',
         icon: null,
@@ -193,10 +172,10 @@ export default {
   },
   mixins : [ setFormWithFile ],
   computed: {
-    ...mapGetters(["oneSkill", "oneCategory"]),    
+    ...mapGetters(["oneSoftware", "oneCategory"]),    
   },
   methods: {
-    ...mapActions(["getCategory", "updateSkillWithFile", "updateSkillWithoutFile", "resetStateSkill"]),
+    ...mapActions(["getCategory", "updateSoftwareWithFile", "updateSoftwareWithoutFile", "resetStateSoftware"]),
     showPreview(event) {
       const file = event.target.files[0];
       if(file) {
@@ -207,7 +186,7 @@ export default {
       }
     },
     setCategory() {
-      return this.modifySkill.category = this.selected;
+      return this.modifySoftware.category = this.selected;
     },
     onModify() {
       this.loading = true;
@@ -217,13 +196,13 @@ export default {
             this.loading = false;
             return
           }
-          if(!this.modifySkill.icon) {
-            this.updateSkillWithoutFile({
-              id: this.oneSkill.id, 
-              form: this.modifySkill
+          if(!this.modifySoftware.icon) {
+            this.updateSoftwareWithoutFile({
+              id: this.oneSoftware.id, 
+              form: this.modifySoftware
             })
             .then(() => {
-              this.successMessage = 'La compétence ' + this.oneSkill.id + ' a été modifier';
+              this.successMessage = 'Le logiciel ' + this.oneSoftware.id + ' a été modifier';
               this.loading = false;
               this.resetForm();
               document.getElementById("alert").scrollIntoView(); 
@@ -232,13 +211,13 @@ export default {
               this.errorMessage = error.message;
             })
           } else {
-            let fd = this.setFormWithFile(this.modifySkill.icon, this.modifySkill);
-            this.updateSkillWithFile({
-              id: this.oneSkill.id, 
+            let fd = this.setFormWithFile(this.modifySoftware.icon, this.modifySoftware);
+            this.updateSoftwareWithFile({
+              id: this.oneSoftware.id, 
               formData: fd
             })
             .then(() => {
-              this.successMessage = 'La compétence ' + this.oneSkill.id + ' a été modifier';
+              this.successMessage = 'Le logiciel ' + this.oneSoftware.id + ' a été modifier';
               this.loading = false;
               this.resetForm();
               document.getElementById("alert").scrollIntoView();  
@@ -251,28 +230,28 @@ export default {
     },
     resetForm() {
       this.$refs.modifyForm.reset;
-      this.modifySkill.name = ''
-      this.modifySkill.description = ''
-      this.modifySkill.icon = null
-      this.modifySkill.level = 0
+      this.modifySoftware.name = ''
+      this.modifySoftware.icon = null
+      this.modifySoftware.level = 0
       this.oldIcon = ''
+      this.currentName = ''
     },
     onCancel: function() {
-      this.onReset(event);
+      this.resetForm();
     },
     formatDate(date) {
       return formatDate(date);
     },
   },
   mounted() {
-    console.log(this.oneSkill);
-    if(this.oneSkill && this.oneCategory) {
-      this.modifySkill = this.oneSkill;
-      this.modifySkill.category = this.oneCategory.id
-      this.currentName = this.oneSkill.name;
+    console.log(this.oneSoftware);
+    if(this.oneSoftware && this.oneCategory) {
+      this.modifySoftware = this.oneSoftware;
+      this.modifySoftware.category = this.oneCategory.id
+      this.currentName = this.oneSoftware.name;
       this.selected = this.oneCategory.id;
-      this.oldIcon = this.oneSkill.icon;
-      this.modifySkill.icon = null;
+      this.oldIcon = this.oneSoftware.icon;
+      this.modifySoftware.icon = null;
     }
   },
   
