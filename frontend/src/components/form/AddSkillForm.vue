@@ -44,13 +44,13 @@
           </b-alert>
         </b-form-group>
       </ValidationProvider>
-      <ValidationProvider ref="knowledge-level" rules="required|numeric" name="Niveau de compétence" v-slot="{ errors }">
-        <b-form-group id="knowledge-level" class="mt-4">
-          <label for="input-knowledge-level" class="text-uppercase">Niveau de compétence</label>
+      <ValidationProvider ref="level" rules="required|numeric" name="Niveau de compétence" v-slot="{ errors }">
+        <b-form-group id="level" class="mt-4">
+          <label for="input-level" class="text-uppercase">Niveau de compétence</label>
           <b-form-input
             type="number"
-            id="input-knowledge-level"
-            v-model="newSkill.knowledgeLevel"
+            id="input-level"
+            v-model="newSkill.level"
             placeholder="Entrer le niveau de compétence"
             >
           </b-form-input>
@@ -141,7 +141,7 @@ export default {
         name: '',
         description: '',
         icon: null,
-        knowledgeLevel: 0,
+        level: 0,
         category: null
       },
       loading: false,
@@ -206,7 +206,7 @@ export default {
       this.newSkill.description = ''
       this.newSkill.url = ''
       this.newSkill.icon = null
-      this.newSkill.knowledgeLevel = 0
+      this.newSkill.level = 0
       this.newSkill.creationDate = ''
     },
     onAdd() {

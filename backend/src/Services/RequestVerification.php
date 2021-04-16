@@ -70,15 +70,11 @@ class RequestVerification
     public function specificException($requestContent)
     {
         foreach ($requestContent as $key => $value) {
-            if ($key == 'knowledgeLevel') {
-                $requestContent[$key] = (int)$value;
-            } elseif ($key == 'knowledge_level') {
+            if ($key == 'level') {
                 $requestContent[$key] = (int)$value;
             } elseif ($key == 'category') {
                 $requestContent[$key] = (int)$value;
             } elseif ($key == 'presentation') {
-                $requestContent[$key] = (int)$value;
-            } elseif ($key == 'masteryOf') {
                 $requestContent[$key] = (int)$value;
             }
         }

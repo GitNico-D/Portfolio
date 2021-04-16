@@ -35,7 +35,7 @@
                 :fields="fields"
                 >
                 <b-thead class="p-5"></b-thead>
-                <template #cell(knowledgeLevel)="data">
+                <template #cell(level)="data">
                   {{ data.value }}
                 </template>
                 <template #cell(createdAt)="data">
@@ -65,8 +65,8 @@
                   </b-card-body>
                     <b-card-text>
                       <p class="my-4">Niveau  de compétence</p> 
-                      {{row.item.knowledgeLevel}}
-                      <b-progress :value="row.item.knowledgeLevel" :max="maxValue" show-progress animated></b-progress>
+                      {{row.item.level}}
+                      <b-progress :value="row.item.level" :max="maxValue" show-progress animated></b-progress>
                       <p class="my-4">{{row.item.description }}</p>
                     </b-card-text>
                     <b-button variant="info" @click="toModifyForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
@@ -133,7 +133,7 @@ export default {
           label: "Nom",
         },
         {
-          key: "knowledgeLevel",
+          key: "level",
           label: "Niveau de connaissance",
         },
         {

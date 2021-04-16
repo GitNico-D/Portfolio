@@ -90,13 +90,13 @@
         </b-form-group>
       </ValidationProvider>
       <hr>
-      <ValidationProvider ref="knowledge-level" rules="required|numeric" name="Niveau de compétence" v-slot="{ errors }">
-        <b-form-group id="knowledge-level" class="mb-5">
-          <label for="input-knowledge-level" class="text-uppercase">Nouveau niveau de la compétence</label>
+      <ValidationProvider ref="level" rules="required|numeric" name="Niveau de compétence" v-slot="{ errors }">
+        <b-form-group id="level" class="mb-5">
+          <label for="input-level" class="text-uppercase">Nouveau niveau de la compétence</label>
           <b-form-input 
             type="number"
-            id="input-knowledge-level" 
-            v-model="modifySkill.knowledgeLevel"
+            id="input-level" 
+            v-model="modifySkill.level"
             >
           </b-form-input>
           <b-alert
@@ -167,7 +167,7 @@ export default {
         name: '',
         description: '',
         icon: null,
-        knowledgeLevel: 0,
+        level: 0,
         category: null
       },
       oldIcon: '',
@@ -248,7 +248,7 @@ export default {
       this.modifySkill.name = ''
       this.modifySkill.description = ''
       this.modifySkill.icon = null
-      this.modifySkill.knowledgeLevel = 0
+      this.modifySkill.level = 0
       this.oldIcon = ''
     },
     onCancel: function() {
