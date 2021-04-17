@@ -5,10 +5,18 @@
     <AlertForm v-if="errorMessage" v-show="oneContact.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="contactColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+    <Button :color="contactColor" action="Retour présentation" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
   </div>
-  <h2 id="modifyForm-title" class="text-center fw-bold my-5" >
-    Modification du contact "{{ currentTitle }}"
+  <h2 v-if="!oneContact.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
+    <p>Aucun <span class="font-weight-bold font-style-italic">Contact</span> sélectionné.</p>
+    <p>Rendez-vous sur l'onglet 
+      <span class="font-style-italic">"Présentation"</span> 
+      pour sélectionné le contact que vous souhaitez modifier.
+    </p>
+  </h2>
+  <h2 v-else id="modifyForm-title" class="text-center fw-bold my-5" >
+    Modification du contact 
+    <p class="my-2"><span class="font-weight-bold font-style-italic">"{{ currentTitle }}"</span></p>
   </h2>
   <p class="mt-4 text-left" v-show="oneContact.id">
     ID du <span class="text-uppercase font-weight-bold">contact : </span>
@@ -79,14 +87,11 @@
       </ValidationProvider> 
       <div class="d-flex justify-content-center">
         <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('updateContact')">
-          <b-spinner v-show="loading" label="Spinning" class="pt-4"></b-spinner>
+          <b-spinner v-show="loading" label="Spinning" class="mr-2"></b-spinner>
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier contact</span>
         </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
-          <font-awesome-icon icon="times"/>
-          <span class="pl-2 pb-2">Annuler</span>
-        </b-button>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm"/>
       </div>
     </b-form>
   </ValidationObserver>
@@ -97,6 +102,7 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
+import Button from"@/components/Button";
 import formatDate from "../../services/formatDate";
 import setFormWithFile from "../../mixins/formMixin";
 
@@ -105,10 +111,13 @@ export default {
   components: { 
     ValidationProvider,
     ValidationObserver,
-    AlertForm
+    AlertForm,
+    Button
   },
   data() {
     return {
+      cancelButtonColor: "#BE8C2E",
+      contactColor: "#485DA6",
       loading: false,
       contactId: null,
       modifyContact: {
@@ -154,11 +163,17 @@ export default {
             .then(() => {
               this.successMessage = 'Le contact ' + this.oneContact.id + ' a été modifié';
               this.loading = false;
+              this.errorMessage = ''
               this.resetForm();
               document.getElementById("alert").scrollIntoView(); 
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
+              this.successMessage = ''
             })
           } else {
             let fd = this.setFormWithFile(this.modifyContact.icon, this.modifyContact)
@@ -169,11 +184,17 @@ export default {
             .then(() => {
               this.successMessage = 'Le contact ' + this.oneContact.id + ' a été modifié';
               this.loading = false;
+              this.errorMessage = ''
               this.resetForm();
               document.getElementById("alert").scrollIntoView();  
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
+              this.successMessage = ''
             })
           }
       })
@@ -186,12 +207,13 @@ export default {
       this.oldIcon = ''
       this.currentTitle = ''
     },
-    onCancel: function() {
-      this.onReset(event);
-    },
     formatDate(date) {
       return formatDate(date);
     },
+    onReturn() {
+      this.successMessage = ''
+      this.errorMessage = ''
+    }
   },
   mounted() {
     if(this.oneContact) {

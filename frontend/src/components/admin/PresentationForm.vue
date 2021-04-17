@@ -51,15 +51,11 @@
             </template>
             <template #cell(actions)="row">
               <Button action="Modifier" :color="presentationColor" icon="edit" v-on:action="toUpdateContactForm(row.item.id)"/>
-              <Button action="Supprimer" :color="deleteButtonColor" icon="trash-alt" class="m-1" v-on:action="toUpdateContactForm(row.item.id)"/>
+              <Button action="Supprimer" :color="deleteButtonColor" icon="trash-alt" class="m-1" v-on:action="onDeleteContact(row.item.id, row.item.title)"/>
               </template>
             </b-table>
             <div class="text-center">
                 <Button action="Ajouter" :color="presentationColor" icon="plus" v-on:action="toAddForm"/>
-            </div>
-            <div id="alertModify" class="mt-1">
-              <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
-              <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
             </div>
           </b-card-body>
             <b-card-text>
@@ -79,14 +75,14 @@
             <font-awesome-icon icon="edit" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter un Contact</span>
           </template> 
-          <AddContactForm v-on:addContact="refreshTab" v-on:onCancel="onCancel"/>
+          <AddContactForm v-on:addContact="refreshTab" v-on:onCancelAdd="onCancel" v-on:onReturn="returnToList"/>
         </b-tab>
         <b-tab lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Modifier un Contact</span>
           </template> 
-          <UpdateContactForm v-on:updateContact="onUpdateContact" v-on:onCancel="onCancel"/>
+          <UpdateContactForm v-on:updateContact="onUpdateContact" v-on:onCancelModify="onCancel" v-on:onReturn="returnToList"/>
         </b-tab>
       </b-tabs>
     </b-col>
@@ -179,31 +175,30 @@ export default {
           document.getElementById("alertModify").scrollIntoView(); 
         })
         .catch((error) => {   
-          this.errorMessage = error.message;
-          if(error.code == "404") {
-            this.errorMessage = 'Le contact ' + id + ' n\'existe pas !';
-            this.successMessage = '';      
-          }  
+          if(error.data[0]) {
+            this.errorMessage = error.data[0].message;
+          } else {
+            this.errorMessage = error.data.message;
+          }
+          this.successMessage = '';  
         }
       )
     },
     onDeleteContact(id, contactName) {
-      console.log("clickDelete " + id);
       this.deleteContact(id) 
         .then(() => {
           this.successMessage = 'Le contact "' +  contactName + '" a été supprimé !';
           this.$store.dispatch("getPresentation");
-          this.showAddCardForm = false
-          this.showUpdateCardForm = true
           this.errorMessage = '';
           document.getElementById("alertModify").scrollIntoView(); 
         })
         .catch((error) => {   
-          this.errorMessage = error.message;
-          if(error.code == "404") {
-            this.errorMessage = 'Le contact ' + id + ' n\'existe pas !';
-            this.successMessage = '';      
-          }  
+          if(error.data[0]) {
+            this.errorMessage = error.data[0].message;
+          } else {
+            this.errorMessage = error.data.message;
+          }
+          this.successMessage = '';
         }
       )
     },

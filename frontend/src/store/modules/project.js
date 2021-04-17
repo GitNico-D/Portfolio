@@ -34,8 +34,7 @@ const actions = {
         commit("SET_ONE_PROJECT", response.data);
       })
       .catch(error => {
-        console.log(error.response.data);
-        return Promise.reject(error.response.data);
+        return Promise.reject(error.response);
       });
   },
   addProject({ commit }, formData) {
@@ -62,7 +61,7 @@ const actions = {
       return Promise.resolve(response.data);
     })
     .catch(error => {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response);
     })
   },
   updateProjectWithoutFile({ commit }, { id, form }) {
@@ -74,7 +73,7 @@ const actions = {
       return Promise.resolve(response.data);
     })
     .catch(error => {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response);
     })
   },
   deleteProject({ commit }, id) {
@@ -86,7 +85,7 @@ const actions = {
       return Promise.resolve(response.data);
     })
     .catch(error => {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response);
     })
   },
   resetStateProject({ commit }) {

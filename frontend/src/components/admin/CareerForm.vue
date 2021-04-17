@@ -145,6 +145,8 @@ export default {
     },
     refreshTab() {
       this.$store.dispatch("getAllCareerStage");
+      this.successMessage = ''
+      this.errorMessage = ''
       // setTimeout(() => {
       //   this.tabIndex = 0;
       // }, 5000);
@@ -152,8 +154,7 @@ export default {
       // this.successMessage = '';
     },
     onDelete(id) {
-      console.log(id);
-      this.deleteCareer(id) 
+      this.deleteCareerStage(id) 
         .then(() => {
           this.successMessage = 'L\'étape de carrière ' + id  + ' a bien été supprimé !';
           this.showCareerCard = false;
@@ -162,11 +163,12 @@ export default {
           document.getElementById("alertModify").scrollIntoView(); 
         })
         .catch((error) => {   
-          if(error.code == "404") {
-            this.errorMessage = 'L\'étape de carrière ' + this.careerId  + ' n\'existe pas !';
-            this.successMessage = '';
-            this.showCareerCard = false;       
-          }  
+          if(error.data[0]) {
+            this.errorMessage = error.data[0].message;
+          } else {
+            this.errorMessage = error.data.message;
+          }
+          this.successMessage = '';
         }
       )
     },
@@ -177,12 +179,14 @@ export default {
           this.tabIndex = 2;
         })
         .catch((error) => {   
-          if(error.code == "404") {
-            this.errorMessage = 'L\'étape de carrière ' + this.careerId  + ' n\'existe pas !';
-            this.successMessage = '';
-            this.showCareerCard = false;       
-          }  
-        })
+          if(error.data[0]) {
+            this.errorMessage = error.data[0].message;
+          } else {
+            this.errorMessage = error.data.message;
+          }
+          this.successMessage = '';  
+        }
+      )
     },
     toAddCareerForm() {
       this.tabIndex = 1

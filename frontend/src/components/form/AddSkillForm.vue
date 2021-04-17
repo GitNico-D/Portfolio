@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="skillColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+    <Button :color="skillColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
   </div>
   <h2 id="addForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter une nouvelle 
@@ -13,7 +13,7 @@
   </h2>
   <ValidationObserver ref="addForm" v-slot="{ handleSubmit }">
     <b-form @submit.prevent="handleSubmit(onCreate)">
-      <ValidationProvider ref="name" rules="required|min:2" name="Titre" v-slot="{ errors }">
+      <ValidationProvider ref="name" rules="required|min:2|max:100" name="Titre" v-slot="{ errors }">
         <b-form-group id="name">
           <label for="input-name" class="text-uppercase">Nom de la compétence</label>
           <b-form-input 
@@ -196,7 +196,7 @@ export default {
             this.resetForm();
           })
           .catch((error) => {
-            this.errorMessage = error.message; //.data[0];
+            this.errorMessage = error.data[0].message;
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.successMessage  = '';
@@ -211,6 +211,10 @@ export default {
       this.newSkill.icon = null
       this.newSkill.level = 0
     },
+    onReturn() {
+      this.successMessage = ''
+      this.errorMessage = ''
+    }
   },
   mounted() {
     this.selected = this.oneCategory.id;

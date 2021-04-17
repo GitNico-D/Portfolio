@@ -63,8 +63,7 @@
                   </b-card-body>
                     <b-card-text>
                       <p class="my-4">Niveau de compétence</p> 
-                      {{row.item.level}}
-                      <b-progress :value="row.item.level" :max="maxValue" show-progress animated></b-progress>
+                        <b-progress :value="row.item.level" :max="maxValue" show-progress animated></b-progress>
                       <p class="my-4">{{row.item.description }}</p>
                     </b-card-text>
                     <Button action="Modifier" :color="skillColor" icon="plus" v-on:action="toModifySkillForm(row.item.id, category.id)"/>
@@ -137,7 +136,7 @@
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter un nouveau logiciel</span>
           </template> 
-          <AddSoftwareForm v-on:addSkill="refreshTab" v-on:onCancelAdd="onCancel" v-on:onReturn="returnToList"/>
+          <AddSoftwareForm v-on:addSkill="refreshTab" v-on:onCancelAdd="onCancel" v-on:showModifySkill="showModifySkill" v-on:onReturn="returnToList"/>
         </b-tab>
         <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
@@ -245,13 +244,16 @@ export default {
       return formatDate(date);
     },
     refreshTab() {
-      this.$store.dispatch("getAllSkills");
       this.$store.dispatch("getAllCategories");
-      setTimeout(() => {
-        this.tabIndex = 0;
-      }, 5000);
-      this.errorMessage = '';
+      this.$store.dispatch("getAllSkills");
+      this.$store.dispatch("getAllSoftwares");
       this.successMessage = '';
+      this.errorMessage = '';
+      // setTimeout(() => {
+      //   this.tabIndex = 0;
+      // }, 5000);
+      // this.errorMessage = '';
+      // this.successMessage = '';
     },
     onDeleteSkill(id) {
       this.deleteSkill(id) 
@@ -374,13 +376,7 @@ export default {
     returnToList() {
       this.tabIndex = 0;
     }
-  },
-  mounted() {
-    this.$store.dispatch("getAllCategories");
-    this.$store.dispatch("getAllSkills");
-    this.resetStateSkill()
-      this.resetStateCategory()
-  },
+  }
 }
 </script>
 

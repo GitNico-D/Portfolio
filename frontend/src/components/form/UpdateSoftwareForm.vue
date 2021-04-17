@@ -5,13 +5,7 @@
     <AlertForm v-if="errorMessage" v-show="oneSoftware.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="softwareColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
-  </div>
-  <div class="text-center">
-    <b-button v-if="!oneSoftware.id || successMessage" class="m-3 p-3 btn-return" @click="$emit('onReturn')">
-      <font-awesome-icon icon="arrow-left"/>
-      <span class="pl-2 pb-2">Retour liste</span>
-    </b-button>
+    <Button :color="softwareColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
   </div>
   <h2 v-if="!oneSoftware.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Logiciel</span> sélectionné.</p>
@@ -21,7 +15,8 @@
     </p>
   </h2>
   <h2 v-else id="modifyForm-title" class="text-center fw-bold my-5" >
-    Modification du logiciel "{{ currentName }}"
+    Modification du logiciel 
+    <p class="my-2"><span class="font-weight-bold font-style-italic">"{{ currentName }}"</span></p>
   </h2>
   <p class="mt-4 text-left" v-show="oneSoftware.id">
     ID du <span class="text-uppercase font-weight-bold">logiciel : </span>
@@ -29,7 +24,7 @@
   </p>
   <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" v-show="oneSoftware.id || showForm">
     <b-form @submit.prevent="handleSubmit(onModify)" >
-      <ValidationProvider ref="name" rules="required|min:2" name="Nom" v-slot="{ errors }">
+      <ValidationProvider ref="name" rules="required|min:2|max:75" name="Nom" v-slot="{ errors }">
         <b-form-group id="name" class="mb-5">
           <label for="input-name" class="text-uppercase">Nouveau nom du logiciel</label>
           <b-form-input 
@@ -116,16 +111,10 @@
         <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showModifySoftware')">
           <b-spinner v-show="loading" label="Spinning" class="mr-2"></b-spinner>
             <font-awesome-icon icon="edit"/>
-            <span class="pl-2 pb-2">Modifier compétence</span>
+            <span class="pl-2 pb-2">Modifier logiciel</span>
         </b-button>
         <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm"/>     
       </div>
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ modifySoftware }}</pre>
-      </b-card>
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ oneSoftware }}</pre>
-      </b-card>
     </b-form>
   </ValidationObserver>
 </div>
@@ -212,7 +201,11 @@ export default {
               document.getElementById("alert").scrollIntoView(); 
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
               this.successMessage = ''
             })
           } else {
@@ -229,7 +222,11 @@ export default {
               document.getElementById("alert").scrollIntoView();  
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
               this.successMessage = ''
             })
           }
@@ -245,10 +242,13 @@ export default {
     },
     formatDate(date) {
       return formatDate(date);
-    },
+    }, 
+    onReturn() {
+      this.successMessage = ''
+      this.errorMessage = ''
+    }
   },
   mounted() {
-    console.log(this.oneSoftware);
     if(this.oneSoftware && this.oneCategory) {
       this.modifySoftware = this.oneSoftware;
       this.modifySoftware.category = this.oneCategory.id
@@ -256,9 +256,8 @@ export default {
       this.selected = this.oneCategory.id;
       this.oldIcon = this.oneSoftware.icon;
       this.modifySoftware.icon = null;
-    }
-  },
-  
+    }    
+  }  
 }
 </script>
 

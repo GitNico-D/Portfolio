@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" v-show="oneProject.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="projectColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+    <Button :color="projectColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
   </div>
   <h2 v-if="!oneProject.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Projet</span> sélectionné.</p>
@@ -84,7 +84,7 @@
       <hr>
       <div >
         <h5 v-show="!modifyProject.imgStatic && oldImgStatic" class="text-left text-uppercase">Image du projet</h5>
-        <b-img :src="oldImgStatic" fluid alt="Fluid image" class="mt-1" v-show="!modifyProject.imgStatic && oldImgStatic"></b-img>
+        <b-img thumbnail :src="oldImgStatic" fluid alt="Fluid image" class="mt-1" v-show="!modifyProject.imgStatic && oldImgStatic"></b-img>
       </div>
       <ValidationProvider ref="new-imgStatic" v-if="modifyProject" name="Image" v-slot="{ errors }">
         <b-form-group id="new-imgStatic" class="mt-3 mb-5">
@@ -240,7 +240,11 @@ export default {
               document.getElementById("alert").scrollIntoView(); 
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
               this.successMessage = ''
             })
           } else {
@@ -257,7 +261,11 @@ export default {
               document.getElementById("alert").scrollIntoView();  
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
               this.successMessage = ''
             })
           }
@@ -277,6 +285,10 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    onReturn() {
+      this.successMessage = ''
+      this.errorMessage = ''
+    }
   },
   mounted() {
     if(this.oneProject.id) {

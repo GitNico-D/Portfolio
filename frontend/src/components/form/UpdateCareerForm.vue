@@ -15,7 +15,8 @@
     </p>
   </h2>
   <h2 v-else id="modifyForm-title" class="text-center fw-bold my-5" >
-    Modification du CareerStage "{{ currentName }}"
+    Modification du CareerStage 
+    <p class="my-2"><span class="font-weight-bold font-style-italic">"{{ currentName }}"</span></p>
   </h2>
   <p class="mt-4 text-left" v-show="oneCareer.id">
     ID de <span class="text-uppercase font-weight-bold">l'étape de carrière : </span>
@@ -23,7 +24,7 @@
   </p>
   <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" v-show="oneCareer.id || showForm">
     <b-form @submit.prevent="handleSubmit(onModify)" >
-      <ValidationProvider ref="name" rules="required|min:2" name="Intitulé" v-slot="{ errors }">
+      <ValidationProvider ref="name" rules="required|min:2|max:100" name="Intitulé" v-slot="{ errors }">
         <b-form-group id="name" class="mb-5">
           <label for="input-name" class="text-uppercase">Nouveau intitulé de l'étape de carrière </label>
           <b-form-input 
@@ -62,7 +63,7 @@
         </b-form-group>
       </ValidationProvider>
       <hr>
-      <ValidationProvider ref="company" rules="required" name="Société" v-slot="{ errors }">
+      <ValidationProvider ref="company" rules="required|min:2|max:50" name="Société" v-slot="{ errors }">
         <b-form-group id="company" class="mb-5">
           <label for="input-company" class="text-uppercase">Nouvelle société de l'étape de carrière</label>
           <b-form-input
@@ -239,7 +240,12 @@ export default {
               document.getElementById("alert").scrollIntoView(); 
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
+              this.successMessage = ''
             })
           } else {
             let fd = this.setFormWithFile(this.modifyCareerStage.logoCompany, this.modifyCareerStage);
@@ -254,7 +260,12 @@ export default {
               document.getElementById("alert").scrollIntoView();  
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
+              this.successMessage = ''
             })
           }
       })

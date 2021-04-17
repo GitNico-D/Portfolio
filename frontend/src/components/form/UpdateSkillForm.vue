@@ -5,13 +5,7 @@
     <AlertForm v-if="errorMessage" v-show="oneSkill.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="skillColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
-  </div>
-  <div class="text-center">
-    <b-button v-if="!oneSkill.id || successMessage" class="m-3 p-3 btn-delete" @click="$emit('onReturn')">
-      <font-awesome-icon icon="arrow-left"/>
-      <span class="pl-2 pb-2">Retour liste</span>
-    </b-button>
+    <Button :color="skillColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
   </div>
   <h2 v-if="!oneSkill.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucune <span class="font-weight-bold font-style-italic">Compétence</span> sélectionnée.</p>
@@ -21,7 +15,8 @@
     </p>
   </h2>
   <h2 v-else id="modifyForm-title" class="text-center fw-bold my-5" >
-    Modification de la compétence "{{ currentName }}"
+    Modification de la compétence 
+    <p class="my-2"><span class="font-weight-bold font-style-italic">"{{ currentName }}"</span></p>
   </h2>
   <p class="mt-4 text-left" v-show="oneSkill.id">
     ID de la <span class="text-uppercase font-weight-bold">compétence : </span>
@@ -29,7 +24,7 @@
   </p>
   <ValidationObserver ref="modifyForm" v-slot="{ handleSubmit }" v-show="oneSkill.id || showForm">
     <b-form @submit.prevent="handleSubmit(onModify)" >
-      <ValidationProvider ref="name" rules="required|min:2" name="Nom" v-slot="{ errors }">
+      <ValidationProvider ref="name" rules="required|min:2|max:100" name="Nom" v-slot="{ errors }">
         <b-form-group id="name" class="mb-5">
           <label for="input-name" class="text-uppercase">Nouveau nom de la compétence</label>
           <b-form-input 
@@ -71,7 +66,7 @@
         <h5 v-show="!modifySkill.icon && oldIcon" class="text-left text-uppercase">Icone de la compétence</h5>
         <b-img :src="oldIcon" fluid alt="Fluid image" class="mt-1" v-show="!modifySkill.icon && oldIcon"></b-img>
       </div>
-      <ValidationProvider ref="new-icon" name="Icone" v-slot="{ validate, errors }">
+      <ValidationProvider ref="new-icon" name="Icone" v-slot="{ errors }">
         <b-form-group id="new-icon" class="mt-3 mb-5">
           <label for="input-icon" class="text-uppercase">Nouvelle Icone de la compétence</label>
           <b-form-file
@@ -83,7 +78,7 @@
             accept="image/*"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
-            @change="showPreview($event), validate"
+            @change="showPreview($event)"
           >
           </b-form-file>
           <b-alert
@@ -223,11 +218,16 @@ export default {
             .then(() => {
               this.successMessage = 'La compétence ' + this.oneSkill.id + ' a été modifier';
               this.loading = false;
+              this.errorMessage = ''
               this.resetForm();
               document.getElementById("alert").scrollIntoView(); 
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
             })
           } else {
             let fd = this.setFormWithFile(this.modifySkill.icon, this.modifySkill);
@@ -238,11 +238,16 @@ export default {
             .then(() => {
               this.successMessage = 'La compétence ' + this.oneSkill.id + ' a été modifier';
               this.loading = false;
+              this.errorMessage = ''
               this.resetForm();
               document.getElementById("alert").scrollIntoView();  
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
             })
           }
       })
@@ -258,9 +263,12 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    onReturn() {
+      this.successMessage = ''
+      this.errorMessage = ''
+    }
   },
   mounted() {
-    console.log(this.oneSkill);
     if(this.oneSkill && this.oneCategory) {
       this.modifySkill = this.oneSkill;
       this.modifySkill.category = this.oneCategory.id

@@ -42,7 +42,7 @@
                 <Button action="Modifier" :color="projectColor" icon="edit" class="m-1" v-on:action="toModifyForm(row.item.id)"/>
                 <Button action="Détail du projet" :color="detailButtonColor" icon="database" class="m-1" v-on:action="row.toggleDetails"/>
               </template>
-                <template #row-details="row">
+                <template #row-details="row" class="m-auto">
                   <b-card
                     :title="row.item.name"
                     :img-src="row.item.imgStatic"
@@ -69,7 +69,7 @@
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter un nouveau projet</span>
           </template> 
-          <AddProjectForm v-on:addProject="refreshTab" v-on:onReturn="returnToList"/>
+          <AddProjectForm v-on:addProject="refreshTab" v-on:onReturn="returnToList" v-on:onCancelAdd="onCancel"/>
         </b-tab>
         <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
@@ -77,7 +77,7 @@
             <span v-if="!projectId">Modifier le projet</span>
             <span v-else>Modification du projet {{ oneProject.id }}</span>
           </template>           
-          <UpdateProjectForm v-on:onCancelModify="onCancelModify" v-on:onReturn="returnToList" v-on:showModifyProject="showModifyProject"/>
+          <UpdateProjectForm v-on:onCancelModify="onCancel" v-on:onReturn="returnToList" v-on:showModifyProject="showModifyProject"/>
         </b-tab>
       </b-tabs>
     </b-col>
@@ -149,6 +149,9 @@ export default {
     },
     refreshTab() {
       this.$store.dispatch("getAllProjects");
+      this.successMessage = '';
+      this.errorMessage = '';
+      // this.resetStateProject()
       // setTimeout(() => {
       //   this.tabIndex = 0;
       // }, 5000);
@@ -196,7 +199,7 @@ export default {
     showModifyProject() {
       this.$store.dispatch("getAllProjects");
     },
-    onCancelModify() {
+    onCancel() {
       this.tabIndex = 0;
       this.resetStateProject()
     },
@@ -216,7 +219,7 @@ export default {
       border: 1px solid $purple;
     } 
     &:focus, &:active {
-      color: $purple;
+      color: $white;
       box-shadow: unset;
       border: 1px solid $purple;
       background-color: $purple;

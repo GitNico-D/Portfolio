@@ -9,7 +9,7 @@
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="contactColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+    <Button :color="contactColor" action="Retour présentation" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
   </div>
   <ValidationObserver ref="addContactForm" v-slot="{ handleSubmit }">
     <b-form @submit.prevent="handleSubmit(onCreate)">
@@ -136,7 +136,11 @@ export default {
             this.resetForm();
           })
           .catch((error) => {
-            this.errorMessage = error.message;
+            if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.successMessage  = '';

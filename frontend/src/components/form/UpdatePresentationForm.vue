@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" v-show="onePresentation.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="presentationColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+    <Button :color="presentationColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
   </div>
   <h2 v-if="!onePresentation.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Présentation</span> sélectionné.</p>
@@ -308,18 +308,15 @@ export default {
               document.getElementById("alert").scrollIntoView(); 
             })
             .catch((error) => {
-              this.errorMessage = error.message;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
+              this.successMessage = ''
             })
           } else {
             let fd = this.setFormWithFile(this.modifyPresentation.picture, this.modifyPresentation)
-            console.log(this.modifyPresentation);
-            console.log(fd);
-            var object = {};
-            fd.forEach(function(value, key){
-                object[key] = value;
-            });
-            var json = JSON.stringify(object);
-            console.log(json);
             this.updatePresentationWithFile({
               id: this.onePresentation.id, 
               formData: fd
@@ -331,7 +328,12 @@ export default {
               document.getElementById("alert").scrollIntoView();  
             })
             .catch((error) => {
-              this.errorMessage = error;
+              if(error.data[0]) {
+                this.errorMessage = error.data[0].message;
+              } else {
+                this.errorMessage = error;
+              }
+              this.successMessage = ''
             })
           }
       })
@@ -339,6 +341,10 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    onReturn() {
+      this.successMessage = ''
+      this.errorMessage = ''
+    }
   },
   mounted() {
     if(this.onePresentation.id) {

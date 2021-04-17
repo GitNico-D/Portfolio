@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="softwareColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+    <Button :color="softwareColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
   </div>
   <h2 id="addForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter un nouveau
@@ -176,7 +176,7 @@ export default {
             this.resetForm();
           })
           .catch((error) => {
-            this.errorMessage = error.message; //.data[0];
+            this.errorMessage = error.data[0].message;
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.successMessage  = '';
@@ -189,6 +189,10 @@ export default {
       this.newSoftware.name = ''
       this.newSoftware.icon = null
       this.newSoftware.level = 0
+    },
+    onReturn() {
+      this.successMessage = ''
+      this.errorMessage = ''
     }
   },
   mounted() {

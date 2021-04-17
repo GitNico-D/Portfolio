@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="projectColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+    <Button :color="projectColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
   </div>
   <h2 id="modifyForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter un nouveau 
@@ -127,13 +127,8 @@
           <font-awesome-icon icon="folder-plus"/>
           <span class="pl-2">Ajouter projet</span>
         </b-button>
-        <Button :color="cancelButtonColor" action="Réinitialiser formulaire" icon="trash-alt" class="m-3 p-3" v-on:action="onReset"/>
-        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), onCancel"/>
-
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
-          <font-awesome-icon icon="times"/>
-          <span class="pl-2 pb-2">Annuler</span>
-        </b-button>
+        <Button :color="resetButtonColor" action="Réinitialiser formulaire" icon="trash-alt" class="m-3 p-3" v-on:action="resetForm"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm"/>
       </div>
     </b-form>
   </ValidationObserver>
@@ -159,6 +154,7 @@ export default {
     return {
       cancelButtonColor: "#BE8C2E",
       projectColor: "#6d327c",
+      resetButtonColor: "#ef233c",
       newProject: {
         name: '',
         description: '',
@@ -199,18 +195,18 @@ export default {
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.errorMessage = '';
-            this.onReset(event);
+            this.resetForm();
           })
           .catch((error) => {
-            this.errorMessage = error.data;
+            this.errorMessage = error.data[0].message;
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.successMessage  = '';
           })
       });
     },
-    onReset(event) {
-      event.preventDefault()
+    resetForm() {
+      this.$refs.addForm.reset();
       this.loading = false;
       this.newProject.name = ''
       this.newProject.description = ''
@@ -219,15 +215,9 @@ export default {
       this.newProject.altStatic = ''
       this.newProject.creationDate = ''
     },
-    onCancel() {
-      this.$refs.addForm.reset
-      this.loading = false;
-      this.newProject.name = ''
-      this.newProject.description = ''
-      this.newProject.url = ''
-      this.newProject.imgStatic = null
-      this.newProject.altStatic = ''
-      this.newProject.creationDate = ''
+    onReturn() {
+      this.successMessage = ''
+      this.errorMessage = ''
     }
   },
 }
@@ -237,22 +227,18 @@ export default {
 .btn {
   &-add {
     color: $white;
-    background-color: $green;
-    border: 1px solid $green;
+    background-color: $purple;
+    border: 1px solid $purple;
     &:hover {
-      color: $green;
+      color: $purple;
       background-color: transparent;
-      border: 1px solid $green;
+      border: 1px solid $purple;
     }
-  }
-  &-delete {
-    color: $white;
-    background-color: $yellow;
-    border: 1px solid $yellow;
-    &:hover {
-      color: $yellow;
-      background-color: transparent;
-      border: 1px solid $yellow;
+    &:focus, &:active {
+      color: $white!important;
+      box-shadow: unset;
+      border: 1px solid $purple;
+      background-color: $purple;
     }
   }
 }

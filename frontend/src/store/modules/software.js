@@ -37,8 +37,7 @@ const actions = {
         commit("SET_ONE_SOFTWARE", response.data);
       })
       .catch(error => {
-        console.log(error.response.data);
-        return Promise.reject(error.response.data);
+        return Promise.reject(error.response);
       });
   },
   addSoftware({ commit }, formData) {
@@ -65,7 +64,7 @@ const actions = {
       return Promise.resolve(response.data);
     })
     .catch(error => {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response);
     })
   },
   updateSoftwareWithoutFile({ commit }, { id, form }) {
@@ -77,7 +76,7 @@ const actions = {
       return Promise.resolve(response.data);
     })
     .catch(error => {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response);
     })
   },
   deleteSoftware({ commit }, id) {
@@ -89,7 +88,7 @@ const actions = {
       return Promise.resolve(response.data);
     })
     .catch(error => {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response);
     })
   },
   resetStateSoftware({ commit }) {
