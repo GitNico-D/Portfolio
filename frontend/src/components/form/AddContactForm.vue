@@ -8,8 +8,11 @@
     <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
+  <div class="text-center">
+    <Button :color="contactColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+  </div>
   <ValidationObserver ref="addContactForm" v-slot="{ handleSubmit }">
-    <b-form @submit.prevent="handleSubmit(onCreate)" @reset.prevent="onReset">
+    <b-form @submit.prevent="handleSubmit(onCreate)">
       <ValidationProvider ref="title" rules="required|min:2" name="Nom" v-slot="{ errors }">
         <b-form-group id="title">
           <label for="input-title" class="text-uppercase">Nom du contact</label>
@@ -66,17 +69,12 @@
         </b-form-group>
       </ValidationProvider>      
       <div class="d-flex justify-content-center">
-        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addContact'), onAdd">
+        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addContact'), resetForm">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 pl-2"></b-spinner>
           <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter contact</span>
         </b-button>
-        <b-button type="reset" class="m-3 p-3 btn-reset" @click="onReset">
-          <font-awesome-icon icon="trash-alt"/><span class="pl-2">Réinitialiser formulaire</span>
-        </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
-          <font-awesome-icon icon="times"/>
-          <span class="pl-2 pb-2">Annuler</span>
-        </b-button>
+        <Button :color="resetButtonColor" action="Réinitialiser formulaire" icon="trash-alt" class="m-3 p-3" v-on:action="resetForm"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm"/>
       </div>
     </b-form>
   </ValidationObserver>
@@ -87,6 +85,8 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
+
+import Button from "@/components/Button"
 import setFormWithFile from "../../mixins/formMixin";
 
 export default {
@@ -94,10 +94,14 @@ export default {
   components: { 
     ValidationProvider,
     ValidationObserver,
-    AlertForm
+    AlertForm,
+    Button
   },
   data() {
     return {
+      contactColor: "#485DA6",
+      cancelButtonColor: "#BE8C2E",
+      resetButtonColor: "#ef233c",
       newContact: {
         title: '',
         link: '',
@@ -129,7 +133,7 @@ export default {
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.errorMessage = '';
-            this.onReset(event);
+            this.resetForm();
           })
           .catch((error) => {
             this.errorMessage = error.message;
@@ -139,20 +143,7 @@ export default {
           })
       });
     },
-    onReset(event) {
-      event.preventDefault()
-      this.loading = false;
-      this.newContact.title = ''
-      this.newContact.link = ''
-      this.newContact.icon = null
-    },
-    onAdd() {
-      this.loading = false;
-      this.newContact.title = ''
-      this.newContact.link = ''
-      this.newContact.icon = null
-    },
-    onCancel() {
+    resetForm() {
       this.$refs.addForm.reset
       this.loading = false;
       this.newContact.title = ''
@@ -175,25 +166,11 @@ export default {
       background-color: transparent;
       border: 1px solid $blue;
     }
-  }
-  &-delete {
-    color: $white;
-    background-color: $yellow;
-    border: 1px solid $yellow;
-    &:hover {
-      color: $yellow;
-      background-color: transparent;
-      border: 1px solid $yellow;
-    }
-  }
-  &-reset {
-    color: $white;
-    background-color: $red;
-    border: 1px solid $red;
-    &:hover {
-      color: $red;
-      background-color: transparent;
-      border: 1px solid $red;
+    &:focus, &:active {
+      color: $white!important;
+      box-shadow: unset;
+      border: 1px solid $blue;
+      background-color: $blue;
     }
   }
 }

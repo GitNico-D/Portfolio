@@ -111,7 +111,7 @@
     </b-row>
     <b-row class="footer justify-content-center align-items-center">
       <HomePageLink action="Retour accueil"
-        url="/admin"
+        url="/"
         direction="animated-arrowLtr"
         :textColor="pageColor"/>
     </b-row>
@@ -313,18 +313,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.btn {
-  &-project {
-    color: $white;
-    background-color: $purple;
-    border: 1px solid $purple;
-    &:hover {
-      color: $purple;
-      background-color: transparent;
-      border: 1px solid $purple;
-    }
-  }
-}
 .container-fluid {
   min-height: 100vh;
   background-color: $dark-gray;

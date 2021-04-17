@@ -5,17 +5,14 @@
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <b-button class="m-3 p-3 btn-return" @click="$emit('onReturn')">
-      <font-awesome-icon icon="arrow-left"/>
-      <span class="pl-2 pb-2">Retour liste</span>
-    </b-button>
+    <Button :color="skillColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
   </div>
   <h2 id="addForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter une nouvelle 
     <span class="font-weight-bold font-style-italic">Compétence !</span>
   </h2>
   <ValidationObserver ref="addForm" v-slot="{ handleSubmit }">
-    <b-form @submit.prevent="handleSubmit(onCreate)" @reset.prevent="onReset" >
+    <b-form @submit.prevent="handleSubmit(onCreate)">
       <ValidationProvider ref="name" rules="required|min:2" name="Titre" v-slot="{ errors }">
         <b-form-group id="name">
           <label for="input-name" class="text-uppercase">Nom de la compétence</label>
@@ -108,17 +105,12 @@
         </b-form-group>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addSkill'), onAdd">
+        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addSkill'), resetForm">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 pl-2"></b-spinner>
           <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter compétence</span>
         </b-button>
-        <b-button type="reset" class="m-3 p-3 btn-reset" @click="onReset">
-          <font-awesome-icon icon="trash-alt"/><span class="pl-2">Réinitialiser formulaire</span>
-        </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
-          <font-awesome-icon icon="times"/>
-          <span class="pl-2 pb-2">Annuler</span>
-        </b-button>
+        <Button :color="resetButtonColor" action="Réinitialiser formulaire" icon="trash-alt" class="m-3 p-3" v-on:action="resetForm"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm"/>
       </div>
       <b-card class="mt-3" header="Form Data Result">
         <pre class="m-0">{{ newSkill }}</pre>
@@ -132,6 +124,7 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
+import Button from "@/components/Button"
 import setFormWithFile from "../../mixins/formMixin";
 
 export default {
@@ -139,10 +132,14 @@ export default {
   components: { 
     ValidationProvider,
     ValidationObserver,
-    AlertForm
+    AlertForm,
+    Button
   },
   data() {
     return {
+      skillColor: "#36C486",
+      cancelButtonColor: "#BE8C2E",
+      resetButtonColor: "#ef233c",
       newSkill: {
         name: '',
         description: '',
@@ -196,7 +193,7 @@ export default {
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.errorMessage = '';
-            this.onReset(event);
+            this.resetForm();
           })
           .catch((error) => {
             this.errorMessage = error.message; //.data[0];
@@ -206,27 +203,14 @@ export default {
           })
       });
     },
-    onReset(event) {
-      event.preventDefault()
+    resetForm() {
+      this.$refs.addForm.reset
       this.loading = false;
       this.newSkill.name = ''
       this.newSkill.description = ''
       this.newSkill.icon = null
       this.newSkill.level = 0
     },
-    onAdd() {
-      this.loading = false;
-      this.newSkill.title = ''
-      this.newSkill.link = ''
-      this.newSkill.icon = null
-    },
-    onCancel() {
-      this.$refs.addForm.reset
-      this.loading = false;
-      this.newSkill.title = ''
-      this.newSkill.link = ''
-      this.newSkill.icon = null
-    }
   },
   mounted() {
     this.selected = this.oneCategory.id;
@@ -245,6 +229,12 @@ export default {
       color: $green;
       background-color: transparent;
       border: 1px solid $green;
+    }
+    &:focus, &:active {
+      color: $white!important;
+      box-shadow: unset;
+      border: 1px solid $green;
+      background-color: $green;
     }
   }
   &-delete {

@@ -5,17 +5,14 @@
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <b-button class="m-3 p-3 btn-return" @click="$emit('onReturn')">
-      <font-awesome-icon icon="arrow-left"/>
-      <span class="pl-2 pb-2">Retour liste</span>
-    </b-button>
+    <Button :color="softwareColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
   </div>
   <h2 id="addForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter un nouveau
     <span class="font-weight-bold font-style-italic">Logiciel !</span>
   </h2>
   <ValidationObserver ref="addForm" v-slot="{ handleSubmit }">
-    <b-form @submit.prevent="handleSubmit(onCreate)" @reset.prevent="onReset" >
+    <b-form @submit.prevent="handleSubmit(onCreate)">
       <ValidationProvider ref="name" rules="required|min:2|max:75" name="Nom" v-slot="{ errors }">
         <b-form-group id="name">
           <label for="input-name" class="text-uppercase">Nom du logiciel</label>
@@ -93,13 +90,8 @@
           <b-spinner v-show="loading" label="Spinning" class="pt-4 pl-2"></b-spinner>
           <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter logiciel</span>
         </b-button>
-        <b-button type="reset" class="m-3 p-3 btn-reset" @click="onReset">
-          <font-awesome-icon icon="trash-alt"/><span class="pl-2">Réinitialiser formulaire</span>
-        </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
-          <font-awesome-icon icon="times"/>
-          <span class="pl-2 pb-2">Annuler</span>
-        </b-button>
+        <Button :color="resetButtonColor" action="Réinitialiser formulaire" icon="trash-alt" class="m-3 p-3" v-on:action="resetForm"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm"/>
       </div>
       <b-card class="mt-3" header="Form Data Result">
         <pre class="m-0">{{ newSoftware }}</pre>
@@ -113,6 +105,7 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
+import Button from "@/components/Button"
 import setFormWithFile from "../../mixins/formMixin";
 
 export default {
@@ -120,10 +113,14 @@ export default {
   components: { 
     ValidationProvider,
     ValidationObserver,
-    AlertForm
+    AlertForm,
+    Button
   },
   data() {
     return {
+      softwareColor: "#36C486",
+      cancelButtonColor: "#BE8C2E",
+      resetButtonColor: "#ef233c",
       newSoftware: {
         name: '',
         icon: null,
@@ -176,7 +173,7 @@ export default {
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.errorMessage = '';
-            this.onReset(event);
+            this.resetForm();
           })
           .catch((error) => {
             this.errorMessage = error.message; //.data[0];
@@ -186,14 +183,7 @@ export default {
           })
       });
     },
-    onReset(event) {
-      event.preventDefault()
-      this.loading = false;
-      this.newSoftware.name = ''
-      this.newSoftware.icon = null
-      this.newSoftware.level = 0
-    },
-    onCancel() {
+    resetForm() {
       this.$refs.addForm.reset
       this.loading = false;
       this.newSoftware.name = ''
@@ -219,25 +209,11 @@ export default {
       background-color: transparent;
       border: 1px solid $green;
     }
-  }
-  &-delete {
-    color: $white;
-    background-color: $yellow;
-    border: 1px solid $yellow;
-    &:hover {
-      color: $yellow;
-      background-color: transparent;
-      border: 1px solid $yellow;
-    }
-  }
-  &-reset {
-    color: $white;
-    background-color: $red;
-    border: 1px solid $red;
-    &:hover {
-      color: $red;
-      background-color: transparent;
-      border: 1px solid $red;
+    &:focus, &:active {
+      color: $white!important;
+      box-shadow: unset;
+      border: 1px solid $green;
+      background-color: $green;
     }
   }
 }

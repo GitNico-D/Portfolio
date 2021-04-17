@@ -17,7 +17,9 @@
             Toutes les <span class="font-weight-bold font-style-italic">compétences</span>
           </h2>
           <!-- <div> -->
-            <b-button @click="refreshTab" variant="info" class="m-2"> Refresh</b-button>
+            <b-button @click="refreshTab" variant="info" class="m-2 btn-add"> 
+              <font-awesome-icon icon="sync" class="mr-2" spin/>Rafraichir
+            </b-button>
             <div id="alertModify">
               <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
               <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
@@ -25,12 +27,8 @@
             <div v-for="category in allCategories" :key="category.id">
               <div class="d-flex flex-wrap justify-content-around my-5">
                 <h3> Catégorie <span class="font-weight-bold">{{category.name}}</span></h3>
-                <b-button type="btn" @click="toAddSkillForm(category.id)" class="btn-add rounded my-1">
-                    <font-awesome-icon icon="plus"/> Compétence {{category.name}}
-                </b-button>
-                <b-button type="btn" @click="toAddSoftwareForm(category.id)" class="btn-add rounded my-1">
-                    <font-awesome-icon icon="plus"/> Logiciel {{category.name}}
-                </b-button>
+                <Button :action="'Compétence ' + category.name" :color="skillColor" icon="plus" v-on:action="toAddSkillForm(category.id)"/>
+                <Button :action="'Logiciel ' + category.name" :color="skillColor" icon="plus" v-on:action="toAddSoftwareForm(category.id)"/>
               </div>
               <!-- <span v-for="skill in allSkills" :key="skill.id"> -->
               <h4 class="m-3">Compétences</h4>
@@ -49,12 +47,8 @@
                   {{ formatDate(data.value) }}
                 </template>
               <template #cell(actions)="row">
-                <b-button variant="info" @click="toModifySkillForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
-                  <font-awesome-icon icon="edit"/> Modifier
-                </b-button>
-                <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-details">
-                  <font-awesome-icon icon="database" /><span class="pl-2">Détail de la compétence</span>
-                </b-button>
+                <Button action="Modifier" :color="skillColor" icon="plus" v-on:action="toModifySkillForm(row.item.id, category.id)"/>
+                <Button action="Détail de la compétence" :color="detailButtonColor" icon="database" class="m-1" v-on:action="row.toggleDetails"/>
               </template>
                 <template #row-details="row">
                   <b-card
@@ -64,7 +58,7 @@
                     class="mt-2 text-dark text-center"
                   >
                   <b-card-body class="text-left fst-italic">
-                    <p>Ajouté le : {{row.item.createdAt}}</p>
+                    <p>Ajouté le : {{formatDate(row.item.createdAt)}}</p>
                     <p>Mise à jour le : {{formatDate(row.item.updatedAt)}}</p>
                   </b-card-body>
                     <b-card-text>
@@ -73,12 +67,8 @@
                       <b-progress :value="row.item.level" :max="maxValue" show-progress animated></b-progress>
                       <p class="my-4">{{row.item.description }}</p>
                     </b-card-text>
-                    <b-button variant="info" @click="toModifySkillForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
-                      <font-awesome-icon icon="edit"/> Modifier
-                    </b-button>
-                    <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDeleteSkill(row.item.id)">
-                      <font-awesome-icon icon="trash-alt"/> Supprimer
-                    </b-button>
+                    <Button action="Modifier" :color="skillColor" icon="plus" v-on:action="toModifySkillForm(row.item.id, category.id)"/>
+                    <Button action="Supprimer" :color="deleteButtonColor" icon="trash-alt" class="m-1" v-on:action="onDeleteSkill(row.item.id)"/>
                   </b-card>
                 </template>
               </b-table>
@@ -97,14 +87,10 @@
                 <template #cell(updatedAt)="data">
                   {{ formatDate(data.value) }}
                 </template>
-              <template #cell(actions)="row">
-                <b-button variant="info" @click="toModifySoftwareForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
-                  <font-awesome-icon icon="edit"/> Modifier
-                </b-button>
-                <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-details">
-                  <font-awesome-icon icon="database" /><span class="pl-2">Détail</span>
-                </b-button>
-              </template>
+                <template #cell(actions)="row">
+                  <Button action="Modifier" :color="skillColor" icon="plus" v-on:action="toModifySoftwareForm(row.item.id, category.id)"/>
+                  <Button action="Détail du logiciel" :color="detailButtonColor" icon="database" class="m-1" v-on:action="row.toggleDetails"/>
+                </template>
                 <template #row-details="row">
                   <b-card
                     :title="row.item.name"
@@ -113,7 +99,7 @@
                     class="mt-2 text-dark text-center"
                   >
                   <b-card-body class="text-left fst-italic">
-                    <p>Ajouté le : {{row.item.createdAt}}</p>
+                    <p>Ajouté le : {{formatDate(row.item.createdAt)}}</p>
                     <p>Mise à jour le : {{formatDate(row.item.updatedAt)}}</p>
                   </b-card-body>
                     <b-card-text>
@@ -122,12 +108,8 @@
                       <b-progress :value="row.item.level" :max="maxValue" show-progress animated></b-progress>
                       <p class="my-4">{{row.item.description }}</p>
                     </b-card-text>
-                    <b-button variant="info" @click="toModifySoftwareForm(row.item.id, category.id)" class="m-1 p-2 btn-modify">
-                      <font-awesome-icon icon="edit"/> Modifier
-                    </b-button>
-                    <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDeleteSoftware(row.item.id)">
-                      <font-awesome-icon icon="trash-alt"/> Supprimer
-                    </b-button>
+                    <Button action="Modifier" :color="skillColor" icon="plus" v-on:action="toModifySoftwareForm(row.item.id, category.id)"/>
+                    <Button action="Supprimer" :color="deleteButtonColor" icon="trash-alt" class="m-1" v-on:action="onDeleteSoftware(row.item.id)"/>
                   </b-card>
                 </template>
               </b-table>
@@ -140,7 +122,7 @@
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter une nouvelle compétence</span>
           </template> 
-          <AddSkillForm v-on:addSkill="refreshTab" v-on:onCancel="onCancel" v-on:onReturn="returnToList"/>
+          <AddSkillForm v-on:addSkill="refreshTab" v-on:onCancelAdd="onCancel" v-on:onReturn="returnToList"/>
         </b-tab>
         <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
@@ -148,14 +130,14 @@
             <span v-if="!skillId">Modifier la compétence</span>
             <span v-else>Modification de la compétence {{ oneSkill.id }}</span>
           </template>           
-          <UpdateSkillForm v-on:onCancel="onCancel" v-on:showModifySkill="showModifySkill" v-on:onReturn="returnToList"/>
+          <UpdateSkillForm v-on:onCancelModify="onCancel" v-on:showModifySkill="showModifySkill" v-on:onReturn="returnToList"/>
         </b-tab>
         <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter un nouveau logiciel</span>
           </template> 
-          <AddSoftwareForm v-on:addSkill="refreshTab" v-on:onCancel="onCancel" v-on:onReturn="returnToList"/>
+          <AddSoftwareForm v-on:addSkill="refreshTab" v-on:onCancelAdd="onCancel" v-on:onReturn="returnToList"/>
         </b-tab>
         <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
@@ -163,7 +145,7 @@
             <span v-if="!softwareId">Modifier un logiciel</span>
             <span v-else>Modification du logiciel {{ oneSoftware.id }}</span>
           </template>           
-          <UpdateSoftwareForm v-on:onCancel="onCancel" v-on:showModifySoftware="showModifySoftware" v-on:onReturn="returnToList"/>
+          <UpdateSoftwareForm v-on:onCancelModify="onCancel" v-on:showModifySoftware="showModifySoftware" v-on:onReturn="returnToList"/>
         </b-tab>
       </b-tabs>
     </b-col>
@@ -173,6 +155,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
+import Button from "@/components/Button";
 import AddSkillForm from "@/components/form/AddSkillForm"
 import UpdateSkillForm from "@/components/form/UpdateSkillForm"
 import AddSoftwareForm from "@/components/form/AddSoftwareForm"
@@ -186,10 +169,14 @@ export default {
     AddSkillForm,
     UpdateSkillForm,
     AddSoftwareForm,
-    UpdateSoftwareForm
+    UpdateSoftwareForm,
+    Button
   },
   data() {
     return {
+      skillColor: "#36C486",
+      detailButtonColor: "#BE8C2E",
+      deleteButtonColor: "#ef233c",
       showSkillCard: false,
       successMessage: '',
       errorMessage: '',
@@ -428,47 +415,6 @@ table {
       box-shadow: unset;
       border: 1px solid $green;
       background-color: $green;
-    }
-  }
-  &-modify {
-    background-color: $green; 
-    color: $white;
-    border: 1px solid $green;
-    &:hover {
-      color: $green;
-      background-color: transparent;
-      border: 1px solid $green;
-    } 
-    &:focus, :active {
-      color: $white!important;
-      box-shadow: unset;
-      border: 1px solid $green;
-      background-color: $green;
-    }
-  }
-  &-delete {
-    &:hover {
-      color: $red;
-      background-color: transparent;
-      border: 1px solid $red;
-    }
-    &:focus, :active {
-      color: $white!important;
-      box-shadow: unset;
-      border: 1px solid $red;
-      background-color: $red;
-    }
-  }
-  &-detail {
-    &:hover {
-      color: $light-blue;
-      background-color: transparent;
-      border: 1px solid $light-blue;
-    }
-    &:focus, :active {
-      box-shadow: unset;
-      border: 1px solid $light-blue;
-      background-color: $light-blue;
     }
   }
 }

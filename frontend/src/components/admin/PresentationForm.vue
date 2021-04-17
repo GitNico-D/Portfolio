@@ -16,7 +16,9 @@
           <h2 id="modifyForm-title" class="text-center fw-bold my-5">
             Voici la <span class="font-weight-bold font-style-italic">Présentation</span>
           </h2>
-          <b-button @click="refreshTab" variant="info" class="m-2"> Refresh</b-button>
+          <b-button @click="refreshTab" variant="info" class="m-2 btn-add"> 
+              <font-awesome-icon icon="sync" class="mr-2" spin/>Rafraichir
+            </b-button>
           <div id="alertModify">
             <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
             <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
@@ -39,9 +41,7 @@
             <p class="text-justify my-3">{{onePresentation.thirdText}}</p>
             <hr>
             <div class="text-center">
-              <b-button variant="info" @click="toUpdatePresentationForm(onePresentation.id)" class="mb-5 mt-3 p-2 btn-add">
-                <font-awesome-icon icon="edit"/> Modifier la présentation
-              </b-button>
+              <Button action="Modifier la présentation" :color="presentationColor" icon="edit" v-on:action="toUpdatePresentationForm(onePresentation.id)"/>
             </div>
             <hr><hr>
             <h3 class="text-center my-5 font-weight-bold">Contacts</h3>
@@ -50,18 +50,12 @@
               {{ data.value }}
             </template>
             <template #cell(actions)="row">
-              <b-button type="btn" @click="toUpdateContactForm(row.item.id)" class="m-1 p-2 btn-update rounded">
-                <font-awesome-icon icon="edit"/> Modifier
-              </b-button>
-              <b-button type="btn" @click="onDeleteContact(row.item.id)" class="m-1 p-2 btn-delete rounded">
-                <font-awesome-icon icon="trash-alt"/><span class="pl-2">Supprimer</span>
-              </b-button>
+              <Button action="Modifier" :color="presentationColor" icon="edit" v-on:action="toUpdateContactForm(row.item.id)"/>
+              <Button action="Supprimer" :color="deleteButtonColor" icon="trash-alt" class="m-1" v-on:action="toUpdateContactForm(row.item.id)"/>
               </template>
             </b-table>
             <div class="text-center">
-              <b-button type="btn" @click="toAddForm" class="m-1 p-2 btn-add rounded text-center">
-                  <font-awesome-icon icon="plus"/> Ajouter
-              </b-button>
+                <Button action="Ajouter" :color="presentationColor" icon="plus" v-on:action="toAddForm"/>
             </div>
             <div id="alertModify" class="mt-1">
               <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
@@ -104,6 +98,7 @@ import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
 import UpdatePresentationForm from "@/components/form/UpdatePresentationForm";
 import AddContactForm from "@/components/form/AddContactForm";
+import Button from "@/components/Button";
 import UpdateContactForm from "@/components/form/UpdateContactForm";
 import formatDate from "../../services/formatDate";
 
@@ -113,10 +108,14 @@ export default {
     AlertForm,
     UpdatePresentationForm,
     AddContactForm,
-    UpdateContactForm
+    UpdateContactForm,
+    Button
   },
   data() {
     return {
+      presentationColor: "#485DA6",
+      detailButtonColor: "#BE8C2E",
+      deleteButtonColor: "#ef233c",
       showPresentationCard: false,
       successMessage: '',
       errorMessage: '',
@@ -214,6 +213,9 @@ export default {
     toAddForm() {
       this.tabIndex = 2
     },
+    returnToList() {
+      this.tabIndex = 0;
+    },
     onUpdateContact() {
       this.$store.dispatch("getPresentation");
     },
@@ -246,37 +248,6 @@ export default {
       box-shadow: unset;
       border: 1px solid $blue;
       background-color: $blue;
-    }
-  }
-  &-delete {
-    background-color: $red; 
-    color: $white;
-    border: 1px solid $red;
-    &:hover {
-      color: $red;
-      background-color: transparent;
-      border: 1px solid $red;
-    }
-    &:focus, :active {
-      box-shadow: unset;
-      border: 1px solid $red;
-      background-color: $red;
-    }
-  }
-  &-update {
-    background-color: $yellow; 
-    color: $white;
-    border: 1px solid $yellow;
-    &:hover {
-      color: $yellow;
-      background-color: transparent;
-      border: 1px solid $yellow;
-    }
-    &:focus, :active {
-      color: $white;
-      box-shadow: unset;
-      border: 1px solid $yellow;
-      background-color: $yellow;
     }
   }
 }

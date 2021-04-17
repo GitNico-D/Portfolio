@@ -11,27 +11,23 @@
         <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
-            <span>Listes de tous les Projets</span>
+            Listes de tous les <span class="font-weight-bold font-style-italic">Projets</span>
           </template> 
           <h2 id="modifyForm-title" class="text-center fw-bold my-5">
             Tous les <span class="font-weight-bold font-style-italic">Projets</span>
           </h2>
           <div>
-            <b-button @click="refreshTab" variant="info" class="m-2"> 
+            <b-button @click="refreshTab" variant="info" class="m-2 btn-add"> 
               <font-awesome-icon icon="sync" class="mr-2" spin/>Rafraichir
             </b-button>
-            <Button action="Rafraichir" :color="projectColor" icon="sync" v-on:action="refreshTab" />
             <div id="alertModify">
               <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
               <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
             </div>
             <div class="text-right mb-4">
-              <b-button type="btn" @click="toAddProjectForm" class="btn-add rounded my-1">
-                  <font-awesome-icon icon="plus" class="mr-1"/> Ajouter Projet
-              </b-button>
               <Button action="Ajouter Projet" :color="projectColor" icon="plus" v-on:action="toAddProjectForm"/>
             </div>
-            <b-table id="table-list" responsive hover no-collpase bordered dark :items="allProjects" :fields="fields">
+            <b-table id="table-list" class="text-center" responsive hover no-collpase bordered dark :items="allProjects" :fields="fields">
               <b-thead class="p-5"></b-thead>
               <template #cell(creationDate)="data">
                 {{ formatDate(data.value) }}
@@ -43,12 +39,8 @@
                 {{ formatDate(data.value) }}
               </template>
               <template #cell(actions)="row">
-                <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
-                  <font-awesome-icon icon="edit"/> Modifier
-                </b-button>
-                <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-detail">
-                  <font-awesome-icon icon="database" /><span class="pl-2">Détail du projet</span>
-                </b-button>
+                <Button action="Modifier" :color="projectColor" icon="edit" class="m-1" v-on:action="toModifyForm(row.item.id)"/>
+                <Button action="Détail du projet" :color="detailButtonColor" icon="database" class="m-1" v-on:action="row.toggleDetails"/>
               </template>
                 <template #row-details="row">
                   <b-card
@@ -59,18 +51,14 @@
                     class="mt-2 text-dark text-center"
                   >
                   <b-card-body class="text-left fst-italic">
-                    <p>Ajouté le : {{row.item.createdAt}}</p>
+                    <p>Ajouté le : {{formatDate(row.item.createdAt)}}</p>
                     <p>Mise à jour le : {{formatDate(row.item.updatedAt)}}</p>
                   </b-card-body>
                     <b-card-text>
                       {{row.item.description }}
                     </b-card-text>
-                    <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
-                      <font-awesome-icon icon="edit"/> Modifier
-                    </b-button>
-                    <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDelete(row.item.id)">
-                      <font-awesome-icon icon="trash-alt"/> Supprimer
-                    </b-button>
+                    <Button action="Modifier" :color="projectColor" icon="edit" class="m-1" v-on:action="toModifyForm(row.item.id)"/>
+                    <Button action="Supprimer" :color="deleteButtonColor" icon="trash-alt" class="m-1" v-on:action="onDelete(row.item.id)"/>
                   </b-card>
                 </template>
             </b-table>
@@ -115,6 +103,8 @@ export default {
   data() {
     return {
       projectColor : "#6d327c",
+      detailButtonColor: "#BE8C2E",
+      deleteButtonColor: "#ef233c",
       showProjectCard: false,
       successMessage: '',
       errorMessage: '',
@@ -221,39 +211,15 @@ export default {
     color: $white;
     border: 1px solid $purple;
     &:hover {
-      color: $white;
+      color: $purple;
       background-color: transparent;
       border: 1px solid $purple;
     } 
     &:focus, &:active {
+      color: $purple;
       box-shadow: unset;
       border: 1px solid $purple;
       background-color: $purple;
-    }
-  }
-  &-delete {
-    &:hover {
-      color: $red;
-      background-color: transparent;
-      border: 1px solid $red;
-    }
-    &:focus, &:active {
-      box-shadow: unset;
-      border: 1px solid $red;
-      background-color: $red;
-    }
-  }
-  &-detail {
-    &:hover {
-      color: $light-blue;
-      background-color: transparent;
-      border: 1px solid $light-blue;
-    }
-    &:focus, &:active {
-      color: $white;
-      box-shadow: unset;
-      border: 1px solid $light-blue;
-      background-color: $light-blue;
     }
   }
 }

@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" v-show="oneProject.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="returnButtonColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+    <Button :color="projectColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
   </div>
   <h2 v-if="!oneProject.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Projet</span> sélectionné.</p>
@@ -159,7 +159,7 @@
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier projet</span>
         </b-button>
-        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), onCancel"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm"/>
       </div>
     </b-form>
   </ValidationObserver>
@@ -185,7 +185,7 @@ export default {
   data() {
     return {
       cancelButtonColor: "#BE8C2E",
-      returnButtonColor: "#6d327c",
+      projectColor: "#6d327c",
       loading: false,
       projectId: null,
       modifyProject: {
@@ -274,9 +274,6 @@ export default {
       this.oldImgStatic = ''
       this.currentName = ''
     },
-    onCancel: function() {
-      this.onReset(event);
-    },
     formatDate(date) {
       return formatDate(date);
     },
@@ -297,22 +294,18 @@ export default {
 .btn {
   &-modify {
     color: $white;
-    background-color: $green;
-    border: 1px solid $green;
+    background-color: $purple;
+    border: 1px solid $purple;
     &:hover {
-      color: $green;
+      color: $purple;
       background-color: transparent;
-      border: 1px solid $green;
+      border: 1px solid $purple;
     }
-  }
-  &-delete {
-    color: $white;
-    background-color: $yellow;
-    border: 1px solid $yellow;
-    &:hover {
-      color: $yellow;
-      background-color: transparent;
-      border: 1px solid $yellow;
+    &:focus, &:active {
+      color: $white!important;
+      box-shadow: unset;
+      border: 1px solid $purple;
+      background-color: $purple;
     }
   }
 }

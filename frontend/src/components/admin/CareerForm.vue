@@ -17,10 +17,15 @@
             Toutes les <span class="font-weight-bold font-style-italic">Étape de carrière</span>
           </h2>
           <div>
-            <b-button @click="refreshTab" variant="info" class="m-2"> Refresh</b-button>
+            <b-button @click="refreshTab" variant="info" class="m-2 btn-add"> 
+              <font-awesome-icon icon="sync" class="mr-2" spin/>Rafraichir
+            </b-button>
             <div id="alertModify">
               <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
               <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
+            </div>
+            <div class="text-right mb-4">
+              <Button action="Ajouter Projet" :color="careerColor" icon="plus" v-on:action="toAddCareerForm"/>
             </div>
             <b-table responsive hover no-collpase bordered dark :items="allCareerStages" :fields="fields">
               <template #cell(startDate)="data">
@@ -30,12 +35,8 @@
                 {{ formatDate(data.value) }}
               </template>
               <template #cell(actions)="row">
-                <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
-                  <font-awesome-icon icon="edit"/> Modifier
-                </b-button>
-                <b-button variant="info" @click="row.toggleDetails" class="m-1 p-2 btn-details">
-                  <font-awesome-icon icon="database" /><span class="pl-2">Détail du l'expérience</span>
-                </b-button>
+                <Button action="Modifier" :color="careerColor" icon="edit" class="m-1" v-on:action="toModifyForm(row.item.id)"/>
+                <Button action="Détail de carrière" :color="detailButtonColor" icon="database" class="m-1" v-on:action="row.toggleDetails"/>
               </template>
                 <template #row-details="row">
                   <b-card
@@ -45,30 +46,25 @@
                     class="mt-2 text-dark text-center"
                   >
                   <b-card-body class="text-left fst-italic">
-                    <p>Ajouté le : {{row.item.createdAt}}</p>
+                    <p>Ajouté le : {{formatDate(row.item.createdAt)}}</p>
                     <p>Mise à jour le : {{formatDate(row.item.updatedAt)}}</p>
                   </b-card-body>
                     <b-card-text>
                       {{oneCareer.description }}
                     </b-card-text>
-                    <b-button variant="info" @click="toModifyForm(row.item.id)" class="m-1 p-2 btn-modify">
-                      <font-awesome-icon icon="edit"/> Modifier
-                    </b-button>
-                    <b-button variant="danger" class="m-1 p-2 btn-delete" @click="onDelete(row.item.id)">
-                      <font-awesome-icon icon="trash-alt"/> Supprimer
-                    </b-button>
+                    <Button action="Modifier" :color="careerColor" icon="edit" class="m-1" v-on:action="toModifyForm(row.item.id)"/>
+                    <Button action="Supprimer" :color="deleteButtonColor" icon="trash-alt" class="m-1" v-on:action="onDelete(row.item.id)"/>
                   </b-card>
                 </template>
             </b-table>
           </div>
-          
         </b-tab>
         <b-tab class="mt-5 justify-content-center">
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2"/>
             <span>Ajouter une nouvelle étape de carrière</span>
           </template> 
-          <AddCareerForm v-on:addCareerStage="refreshTab"/>
+          <AddCareerForm v-on:addCareerStage="refreshTab" v-on:onCancelAdd="onCancel" v-on:onReturn="returnToList"/>
         </b-tab>
         <b-tab class="mt-3 justify-content-center" lazy>
           <template #title>
@@ -76,7 +72,7 @@
             <span v-if="!careerId">Modifier une étape de carrière</span>
             <span v-else>Modifier l'étape de carrière {{ oneCareer.id }}</span>
           </template>           
-          <UpdateCareerForm v-on:onCancelModify="onCancelModify" v-on:showModifyCareerStage="showModifyCareerStage"/>
+          <UpdateCareerForm v-on:onCancelModify="onCancel" v-on:showModifyCareerStage="showModifyCareerStage" v-on:onReturn="returnToList"/>
         </b-tab>
       </b-tabs>
     </b-col>
@@ -88,18 +84,22 @@ import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
 import AddCareerForm from "@/components/form/AddCareerForm"
 import UpdateCareerForm from "@/components/form/UpdateCareerForm"
+import Button from "@/components/Button";
 import formatDate from "../../services/formatDate";
-// import { setFormWithFile } from "../mixins/formMixin";
 
 export default {
   name: "CareerForm",
   components: { 
     AlertForm,
     AddCareerForm,
-    UpdateCareerForm
+    UpdateCareerForm,
+    Button
   },
   data() {
     return {
+      careerColor : "#00a1ba",
+      detailButtonColor: "#BE8C2E",
+      deleteButtonColor: "#ef233c",
       loading: false,
       showCareerCard: false,
       successMessage: '',
@@ -135,7 +135,6 @@ export default {
       tabIndex: 0
     }
   },
-  // mixins : [ setFormWithFile ],
   computed: {
     ...mapGetters(["oneCareer", "allCareerStages"])
   },
@@ -146,19 +145,19 @@ export default {
     },
     refreshTab() {
       this.$store.dispatch("getAllCareerStage");
-      setTimeout(() => {
-        this.tabIndex = 0;
-      }, 5000);
-      this.errorMessage = '';
-      this.successMessage = '';
+      // setTimeout(() => {
+      //   this.tabIndex = 0;
+      // }, 5000);
+      // this.errorMessage = '';
+      // this.successMessage = '';
     },
     onDelete(id) {
       console.log(id);
       this.deleteCareer(id) 
         .then(() => {
-          this.successMessage = 'l\'étape de carrière ' + id  + ' a bien été supprimé !';
+          this.successMessage = 'L\'étape de carrière ' + id  + ' a bien été supprimé !';
           this.showCareerCard = false;
-          this.$store.dispatch("allCareerStages");
+          this.$store.dispatch("getAllCareerStage");
           this.errorMessage = '';
           document.getElementById("alertModify").scrollIntoView(); 
         })
@@ -173,7 +172,6 @@ export default {
     },
     toModifyForm(data) {
       this.careerId = data;
-      console.log(this.careerId);
       this.getCareerStage(this.careerId)
         .then(() => { 
           this.tabIndex = 2;
@@ -186,13 +184,16 @@ export default {
           }  
         })
     },
-    showModifyCareerStage() {
-    //   setTimeout(() => {
-    //     this.tabIndex = 0;
-    //     this.resetStateCareerStage()
-    //   }, 5000);
+    toAddCareerForm() {
+      this.tabIndex = 1
     },
-    onCancelModify() {
+    returnToList() {
+      this.tabIndex = 0;
+    },
+    showModifyCareerStage() {
+      this.$store.dispatch("getAllCareerStage");
+    },
+    onCancel() {
       this.tabIndex = 0;
       this.resetStateCareerStage()
     },
@@ -202,7 +203,7 @@ export default {
 
 <style lang="scss" scoped>
 .btn {
-  &-modify {
+  &-add {
     background-color: $light-blue; 
     color: $white;
     border: 1px solid $light-blue;
@@ -212,30 +213,7 @@ export default {
       border: 1px solid $light-blue;
     } 
     &:focus, &:active {
-      box-shadow: unset;
-      border: 1px solid $light-blue;
-      background-color: $light-blue;
-    }
-  }
-  &-delete {
-    &:hover {
-      color: $red;
-      background-color: transparent;
-      border: 1px solid $red;
-    }
-    &:focus, &:active {
-      box-shadow: unset;
-      border: 1px solid $red;
-      background-color: $red;
-    }
-  }
-  &-detail {
-    &:hover {
-      color: $light-blue;
-      background-color: transparent;
-      border: 1px solid $light-blue;
-    }
-    &:focus, &:active {
+      color: $white;
       box-shadow: unset;
       border: 1px solid $light-blue;
       background-color: $light-blue;

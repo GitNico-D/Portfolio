@@ -5,6 +5,9 @@
     <AlertForm v-if="errorMessage" v-show="oneSkill.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
+    <Button :color="skillColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+  </div>
+  <div class="text-center">
     <b-button v-if="!oneSkill.id || successMessage" class="m-3 p-3 btn-delete" @click="$emit('onReturn')">
       <font-awesome-icon icon="arrow-left"/>
       <span class="pl-2 pb-2">Retour liste</span>
@@ -131,21 +134,12 @@
       </ValidationProvider>
       <div class="d-flex justify-content-center">
         <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showModifySkill')">
-          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
+          <b-spinner v-show="loading" label="Spinning" class="mr-2"></b-spinner>
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier compétence</span>
         </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
-          <font-awesome-icon icon="times"/>
-          <span class="pl-2 pb-2">Annuler</span>
-        </b-button>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm"/>
       </div>
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ modifySkill }}</pre>
-      </b-card>
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ oneSkill }}</pre>
-      </b-card>
     </b-form>
   </ValidationObserver>
 </div>
@@ -155,6 +149,7 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
+import Button from "@/components/Button";
 import formatDate from "../../services/formatDate";
 import setFormWithFile from "../../mixins/formMixin";
 
@@ -163,10 +158,13 @@ export default {
   components: { 
     ValidationProvider,
     ValidationObserver,
-    AlertForm
+    AlertForm,
+    Button
   },
   data() {
     return {
+      cancelButtonColor: "#BE8C2E",
+      skillColor: "#36C486",
       loading: false,
       skillId: null,
       modifySkill: {
@@ -257,9 +255,6 @@ export default {
       this.modifySkill.level = 0
       this.oldIcon = ''
     },
-    onCancel: function() {
-      this.onReset(event);
-    },
     formatDate(date) {
       return formatDate(date);
     },
@@ -281,7 +276,7 @@ export default {
 
 <style lang="scss" scoped>
 .btn {
-  &-modify, &-return {
+  &-modify {
     color: $white;
     background-color: $green;
     border: 1px solid $green;
@@ -290,15 +285,11 @@ export default {
       background-color: transparent;
       border: 1px solid $green;
     }
-  }
-  &-delete {
-    color: $white;
-    background-color: $yellow;
-    border: 1px solid $yellow;
-    &:hover {
-      color: $yellow;
-      background-color: transparent;
-      border: 1px solid $yellow;
+    &:focus, &:active {
+      color: $white!important;
+      box-shadow: unset;
+      border: 1px solid $green;
+      background-color: $green;
     }
   }
 }

@@ -4,6 +4,9 @@
     <AlertForm v-if="successMessage" v-show="oneCareer.id" :message="successMessage" variant="success"/>
     <AlertForm v-if="errorMessage" v-show="oneCareer.id" :message="errorMessage" variant="danger"/>
   </div>
+  <div class="text-center">
+    <Button :color="careerColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+  </div>
   <h2 v-if="!oneCareer.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Étape de carrière </span> sélectionné.</p>
     <p>Rendez-vous sur l'onglet 
@@ -105,7 +108,7 @@
           >
           </b-alert>
           <div class="mt-3">Fichier sélectionné: {{ modifyCareerStage.logoCompany ? modifyCareerStage.logoCompany.name : '' }}</div>
-          <b-img thumbnail fluid id="previewImage" v-show="previewImageUrl && modifyCareerStage.logoCompany" :src="previewImageUrl"></b-img>
+          <b-img thumbnail fluid id="previewLogoCompany" v-show="previewLogoCompanyUrl && modifyCareerStage.logoCompany" :src="previewLogoCompanyUrl"></b-img>
         </b-form-group>
       </ValidationProvider>
       <ValidationProvider ref="start-date" rules="required" name="Date de début" v-slot="{ errors }">
@@ -152,14 +155,11 @@
       </ValidationProvider>
       <div class="d-flex justify-content-center">
         <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showmodifyCareerStage')">
-          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
+          <b-spinner v-show="loading" label="Spinning" class="mr-2"></b-spinner>
             <font-awesome-icon icon="edit"/>
-            <span class="pl-2 pb-2">Modifier projet</span>
+            <span class="pl-2 pb-2">Modifier Carrière</span>
         </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancelModify'), onCancel">
-          <font-awesome-icon icon="times"/>
-          <span class="pl-2 pb-2">Annuler</span>
-        </b-button>
+        <Button action="Annuler" :color="cancelButtonColor" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm"/>
       </div>
     </b-form>
   </ValidationObserver>
@@ -170,6 +170,7 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
+import Button from "@/components/Button"
 import formatDate from "../../services/formatDate";
 import setFormWithFile from "../../mixins/formMixin";
 
@@ -178,10 +179,13 @@ export default {
   components: { 
     ValidationProvider,
     ValidationObserver,
-    AlertForm
+    AlertForm,
+    Button
   },
   data() {
     return {
+      careerColor: "#00a1ba",
+      cancelButtonColor: "#BE8C2E",
       loading: false,
       careerStageId: null,
       modifyCareerStage: {
@@ -194,7 +198,7 @@ export default {
       },
       oldLogoCompany: '',
       currentName: '',
-      previewImageUrl: null,
+      previewLogoCompanyUrl: '',
       successMessage: '',
       errorMessage: '',
       showForm: false 
@@ -209,9 +213,9 @@ export default {
     showPreview(event) {
       const file = event.target.files[0];
       if(file) {
-        this.previewImageUrl = URL.createObjectURL(file);
-        document.getElementById("previewImage").onload = function () {
-          window.URL.revokeObjectURL(this.previewImageUrl);
+        this.previewLogoCompanyUrl = URL.createObjectURL(file);
+        document.getElementById("previewLogoCompany").onload = function () {
+          window.URL.revokeObjectURL(this.previewLogoCompanyUrl);
         }
       }
     },
@@ -265,15 +269,11 @@ export default {
       this.modifyCareerStage.creationDate = ''
       this.oldLogoCompany = ''
     },
-    onCancel: function() {
-      this.onReset(event);
-    },
     formatDate(date) {
       return formatDate(date);
     },
   },
   mounted() {
-    console.log(this.oneCareer)
     if(this.oneCareer.id) {
       this.modifyCareerStage = this.oneCareer;
       this.currentName = this.oneCareer.name;
@@ -289,22 +289,18 @@ export default {
 .btn {
   &-modify {
     color: $white;
-    background-color: $green;
-    border: 1px solid $green;
+    background-color: $light-blue;
+    border: 1px solid $light-blue;
     &:hover {
-      color: $green;
+      color: $light-blue;
       background-color: transparent;
-      border: 1px solid $green;
+      border: 1px solid $light-blue;
     }
-  }
-  &-delete {
-    color: $white;
-    background-color: $yellow;
-    border: 1px solid $yellow;
-    &:hover {
-      color: $yellow;
-      background-color: transparent;
-      border: 1px solid $yellow;
+    &:focus, &:active {
+      color: $white;
+      box-shadow: unset;
+      border: 1px solid $light-blue;
+      background-color: $light-blue;
     }
   }
 }

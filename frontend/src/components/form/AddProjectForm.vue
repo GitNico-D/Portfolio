@@ -5,10 +5,7 @@
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <b-button class="m-3 p-3 btn-return" @click="$emit('onReturn')">
-      <font-awesome-icon icon="arrow-left"/>
-      <span class="pl-2 pb-2">Retour liste</span>
-    </b-button>
+    <Button :color="projectColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
   </div>
   <h2 id="modifyForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter un nouveau 
@@ -125,13 +122,14 @@
           </b-alert>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" class="m-3 p-3 btn-add"  :disabled="loading" @click="$emit('addProject')">
-          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
-          <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter projet</span>
+        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addProject')">
+          <b-spinner v-show="loading" label="Spinning" class="mr-2"></b-spinner>
+          <font-awesome-icon icon="folder-plus"/>
+          <span class="pl-2">Ajouter projet</span>
         </b-button>
-        <b-button type="reset" class="m-3 p-3 btn-reset" @click="onReset">
-          <font-awesome-icon icon="trash-alt"/><span class="pl-2">Réinitialiser formulaire</span>
-        </b-button>
+        <Button :color="cancelButtonColor" action="Réinitialiser formulaire" icon="trash-alt" class="m-3 p-3" v-on:action="onReset"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), onCancel"/>
+
         <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel'), onCancel">
           <font-awesome-icon icon="times"/>
           <span class="pl-2 pb-2">Annuler</span>
@@ -146,6 +144,7 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
+import Button from "@/components/Button"
 import setFormWithFile from "../../mixins/formMixin";
 
 export default {
@@ -153,10 +152,13 @@ export default {
   components: { 
     ValidationProvider,
     ValidationObserver,
-    AlertForm
+    AlertForm,
+    Button
   },
   data() {
     return {
+      cancelButtonColor: "#BE8C2E",
+      projectColor: "#6d327c",
       newProject: {
         name: '',
         description: '',
@@ -209,7 +211,6 @@ export default {
     },
     onReset(event) {
       event.preventDefault()
-      console.log("click reset");
       this.loading = false;
       this.newProject.name = ''
       this.newProject.description = ''
@@ -234,14 +235,14 @@ export default {
 
 <style lang="scss" scoped>
 .btn {
-  &-add, &-return {
+  &-add {
     color: $white;
-    background-color: $purple;
-    border: 1px solid $purple;
+    background-color: $green;
+    border: 1px solid $green;
     &:hover {
-      color: $purple;
+      color: $green;
       background-color: transparent;
-      border: 1px solid $purple;
+      border: 1px solid $green;
     }
   }
   &-delete {
@@ -252,16 +253,6 @@ export default {
       color: $yellow;
       background-color: transparent;
       border: 1px solid $yellow;
-    }
-  }
-  &-reset {
-    color: $white;
-    background-color: $red;
-    border: 1px solid $red;
-    &:hover {
-      color: $red;
-      background-color: transparent;
-      border: 1px solid $red;
     }
   }
 }

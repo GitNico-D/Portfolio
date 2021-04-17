@@ -4,12 +4,15 @@
     <AlertForm v-if="successMessage" :message="successMessage" variant="success"/>
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
+  <div class="text-center">
+    <Button :color="careerColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+  </div>
   <h2 id="modifyForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter une nouvelle 
     <span class="font-weight-bold font-style-italic">Étape de carrière !</span>
   </h2>
   <ValidationObserver ref="addForm" v-slot="{ handleSubmit }">
-    <b-form @submit.prevent="handleSubmit(onCreate)" @reset.prevent="onReset" >
+    <b-form @submit.prevent="handleSubmit(onCreate)">
       <ValidationProvider ref="name" rules="required|min:2" name="Titre" v-slot="{ errors }">
         <b-form-group id="name">
           <label for="input-name" class="text-uppercase">Titre de l'étape de carrière</label>
@@ -72,7 +75,9 @@
             browse-text="Parcourir"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
-          ></b-form-file>
+            @change="showPreview($event)"
+          >
+          </b-form-file>
         <b-alert
           variant="danger"
           v-if="errors[0]"
@@ -81,6 +86,7 @@
           dismissible>
         </b-alert>
         <div class="mt-3">Fichier sélectionné: {{ newCareer.logoCompany ? newCareer.logoCompany.name : '' }}</div>
+        <b-img thumbnail fluid id="previewLogoCompany" v-show="previewLogoCompanyUrl && newCareer.logoCompany" :src="previewLogoCompanyUrl"></b-img>
         </b-form-group>
       </ValidationProvider>
       <ValidationProvider ref="start-date" rules="required" name="Date de création" v-slot="{ errors }">
@@ -112,13 +118,13 @@
           </b-alert>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" variant="success" class="m-3 p-3" :disabled="loading" @click="$emit('addCareerStage')">
-          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
-          <span class="pl-2 pb-2">Ajouter étape de carrière</span>
+        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addCareerStage'), resetForm">
+          <b-spinner v-show="loading" label="Spinning" class="pl-2"></b-spinner>
+          <font-awesome-icon icon="folder-plus"/>
+          <span class="pl-2">Ajouter étape de carrière</span>
         </b-button>
-        <b-button type="reset" variant="danger" class="m-3 p-3" @click="onReset">
-          Réinitialiser formulaire
-        </b-button>
+        <Button :color="resetButtonColor" action="Réinitialiser formulaire" icon="trash-alt" class="m-3 p-3" v-on:action="resetForm"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm"/>
       </div>
     </b-form>
     <b-card class="mt-3" header="Form Data Result">
@@ -132,17 +138,22 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
-// import { setFormWithFile } from "../mixins/formMixin";
+import Button from "@/components/Button"
+import setFormWithFile from "../../mixins/formMixin";
 
 export default {
   name: "AddCareerForm",
   components: { 
     ValidationProvider,
     ValidationObserver,
-    AlertForm
+    AlertForm,
+    Button
   },
   data() {
     return {
+      careerColor: "#00a1ba",
+      cancelButtonColor: "#BE8C2E",
+      resetButtonColor: "#ef233c",
       newCareer: {
         name: '',
         description: '',
@@ -154,11 +165,21 @@ export default {
       loading: false,
       successMessage: '',
       errorMessage: '',
+      previewLogoCompanyUrl: ''
     }
   },
-  // mixins : [ setFormWithFile ],
+  mixins : [ setFormWithFile ],
   methods: {
     ...mapActions(["addCareerStage"]),
+    showPreview(event) {
+      const file = event.target.files[0];
+      if(file) {
+        this.previewLogoCompanyUrl = URL.createObjectURL(file);
+        document.getElementById("previewLogoCompany").onload = function () {
+          window.URL.revokeObjectURL(this.previewLogoCompanyUrl);
+        }
+      }
+    },
     onCreate() {
       this.loading = true;
       this.$refs.addForm.validate()
@@ -167,22 +188,14 @@ export default {
             this.loading = false;
             return
           }
-          let fd = new FormData();
-          fd.append('logoCompany', this.newCareer.logoCompany)
-          Object.entries(this.newCareer).forEach(
-            ([key, value]) => {
-              if (value !== null && value !== '') {
-                fd.append(`${key}`, value);
-              }
-            },
-          );          
+          let fd = this.setFormWithFile(this.newCareer.icon, this.newCareer)       
         this.addCareerStage(fd)
           .then(() => {
             this.successMessage = "L'étape de carrière a été ajoutée !";
             document.getElementById("alert").scrollIntoView();
             this.loading = false;
             this.errorMessage = '';
-            this.onReset(event);
+            this.resetForm();
           })
           .catch((error) => {
             this.errorMessage = error.data[0];
@@ -192,9 +205,7 @@ export default {
           })
       });
     },
-    onReset(event) {
-      event.preventDefault()
-      console.log("click reset");
+    resetForm(){
       this.loading = false;
       this.newCareer.name = ''
       this.newCareer.description = ''
@@ -202,6 +213,7 @@ export default {
       this.newCareer.logoCompany = null
       this.newCareer.startDate = ''
       this.newCareer.endDate = ''
+      this.previewLogoCompanyUrl = ''
     }
   },
   
@@ -209,6 +221,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.btn {
+  &-add {
+    color: $white;
+    background-color: $light-blue;
+    border: 1px solid $light-blue;
+    &:hover {
+      color: $light-blue;
+      background-color: transparent;
+      border: 1px solid $light-blue;
+    }
+    &:focus, &:active {
+      color: $white!important;
+      box-shadow: unset;
+      border: 1px solid $light-blue;
+      background-color: $light-blue;
+    }
+  }
+}
 .card {
   &-body {
     background-color: transparent; 

@@ -4,6 +4,9 @@
     <AlertForm v-if="successMessage" v-show="onePresentation.id" :message="successMessage" variant="success"/>
     <AlertForm v-if="errorMessage" v-show="onePresentation.id" :message="errorMessage" variant="danger"/>
   </div>
+  <div class="text-center">
+    <Button :color="presentationColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+  </div>
   <h2 v-if="!onePresentation.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Présentation</span> sélectionné.</p>
     <p>Rendez-vous sur l'onglet 
@@ -216,23 +219,14 @@
       </ValidationProvider>
       <div class="d-flex justify-content-center">
         <b-button type="submit" class="m-3 p-3 btn-modify" :disabled="loading" @click="$emit('showModifyPresentation')">
-          <b-spinner v-show="loading" label="Spinning" class="pt-4 p"></b-spinner>
+          <b-spinner v-show="loading" label="Spinning" class="mr-2"></b-spinner>
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier présentation</span>
         </b-button>
-        <b-button class="m-3 p-3 btn-delete" @click="$emit('onCancel')">
-          <font-awesome-icon icon="times"/>
-          <span class="pl-2 pb-2">Annuler</span>
-        </b-button>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), onCancel"/>
       </div>
     </b-form>
   </ValidationObserver>
-  <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ modifyPresentation }}</pre>
-      </b-card>
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ onePresentation }}</pre>
-      </b-card>
 </div>
 </template>
 
@@ -240,6 +234,7 @@
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import AlertForm from "@/components/form/AlertForm";
+import Button from "@/components/Button";
 import formatDate from "../../services/formatDate";
 import setFormWithFile from "../../mixins/formMixin";
 
@@ -248,10 +243,13 @@ export default {
   components: { 
     ValidationProvider,
     ValidationObserver,
-    AlertForm
+    AlertForm,
+    Button
   },
   data() {
     return {
+      presentationColor: "#485DA6",
+      cancelButtonColor: "#BE8C2E",
       loading: false,
       presentationId: null,
       modifyPresentation: {
@@ -357,22 +355,18 @@ export default {
 .btn {
   &-modify {
     color: $white;
-    background-color: $green;
-    border: 1px solid $green;
+    background-color: $blue;
+    border: 1px solid $blue;
     &:hover {
-      color: $green;
+      color: $blue;
       background-color: transparent;
-      border: 1px solid $green;
+      border: 1px solid $blue;
     }
-  }
-  &-delete {
-    color: $white;
-    background-color: $yellow;
-    border: 1px solid $yellow;
-    &:hover {
-      color: $yellow;
-      background-color: transparent;
-      border: 1px solid $yellow;
+    &:focus, &:active {
+      color: $white!important;
+      box-shadow: unset;
+      border: 1px solid $blue;
+      background-color: $blue;
     }
   }
 }

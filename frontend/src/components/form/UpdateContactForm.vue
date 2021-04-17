@@ -4,6 +4,9 @@
     <AlertForm v-if="successMessage" v-show="oneContact.id" :message="successMessage" variant="success"/>
     <AlertForm v-if="errorMessage" v-show="oneContact.id" :message="errorMessage" variant="danger"/>
   </div>
+  <div class="text-center">
+    <Button :color="contactColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+  </div>
   <h2 id="modifyForm-title" class="text-center fw-bold my-5" >
     Modification du contact "{{ currentTitle }}"
   </h2>
@@ -206,22 +209,18 @@ export default {
 .btn {
   &-modify {
     color: $white;
-    background-color: $green;
-    border: 1px solid $green;
+    background-color: $blue;
+    border: 1px solid $blue;
     &:hover {
-      color: $green;
+      color: $blue;
       background-color: transparent;
-      border: 1px solid $green;
+      border: 1px solid $blue;
     }
-  }
-  &-delete {
-    color: $white;
-    background-color: $yellow;
-    border: 1px solid $yellow;
-    &:hover {
-      color: $yellow;
-      background-color: transparent;
-      border: 1px solid $yellow;
+    &:focus, &:active {
+      color: $white!important;
+      box-shadow: unset;
+      border: 1px solid $blue;
+      background-color: $blue;
     }
   }
 }
@@ -237,7 +236,7 @@ export default {
   border-bottom: 1px solid $white;
   border-radius: unset;
   &:focus {
-    @include box_shadow(0px, 0px, 5px, $purple);
+    @include box_shadow(0px, 0px, 5px, $blue);
     background-color: transparent;
     border-bottom: 1px solid $purple;
   }
