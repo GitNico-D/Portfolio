@@ -223,7 +223,7 @@
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier présentation</span>
         </b-button>
-        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), onCancel"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify')"/>
       </div>
     </b-form>
   </ValidationObserver>

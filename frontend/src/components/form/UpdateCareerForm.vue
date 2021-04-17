@@ -98,7 +98,7 @@
             accept="image/*"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
-            @change="showPreview($event), validate"
+            @change="showPreview($event)"
           >{{modifyCareerStage.logoCompany}}</b-form-file>
           <b-alert
             class="mt-1"

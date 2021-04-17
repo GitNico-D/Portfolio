@@ -69,7 +69,7 @@
         </b-form-group>
       </ValidationProvider>      
       <div class="d-flex justify-content-center">
-        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addContact'), resetForm">
+        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addContact'), resetForm()">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 pl-2"></b-spinner>
           <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter contact</span>
         </b-button>
@@ -148,7 +148,6 @@ export default {
       });
     },
     resetForm() {
-      console.log("resetForm")
       this.$refs.addContactForm.reset()
       this.loading = false;
       this.newContact.title = ''
