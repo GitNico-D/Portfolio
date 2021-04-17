@@ -9,7 +9,7 @@
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="contactColor" action="Retour présentation" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
+    <Button :color="contactColor" action="Retour présentation" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn()"/>
   </div>
   <ValidationObserver ref="addContactForm" v-slot="{ handleSubmit }">
     <b-form @submit.prevent="handleSubmit(onCreate)">
@@ -74,7 +74,7 @@
           <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter contact</span>
         </b-button>
         <Button :color="resetButtonColor" action="Réinitialiser formulaire" icon="trash-alt" class="m-3 p-3" v-on:action="resetForm"/>
-        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm()"/>
       </div>
     </b-form>
   </ValidationObserver>
@@ -148,7 +148,8 @@ export default {
       });
     },
     resetForm() {
-      this.$refs.addForm.reset
+      console.log("resetForm")
+      this.$refs.addContactForm.reset()
       this.loading = false;
       this.newContact.title = ''
       this.newContact.link = ''

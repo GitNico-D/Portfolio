@@ -23,7 +23,7 @@ class RequestVerification
      * @param $request
      * @param $configuration
      */
-    public function checkAddContent($request, $configuration)
+    public function checkAddContent($request)
     {
         if($request->getContent()) {
             $jsonRequest = $request->getContent();
@@ -70,13 +70,9 @@ class RequestVerification
     public function specificException($requestContent)
     {
         foreach ($requestContent as $key => $value) {
-            if ($key == 'level') {
+            if ($key == 'level' || $key == 'category' || $key == 'presentation') {
                 $requestContent[$key] = (int)$value;
-            } elseif ($key == 'category') {
-                $requestContent[$key] = (int)$value;
-            } elseif ($key == 'presentation') {
-                $requestContent[$key] = (int)$value;
-            }
+            } 
         }
         return $requestContent;
     }

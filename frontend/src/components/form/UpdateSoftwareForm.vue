@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" v-show="oneSoftware.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="softwareColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
+    <Button :color="softwareColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn()"/>
   </div>
   <h2 v-if="!oneSoftware.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Logiciel</span> sélectionné.</p>
@@ -47,7 +47,7 @@
         <h5 v-show="!modifySoftware.icon && oldIcon" class="text-left text-uppercase">Icone du logiciel</h5>
         <b-img :src="oldIcon" fluid alt="Fluid image" class="mt-1" v-show="!modifySoftware.icon && oldIcon"></b-img>
       </div>
-      <ValidationProvider ref="new-icon" name="Icone" v-slot="{ validate, errors }">
+      <ValidationProvider ref="new-icon" name="Icone" v-slot="{ errors }">
         <b-form-group id="new-icon" class="mt-3 mb-5">
           <label for="input-icon" class="text-uppercase">Nouvelle icone du logiciel</label>
           <b-form-file
@@ -59,7 +59,7 @@
             accept="image/*"
             placeholder="Choisir un fichier ou glisser-déposer ici"
             drop-placeholder="Choisir un fichier"
-            @change="showPreview($event), validate"
+            @change="showPreview($event)"
           >
           </b-form-file>
           <b-alert
@@ -113,7 +113,7 @@
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier logiciel</span>
         </b-button>
-        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm"/>     
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm()"/>     
       </div>
     </b-form>
   </ValidationObserver>
@@ -233,7 +233,7 @@ export default {
       })
     },
     resetForm() {
-      this.$refs.modifyForm.reset;
+      this.$refs.modifyForm.reset();
       this.modifySoftware.name = ''
       this.modifySoftware.icon = null
       this.modifySoftware.level = 0

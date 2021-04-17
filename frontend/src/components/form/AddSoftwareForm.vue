@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="softwareColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
+    <Button :color="softwareColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn()"/>
   </div>
   <h2 id="addForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter un nouveau
@@ -86,12 +86,12 @@
         </b-form-group>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addSoftware')">
+        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addSoftware'), resetForm()">
           <b-spinner v-show="loading" label="Spinning" class="pt-4 pl-2"></b-spinner>
           <font-awesome-icon icon="folder-plus"/><span class="pl-2 pb-2">Ajouter logiciel</span>
         </b-button>
         <Button :color="resetButtonColor" action="Réinitialiser formulaire" icon="trash-alt" class="m-3 p-3" v-on:action="resetForm"/>
-        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm()"/>
       </div>
       <b-card class="mt-3" header="Form Data Result">
         <pre class="m-0">{{ newSoftware }}</pre>
@@ -184,7 +184,7 @@ export default {
       });
     },
     resetForm() {
-      this.$refs.addForm.reset
+      this.$refs.addForm.reset()
       this.loading = false;
       this.newSoftware.name = ''
       this.newSoftware.icon = null

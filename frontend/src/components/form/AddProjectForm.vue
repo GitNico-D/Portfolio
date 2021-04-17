@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="projectColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
+    <Button :color="projectColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn()"/>
   </div>
   <h2 id="modifyForm-title" class="text-center fw-bold my-5">
     Remplisser le formulaire ci-dessous pour ajouter un nouveau 
@@ -122,13 +122,13 @@
           </b-alert>
       </ValidationProvider>
       <div class="d-flex justify-content-center">
-        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addProject')">
+        <b-button type="submit" class="m-3 p-3 btn-add" :disabled="loading" @click="$emit('addProject'), resetForm()">
           <b-spinner v-show="loading" label="Spinning" class="mr-2"></b-spinner>
           <font-awesome-icon icon="folder-plus"/>
           <span class="pl-2">Ajouter projet</span>
         </b-button>
         <Button :color="resetButtonColor" action="Réinitialiser formulaire" icon="trash-alt" class="m-3 p-3" v-on:action="resetForm"/>
-        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelAdd'), resetForm()"/>
       </div>
     </b-form>
   </ValidationObserver>

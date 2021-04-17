@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" v-show="oneCareer.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="careerColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn')"/>
+    <Button :color="careerColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn()"/>
   </div>
   <h2 v-if="!oneCareer.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Étape de carrière </span> sélectionné.</p>
@@ -86,7 +86,7 @@
         <h5 v-show="!modifyCareerStage.logoCompany && oldLogoCompany" class="text-left text-uppercase">Logo de la société</h5>
         <b-img :src="oldLogoCompany" fluid alt="Fluid image" class="mt-1" v-show="!modifyCareerStage.logoCompany && oldLogoCompany"></b-img>
       </div>
-      <ValidationProvider ref="new-logoCompany" name="Image" v-slot="{ validate, errors }">
+      <ValidationProvider ref="new-logoCompany" name="Image" v-slot="{ errors }">
         <b-form-group id="new-logoCompany" class="mt-3 mb-5">
           <label for="input-logoCompany" class="text-uppercase">Nouveau logo de la société</label>
           <b-form-file
@@ -160,7 +160,7 @@
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier Carrière</span>
         </b-button>
-        <Button action="Annuler" :color="cancelButtonColor" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm"/>
+        <Button action="Annuler" :color="cancelButtonColor" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm()"/>
       </div>
     </b-form>
   </ValidationObserver>
@@ -271,7 +271,7 @@ export default {
       })
     },
     resetForm() {
-      this.$refs.modifyForm.reset;
+      this.$refs.modifyForm.reset();
       this.modifyCareerStage.name = ''
       this.modifyCareerStage.description = ''
       this.modifyCareerStage.company = ''
@@ -283,6 +283,10 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    onReturn() {
+      this.successMessage = ''
+      this.errorMessage = ''
+    }
   },
   mounted() {
     if(this.oneCareer.id) {

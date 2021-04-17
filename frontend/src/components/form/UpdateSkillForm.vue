@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" v-show="oneSkill.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="skillColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
+    <Button :color="skillColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn()"/>
   </div>
   <h2 v-if="!oneSkill.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucune <span class="font-weight-bold font-style-italic">Compétence</span> sélectionnée.</p>
@@ -133,7 +133,7 @@
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier compétence</span>
         </b-button>
-        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm()"/>
       </div>
     </b-form>
   </ValidationObserver>
@@ -253,7 +253,7 @@ export default {
       })
     },
     resetForm() {
-      this.$refs.modifyForm.reset;
+      this.$refs.modifyForm.reset();
       this.modifySkill.name = ''
       this.modifySkill.description = ''
       this.modifySkill.icon = null

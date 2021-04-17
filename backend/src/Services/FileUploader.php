@@ -32,10 +32,7 @@ class FileUploader
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
-        try {
-            $file->move($destination . '/' . $entity, $fileName);
-        } catch (FileException $e) {
-        }
+        $file->move($destination . '/' . $entity, $fileName);
         return $fileName;
     }
 

@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" v-show="oneContact.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="contactColor" action="Retour présentation" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
+    <Button :color="contactColor" action="Retour présentation" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn()"/>
   </div>
   <h2 v-if="!oneContact.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Contact</span> sélectionné.</p>
@@ -91,7 +91,7 @@
             <font-awesome-icon icon="edit"/>
             <span class="pl-2 pb-2">Modifier contact</span>
         </b-button>
-        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm"/>
+        <Button :color="cancelButtonColor" action="Annuler" icon="times" class="m-3 p-3" v-on:action="$emit('onCancelModify'), resetForm()"/>
       </div>
     </b-form>
   </ValidationObserver>
@@ -200,7 +200,7 @@ export default {
       })
     },
     resetForm() {
-      this.$refs.modifyForm.reset;
+      this.$refs.modifyForm.reset();
       this.modifyContact.title = ''
       this.modifyContact.link = ''
       this.modifyContact.icon = null

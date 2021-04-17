@@ -5,7 +5,7 @@
     <AlertForm v-if="errorMessage" v-show="onePresentation.id" :message="errorMessage" variant="danger"/>
   </div>
   <div class="text-center">
-    <Button :color="presentationColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn"/>
+    <Button :color="presentationColor" action="Retour liste" icon="arrow-left" class="m-3 p-3" v-on:action="$emit('onReturn'), onReturn()"/>
   </div>
   <h2 v-if="!onePresentation.id" id="modifyForm-title" ref="titleForm" class="text-center fw-bold mt-5" >
     <p>Aucun <span class="font-weight-bold font-style-italic">Présentation</span> sélectionné.</p>
