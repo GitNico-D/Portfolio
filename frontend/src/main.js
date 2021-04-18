@@ -35,7 +35,7 @@ import {
   faTimes,
   faPlus,
   faArrowLeft,
-  faSync,
+  faSync
 } from "@fortawesome/free-solid-svg-icons";
 import "./validation-config";
 
@@ -45,11 +45,11 @@ Object.keys(rules).forEach(rule => {
 localize("fr", fr);
 
 library.add(
-  faHome, 
-  faUserShield, 
-  faSignInAlt, 
-  faSignOutAlt, 
-  faAngleDoubleRight, 
+  faHome,
+  faUserShield,
+  faSignInAlt,
+  faSignOutAlt,
+  faAngleDoubleRight,
   faFolderPlus,
   faEdit,
   faDatabase,
@@ -61,7 +61,7 @@ library.add(
   faPlus,
   faArrowLeft,
   faSync
-  );
+);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.component("ValidationObserver", ValidationObserver);
 Vue.component("ValidationProvider", ValidationProvider);

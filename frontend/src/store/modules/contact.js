@@ -6,7 +6,7 @@ const headers = { "Content-Type": "application/json" };
 
 const state = () => ({
   contacts: [],
-  contact: ''
+  contact: ""
 });
 
 const getters = {
@@ -16,7 +16,8 @@ const getters = {
 
 const actions = {
   getAllContacts({ commit }) {
-    axios.get(process.env.VUE_APP_API_URL + "/contacts", {
+    axios
+      .get(process.env.VUE_APP_API_URL + "/contacts", {
         headers: headers
       })
       .then(response => {
@@ -27,7 +28,8 @@ const actions = {
       });
   },
   getContact({ commit }, id) {
-    return axios.get(process.env.VUE_APP_API_URL + `/contacts/${id}`, {
+    return axios
+      .get(process.env.VUE_APP_API_URL + `/contacts/${id}`, {
         headers: headers
       })
       .then(response => {
@@ -39,58 +41,62 @@ const actions = {
       });
   },
   addContact({ commit }, formData) {
-    return axios.post(process.env.VUE_APP_API_URL + '/contacts', formData, {
-      headers: authHeader()
-    })
-    .then(formData => {
-      commit("NEW_CONTACT", formData);
-      return Promise.resolve(formData);
-    })
-    .catch(error => {
-      return Promise.reject(error.response.data);
-    })
+    return axios
+      .post(process.env.VUE_APP_API_URL + "/contacts", formData, {
+        headers: authHeader()
+      })
+      .then(formData => {
+        commit("NEW_CONTACT", formData);
+        return Promise.resolve(formData);
+      })
+      .catch(error => {
+        return Promise.reject(error.response.data);
+      });
   },
   updateContactWithFile({ commit }, { id, formData }) {
-    return axios.post(process.env.VUE_APP_API_URL + `/contacts/${id}`, formData, {
-      headers: authHeader(),
-      params: {
-        "_method": "PUT"
-      }
-    })
-    .then(response => {
-      commit("UPDATE_CONTACT", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response.data);
-    })
+    return axios
+      .post(process.env.VUE_APP_API_URL + `/contacts/${id}`, formData, {
+        headers: authHeader(),
+        params: {
+          _method: "PUT"
+        }
+      })
+      .then(response => {
+        commit("UPDATE_CONTACT", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response.data);
+      });
   },
   updateContactWithoutFile({ commit }, { id, form }) {
-    return axios.put(process.env.VUE_APP_API_URL + `/contacts/${id}`, form, {
-      headers: authHeader(),
-    })
-    .then(response => {
-      commit("UPDATE_CONTACT", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response.data);
-    })
+    return axios
+      .put(process.env.VUE_APP_API_URL + `/contacts/${id}`, form, {
+        headers: authHeader()
+      })
+      .then(response => {
+        commit("UPDATE_CONTACT", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response.data);
+      });
   },
   deleteContact({ commit }, id) {
-    return axios.delete(process.env.VUE_APP_API_URL + `/contacts/${id}`, {
-      headers: authHeader()
-    })
-    .then(response => {
-      commit("DELETE_CONTACT", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response.data);
-    })
+    return axios
+      .delete(process.env.VUE_APP_API_URL + `/contacts/${id}`, {
+        headers: authHeader()
+      })
+      .then(response => {
+        commit("DELETE_CONTACT", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response.data);
+      });
   },
   resetStateContact({ commit }) {
-    commit("RESET_STATE_CONTACT")
+    commit("RESET_STATE_CONTACT");
   }
 };
 
@@ -102,28 +108,28 @@ const mutations = {
     state.contact = contact;
   },
   NEW_CONTACT(state, newContact) {
-    state.contacts.unshift(newContact)
+    state.contacts.unshift(newContact);
   },
   UPDATE_CONTACT(state, updateContact) {
-    let contactPosition = '';
+    let contactPosition = "";
     state.contacts.forEach((contact, index) => {
-      if(contact.id === updateContact.id) {
+      if (contact.id === updateContact.id) {
         contactPosition = index;
       }
     });
     state.contacts.splice(contactPosition, 1, updateContact);
   },
   DELETE_CONTACT(state, id) {
-    let contactPosition = '';
+    let contactPosition = "";
     state.contacts.forEach((contact, index) => {
-      if(contact.id === id) {
+      if (contact.id === id) {
         contactPosition = index;
       }
     });
     state.contacts.splice(contactPosition, 1);
-  }, 
+  },
   RESET_STATE_CONTACT(state) {
-    state.contact = '';
+    state.contact = "";
   }
 };
 

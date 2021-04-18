@@ -6,7 +6,7 @@ const headers = { "Content-Type": "application/json" };
 
 const state = () => ({
   projects: [],
-  project: ''
+  project: ""
 });
 
 const getters = {
@@ -16,7 +16,8 @@ const getters = {
 
 const actions = {
   getAllProjects({ commit }) {
-    axios.get(process.env.VUE_APP_API_URL + "/projects", {
+    axios
+      .get(process.env.VUE_APP_API_URL + "/projects", {
         headers: headers
       })
       .then(response => {
@@ -27,7 +28,8 @@ const actions = {
       });
   },
   getProject({ commit }, id) {
-    return axios.get(process.env.VUE_APP_API_URL + `/projects/${id}`, {
+    return axios
+      .get(process.env.VUE_APP_API_URL + `/projects/${id}`, {
         headers: headers
       })
       .then(response => {
@@ -38,58 +40,62 @@ const actions = {
       });
   },
   addProject({ commit }, formData) {
-    return axios.post(process.env.VUE_APP_API_URL + '/projects', formData, {
-      headers: authHeader()
-    })
-    .then(formData => {
-      commit("NEW_PROJECT", formData);
-      return Promise.resolve(formData);
-    })
-    .catch(error => {
-      return Promise.reject(error.response);
-    })
+    return axios
+      .post(process.env.VUE_APP_API_URL + "/projects", formData, {
+        headers: authHeader()
+      })
+      .then(formData => {
+        commit("NEW_PROJECT", formData);
+        return Promise.resolve(formData);
+      })
+      .catch(error => {
+        return Promise.reject(error.response);
+      });
   },
   updateProjectWithFile({ commit }, { id, formData }) {
-    return axios.post(process.env.VUE_APP_API_URL + `/projects/${id}`, formData, {
-      headers: authHeader(),
-      params: {
-        "_method": "PUT"
-      }
-    })
-    .then(response => {
-      commit("UPDATE_PROJECT", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response);
-    })
+    return axios
+      .post(process.env.VUE_APP_API_URL + `/projects/${id}`, formData, {
+        headers: authHeader(),
+        params: {
+          _method: "PUT"
+        }
+      })
+      .then(response => {
+        commit("UPDATE_PROJECT", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response);
+      });
   },
   updateProjectWithoutFile({ commit }, { id, form }) {
-    return axios.put(process.env.VUE_APP_API_URL + `/projects/${id}`, form, {
-      headers: authHeader(),
-    })
-    .then(response => {
-      commit("UPDATE_PROJECT", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response);
-    })
+    return axios
+      .put(process.env.VUE_APP_API_URL + `/projects/${id}`, form, {
+        headers: authHeader()
+      })
+      .then(response => {
+        commit("UPDATE_PROJECT", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response);
+      });
   },
   deleteProject({ commit }, id) {
-    return axios.delete(process.env.VUE_APP_API_URL + `/projects/${id}`, {
-      headers: authHeader()
-    })
-    .then(response => {
-      commit("DELETE_PROJECT", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response);
-    })
+    return axios
+      .delete(process.env.VUE_APP_API_URL + `/projects/${id}`, {
+        headers: authHeader()
+      })
+      .then(response => {
+        commit("DELETE_PROJECT", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response);
+      });
   },
   resetStateProject({ commit }) {
-    commit("RESET_STATE_PROJECT")
+    commit("RESET_STATE_PROJECT");
   }
 };
 
@@ -101,28 +107,28 @@ const mutations = {
     state.project = project;
   },
   NEW_PROJECT(state, newProject) {
-    state.projects.unshift(newProject)
+    state.projects.unshift(newProject);
   },
   UPDATE_PROJECT(state, updateProject) {
-    let projectPosition = '';
+    let projectPosition = "";
     state.projects.forEach((project, index) => {
-      if(project.id === updateProject.id) {
+      if (project.id === updateProject.id) {
         projectPosition = index;
       }
     });
     state.projects.splice(projectPosition, 1, updateProject);
   },
   DELETE_PROJECT(state, id) {
-    let projectPosition = '';
+    let projectPosition = "";
     state.projects.forEach((project, index) => {
-      if(project.id === id) {
+      if (project.id === id) {
         projectPosition = index;
       }
     });
     state.projects.splice(projectPosition, 1);
-  }, 
+  },
   RESET_STATE_PROJECT(state) {
-    state.project = '';
+    state.project = "";
   }
 };
 

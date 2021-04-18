@@ -44,16 +44,15 @@ export default {
   perspective: 1000px;
   min-height: 100vh;
 }
-  .jumbotron {
-    position: relative;
-    // background: url("../assets/404-error.png") center no-repeat;
-    font-family: "MontSerrat", sans-serif;
-    color: white;
-    border: none;
-    background-color: transparent !important;
-    width: 80%;
+.jumbotron {
+  position: relative;
+  // background: url("../assets/404-error.png") center no-repeat;
+  font-family: "MontSerrat", sans-serif;
+  color: white;
+  border: none;
+  background-color: transparent !important;
+  width: 80%;
 }
-
 
 @media (min-width: 320px) {
   .container-fluid {

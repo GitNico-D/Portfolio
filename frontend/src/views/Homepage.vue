@@ -28,7 +28,7 @@
       >
         <font-awesome-icon icon="sign-in-alt" />
       </b-button>
-      </div>
+    </div>
     <b-row>
       <div class="circle_box">
         <div class="circle circle-blue"></div>

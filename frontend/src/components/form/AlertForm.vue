@@ -1,12 +1,9 @@
 <template>
-<div>
-  <b-alert 
-    :variant="variant"
-    show
-    >
-    {{message}}
-  </b-alert>
-</div>
+  <div>
+    <b-alert :variant="variant" show>
+      {{ message }}
+    </b-alert>
+  </div>
 </template>
 
 <script>
@@ -19,9 +16,7 @@ export default {
     variant: String
     // successMessage: String
   }
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

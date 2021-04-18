@@ -6,7 +6,7 @@ const headers = { "Content-Type": "application/json" };
 
 const state = () => ({
   softwares: [],
-  software: ''
+  software: ""
 });
 
 const getters = {
@@ -30,7 +30,8 @@ const actions = {
       });
   },
   getSoftware({ commit }, id) {
-    return axios.get(process.env.VUE_APP_API_URL + `/softwares/${id}`, {
+    return axios
+      .get(process.env.VUE_APP_API_URL + `/softwares/${id}`, {
         headers: headers
       })
       .then(response => {
@@ -41,58 +42,62 @@ const actions = {
       });
   },
   addSoftware({ commit }, formData) {
-    return axios.post(process.env.VUE_APP_API_URL + '/softwares', formData, {
-      headers: authHeader()
-    })
-    .then(formData => {
-      commit("NEW_SOFTWARE", formData);
-      return Promise.resolve(formData);
-    })
-    .catch(error => {
-      return Promise.reject(error.response);
-    })
+    return axios
+      .post(process.env.VUE_APP_API_URL + "/softwares", formData, {
+        headers: authHeader()
+      })
+      .then(formData => {
+        commit("NEW_SOFTWARE", formData);
+        return Promise.resolve(formData);
+      })
+      .catch(error => {
+        return Promise.reject(error.response);
+      });
   },
   updateSoftwareWithFile({ commit }, { id, formData }) {
-    return axios.post(process.env.VUE_APP_API_URL + `/softwares/${id}`, formData, {
-      headers: authHeader(),
-      params: {
-        "_method": "PUT"
-      }
-    })
-    .then(response => {
-      commit("UPDATE_SOFTWARE", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response);
-    })
+    return axios
+      .post(process.env.VUE_APP_API_URL + `/softwares/${id}`, formData, {
+        headers: authHeader(),
+        params: {
+          _method: "PUT"
+        }
+      })
+      .then(response => {
+        commit("UPDATE_SOFTWARE", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response);
+      });
   },
   updateSoftwareWithoutFile({ commit }, { id, form }) {
-    return axios.put(process.env.VUE_APP_API_URL + `/softwares/${id}`, form, {
-      headers: authHeader(),
-    })
-    .then(response => {
-      commit("UPDATE_SOFTWARE", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response);
-    })
+    return axios
+      .put(process.env.VUE_APP_API_URL + `/softwares/${id}`, form, {
+        headers: authHeader()
+      })
+      .then(response => {
+        commit("UPDATE_SOFTWARE", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response);
+      });
   },
   deleteSoftware({ commit }, id) {
-    return axios.delete(process.env.VUE_APP_API_URL + `/softwares/${id}`, {
-      headers: authHeader()
-    })
-    .then(response => {
-      commit("DELETE_SOFTWARE", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response);
-    })
+    return axios
+      .delete(process.env.VUE_APP_API_URL + `/softwares/${id}`, {
+        headers: authHeader()
+      })
+      .then(response => {
+        commit("DELETE_SOFTWARE", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response);
+      });
   },
   resetStateSoftware({ commit }) {
-    commit("RESET_STATE_SOFTWARE")
+    commit("RESET_STATE_SOFTWARE");
   }
 };
 
@@ -104,28 +109,28 @@ const mutations = {
     state.software = software;
   },
   NEW_SOFTWARE(state, newSoftware) {
-    state.softwares.unshift(newSoftware)
+    state.softwares.unshift(newSoftware);
   },
   UPDATE_SOFTWARE(state, updateSoftware) {
-    let softwarePosition = '';
+    let softwarePosition = "";
     state.softwares.forEach((software, index) => {
-      if(software.id === updateSoftware.id) {
+      if (software.id === updateSoftware.id) {
         softwarePosition = index;
       }
     });
     state.softwares.splice(softwarePosition, 1, updateSoftware);
   },
   DELETE_SOFTWARE(state, id) {
-    let softwarePosition = '';
+    let softwarePosition = "";
     state.softwares.forEach((software, index) => {
-      if(software.id === id) {
+      if (software.id === id) {
         softwarePosition = index;
       }
     });
     state.softwares.splice(softwarePosition, 1);
-  }, 
+  },
   RESET_STATE_SOFTWARE(state) {
-    state.software = '';
+    state.software = "";
   }
 };
 

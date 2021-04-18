@@ -69,7 +69,11 @@
               </ValidationProvider>
               <b-form-group>
                 <b-button block type="submit" :disabled="loading">
-                  <b-spinner v-show="loading" label="Spinning" small></b-spinner>
+                  <b-spinner
+                    v-show="loading"
+                    label="Spinning"
+                    small
+                  ></b-spinner>
                   <span class="ml-2">Se connecter</span>
                 </b-button>
               </b-form-group>

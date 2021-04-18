@@ -12,13 +12,13 @@
         <b-card :img-src="presentation.picture" img-top>
           <b-card-title class="text-uppercase">
             <p class="card-title-first">{{ presentation.lastName }}</p>
-            <p class="card-title-last font-weight-bold">{{
-              presentation.firstName
-            }}</p>
+            <p class="card-title-last font-weight-bold">
+              {{ presentation.firstName }}
+            </p>
           </b-card-title>
           <hr />
           <b-card-text>
-            {{presentation.quote}}
+            {{ presentation.quote }}
             <div class="d-flex flex-wrap justify-content-around my-4">
               <ContactButton
                 v-for="(contact, index) in presentation.contacts"

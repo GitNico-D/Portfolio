@@ -6,7 +6,7 @@ const headers = { "Content-Type": "application/json" };
 
 const state = () => ({
   presentations: [],
-  presentation: ''
+  presentation: ""
 });
 
 const getters = {
@@ -16,7 +16,8 @@ const getters = {
 
 const actions = {
   getAllPresentations({ commit }) {
-    axios.get(process.env.VUE_APP_API_URL + "/presentations", {
+    axios
+      .get(process.env.VUE_APP_API_URL + "/presentations", {
         headers: headers
       })
       .then(response => {
@@ -27,7 +28,8 @@ const actions = {
       });
   },
   getPresentation({ commit }) {
-    return axios.get(process.env.VUE_APP_API_URL + `/presentations/1`, {
+    return axios
+      .get(process.env.VUE_APP_API_URL + `/presentations/1`, {
         headers: headers
       })
       .then(response => {
@@ -39,58 +41,62 @@ const actions = {
       });
   },
   addPresentation({ commit }, formData) {
-    return axios.post(process.env.VUE_APP_API_URL + '/presentations', formData, {
-      headers: authHeader()
-    })
-    .then(formData => {
-      commit("NEW_PRESENTATION", formData);
-      return Promise.resolve(formData);
-    })
-    .catch(error => {
-      return Promise.reject(error.response);
-    })
+    return axios
+      .post(process.env.VUE_APP_API_URL + "/presentations", formData, {
+        headers: authHeader()
+      })
+      .then(formData => {
+        commit("NEW_PRESENTATION", formData);
+        return Promise.resolve(formData);
+      })
+      .catch(error => {
+        return Promise.reject(error.response);
+      });
   },
   updatePresentationWithFile({ commit }, { id, formData }) {
-    return axios.post(process.env.VUE_APP_API_URL + `/presentations/${id}`, formData, {
-      headers: authHeader(),
-      params: {
-        "_method": "PUT"
-      }
-    })
-    .then(response => {
-      commit("UPDATE_PRESENTATION", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response.data);
-    })
+    return axios
+      .post(process.env.VUE_APP_API_URL + `/presentations/${id}`, formData, {
+        headers: authHeader(),
+        params: {
+          _method: "PUT"
+        }
+      })
+      .then(response => {
+        commit("UPDATE_PRESENTATION", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response.data);
+      });
   },
   updatePresentationWithoutFile({ commit }, { id, form }) {
-    return axios.put(process.env.VUE_APP_API_URL + `/presentations/${id}`, form, {
-      headers: authHeader(),
-    })
-    .then(response => {
-      commit("UPDATE_PRESENTATION", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response.data);
-    })
+    return axios
+      .put(process.env.VUE_APP_API_URL + `/presentations/${id}`, form, {
+        headers: authHeader()
+      })
+      .then(response => {
+        commit("UPDATE_PRESENTATION", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response.data);
+      });
   },
   deletePresentation({ commit }, id) {
-    return axios.delete(process.env.VUE_APP_API_URL + `/presentations/${id}`, {
-      headers: authHeader()
-    })
-    .then(response => {
-      commit("DELETE_PRESENTATION", response.data);
-      return Promise.resolve(response.data);
-    })
-    .catch(error => {
-      return Promise.reject(error.response.data);
-    })
+    return axios
+      .delete(process.env.VUE_APP_API_URL + `/presentations/${id}`, {
+        headers: authHeader()
+      })
+      .then(response => {
+        commit("DELETE_PRESENTATION", response.data);
+        return Promise.resolve(response.data);
+      })
+      .catch(error => {
+        return Promise.reject(error.response.data);
+      });
   },
   resetStatePresentation({ commit }) {
-    commit("RESET_STATE_PRESENTATION")
+    commit("RESET_STATE_PRESENTATION");
   }
 };
 
@@ -102,28 +108,28 @@ const mutations = {
     state.presentation = presentation;
   },
   NEW_PRESENTATION(state, newPresentation) {
-    state.presentations.unshift(newPresentation)
+    state.presentations.unshift(newPresentation);
   },
   UPDATE_PRESENTATION(state, updatePresentation) {
-    let presentationPosition = '';
+    let presentationPosition = "";
     state.presentations.forEach((presentation, index) => {
-      if(presentation.id === updatePresentation.id) {
+      if (presentation.id === updatePresentation.id) {
         presentationPosition = index;
       }
     });
     state.presentations.splice(presentationPosition, 1, updatePresentation);
   },
   DELETE_PRESENTATION(state, id) {
-    let presentationPosition = '';
+    let presentationPosition = "";
     state.presentations.forEach((presentation, index) => {
-      if(presentation.id === id) {
+      if (presentation.id === id) {
         presentationPosition = index;
       }
     });
     state.presentations.splice(presentationPosition, 1);
-  }, 
+  },
   RESET_STATE_PRESENTATION(state) {
-    state.presentation = '';
+    state.presentation = "";
   }
 };
 
