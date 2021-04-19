@@ -21,11 +21,11 @@
       <b-col cols="12" md="7">
         <div class="skill-block" v-show="current == categories.id">
           <ProgressBarCard
-            v-for="skills in categories.skills"
-            :key="skills.id"
-            :title="skills.name"
-            :urlIcon="skills.icon"
-            :value="skills.knowledge_level"
+            v-for="skill in categories.skills"
+            :key="skill.id"
+            :title="skill.name"
+            :urlIcon="skill.icon"
+            :value="skill.level"
             color="#36C486"
           />
         </div>
@@ -41,13 +41,13 @@
             :key="software.id"
             :title="software.name"
             :urlIcon="software.icon"
-            :value="software.mastery_of"
+            :value="software.level"
             color="#36C486"
           />
         </div>
       </b-col>
     </b-row>
-    <b-row class="back position-relative my-3">
+    <b-row class="back position-relative mt-3">
       <HomePageLink
         action="Retour"
         url="/"
@@ -82,6 +82,7 @@ export default {
     };
   },
   methods: {
+    // Hide or show slider transition
     actionTransition() {
       this.showTransition = true;
       setTimeout(() => {
@@ -94,11 +95,13 @@ export default {
     ...mapGetters(["allCategories"])
   },
   created() {
+    // Hide slider transition after created
     setTimeout(() => {
       this.showTransition = false;
     }, 1300);
   },
   mounted() {
+    // Dispatch all categories contains in the vuex state.projects
     this.$store.dispatch("getAllCategories");
   }
 };
@@ -109,6 +112,7 @@ export default {
   background-color: $dark-gray;
   perspective: 1000px;
   position: relative;
+  min-height: 100vh;
   .back {
     height: 15vh;
   }
@@ -206,10 +210,6 @@ export default {
 }
 @media (min-width: 320px) {
   .container-fluid {
-    .btn {
-      font-size: 0.9rem;
-      padding: 0.5rem;
-    }
     .back {
       .link {
         &-bottom {
@@ -281,21 +281,13 @@ export default {
       }
     }
     .btn {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       padding: 1rem 5rem 1rem 5rem;
     }
     .software {
       &-title {
         text-align: right;
       }
-    }
-  }
-}
-@media (min-width: 1200px) {
-  .container-fluid {
-    .btn {
-      font-size: 1.5rem;
-      padding: 1rem 5rem 1rem 5rem;
     }
   }
 }

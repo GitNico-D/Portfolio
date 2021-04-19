@@ -18,7 +18,7 @@
       />
     </div>
     <div v-if="!oneCareer.id">
-      <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+      <h2 id="modifyForm-title" class="text-center fw-bold my-5 tab-career-title">
         Remplisser le formulaire ci-dessous pour ajouter une nouvelle
         <span class="font-weight-bold font-style-italic"
           >Étape de carrière !</span
@@ -551,5 +551,20 @@ form {
 .tabs {
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
+}
+@media (min-width: 320px) {
+  .tab-career-title {
+    font-size: 1.2rem;
+  }
+}
+@media (min-width: 576px) {
+  .tab-career-title {
+    font-size: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .tab-career-title {
+    font-size: 2rem;
+  }
 }
 </style>

@@ -4,7 +4,7 @@
     :style="{
       '--color-one': colorOne,
       '--color-two': colorTwo,
-      '--url-icon': logoIcon
+      '--url-icon': 'url(' + `'${logoIcon}'` +  ')'
     }"
     class="btn m-1 p-2"
   >

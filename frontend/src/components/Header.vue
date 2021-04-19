@@ -6,7 +6,7 @@
         :style="{ '--color': color }"
       ></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="p-3" :style="{ '--color': color }">
+        <b-navbar-nav class="py-3" :style="{ '--color': color }">
           <router-link to="/" v-b-popover.hover.leftbottom="'Accueil'">
             <font-awesome-icon icon="home" /> </router-link
           ><span class="px-3" :style="{ '--color': color }"> | </span>
@@ -44,7 +44,7 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <h1 :style="{ '--color': color }" class="mt-1">{{ title }}</h1>
+    <h1 :style="{ '--color': color }" class="mt-3">{{ title }}</h1>
   </b-row>
 </template>
 
@@ -74,7 +74,6 @@ export default {
 
 <style lang="scss" scoped>
 .row {
-  height: 20vh;
   .navbar {
     width: 100%;
     &-nav {
@@ -117,19 +116,6 @@ export default {
         color: var(--color);
         font-weight: bold;
         animation: swirl-in-fwd 0.8s ease-out 1.6s both;
-      }
-      .indicator {
-        position: absolute;
-        left: 5%;
-        bottom: 0;
-        width: 30px;
-        height: 3px;
-        background-color: #fff;
-        border-radius: 5px;
-        transition: 0.2s ease left;
-      }
-      &-collapse {
-        flex-direction: column;
       }
     }
     button {
@@ -174,12 +160,12 @@ export default {
 }
 @media (min-width: 320px) {
   .row {
-    height: 25vh;
     h1 {
       font-size: 1.8rem !important;
     }
     .navbar {
-      button {
+      padding: unset;
+      button { //Center navbar collapse 
         margin: auto !important;
         margin-top: 1rem !important;
       }
@@ -208,10 +194,16 @@ export default {
     }
   }
 }
-@media (min-width: 576px) {
+@media (min-width: 768px) {
   .row {
+    height: 25vh;
     h1 {
       font-size: 2.8rem !important;
+    }
+    .navbar {
+      &-nav {
+        padding: 1.5rem;
+      }
     }
   }
 }

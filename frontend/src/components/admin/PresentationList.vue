@@ -1,6 +1,6 @@
 <template>
   <b-row class="justify-content-center mt-5">
-    <b-col cols md="12" lg="8">
+    <b-col cols md="10" lg="9" class="padding-col-md">
       <b-tabs
         active-nav-item-class="font-weight-bold text-uppercase text-success"
         active-tab-class="text-left text-white"
@@ -8,19 +8,22 @@
         class="mt-5"
         fill
         v-model="tabIndex"
+        small
       >
         <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2" />
             <span>La présentation</span>
           </template>
-          <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+          <h2 id="modifyForm-title" class="text-center fw-bold my-5 tab-presentation-title">
             Voici la
             <span class="font-weight-bold font-style-italic">Présentation</span>
           </h2>
-          <b-button @click="refreshTab" variant="info" class="m-2 btn-add">
-            <font-awesome-icon icon="sync" class="mr-2" spin />Rafraichir
-          </b-button>
+          <div class="btn-refresh-button">
+            <b-button @click="refreshTab" variant="info" class="m-2 btn-add">
+              <font-awesome-icon icon="sync" class="mr-2" spin />Rafraichir
+            </b-button>
+          </div>
           <div id="alertModify">
             <AlertForm
               v-if="successMessage"
@@ -85,6 +88,7 @@
                 :items="onePresentation.contacts"
                 :fields="fields"
                 class="text-center"
+                stacked="sm"
               >
                 <template #cell(title)="data">
                   {{ data.value }}
@@ -319,44 +323,74 @@ export default {
 .row {
   height: unset;
 }
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
-}
-.form-group {
-  margin-bottom: 2rem;
-}
-.custom-file-label {
-  background-color: transparent !important;
-  color: $white;
-  border: unset;
-  border-bottom: 1px solid $white;
-  border-radius: unset;
-  &:focus {
-    @include box_shadow(0px, 0px, 5px, $purple);
-    background-color: transparent;
-    border-bottom: 1px solid $purple;
-  }
-}
-.form-control {
-  background-color: transparent;
-  color: $white;
-  border: unset;
-  border-bottom: 1px solid $white;
-  border-radius: unset;
-  &:focus {
-    @include box_shadow(0px, 0px, 5px, $purple);
-    background-color: transparent;
-    border-bottom: 1px solid $purple;
-    color: $white;
-  }
-}
 .nav-link {
   color: $white !important;
 }
 .tabs {
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
+}
+@media (min-width: 320px) {
+  .btn {
+    &-refresh {
+      &-position {
+        text-align: center;
+      }
+    }
+    &-add {
+      &-position {
+        text-align: center;
+      }
+    }
+  }
+  .padding-col-md {
+    padding-right: 2.1rem;
+    padding-left: 2.1rem;
+  }
+  .tab-presentation-title {
+    font-size: 1.2rem;
+  }
+}
+@media (min-width: 576px) {
+  .btn {
+    &-refresh {
+      &-position {
+        text-align: left;
+      }
+    }
+    &-add {
+      &-position {
+        text-align: right;
+      }
+    }
+  }
+  .padding-col-md {
+    padding-right: 2.1rem;
+    padding-left: 2.1rem;
+  }
+  .tab-presentation-title {
+    font-size: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .btn {
+    &-refresh {
+      &-position {
+        text-align: left;
+      }
+    }
+    &-add {
+      &-position {
+        text-align: right;
+      }
+    }
+  }
+  .padding-col-md {
+    padding-right: inherit;
+    padding-left: inherit;
+  }
+  .tab-presentation-title {
+    font-size: 2rem;
+  }
 }
 </style>

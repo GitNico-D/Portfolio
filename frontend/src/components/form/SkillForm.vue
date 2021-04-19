@@ -1,5 +1,6 @@
 <template>
-  <div>
+<b-row>
+  <b-col cols md="12" lg="9">
     <div id="alert">
       <AlertForm
         v-if="successMessage"
@@ -221,12 +222,10 @@
             v-on:action="$emit('onCancel'), resetForm()"
           />
         </div>
-        <b-card class="mt-3" header="Form Data Result">
-          <pre class="m-0">{{ skill }}</pre>
-        </b-card>
       </b-form>
     </ValidationObserver>
-  </div>
+  </b-col>
+  <b-row>
 </template>
 
 <script>
@@ -406,7 +405,6 @@ export default {
       this.selected = this.oneCategory.id;
       this.skill.category = this.oneCategory.id;
     } else {
-      this.resetForm();
       this.selected = 0;
       this.selected = this.oneCategory.id;
       this.skill.category = this.oneCategory.id;
@@ -417,8 +415,8 @@ export default {
 
 <style lang="scss" scoped>
 .btn {
-  &-add,
-  &-return {
+  &-add
+  {
     color: $white;
     background-color: $green;
     border: 1px solid $green;
@@ -435,26 +433,6 @@ export default {
       background-color: $green;
     }
   }
-  &-delete {
-    color: $white;
-    background-color: $yellow;
-    border: 1px solid $yellow;
-    &:hover {
-      color: $yellow;
-      background-color: transparent;
-      border: 1px solid $yellow;
-    }
-  }
-  &-reset {
-    color: $white;
-    background-color: $red;
-    border: 1px solid $red;
-    &:hover {
-      color: $red;
-      background-color: transparent;
-      border: 1px solid $red;
-    }
-  }
 }
 .card {
   &-body {
@@ -463,14 +441,6 @@ export default {
 }
 .row {
   height: unset;
-}
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
-}
-.form-group {
-  margin-bottom: 2rem;
 }
 .custom-file-label {
   background-color: transparent !important;
@@ -484,6 +454,11 @@ form {
     border-bottom: 1px solid $purple;
   }
 }
+form {
+  width: 90%;
+  margin: auto;
+  padding: 1.5rem;
+}
 .form-control {
   background-color: transparent;
   color: $white;
@@ -496,6 +471,9 @@ form {
     border-bottom: 1px solid $purple;
     color: $white;
   }
+}
+.form-group {
+  margin-bottom: 2rem;
 }
 .nav-link {
   color: $white !important;

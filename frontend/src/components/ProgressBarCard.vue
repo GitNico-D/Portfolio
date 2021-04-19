@@ -5,14 +5,14 @@
         :style="{
           '--color': color,
           '--value': this.value + '%',
-          '--url-icon': urlIcon
+          '--url-icon': 'url(' + `'${urlIcon}'` +  ')'
         }"
+        class="mt-4"
       >
         <b-progress-bar
           :value="value"
           max="100"
           :style="{ '--color': color }"
-          class=""
         ></b-progress-bar>
       </b-progress>
     </b-card-text>
@@ -50,7 +50,8 @@ export default {
       background-color: $white;
       &:after {
         position: absolute;
-        content: var(--url-icon);
+        // content: var(--url-icon);
+        content: '';
         top: 0;
         left: var(--value);
         animation: flip-in-ver-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
@@ -60,6 +61,7 @@ export default {
         animation: scale-in-hor-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
           0.8s both;
         align-items: flex-end;
+        background-image: src(var(--url-icon));
         background-color: var(--color);
       }
     }

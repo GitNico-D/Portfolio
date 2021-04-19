@@ -25,7 +25,7 @@
       v-show="showOverview"
       class="overview justify-content-around flex-wrap"
     >
-      <b-col col lg="6" md="8" sm="8">
+      <b-col col lg="6" md="10" sm="10">
         <b-card class="card-project mb-3">
           <b-card-title class="text-uppercase font-weight-bold"
             >Projets</b-card-title
@@ -65,7 +65,7 @@
           <template #footer> </template>
         </b-card>
       </b-col>
-      <b-col col lg="6" md="8" sm="8">
+      <b-col col lg="6" md="10" sm="10">
         <b-card class="card-skill mb-3">
           <b-card-title class="text-uppercase font-weight-bold"
             >Compétences</b-card-title
@@ -109,7 +109,7 @@
           <template #footer> </template>
         </b-card>
       </b-col>
-      <b-col col lg="6" md="8" sm="8">
+      <b-col col lg="6" md="10" sm="10">
         <b-card class="card-career mb-3">
           <b-card-title class="text-uppercase font-weight-bold"
             >Carrières</b-card-title
@@ -150,7 +150,7 @@
           <template #footer> </template>
         </b-card>
       </b-col>
-      <b-col col lg="6" md="8" sm="8">
+      <b-col col lg="6" md="10" sm="10">
         <b-card class="card-presentation mb-3">
           <b-card-title class="text-uppercase font-weight-bold"
             >Présentation</b-card-title
@@ -182,6 +182,7 @@
         url="/"
         direction="animated-arrowLtr"
         :textColor="pageColor"
+        class="link"
       />
     </b-row>
   </b-container>
@@ -443,5 +444,26 @@ export default {
   .row {
     height: unset;
   }
+}
+@media(min-width: 320px) {
+  .footer {
+    .link {
+      transform: scale(0.6);
+    }
+  } 
+}
+@media(min-width: 576px) {
+  .footer {
+    .link {
+      transform: scale(0.8);
+    }
+  } 
+}
+@media(min-width: 768px) {
+  .footer {
+    .link {
+      transform: scale(1);
+    }
+  } 
 }
 </style>

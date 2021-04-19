@@ -16,12 +16,12 @@
         :date="project.creationDate"
       />
     </b-row>
-    <b-row class="back">
+    <b-row class="back position-relative">
       <HomePageLink
         action="Retour"
         url="/"
         direction="animated-arrowLtr"
-        class="link link-left"
+        class="position-absolute link link-left"
         textColor="#6d327c"
       />
     </b-row>
@@ -50,6 +50,7 @@ export default {
     };
   },
   methods: {
+    // Hide or show slider transition
     actionTransition() {
       this.showTransition = true;
       setTimeout(() => {
@@ -62,11 +63,13 @@ export default {
     ...mapGetters(["allProjects"])
   },
   beforeCreate() {
+    // Hide slider transition after created
     setTimeout(() => {
       this.showTransition = false;
     }, 1300);
   },
   mounted() {
+    // Dispatch all projets contains in the vuex state.projects
     this.$store.dispatch("getAllProjects");
   }
 };
@@ -77,17 +80,9 @@ export default {
   position: relative;
   background-color: $dark-gray;
   perspective: 1000px;
+  min-height: 100vh;
   .back {
-    position: relative;
-    height: 10vh;
-    .link {
-      position: absolute;
-      &-left {
-        left: 70%;
-        bottom: 0;
-        transform: scale(0.8);
-      }
-    }
+    height: 15vh;
   }
   .cards {
     justify-content: space-around;
@@ -130,8 +125,8 @@ export default {
       .link {
         &-left {
           left: 50%;
-          bottom: 0;
-          transform: translate(-50%) scale(0.8);
+          bottom: 50%;
+          transform: translate(-50%, 0) scale(0.8);
         }
       }
     }
@@ -147,14 +142,12 @@ export default {
     }
   }
 }
-@media (min-width: 992px) {
+@media (min-width: 768px) {
   .container-fluid {
     .back {
       .link {
         &-left {
-          left: 81%;
-          bottom: 0;
-          transform: scale(0.8);
+          transform: translate(-50%, 0) scale(1);
         }
       }
     }

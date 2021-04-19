@@ -168,7 +168,6 @@ h2 {
         color: $white;
         background-color: var(--color);
         box-shadow: 5px 7px 2px $white, 0px 0px 15px var(--color);
-        // transform: translate(-5%, -50%) rotateZ(0deg);
       }
     }
     h2 {
@@ -225,7 +224,6 @@ h2 {
         color: $white;
         background-color: var(--color);
         box-shadow: -5px 7px 2px $white, 0px 0px 15px var(--color);
-        // transform: translate(10%, -50%) rotateZ(0deg);
       }
       &-body {
         transition: all 0.2s ease;

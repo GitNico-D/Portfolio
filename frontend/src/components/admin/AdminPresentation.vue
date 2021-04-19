@@ -7,7 +7,7 @@
         ressource, la modifier, la visionner ainsi que la supprimer.
       </template>
       <hr class="my-4" />
-      <p>
+      <p class="jumbotron-body">
         Pour se rendre sur la section souhaitée, ouvrez la sidebar symbolisé par
         les flèches blanches et sélectionné la section de resource que vous
         souhaitez gérer.
@@ -30,5 +30,38 @@ export default {
 }
 hr {
   background-color: $white;
+}
+@media(min-width: 320px) {
+  .jumbotron {
+    width: 100%;
+    .lead {
+      font-size: 0.9rem;
+    }
+    &-body {
+      font-size: 0.7rem;
+    }
+  }
+}
+@media(min-width: 576px) {
+  .jumbotron {
+    width: 85%;
+    .lead {
+      font-size: 1rem;
+    }
+    &-body {
+      font-size: 0.9rem;
+    }
+  }
+}
+@media(min-width: 768px) {
+  .jumbotron {
+    width: 70%;
+    .lead {
+      font-size: 1.2rem;
+    }
+    &-body {
+      font-size: 1.1rem;
+    }
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-button v-b-toggle.sidebar class="btn-toggle position-absolute">
+  <div class="div-button">
+    <b-button v-b-toggle.sidebar class="btn-toggle" v-b-popover.hover.bottom="'Toutes les sections'">
       <font-awesome-icon icon="angle-double-right" size="2x" />
     </b-button>
     <b-sidebar id="sidebar" aria-labelledby="sidebar" no-header backdrop>
@@ -115,43 +115,67 @@ export default {
     }
   }
 }
-.btn {
-  &-toggle {
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: transparent;
-    border-left: none;
-    @include box_shadow(4px, 4px, 1px, $white);
-    &:hover {
-      background: $white;
-      color: $dark-gray;
-      @include box_shadow(0px, 0px, 6px, $white);
-    }
-    &:focus {
+.div-button {
+  .btn {
+    &-toggle {
+      position: absolute;
       background-color: transparent;
-      color: $white;
-      border-color: $white;
-      @include box_shadow(0px, 0px, 6px, $white);
+      border-left: none;
+      @include box_shadow(4px, 4px, 1px, $white);
+      &:hover {
+        background: $white;
+        color: $dark-gray;
+        @include box_shadow(0px, 0px, 6px, $white);
+      }
+      &:focus {
+        background-color: transparent;
+        color: $white;
+        border-color: $white;
+        @include box_shadow(0px, 0px, 6px, $white);
+      }
     }
-  }
-  &-close {
-    background: $dark-gray !important;
-    border: 1px solid $dark-gray;
-    &:hover {
-      background: $white !important;
+    &-close {
+      background: $dark-gray !important;
       border: 1px solid $dark-gray;
-      color: $dark-gray;
+      &:hover {
+        background: $white !important;
+        border: 1px solid $dark-gray;
+        color: $dark-gray;
+      }
+    }
+    &-overview,
+    &-project,
+    &-career,
+    &-skill,
+    &-presentation {
+      &:hover {
+        background-color: var(--bg-color);
+        color: $white !important;
+      }
     }
   }
-  &-overview,
-  &-project,
-  &-career,
-  &-skill,
-  &-presentation {
-    &:hover {
-      background-color: var(--bg-color);
-      color: $white !important;
+}
+@media (min-width: 320px) {
+  .div-button {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 50%;
+    z-index: 10;
+    .btn {
+      &-toggle {
+        left: 0;      
+        transform: translate(-25%, -50%) scale(0.5);
+      }
+    }
+  }
+}
+@media (min-width: 768px) {
+  .div-button {
+    .btn {
+      &-toggle { 
+        left: 0;  
+        transform: translateY(-50%) scale(1);
+      }
     }
   }
 }
