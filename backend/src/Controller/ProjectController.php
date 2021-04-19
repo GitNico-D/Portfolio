@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Project;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
+use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -123,9 +124,10 @@ class ProjectController extends AbstractController
      * @param EntityManagerInterface $em
      * @return JsonResponse
      */
-    public function deleteProject(Project $project, EntityManagerInterface $em): JsonResponse
+    public function deleteProject(Project $project, EntityManagerInterface $em, FileUploader $fileUploader): JsonResponse
     {
         $id = $project->getId();
+        $fileUploader->deleteFile($project->getImgStatic(), 'project');
         $em->remove($project);
         $em->flush();
         return $this->json(['Message' => 'Project id ' . $id . ' deleted'], JsonResponse::HTTP_OK);

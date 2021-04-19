@@ -18,13 +18,14 @@
           ><span class="px-3" :style="{ '--color': color }"> | </span>
           <router-link to="/career">Carrières</router-link
           ><span class="px-3" :style="{ '--color': color }"> | </span>
-          <router-link
+          <b-link
             v-if="loggedIn"
             to="/admin"
+            @click="reloadPage"
             v-b-popover.hover.bottom="'Vers page administrateur'"
           >
             <font-awesome-icon icon="user-shield" />
-          </router-link>
+          </b-link>
           <router-link
             to="/login"
             v-if="!loggedIn"
@@ -58,6 +59,9 @@ export default {
     logOut() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/login");
+    },
+    reloadPage() {
+      document.location.reload(true);
     }
   },
   computed: {

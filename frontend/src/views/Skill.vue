@@ -106,6 +106,9 @@ export default {
 
 <style lang="scss" scoped>
 .container-fluid {
+  background-color: $dark-gray;
+  perspective: 1000px;
+  position: relative;
   .back {
     height: 15vh;
   }

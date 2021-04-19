@@ -1,4 +1,5 @@
 import AuthServices from "../../services/authServices";
+import errorRedirection from "../../services/errorRedirection";
 
 const user = JSON.parse(localStorage.getItem("user"));
 const state = user
@@ -14,6 +15,7 @@ const actions = {
       },
       error => {
         commit("loginFailure");
+        errorRedirection(error);
         return Promise.reject(error);
       }
     );

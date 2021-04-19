@@ -48,3 +48,15 @@
         19px 19px rgba(109, 50, 124, 0.04), 
         1.25rem 1.25rem rgba(109, 50, 124, 0.04);
 }
+
+@mixin text-shadow-3d($color: $green) {
+    text-shadow : 0 1px 0 $color, 
+    0 2px 0 $color,
+    0 3px 0 $color,
+    0 4px 0 $color, 
+    0 5px 0 $color,
+    0 6px 0 $color, 
+    0 7px 0 $color,
+    0 8px 0 $color,
+    0 9px 0 $color;
+}

@@ -69,8 +69,12 @@
               </ValidationProvider>
               <b-form-group>
                 <b-button block type="submit" :disabled="loading">
-                  <b-spinner v-show="loading" label="Spinning"></b-spinner>
-                  <span>Se connecter</span>
+                  <b-spinner
+                    v-show="loading"
+                    label="Spinning"
+                    small
+                  ></b-spinner>
+                  <span class="ml-2">Se connecter</span>
                 </b-button>
               </b-form-group>
               <b-form-group>
@@ -169,9 +173,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-hr {
-  background: $white;
+.container-fluid {
+  background-color: $dark-gray;
+  perspective: 1000px;
+  position: relative;
+  min-height: 100vh;
 }
+
 .card {
   border: 1px solid $white;
   background: $dark-gray;
@@ -195,11 +203,17 @@ hr {
     }
   }
 }
+hr {
+  background: $white;
+}
 .link {
   &-back {
     position: absolute;
     bottom: -15%;
     transform: translateX(-50%) scale(0.8);
   }
+}
+.row {
+  height: 100vh;
 }
 </style>

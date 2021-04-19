@@ -4,7 +4,7 @@
     <BackgroundPage circleColor="#00a1ba" />
     <Transition v-show="showTransition" directionAnimation="down" />
     <CareerStage
-      v-for="(careerStage, index) in allCareerStage"
+      v-for="(careerStage, index) in allCareerStages"
       :key="careerStage.id"
       :title="careerStage.name"
       :description="careerStage.description"
@@ -59,7 +59,7 @@ export default {
     ...mapActions(["getAllCareerStage"])
   },
   computed: {
-    ...mapGetters(["allCareerStage"])
+    ...mapGetters(["allCareerStages"])
   },
   created() {
     setTimeout(() => {
@@ -73,6 +73,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container-fluid {
+  background-color: $dark-gray;
+  position: relative;
+  perspective: 1000px;
+}
 .bottom {
   height: 16vh !important;
   position: relative;

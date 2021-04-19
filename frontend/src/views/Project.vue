@@ -11,8 +11,8 @@
         :title="project.name"
         :content="project.description"
         :url="project.url"
-        :imgSrc="require('../assets/img-test-1.jpg')"
-        imgAlt="Image Projet 1"
+        :imgSrc="project.imgStatic"
+        :imgAlt="project.altStatic"
         :date="project.creationDate"
       />
     </b-row>
@@ -76,6 +76,7 @@ export default {
 .container-fluid {
   position: relative;
   background-color: $dark-gray;
+  perspective: 1000px;
   .back {
     position: relative;
     height: 10vh;

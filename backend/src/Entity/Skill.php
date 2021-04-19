@@ -53,7 +53,7 @@ class Skill
      * @Assert\Type("integer")
      * @Groups({"category:read"})
      */
-    private $knowledge_level;
+    private $level;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="skills", cascade={"persist"})
@@ -102,14 +102,14 @@ class Skill
         return $this;
     }
 
-    public function getKnowledgeLevel(): ?int
+    public function getLevel(): ?int
     {
-        return $this->knowledge_level;
+        return $this->level;
     }
 
-    public function setKnowledgeLevel(int $knowledge_level): self
+    public function setLevel(int $level): self
     {
-        $this->knowledge_level = $knowledge_level;
+        $this->level = $level;
 
         return $this;
     }

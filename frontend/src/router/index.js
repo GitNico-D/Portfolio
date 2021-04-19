@@ -70,7 +70,9 @@ router.beforeEach((to, from, next) => {
     "/projects",
     "/presentation",
     "/skills",
-    "/career"
+    "/career",
+    "/ErrorView/404",
+    "/ErrorView/500"
   ];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem("user");

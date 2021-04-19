@@ -5,6 +5,7 @@
         "php": ">=7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-json": "*",
         "composer/package-versions-deprecated": "^1.11",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.1",
@@ -24,6 +25,7 @@
         "symfony/flex": "^1.3.1",
         "symfony/framework-bundle": "5.1.*",
         "symfony/maker-bundle": "^1.21",
+        "symfony/mime": "5.1.*",
         "symfony/property-access": "5.1.*",
         "symfony/property-info": "5.1.*",
         "symfony/security-bundle": "5.1.*",
@@ -33,10 +35,7 @@
         "symfony/yaml": "5.1.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
-        "willdurand/hateoas-bundle": "^2.1",
-      "ext-json": "*"
-    },
-    "require-dev": {
+        "willdurand/hateoas-bundle": "^2.1"
     },
     "config": {
         "optimize-autoloader": true,

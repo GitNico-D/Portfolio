@@ -2,6 +2,8 @@
 
 namespace App\Request\ParamConverter;
 
+use App\Services\FileUploader;
+use App\Services\RequestVerification;
 use App\Services\SearchRelatedEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -14,20 +16,27 @@ class CreateEntityConverter implements ParamConverterInterface
     protected $serializer;
     protected $entityManager;
     protected $searchRelatedEntity;
+    protected $requestVerification;
+    protected $fileUploader;
 
     /**
      * @param SerializerInterface $serializer
      * @param EntityManagerInterface $entityManager
      * @param SearchRelatedEntity $searchRelatedEntity
+     * @param RequestVerification $requestVerification
      */
     public function __construct(
         SerializerInterface $serializer,
         EntityManagerInterface $entityManager,
-        SearchRelatedEntity $searchRelatedEntity
+        SearchRelatedEntity $searchRelatedEntity,
+        RequestVerification $requestVerification,
+        FileUploader $fileUploader
     ) {
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
         $this->searchRelatedEntity = $searchRelatedEntity;
+        $this->requestVerification = $requestVerification;
+        $this->fileUploader = $fileUploader;
     }
 
     /**
@@ -49,15 +58,20 @@ class CreateEntityConverter implements ParamConverterInterface
      * @param ParamConverter $configuration
      */
     public function apply(Request $request, ParamConverter $configuration)
-    {
+    {    
+        $jsonRequest = $this->requestVerification->checkAddContent($request, $configuration);
         $entity = $this->serializer->deserialize(
-            $request->getContent(),
+            $jsonRequest,
             $configuration->getClass(),
             'json'
         );
-        $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $request);
-        if ($relatedEntity) {
-            $setRelatedEntity = 'set' . str_replace('App\Entity\\', '', get_class($relatedEntity));
+        if($request->files) {
+            $uploadFile = $this->fileUploader->getUploadFile($request->files, $configuration->getName());
+            $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);                
+        }
+        $relatedEntity = $this->searchRelatedEntity->searchForeignKey($entity, $jsonRequest);
+        if($relatedEntity) {
+            $setRelatedEntity = $this->searchRelatedEntity->isProxiesClass($relatedEntity);
             $entity->$setRelatedEntity($relatedEntity);
         }
         $request->attributes->set($configuration->getName(), $entity);
