@@ -109,7 +109,7 @@ class SoftwareController extends AbstractController
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
             $softwareAndLinks = $customLink->createLink($software);
-            $em->flush($software);
+            $em->flush();
             return $this->json($softwareAndLinks, JsonResponse::HTTP_OK);
         }
     }
@@ -122,6 +122,7 @@ class SoftwareController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      * @param Software $software
      * @param EntityManagerInterface $em
+     * @param FileUploader $fileUploader
      * @return JsonResponse
      */
     public function deleteSoftware(

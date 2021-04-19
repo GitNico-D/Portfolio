@@ -107,7 +107,7 @@ class PresentationController extends AbstractController
             return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
             $presentationAndLinks = $customLink->createLink($presentation);
-            $em->flush($presentation);
+            $em->flush();
             return$this->json($presentationAndLinks, JsonResponse::HTTP_OK);
         }
     }

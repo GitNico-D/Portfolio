@@ -107,7 +107,7 @@ class CategoryController extends AbstractController
             return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
             $categoryAndLinks = $customLink->createLink($category);
-            $em->flush($category);
+            $em->flush();
             return$this->json($categoryAndLinks, JsonResponse::HTTP_OK);
         }
     }

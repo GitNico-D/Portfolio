@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -23,8 +22,9 @@ class FileUploader
 
     /**
      * Upload a new file and move it to the directory corresponding at entity
-     * @param UploadFile $file
+     * @param UploadedFile $file
      * @param Entity $entity
+     * @return string
      */
     public function upload(UploadedFile $file, $entity)
     {
@@ -38,8 +38,9 @@ class FileUploader
 
     /**
      * Get the File from the request and upload on server
-     * 
+     *
      * @param File $file
+     * @return string
      */
     public function getUploadFile($files, $entity) 
     {
@@ -52,10 +53,11 @@ class FileUploader
 
     /**
      * Attach the File and his url to the associate entity
-     * 
+     *
      * @param File $file
      * @param Entity $entity
-     * @param Configuration $configuration 
+     * @param Configuration $configuration
+     * @return
      */
     public function setUploadFile($file, $entity, $configuration) 
     {
@@ -85,10 +87,11 @@ class FileUploader
 
     /**
      * Checks if a file exist and delete it
-     * Works when deleting an entity even if its attached image 
+     * Works when deleting an entity even if its attached image
      * file cannot be found or has already been deleted
-     * @param $file/$entity
+     * @param $entity
      * @param $entityName
+     * @return null
      */
     public function deleteFile($entity, $entityName) 
     {
@@ -111,6 +114,7 @@ class FileUploader
     /**
      * Get entity image to find his name when request->files is null
      * @param $entity
+     * @return null
      */
     public function findImage($entity) 
     {
@@ -122,11 +126,7 @@ class FileUploader
                 return $entity->getLogoCompany();
                 break;
             case 'skill':
-                return $entity->getIcon();
-                break;
             case 'software':
-                return $entity->getIcon();
-                break;
             case 'contact':
                 return $entity->getIcon();
                 break;

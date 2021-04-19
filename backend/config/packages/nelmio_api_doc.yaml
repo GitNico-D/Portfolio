@@ -21,12 +21,6 @@ nelmio_api_doc:
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/Category'
-                        '401':
-                            description: Unauthorized
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Category
                     tags: 
@@ -64,11 +58,42 @@ nelmio_api_doc:
                         - Categories
                     parameters:
                         - name: id
-                          in: query 
+                          in: path 
                           description: "**ID** of Category resource. *Example: 5,11.*"
                           required: true
                           schema:
                             type: integer
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Category'
+                        '404':
+                            description: Resource **Category** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
+                put:
+                    summary: Updated an existing Category by his {id}
+                    tags: 
+                        - Categories
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer    
+                    requestBody:
+                        description: Category that need to be updated
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Category'
+                        required: true
                     responses:
                         '200':
                             description: Successful response
@@ -83,30 +108,6 @@ nelmio_api_doc:
                                     schema:
                                         $ref: '#/components/schemas/Error401'
                         '404':
-                            description: Resource **Category** not found
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error404'
-                put:
-                    summary: Updated an existing Category by his {id}
-                    tags: 
-                        - Categories
-                    requestBody:
-                        description: Category that need to be added
-                        content: 
-                            application/json: 
-                                schema:
-                                    $ref: '#/components/schemas/Category'
-                        required: true
-                    responses:
-                        '200':
-                            description: Successful response
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Category'
-                        '404':
                             description: Resource not found
                             content:
                                 application/json: 
@@ -118,7 +119,7 @@ nelmio_api_doc:
                         - Categories
                     parameters:
                         - name: id
-                          in: query 
+                          in: path 
                           description: "**ID** of Category resource. *Example: 5,11.*"
                           required: true
                           schema:
@@ -130,6 +131,12 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/DeleteMessage'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'
                         '404':
                             description: Resource **Category** not found
                             content:
@@ -151,12 +158,6 @@ nelmio_api_doc:
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/Project'
-                        '401':
-                            description: Unauthorized
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Project
                     tags: 
@@ -166,7 +167,10 @@ nelmio_api_doc:
                         content: 
                             application/json: 
                                 schema:
-                                    $ref: '#/components/schemas/Project'
+                                    $ref: '#/components/schemas/Project_post'
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Project_form_data'       
                         required: true
                     responses:
                         '201':
@@ -193,8 +197,7 @@ nelmio_api_doc:
                     tags: 
                         - Projects
                     parameters:
-                        -
-                          name: id
+                        - name: id
                           in: path 
                           description: "**ID** of project resource. *Example: 5,11.*"
                           required: true
@@ -207,12 +210,6 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Project'
-                        '401':
-                            description: Unauthorized
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error401'
                         '404':
                             description: Resource **Project** not found
                             content:
@@ -223,12 +220,22 @@ nelmio_api_doc:
                     summary: Updated an existing Project by his {id}
                     tags: 
                         - Projects
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer   
                     requestBody:
-                        description: Project that need to be added
+                        description: Project that need to be updated
                         content: 
                             application/json: 
                                 schema:
                                     $ref: '#/components/schemas/Project'
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Project_form_data' 
                         required: true
                     responses:
                         '200':
@@ -237,6 +244,12 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Project'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
                         '404':
                             description: Resource not found
                             content:
@@ -249,7 +262,7 @@ nelmio_api_doc:
                         - Projects
                     parameters:
                         - name: id
-                          in: query 
+                          in: path 
                           description: "**ID** of project resource. *Example: 5,11.*"
                           required: true
                           schema:
@@ -261,143 +274,19 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/DeleteMessage'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
                         '404':
                             description: Resource **Project** not found
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/Error404'
-            /educations:
-                get:
-                    summary: List all Educations
-                    tags: 
-                        - Educations
-                    description: ''
-                    responses:
-                        '200':
-                            description: Successful response
-                            content:
-                                application/json: 
-                                    schema:
-                                        type: array
-                                        items:
-                                            $ref: '#/components/schemas/Education'
-                        '401':
-                            description: Unauthorized
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error401'
-                post:
-                    summary: Add a new Education
-                    tags: 
-                        - Educations
-                    requestBody:
-                        description: "**Education** that need to be added"
-                        content: 
-                            application/json: 
-                                schema:
-                                    $ref: '#/components/schemas/Education'
-                        required: true
-                    responses:
-                        '201':
-                            description: "New **Education** resource created"
-                            content:
-                                application/json:
-                                    schema:
-                                        $ref: '#/components/schemas/Education'
-                        '401':
-                            description: Unauthorized
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error401'
-                        '400':
-                            description: Syntax error, Validations errors of fields, Wrong attributes
-                            content:
-                                application/json:
-                                    schema:
-                                        $ref: '#/components/schemas/Error400'
-            /educations/{id}:
-                get:
-                    summary: Return a Educations by his ID
-                    tags: 
-                        - Educations
-                    parameters:
-                        - name: id
-                          in: query 
-                          description: "**ID** of Education resource. *Example: 5,11.*"
-                          required: true
-                          schema:
-                            type: integer
-                    responses:
-                        '200':
-                            description: Successful response
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Education'
-                        '401':
-                            description: Unauthorized
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error401'
-                        '404':
-                            description: Resource **Education** not found
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error404'
-                put:
-                    summary: Updated an existing Education by his {id}
-                    tags: 
-                        - Educations
-                    requestBody:
-                        description: Education that need to be added
-                        content: 
-                            application/json: 
-                                schema:
-                                    $ref: '#/components/schemas/Education'
-                        required: true
-                    responses:
-                        '200':
-                            description: Successful response
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Education'
-                        '404':
-                            description: Resource not found
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error404'
-                delete:
-                    summary: Delete an existing Education
-                    tags: 
-                        - Educations
-                    parameters:
-                        - name: id
-                          in: query 
-                          description: "**ID** of Education resource. *Example: 5,11.*"
-                          required: true
-                          schema:
-                            type: integer
-                    responses:
-                        '200':
-                            description: " **Education** Resource id deleted"
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/DeleteMessage'
-                        '404':
-                            description: Resource **Education** not found
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error404'
-            /experience:
+                                        $ref: '#/components/schemas/Error404'            
+            /experiences:
                 get:
                     summary: List all Experiences
                     tags: 
@@ -412,12 +301,6 @@ nelmio_api_doc:
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/Experience'
-                        '401':
-                            description: Unauthorized
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Experience
                     tags: 
@@ -428,6 +311,9 @@ nelmio_api_doc:
                             application/json: 
                                 schema:
                                     $ref: '#/components/schemas/Experience'
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Experience_form_data'
                         required: true
                     responses:
                         '201':
@@ -448,18 +334,52 @@ nelmio_api_doc:
                                 application/json:
                                     schema:
                                         $ref: '#/components/schemas/Error400'
-            /experience/{id}:
+            /experiences/{id}:
                 get:
                     summary: Return a Experience by his ID
                     tags: 
                         - Experiences
                     parameters:
                         - name: id
-                          in: query 
+                          in: path 
                           description: "**ID** of Experience resource. *Example: 5,11.*"
                           required: true
                           schema:
                             type: integer
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Experience'
+                        '404':
+                            description: Resource **Experience** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
+                put:
+                    summary: Updated an existing Experience by his {id}
+                    tags: 
+                        - Experiences
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer    
+                    requestBody:
+                        description: Experience that need to be updated
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Experience'
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Experience_form_data'
+                        required: true
                     responses:
                         '200':
                             description: Successful response
@@ -474,30 +394,6 @@ nelmio_api_doc:
                                     schema:
                                         $ref: '#/components/schemas/Error401'
                         '404':
-                            description: Resource **Experience** not found
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error404'
-                put:
-                    summary: Updated an existing Experience by his {id}
-                    tags: 
-                        - Experiences
-                    requestBody:
-                        description: Experience that need to be added
-                        content: 
-                            application/json: 
-                                schema:
-                                    $ref: '#/components/schemas/Experience'
-                        required: true
-                    responses:
-                        '200':
-                            description: Successful response
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Experience'
-                        '404':
                             description: Resource not found
                             content:
                                 application/json: 
@@ -509,7 +405,7 @@ nelmio_api_doc:
                         - Experiences
                     parameters:
                         - name: id
-                          in: query 
+                          in: path 
                           description: "**ID** of Experience resource. *Example: 5,11.*"
                           required: true
                           schema:
@@ -521,13 +417,19 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/DeleteMessage'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
                         '404':
                             description: Resource **Experience** not found
                             content:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Error404'
-            /skill:
+            /skills:
                 get:
                     summary: List all Skills
                     tags: 
@@ -542,12 +444,6 @@ nelmio_api_doc:
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/Skill'
-                        '401':
-                            description: Unauthorized
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Skill
                     tags: 
@@ -558,6 +454,9 @@ nelmio_api_doc:
                             application/json: 
                                 schema:
                                     $ref: '#/components/schemas/Skill'
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Skill_form_data'
                         required: true
                     responses:
                         '201':
@@ -585,11 +484,45 @@ nelmio_api_doc:
                         - Skills
                     parameters:
                         - name: id
-                          in: query 
+                          in: path 
                           description: "**ID** of Skill resource. *Example: 5,11.*"
                           required: true
                           schema:
                             type: integer
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Skill'
+                        '404':
+                            description: Resource **Skill** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
+                put:
+                    summary: Updated an existing Skill by his {id}
+                    tags: 
+                        - Skills
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    requestBody:
+                        description: Skill that need to be updated
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Skill'
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Skill_form_data'
+                        required: true
                     responses:
                         '200':
                             description: Successful response
@@ -602,31 +535,7 @@ nelmio_api_doc:
                             content:
                                 application/json: 
                                     schema:
-                                        $ref: '#/components/schemas/Error401'
-                        '404':
-                            description: Resource **Skill** not found
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error404'
-                put:
-                    summary: Updated an existing Skill by his {id}
-                    tags: 
-                        - Skills
-                    requestBody:
-                        description: Skill that need to be added
-                        content: 
-                            application/json: 
-                                schema:
-                                    $ref: '#/components/schemas/Skill'
-                        required: true
-                    responses:
-                        '200':
-                            description: Successful response
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Skill'
+                                        $ref: '#/components/schemas/Error401'                
                         '404':
                             description: Resource not found
                             content:
@@ -639,7 +548,7 @@ nelmio_api_doc:
                         - Skills
                     parameters:
                         - name: id
-                          in: query 
+                          in: path 
                           description: "**ID** of Skill resource. *Example: 5,11.*"
                           required: true
                           schema:
@@ -651,13 +560,19 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/DeleteMessage'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
                         '404':
                             description: Resource **Skill** not found
                             content:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Error404'
-            /software:
+            /softwares:
                 get:
                     summary: List all Softwares
                     tags: 
@@ -672,12 +587,6 @@ nelmio_api_doc:
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/Software'
-                        '401':
-                            description: Unauthorized
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error401'
                 post:
                     summary: Add a new Software
                     tags: 
@@ -688,6 +597,9 @@ nelmio_api_doc:
                             application/json: 
                                 schema:
                                     $ref: '#/components/schemas/Software'
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Software_form_data'
                         required: true
                     responses:
                         '201':
@@ -715,7 +627,7 @@ nelmio_api_doc:
                         - Softwares
                     parameters:
                         - name: id
-                          in: query 
+                          in: path 
                           description: "**ID** of Software resource. *Example: 5,11.*"
                           required: true
                           schema:
@@ -727,12 +639,6 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Software'
-                        '401':
-                            description: Unauthorized
-                            content:
-                                application/json: 
-                                    schema:
-                                        $ref: '#/components/schemas/Error401'
                         '404':
                             description: Resource **Software** not found
                             content:
@@ -743,8 +649,15 @@ nelmio_api_doc:
                     summary: Updated an existing Software by his {id}
                     tags: 
                         - Softwares
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
                     requestBody:
-                        description: Software that need to be added
+                        description: Software that need to be updated
                         content: 
                             application/json: 
                                 schema:
@@ -757,6 +670,12 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Software'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
                         '404':
                             description: Resource not found
                             content:
@@ -769,7 +688,7 @@ nelmio_api_doc:
                         - Softwares
                     parameters:
                         - name: id
-                          in: query 
+                          in: path 
                           description: "**ID** of Software resource. *Example: 5,11.*"
                           required: true
                           schema:
@@ -781,8 +700,243 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/DeleteMessage'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
                         '404':
                             description: Resource **Software** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
+            /login_check:
+                post:
+                    summary: Get JWT Token
+                    tags: 
+                        - Login
+                    requestBody:
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Login'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Token'
+                        '401':
+                            description: Invalid credentials
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Login_fail'                            
+            /presentations/{id}:
+                get:
+                    summary: Return the presentation (id = "1")
+                    tags: 
+                        - Presentation
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Presentation 1"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Software'
+                        '404':
+                            description: Resource **Presentation** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
+                put:
+                    summary: Updated the presentation 1
+                    tags: 
+                        - Presentation
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Presentation 1"
+                          required: true
+                          schema:
+                            type: integer
+                    requestBody:
+                        description: Presentation that need to be updated
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Presentation'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Presentation'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
+            /contacts:
+                get:
+                    summary: List all Contact
+                    tags: 
+                        - Contacts
+                    description: ''
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Contact'
+                post:
+                    summary: Add a new Contact
+                    tags: 
+                        - Contacts
+                    requestBody:
+                        description: "**Contact** that need to be added"
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Contact'
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Contact_form_data'
+                        required: true
+                    responses:
+                        '201':
+                            description: "New **Contact** resource created"
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Contact'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'
+                        '400':
+                            description: Syntax error, Validations errors of fields, Wrong attributes
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Error400'
+            /contacts/{id}:
+                get:
+                    summary: Return a Contact by his ID
+                    tags: 
+                        - Contacts
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Contact resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Contact'
+                        '404':
+                            description: Resource **Contact** not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
+                put:
+                    summary: Updated an existing Contact by his {id}
+                    tags: 
+                        - Contacts
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    requestBody:
+                        description: Contact that need to be updated
+                        content: 
+                            application/json: 
+                                schema:
+                                    $ref: '#/components/schemas/Contact'
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Contact_form_data'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Contact'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
+                delete:
+                    summary: Delete an existing Contact
+                    tags: 
+                        - Contacts
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Contact resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                    responses:
+                        '200':
+                            description: " **Contact** Resource id deleted"
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/DeleteMessage'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
+                        '404':
+                            description: Resource **Contact** not found
                             content:
                                 application/json: 
                                     schema:
@@ -805,32 +959,70 @@ nelmio_api_doc:
                             type: string
                         url: 
                             type: string
+                            format: url
                         img_static:
-                            type: string
-                        img_hover:
                             type: string
                         alt_static:
                             type: string
-                        alt_hover:
+                        creation_date:
+                            type: string
+                            format: date-time
+                    required:
+                        - id
+                        - name 
+                        - description
+                        - url
+                        - img_static
+                        - alt_static
+                        - creation_date   
+                Project_post:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                        description:
+                            type: string
+                        url: 
+                            type: string
+                        img_static:
+                            type: string
+                        alt_static:
                             type: string
                         creation_date:
                             type: string
+                            format: date-time
                     required:
                         - id
-                        - name                
-                Education:
-                    type: object
+                        - name 
+                        - description
+                        - url
+                        - img_static
+                        - alt_static
+                        - creation_date 
+                Project_form_data: 
                     properties:
-                        id:
-                            type: integer
-                        title:
+                        name:
                             type: string
-                        school:
+                        description:
                             type: string
-                        city: 
+                        url: 
                             type: string
-                        start_date:
+                        img_static:
                             type: string
+                            format: binary
+                        alt_static:
+                            type: string
+                        creation_date:
+                            type: string
+                            format: date-time
+                    required:
+                        - id
+                        - name 
+                        - description
+                        - url
+                        - img_static
+                        - alt_static
+                        - creation_date
                 Experience:
                     type: object
                     properties:
@@ -846,8 +1038,46 @@ nelmio_api_doc:
                             type: string
                         start_date:
                             type: string
+                            format: date-time                            
                         end_date:
                             type: string
+                            format: date-time
+                    required:
+                        - id
+                        - name 
+                        - description
+                        - company
+                        - logo_company
+                        - start_date
+                        - end_date
+                Experience_form_data:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                        description:
+                            type: string
+                        company: 
+                            type: string
+                        logo_company:
+                            type: string
+                            format: binary
+                        start_date:
+                            type: string
+                            format: date-time                            
+                        end_date:
+                            type: string
+                            format: date-time
+                    required:
+                        - id
+                        - name 
+                        - description
+                        - company
+                        - logo_company
+                        - start_date
+                        - end_date
                 Category:
                     type: object
                     properties:
@@ -855,6 +1085,9 @@ nelmio_api_doc:
                             type: integer
                         name:
                             type: string
+                    required:
+                        - id
+                        - name  
                 Skill:
                     type: object
                     properties:
@@ -866,8 +1099,34 @@ nelmio_api_doc:
                             type: string
                         description:
                             type: string
-                        knowledge_level: 
+                        level: 
                             type: integer
+                    required:
+                        - id
+                        - name
+                        - icon
+                        - description
+                        - level
+                Skill_form_data:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                        icon:
+                            type: string
+                            format: binary
+                        description:
+                            type: string
+                        level: 
+                            type: integer
+                    required:
+                        - id
+                        - name
+                        - icon
+                        - description
+                        - level        
                 Software:
                     type: object
                     properties:
@@ -876,6 +1135,116 @@ nelmio_api_doc:
                         name:
                             type: string
                         icon:
+                            type: string
+                        level:
+                            type: string
+                    required:
+                        - id
+                        - name
+                        - icon
+                        - level
+                Software_form_data:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                        icon:
+                            type: string
+                            format: binary
+                        level:
+                            type: string
+                    required:
+                        - id
+                        - name
+                        - icon
+                        - level
+                Presentation: 
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        first_name:
+                            type: string
+                        last_name:
+                            type: string
+                        picture:
+                            type: string
+                        quote:
+                            type: string
+                        title_first_text:
+                            type: string
+                        first_text:
+                            type: string
+                        title_second_text:
+                            type: string
+                        second_text:
+                            type: string
+                        title_third_text:
+                            type: string
+                        third_text:
+                            type: string 
+                Contact: 
+                    type: object
+                    properties:
+                        id: 
+                            type: integer
+                        title:
+                            type: string
+                        link:
+                            type: string
+                            format: url
+                        icon:
+                            type: string
+                    required:
+                        - id
+                        - title
+                        - link
+                        - icon
+                Contact_form_data: 
+                    type: object
+                    properties:
+                        id: 
+                            type: integer
+                        title:
+                            type: string
+                        link:
+                            type: string
+                            format: url
+                        icon:
+                            type: string
+                            format: binary
+                    required:
+                        - id
+                        - title
+                        - link
+                        - icon
+                Login: 
+                    type: object
+                    properties:
+                        email:
+                            type: string
+                            format: email
+                        password:
+                            type: string   
+                    required:
+                        - username
+                        - password
+                Login_fail:
+                    type: object
+                    properties:
+                        status:
+                            type: string
+                        message: 
+                            type: string 
+                    example: 
+                        status: 401
+                        message: 'Invalid credentials' 
+                Token: 
+                    type: object
+                    properties:
+                        token:
                             type: string
                 SuccessMessage:
                     type: object
@@ -927,6 +1296,7 @@ nelmio_api_doc:
                     example: 
                         status: 404
                         message: 'Resource ID not found'
+                    
         security:
             - Bearer: []
     areas: # to filter documented areas

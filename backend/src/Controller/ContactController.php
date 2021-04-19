@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Contact;
 use App\Services\CustomHateoasLinks;
 use App\Services\ErrorValidator;
+use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +27,7 @@ class ContactController extends AbstractController
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function readContactList(CustomHateoasLinks $customLink)
+    public function readContactList(CustomHateoasLinks $customLink): JsonResponse
     {
         $contacts = $this->getDoctrine()
             ->getRepository(Contact::class)
@@ -47,7 +48,7 @@ class ContactController extends AbstractController
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function readContacts(Contact $contact, CustomHateoasLinks $customLink)
+    public function readContacts(Contact $contact, CustomHateoasLinks $customLink): JsonResponse
     {
         $contactAndLinks = $customLink->createLink($contact);
         return $this->json($contactAndLinks, JsonResponse::HTTP_OK, [], ['groups' => 'presentation:read']);
@@ -108,7 +109,7 @@ class ContactController extends AbstractController
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
             $contactAndLinks = $customLink->createLink($contact);
-            $em->flush($contact);
+            $em->flush();
             return $this->json($contactAndLinks, JsonResponse::HTTP_OK);
         }
     }
@@ -123,9 +124,10 @@ class ContactController extends AbstractController
      * @param EntityManagerInterface $em
      * @return JsonResponse
      */
-    public function deleteContact(Contact $contact, EntityManagerInterface $em)
+    public function deleteContact(Contact $contact, EntityManagerInterface $em, FileUploader $fileUploader)
     {
         $id = $contact->getId();
+        $fileUploader->deleteFile($contact->getIcon(), 'contact');
         $em->remove($contact);
         $em->flush();
         return $this->json(['Message' => 'Contact id ' . $id . ' deleted'], JsonResponse::HTTP_OK);
