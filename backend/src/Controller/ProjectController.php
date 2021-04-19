@@ -122,6 +122,7 @@ class ProjectController extends AbstractController
      *
      * @param Project $project
      * @param EntityManagerInterface $em
+     * @param FileUploader $fileUploader
      * @return JsonResponse
      */
     public function deleteProject(Project $project, EntityManagerInterface $em, FileUploader $fileUploader): JsonResponse

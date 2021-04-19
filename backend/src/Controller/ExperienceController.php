@@ -24,12 +24,11 @@ class ExperienceController extends AbstractController
      * GET an Experience resources list
      *
      * @Route("/experiences", name="get_experience_list", methods={"GET"})
-     * @param Request $request
      * @param CustomHateoasLinks $customLink
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function readExperienceList(Request $request, CustomHateoasLinks $customLink): JsonResponse
+    public function readExperienceList(CustomHateoasLinks $customLink): JsonResponse
     {
         $experiences = $this->getDoctrine()
             ->getRepository(Experience::class)
@@ -110,7 +109,7 @@ class ExperienceController extends AbstractController
             return$this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
             $experienceAndLinks = $customLink->createLink($experience);
-            $em->flush($experience);
+            $em->flush();
             return$this->json($experienceAndLinks, JsonResponse::HTTP_OK);
         }
     }
@@ -123,6 +122,7 @@ class ExperienceController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      * @param Experience $experience
      * @param EntityManagerInterface $em
+     * @param FileUploader $fileUploader
      * @return JsonResponse
      */
     public function deleteExperience(

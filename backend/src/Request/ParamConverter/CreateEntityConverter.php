@@ -24,6 +24,7 @@ class CreateEntityConverter implements ParamConverterInterface
      * @param EntityManagerInterface $entityManager
      * @param SearchRelatedEntity $searchRelatedEntity
      * @param RequestVerification $requestVerification
+     * @param FileUploader $fileUploader
      */
     public function __construct(
         SerializerInterface $serializer,
@@ -59,7 +60,7 @@ class CreateEntityConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {    
-        $jsonRequest = $this->requestVerification->checkAddContent($request, $configuration);
+        $jsonRequest = $this->requestVerification->checkAddContent($request);
         $entity = $this->serializer->deserialize(
             $jsonRequest,
             $configuration->getClass(),

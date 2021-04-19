@@ -109,7 +109,7 @@ class SkillController extends AbstractController
             return $this->json($errors, JsonResponse::HTTP_BAD_REQUEST);
         } else {
             $skillAndLinks = $customLink->createLink($skill);
-            $em->flush($skill);
+            $em->flush();
             return $this->json($skillAndLinks, JsonResponse::HTTP_OK);
         }
     }
@@ -122,6 +122,7 @@ class SkillController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      * @param Skill $skill
      * @param EntityManagerInterface $em
+     * @param FileUploader $fileUploader
      * @return JsonResponse
      */
     public function deleteSkill(
