@@ -19,7 +19,7 @@
             Voici la
             <span class="font-weight-bold font-style-italic">Présentation</span>
           </h2>
-          <div class="btn-refresh-button">
+          <div class="btn-refresh-position">
             <b-button @click="refreshTab" variant="info" class="m-2 btn-add">
               <font-awesome-icon icon="sync" class="mr-2" spin />Rafraichir
             </b-button>
@@ -37,7 +37,7 @@
             />
           </div>
           <b-card class="mt-2 p-2 text-dark text-center">
-            <b-card-title class="display-4"
+            <b-card-title 
               >{{ onePresentation.firstName }}
               {{ onePresentation.lastName }}</b-card-title
             >
@@ -343,6 +343,11 @@ export default {
       }
     }
   }
+  .card {
+    &-body {
+      padding: 0.25rem;
+    }
+  }
   .padding-col-md {
     padding-right: 2.1rem;
     padding-left: 2.1rem;
@@ -362,6 +367,11 @@ export default {
       &-position {
         text-align: right;
       }
+    }
+  }
+  .card {
+    &-body {
+      padding: 1.25rem;
     }
   }
   .padding-col-md {

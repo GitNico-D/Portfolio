@@ -114,7 +114,7 @@
           </div>
         </b-tab>
         <b-tab class="mt-5 justify-content-center" lazy>
-          <template v-if="!careerId" #title>
+          <template v-if="!oneCareer.id" #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2" />
             <span>Ajouter une nouvelle étape de carrière</span>
           </template>
@@ -206,6 +206,9 @@ export default {
       this.$store.dispatch("getAllCareerStage");
       this.successMessage = "";
       this.errorMessage = "";
+      this.resetStateCareerStage()
+      this.methodAction = ''
+      this.careerId = ''
       // setTimeout(() => {
       //   this.tabIndex = 0;
       // }, 5000);
@@ -232,6 +235,7 @@ export default {
         });
     },
     toCareerForm(data, methodAction) {
+      this.resetStateCareerStage()
       this.careerId = data;
       this.methodAction = methodAction;
       if (methodAction == "create") {

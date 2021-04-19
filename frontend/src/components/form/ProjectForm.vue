@@ -18,13 +18,13 @@
       />
     </div>
     <div v-if="!oneProject.id">
-      <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+      <h2 id="modifyForm-title" class="text-center fw-bold my-5 project-form-title">
         Remplisser le formulaire ci-dessous pour ajouter un nouveau
         <span class="font-weight-bold font-style-italic">Projet !</span>
       </h2>
     </div>
     <div v-else>
-      <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+      <h2 id="modifyForm-title" class="text-center fw-bold my-5 project-form-title">
         Modification du project
         <p class="my-2">
           <span class="font-weight-bold font-style-italic"
@@ -254,7 +254,7 @@
             <p v-else>Date de création: '{{ project.creationDate }}'</p>
           </b-form-group>
         </ValidationProvider>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center flex-wrap">
           <b-button
             type="submit"
             class="m-3 p-3 btn-add"
@@ -502,11 +502,6 @@ export default {
 .row {
   height: unset;
 }
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
-}
 .form-group {
   margin-bottom: 2rem;
 }
@@ -541,5 +536,29 @@ form {
 .tabs {
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
+}
+@media (min-width: 320px) {
+  form {
+    width: 100%;
+    margin: auto;
+  }
+  .project-form-title {
+    font-size: 1.2rem;
+  }
+}
+@media (min-width: 576px) {
+  .project-form-title {
+    font-size: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  form {
+    width: 100%;
+    margin: auto;
+    padding: 1.5rem;
+  }
+  .project-form-title {
+    font-size: 2rem;
+  }
 }
 </style>

@@ -18,13 +18,13 @@
       />
     </div>
     <div v-if="!oneContact.id">
-      <h2 id="modifyForm-title" class="text-center fw-bold mt-5">
+      <h2 id="modifyForm-title" class="text-center fw-bold mt-5 contact-form-title">
         Remplisser le formulaire ci-dessous pour ajouter un nouveau
         <span class="font-weight-bold font-style-italic">Contact !</span>
       </h2>
     </div>
     <div v-else>
-      <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+      <h2 id="modifyForm-title" class="text-center fw-bold my-5 contact-form-title">
         Modification du contact
         <p class="my-2">
           <span class="font-weight-bold font-style-italic"
@@ -140,7 +140,7 @@
             ></b-img>
           </b-form-group>
         </ValidationProvider>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center flex-wrap">
           <b-button
             type="submit"
             class="m-3 p-3 btn-add"
@@ -342,8 +342,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.methodAction);
-    console.log(this.oneContact);
+    console.log('Mounted contactForm');
     if (this.methodAction == "update" && this.oneContact) {
       this.contact = this.oneContact;
       this.currentTitle = this.oneContact.title;
@@ -384,11 +383,6 @@ export default {
 .row {
   height: unset;
 }
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
-}
 .form-group {
   margin-bottom: 2rem;
 }
@@ -423,5 +417,29 @@ form {
 .tabs {
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
+}
+@media (min-width: 320px) {
+  form {
+    width: 100%;
+    margin: auto;
+  }
+  .contact-form-title {
+    font-size: 1.2rem;
+  }
+}
+@media (min-width: 576px) {
+  .contact-form-title {
+    font-size: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  form {
+    width: 100%;
+    margin: auto;
+    padding: 1.5rem;
+  }
+  .contact-form-title {
+    font-size: 2rem;
+  }
 }
 </style>
