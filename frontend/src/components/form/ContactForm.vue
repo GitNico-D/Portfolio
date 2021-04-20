@@ -309,7 +309,6 @@ export default {
                 this.successMessage = "";
               });
           } else {
-            console.log(this.oneContact.id)
             let fd = this.setFormWithFile(this.contact.icon, this.contact);
             this.updateContactWithFile({
               id: this.oneContact.id,

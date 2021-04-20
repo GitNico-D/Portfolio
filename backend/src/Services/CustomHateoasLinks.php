@@ -7,12 +7,15 @@ use ReflectionException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Creating custom Hateoas Links
  */
 class CustomHateoasLinks
 {
+    CONST CONTROLLER = '_controller';
+
     private $urlGenerator;
     private $routerInterface;
     private $serializer;
@@ -80,6 +83,7 @@ class CustomHateoasLinks
         return array_merge($entityArray, $links);
     }
 
+    
     /**
      * Listing Routes corresponding to Read, Update and Delete methods of an entity controller
      * @param string $entityName
@@ -87,17 +91,16 @@ class CustomHateoasLinks
      */
     public function routesList(string $entityName)
     {
+        
         $allRoutes = $this->routerInterface->getRouteCollection()->all();
         foreach ($allRoutes as $route => $params) {
             $controllersList = $params->getDefaults();
-            if (isset($controllersList['_controller'])) {
-                $controllerAction = explode("::", $controllersList['_controller']);
-                if (!str_contains($controllerAction[0], "nelmio")) {
-                    $action = $controllerAction[1];
-                    if ((!str_contains($action, "List")) && (!str_contains($action, "create"))) {
-                        if (str_contains($route, $entityName)) {
-                            $routesList [] = $route;
-                        }
+            if (isset($controllersList[self::CONTROLLER]) && (!str_contains($controllersList[self::CONTROLLER], "nelmio"))) {
+                $controllerAction = explode("::", $controllersList[self::CONTROLLER]);
+                $action = $controllerAction[1];
+                if ((!str_contains($action, "List")) && (!str_contains($action, "create"))) {
+                    if (str_contains($route, $entityName)) {
+                        $routesList [] = $route;
                     }
                 }
             }

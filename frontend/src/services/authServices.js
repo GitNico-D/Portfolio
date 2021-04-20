@@ -4,7 +4,6 @@ import axios from "axios";
 //If it's good return a jwt token and save it in local Storage  
 class AuthServices {
   login(user) {
-    console.log(user);
     return axios
       .post(process.env.VUE_APP_API_URL + "/login_check", {
         email: user.email,

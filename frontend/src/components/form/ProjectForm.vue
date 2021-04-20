@@ -41,6 +41,7 @@
       <b-form
         @submit.prevent="handleSubmit(onSubmit)"
         :methodAction="methodAction"
+        v-if="oneProject"
       >
         <ValidationProvider
           ref="name"
@@ -466,6 +467,7 @@ export default {
     }
   },
   mounted() {
+    console.log('mounted ')
     //According to the method received, fill in the form data
     if (this.methodAction == "update") {
       this.project.name = this.oneProject.name;

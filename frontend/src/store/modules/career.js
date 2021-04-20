@@ -39,7 +39,6 @@ const actions = {
         commit("SET_ONE_CAREER", response.data);
       })
       .catch(error => {
-        console.log(error.response.data);
         return Promise.reject(error.response.data);
       });
   },
@@ -100,7 +99,6 @@ const actions = {
         return Promise.resolve(response.data);
       })
       .catch(error => {
-        console.log(error.response);
         return Promise.reject(error.response);
       });
   },

@@ -36,7 +36,6 @@ const actions = {
         commit("SET_ONE_CATEGORY", response.data);
       })
       .catch(error => {
-        console.log(error.response.data);
         return Promise.reject(error.response.data);
       });
   },
