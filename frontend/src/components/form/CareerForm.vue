@@ -375,7 +375,6 @@ export default {
     onSubmit() {    
       if (this.methodAction == "create") {
         this.loading = true;
-        console.log(this.career);
         this.$refs.careerForm.validate().then(isValid => {
           if (!isValid) {
             this.loading = false;

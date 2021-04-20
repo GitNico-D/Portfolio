@@ -63,26 +63,27 @@ class FileUploader
     {
         switch($configuration->getName()) {
             case 'project':
-                return $entity->setImgStatic($this->baseUrl . 'project/' . $file);
+                $fileSet = $entity->setImgStatic($this->baseUrl . 'project/' . $file);
                 break;
             case 'experience':
-                return $entity->setLogoCompany($this->baseUrl . 'experience/' . $file);
+                $fileSet = $entity->setLogoCompany($this->baseUrl . 'experience/' . $file);
                 break;
             case 'skill':
-                return $entity->setIcon($this->baseUrl . 'skill/' . $file);
+                $fileSet = $entity->setIcon($this->baseUrl . 'skill/' . $file);
                 break;
             case 'software':
-                return $entity->setIcon($this->baseUrl . 'software/' . $file);
+                $fileSet = $entity->setIcon($this->baseUrl . 'software/' . $file);
                 break;
             case 'contact':
-                return $entity->setIcon($this->baseUrl . 'contact/' . $file);
+                $fileSet = $entity->setIcon($this->baseUrl . 'contact/' . $file);
                 break;
             case 'presentation':
-                return $entity->setPicture($this->baseUrl . 'presentation/' . $file);
+                $fileSet = $entity->setPicture($this->baseUrl . 'presentation/' . $file);
                 break;
             default:
                 break;
         }
+        return $fileSet;
     }
 
     /**
@@ -97,6 +98,7 @@ class FileUploader
     {
         if(is_object($entity)) {
             $file = $this->findImage($entity);
+            dd($file);
         } else {
             $file = $entity;
         }
@@ -119,23 +121,24 @@ class FileUploader
     public function findImage($entity) 
     {
         switch (strtolower((str_replace('App\Entity\\', '', get_class($entity))))) {
-            case 'project': 
-                return $entity->getImgStatic();
+            case 'project':
+                $entityImage = $entity->getImgStatic();
                 break;
             case 'experience':
-                return $entity->getLogoCompany();
+                $entityImage = $entity->getLogoCompany();
                 break;
             case 'skill':
             case 'software':
             case 'contact':
-                return $entity->getIcon();
+                $entityImage = $entity->getIcon();
                 break;
             case 'presentation':
-                return $entity->getPicture();
+                $entityImage = $entity->getPicture();
                 break;
             default:
-                return null;
+                $entityImage = null;
                 break;
-            }
         }
+        return $entityImage;
     }
+}

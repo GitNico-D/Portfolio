@@ -39,7 +39,6 @@ const actions = {
         commit("SET_ONE_PRESENTATION", response.data);
       })
       .catch(error => {
-        console.log(error.response.data);
         return Promise.reject(error.response.data);
       });
   },

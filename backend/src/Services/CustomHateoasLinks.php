@@ -7,6 +7,7 @@ use ReflectionException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Creating custom Hateoas Links
@@ -80,6 +81,7 @@ class CustomHateoasLinks
         return array_merge($entityArray, $links);
     }
 
+    
     /**
      * Listing Routes corresponding to Read, Update and Delete methods of an entity controller
      * @param string $entityName
@@ -90,15 +92,15 @@ class CustomHateoasLinks
         $allRoutes = $this->routerInterface->getRouteCollection()->all();
         foreach ($allRoutes as $route => $params) {
             $controllersList = $params->getDefaults();
-            if (isset($controllersList['_controller'])) {
+            if (isset($controllersList['_controller']) && (!str_contains($controllersList['_controller'], "nelmio"))) {
                 $controllerAction = explode("::", $controllersList['_controller']);
-                if (!str_contains($controllerAction[0], "nelmio")) {
+                // if (!str_contains($controllerAction[0], "nelmio")) {
                     $action = $controllerAction[1];
                     if ((!str_contains($action, "List")) && (!str_contains($action, "create"))) {
                         if (str_contains($route, $entityName)) {
                             $routesList [] = $route;
                         }
-                    }
+                    // }
                 }
             }
         }

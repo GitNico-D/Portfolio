@@ -471,7 +471,6 @@ export default {
             formData: fd
           })
             .then(() => {
-              console.log("c'est ok");
               this.successMessage =
                 "Le présentation " +
                 this.onePresentation.id +
@@ -499,7 +498,6 @@ export default {
     }
   },
   mounted() {
-    console.log("Mounted presentationForm")
     if (this.onePresentation.id) {
       this.modifyPresentation = this.onePresentation;
       this.oldPicture = this.onePresentation.picture;

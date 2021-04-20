@@ -87,8 +87,6 @@ router.beforeEach((to, from, next) => {
 });
 
 router.beforeEach((to, from, next) => {
-  console.log("from", from.fullPath);
-  console.log("going to", to.fullPath);
   if (to.query.wait) {
     setTimeout(() => next(), 100);
   } else if (to.query.redirect) {
