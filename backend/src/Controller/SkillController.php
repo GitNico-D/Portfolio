@@ -42,7 +42,7 @@ class SkillController extends AbstractController
      * GET a Skill resource
      *
      * @Route("/skills/{id}", name="get_skill", methods={"GET"})
-     * @ParamConverter("skill", class="App:skill")
+     * @ParamConverter("skill", class="App:Skill")
      * @param Skill $skill
      * @param CustomHateoasLinks $customLink
      * @return JsonResponse
@@ -118,7 +118,7 @@ class SkillController extends AbstractController
      * DELETE an existing Skill resource
      *
      * @Route("/skills/{id}", name="delete_skills", methods={"DELETE"})
-     * @ParamConverter("skill", class="App:skill")
+     * @ParamConverter("skill", class="App:Skill")
      * @IsGranted("ROLE_ADMIN")
      * @param Skill $skill
      * @param EntityManagerInterface $em

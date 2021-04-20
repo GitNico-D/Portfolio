@@ -112,7 +112,7 @@
         </div>
         <ValidationProvider
           ref="icon"
-          rules="required"
+          :rules="!oneSoftware.id ? 'required' : ''"
           name="Icone"
           v-slot="{ errors }"
         >
@@ -192,8 +192,9 @@
               label="Spinning"
               class="pt-4 pl-2"
             ></b-spinner>
-            <font-awesome-icon icon="folder-plus" /><span class="pl-2 pb-2"
-              >Ajouter logiciel</span
+            <font-awesome-icon icon="folder-plus" />
+            <span v-if="oneSoftware.id" class="pl-2 pb-2">Modifier Logiciel</span>
+            <span v-else class="pl-2 pb-2">Ajouter logiciel</span
             >
           </b-button>
           <Button
@@ -322,10 +323,10 @@ export default {
             this.loading = false;
             return;
           }
-          if (!this.modifySoftware.icon) {
+          if (!this.software.icon) {
             this.updateSoftwareWithoutFile({
               id: this.oneSoftware.id,
-              form: this.modifySoftware
+              form: this.software
             })
               .then(() => {
                 this.successMessage =
@@ -344,8 +345,8 @@ export default {
               });
           } else {
             let fd = this.setFormWithFile(
-              this.modifySoftware.icon,
-              this.modifySoftware
+              this.software.icon,
+              this.software
             );
             this.updateSoftwareWithFile({
               id: this.oneSoftware.id,

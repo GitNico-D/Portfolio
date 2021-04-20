@@ -36,29 +36,27 @@
               variant="danger"
             />
           </div>
-          <b-card class="mt-2 p-2 text-dark text-center">
+          <b-card class="mt-2 p-2 text-white text-center mx-auto">
             <b-card-title 
               >{{ onePresentation.firstName }}
               {{ onePresentation.lastName }}</b-card-title
             >
             <b-card-sub-title>{{ onePresentation.quote }}</b-card-sub-title>
             <b-card-body class="text-left fst-italic">
-              <b-card-img
-                :src="onePresentation.picture"
-                class="rounded mb-3"
-                top
-              ></b-card-img>
+              <div class="d-flex justify-content-center mb-5 card-img">
+                <b-img thumbnail :src="onePresentation.picture" width="576" class="rounded"></b-img>
+              </div>
               <p class="font-style-italic">
                 Ajouté le : {{ formatDate(onePresentation.createdAt) }}
               </p>
-              <p class="font-style-italic">
+              <p class="font-style-italic mb-5">
                 Mise à jour le : {{ formatDate(onePresentation.updatedAt) }}
               </p>
               <hr />
               <h4 class="text-left my-4 font-weight-bold">
                 {{ onePresentation.titleFirstText }}
               </h4>
-              <p class="text-justify my-3">{{ onePresentation.firstText }}</p>
+              <p class="text-justify my-4">{{ onePresentation.firstText }}</p>
               <hr />
               <h4 class="text-right my-4 font-weight-bold">
                 {{ onePresentation.titleSecondText }}
@@ -70,7 +68,7 @@
               </h4>
               <p class="text-justify my-3">{{ onePresentation.thirdText }}</p>
               <hr />
-              <div class="text-center">
+              <div class="text-center my-5">
                 <Button
                   action="Modifier la présentation"
                   :color="presentationColor"
@@ -85,6 +83,9 @@
                 id="table-list"
                 responsive
                 hover
+                no-collpase
+                bordered
+                dark
                 :items="onePresentation.contacts"
                 :fields="fields"
                 class="text-center"
@@ -333,9 +334,14 @@ export default {
   }
 }
 .card {
-  &-body {
-    background-color: transparent;
+  background-color: transparent;
+  border-color: $blue;
+  img {
+    @include box_shadow(0px, 0px, 12px, $blue);
   }
+}
+hr {
+  background: $blue;
 }
 .row {
   height: unset;
@@ -411,6 +417,9 @@ export default {
         text-align: right;
       }
     }
+  }
+  .card {
+    width: 80%;
   }
   .padding-col-md {
     padding-right: inherit;

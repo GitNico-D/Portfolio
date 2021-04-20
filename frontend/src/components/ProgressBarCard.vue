@@ -50,8 +50,7 @@ export default {
       background-color: $white;
       &:after {
         position: absolute;
-        // content: var(--url-icon);
-        content: '';
+        content: var(--url-icon);
         top: 0;
         left: var(--value);
         animation: flip-in-ver-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)

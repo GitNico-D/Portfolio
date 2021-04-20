@@ -99,10 +99,11 @@
               <template #row-details="row">
                 <b-card
                   :title="row.item.name"
-                  :img-src="row.item.icon"
-                  img-top
                   class="mt-2 text-dark text-center"
                 >
+                <div class="d-flex justify-content-center my-4">
+                  <b-img :src="row.item.icon" width="128"></b-img>
+                </div>
                   <b-card-body class="text-left fst-italic">
                     <p>Ajouté le : {{ formatDate(row.item.createdAt) }}</p>
                     <p>Mise à jour le : {{ formatDate(row.item.updatedAt) }}</p>
@@ -177,10 +178,11 @@
               <template #row-details="row">
                 <b-card
                   :title="row.item.name"
-                  :img-src="row.item.icon"
-                  img-top
                   class="mt-2 text-dark text-center"
                 >
+                <div class="d-flex justify-content-center my-4">
+                  <b-img :src="row.item.icon" width="128"></b-img>
+                </div>
                   <b-card-body class="text-left fst-italic">
                     <p>Ajouté le : {{ formatDate(row.item.createdAt) }}</p>
                     <p>Mise à jour le : {{ formatDate(row.item.updatedAt) }}</p>
@@ -611,6 +613,7 @@ hr {
       }
     }
   }
+  
   .padding-col-md {
     padding-right: inherit;
     padding-left: inherit;

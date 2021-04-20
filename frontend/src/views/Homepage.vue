@@ -43,9 +43,6 @@
       <div class="title">
         <h2><span>Nicolas</span>,</h2>
         <h1>Développeur Web</h1>
-        <b-button @click="actionTransition" directionAnimation="up"
-          >En savoir plus</b-button
-        >
       </div>
     </b-row>
     <Transition v-show="showTransition" directionAnimation="up" />
@@ -207,10 +204,10 @@ export default {
       }
     }
   }
-  .div-button {
-    left: 50%;
-    transform: translateX(-50%);
-  }
+  // .div-button {
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  // }
 }
 @keyframes slideH1 {
   0% {
@@ -368,27 +365,32 @@ export default {
     position: absolute;
     animation: 1.5s ease-in-out opacityIn;
     &-left {
-      transform: translateX(-5%) scale(0.7);
+      transform: translateX(-20%) scale(0.5);
       left: 0;
       top: 2%;
     }
     &-right {
-      transform: translateX(5%) scale(0.7);
+      transform: translateX(20%) scale(0.5);
       right: 0;
       bottom: 2%;
     }
     &-top {
       transform-style: preserve-3d;
-      transform: translateX(35%) rotateZ(-90deg) scale(0.7);
+      transform: translateX(40%) rotateZ(-90deg) scale(0.5);
       right: 0;
       top: 12%;
     }
     &-bottom {
       transform-style: preserve-3d;
-      transform: translatex(-35%) rotateZ(90deg) scale(0.7);
+      transform: translatex(-40%) rotateZ(90deg) scale(0.5);
       left: 0;
       bottom: 14%;
     }
+  }
+  .div-button {
+    left: 50%;
+    bottom: 44%;
+    transform: translate(0%, 100%);
   }
 }
 @media (min-width: 576px) {
@@ -411,21 +413,26 @@ export default {
   }
   .link {
     &-left {
-      transform: scale(0.8);
+      transform: scale(0.6);
     }
     &-right {
-      transform: scale(0.8);
+      transform: scale(0.6);
     }
     &-top {
-      transform: translateX(35%) rotateZ(-90deg) scale(0.8);
+      transform: translateX(35%) rotateZ(-90deg) scale(0.6);
       right: 0;
       top: 12%;
     }
     &-bottom {
-      transform: translatex(-35%) rotateZ(90deg) scale(0.8);
+      transform: translatex(-35%) rotateZ(90deg) scale(0.6);
       left: 0;
       bottom: 14%;
     }
+  }
+  .div-button {
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
   }
 }
 @media (min-width: 768px) {

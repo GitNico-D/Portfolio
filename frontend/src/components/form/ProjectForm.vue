@@ -41,7 +41,7 @@
       <b-form
         @submit.prevent="handleSubmit(onSubmit)"
         :methodAction="methodAction"
-        v-if="oneProject"
+        v-if="oneProject || (methodAction == 'create')"
       >
         <ValidationProvider
           ref="name"

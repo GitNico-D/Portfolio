@@ -43,14 +43,7 @@ class RequestVerification
     public function checkUpdateContent($entity, $request, $configuration) 
     {
         if ($request->getContent()) {
-            $requestArray = $this->specificException(json_decode($request->getContent(), true));
-            foreach ($requestArray as $key => $value) {
-                if ($value == null) {
-                    $getImage = 'get' . ucfirst($key);
-                    $requestArray[$key] = $entity->$getImage();
-                }
-            }
-            $jsonRequest = json_encode($requestArray);
+            $jsonRequest = $this->isRequestGetContent($entity, $request);
         } else {
             $jsonRequest = json_encode($this->specificException($request->request->all()));
             if ($request->files) {
@@ -62,6 +55,24 @@ class RequestVerification
         return $jsonRequest;
     }
 
+    /**
+     * Encode the 
+     * @param $entity
+     * @param $request
+     */
+    public function isRequestGetContent($entity, $request)
+    {
+        $requestArray = $this->specificException(json_decode($request->getContent(), true));
+            foreach ($requestArray as $key => $value) {
+                if ($value == null) {
+                    $getImage = 'get' . ucfirst($key);
+                    $requestArray[$key] = $entity->$getImage();
+                }
+            }
+        return json_encode($requestArray);
+    } 
+    
+    
     /**
      * Specific project function to convert string receive by FormData into 
      * integer.

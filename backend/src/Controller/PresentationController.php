@@ -41,7 +41,7 @@ class PresentationController extends AbstractController
      * GET a Presentation resource
      *
      * @Route("/presentations/{id}", name="get_presentation", methods={"GET"})
-     * @ParamConverter("presentation", class="App:presentation")
+     * @ParamConverter("presentation", class="App:Presentation")
      * @param Presentation $presentation
      * @param CustomHateoasLinks $customLink
      * @return JsonResponse
@@ -116,7 +116,7 @@ class PresentationController extends AbstractController
      * DELETE an existing Presentation resource
      *
      * @Route("/presentations/{id}", name="delete_presentation", methods={"DELETE"})
-     * @ParamConverter("presentation", class="App:presentation")
+     * @ParamConverter("presentation", class="App:Presentation")
      * @IsGranted("ROLE_ADMIN")
      * @param Presentation $presentation
      * @param EntityManagerInterface $em

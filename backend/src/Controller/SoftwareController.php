@@ -42,7 +42,7 @@ class SoftwareController extends AbstractController
      * GET a Software resource
      *
      * @Route("/softwares/{id}", name="get_software", methods={"GET"})
-     * @ParamConverter("software", class="App:software")
+     * @ParamConverter("software", class="App:Software")
      * @param Software $software
      * @param CustomHateoasLinks $customLink
      * @return JsonResponse
@@ -118,7 +118,7 @@ class SoftwareController extends AbstractController
      * DELETE an existing Software resource
      *
      * @Route("/softwares/{id}", name="delete_software", methods={"DELETE"})
-     * @ParamConverter("software", class="App:software")
+     * @ParamConverter("software", class="App:Software")
      * @IsGranted("ROLE_ADMIN")
      * @param Software $software
      * @param EntityManagerInterface $em

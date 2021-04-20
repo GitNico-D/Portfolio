@@ -150,9 +150,12 @@ export default {
             .then(() => {
               this.$router.push("/admin");
             })
-            .catch(() => {
-              this.loading = false;
-              this.message = "Identifiants invalides !";
+            .catch((error) => {
+              console.log(error);
+              if(error.data.code == 401) {
+                this.loading = false;
+                this.message = "Identifiants invalides !";
+              }
             });
         }
       });

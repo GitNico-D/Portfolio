@@ -41,7 +41,7 @@ class CategoryController extends AbstractController
      * GET a Category resource
      *
      * @Route("/categories/{id}", name="get_category", methods={"GET"})
-     * @ParamConverter("category", class="App:category")
+     * @ParamConverter("category", class="App:Category")
      * @param Category $category
      * @param CustomHateoasLinks $customLink
      * @return JsonResponse
@@ -116,7 +116,7 @@ class CategoryController extends AbstractController
      * DELETE an existing Category resource
      *
      * @Route("/categories/{id}", name="delete_category", methods={"DELETE"})
-     * @ParamConverter("category", class="App:category")
+     * @ParamConverter("category", class="App:Category")
      * @IsGranted("ROLE_ADMIN")
      * @param Category $category
      * @param EntityManagerInterface $em

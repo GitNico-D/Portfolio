@@ -229,7 +229,6 @@
       </b-form>
     </ValidationObserver>
   </div>
-  <!-- <b-row> -->
 </template>
 
 <script>
