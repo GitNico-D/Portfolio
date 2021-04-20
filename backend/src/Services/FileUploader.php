@@ -98,7 +98,6 @@ class FileUploader
     {
         if(is_object($entity)) {
             $file = $this->findImage($entity);
-            dd($file);
         } else {
             $file = $entity;
         }

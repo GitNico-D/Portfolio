@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints\Length;
  */
 class CustomHateoasLinks
 {
+    CONST CONTROLLER = '_controller';
+
     private $urlGenerator;
     private $routerInterface;
     private $serializer;
@@ -89,18 +91,17 @@ class CustomHateoasLinks
      */
     public function routesList(string $entityName)
     {
+        
         $allRoutes = $this->routerInterface->getRouteCollection()->all();
         foreach ($allRoutes as $route => $params) {
             $controllersList = $params->getDefaults();
-            if (isset($controllersList['_controller']) && (!str_contains($controllersList['_controller'], "nelmio"))) {
-                $controllerAction = explode("::", $controllersList['_controller']);
-                // if (!str_contains($controllerAction[0], "nelmio")) {
-                    $action = $controllerAction[1];
-                    if ((!str_contains($action, "List")) && (!str_contains($action, "create"))) {
-                        if (str_contains($route, $entityName)) {
-                            $routesList [] = $route;
-                        }
-                    // }
+            if (isset($controllersList[self::CONTROLLER]) && (!str_contains($controllersList[self::CONTROLLER], "nelmio"))) {
+                $controllerAction = explode("::", $controllersList[self::CONTROLLER]);
+                $action = $controllerAction[1];
+                if ((!str_contains($action, "List")) && (!str_contains($action, "create"))) {
+                    if (str_contains($route, $entityName)) {
+                        $routesList [] = $route;
+                    }
                 }
             }
         }
