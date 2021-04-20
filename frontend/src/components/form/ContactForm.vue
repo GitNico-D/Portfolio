@@ -18,13 +18,13 @@
       />
     </div>
     <div v-if="!oneContact.id">
-      <h2 id="modifyForm-title" class="text-center fw-bold mt-5">
+      <h2 id="modifyForm-title" class="text-center fw-bold mt-5 contact-form-title">
         Remplisser le formulaire ci-dessous pour ajouter un nouveau
         <span class="font-weight-bold font-style-italic">Contact !</span>
       </h2>
     </div>
     <div v-else>
-      <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+      <h2 id="modifyForm-title" class="text-center fw-bold my-5 contact-form-title">
         Modification du contact
         <p class="my-2">
           <span class="font-weight-bold font-style-italic"
@@ -48,7 +48,7 @@
           name="Nom"
           v-slot="{ errors }"
         >
-          <b-form-group id="title">
+          <b-form-group id="title" class="mb-5">
             <label v-if="oneContact.id" for="input-name" class="text-uppercase"
               >Nouveau nom du contact</label
             >
@@ -71,7 +71,7 @@
           name="Lien"
           v-slot="{ errors }"
         >
-          <b-form-group id="link" class="mt-4">
+          <b-form-group id="link" class="mb-5">
             <label v-if="oneContact.id" for="input-link" class="text-uppercase"
               >Nouveau lien du contact</label
             >
@@ -88,7 +88,7 @@
             </b-alert>
           </b-form-group>
         </ValidationProvider>
-        <div>
+        <div v-if="!oneContact.id || oldIcon">
           <h5
             v-show="!contact.icon && oldIcon"
             class="text-left text-uppercase"
@@ -103,14 +103,23 @@
             v-show="!contact.icon && oldIcon"
           ></b-img>
         </div>
+        <div v-else>
+          <p><span class="font-weight-bold">Aucune ancienne image trouvée</span></p>
+        </div>
         <ValidationProvider
           ref="logo-contact"
           :rules="!oneContact.id ? 'required' : ''"
           name="Icone"
           v-slot="{ errors }"
         >
-          <b-form-group id="logo-contact" class="mt-4">
-            <label for="input-logo-contact" class="text-uppercase"
+          <b-form-group id="logo-contact" class="mb-5">
+            <label
+              v-if="oneContact.id"
+              for="input-logo-contact"
+              class="text-uppercase"
+              >Nouvelle icone ddu contact</label
+            >
+            <label v-else for="input-logo-contact" class="text-uppercase"
               >Icone du contact</label
             >
             <b-form-file
@@ -140,7 +149,7 @@
             ></b-img>
           </b-form-group>
         </ValidationProvider>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center flex-wrap">
           <b-button
             type="submit"
             class="m-3 p-3 btn-add"
@@ -152,8 +161,9 @@
               label="Spinning"
               class="pt-4 pl-2"
             ></b-spinner>
-            <font-awesome-icon icon="folder-plus" /><span class="pl-2 pb-2"
-              >Ajouter contact</span
+            <font-awesome-icon icon="folder-plus" />
+            <span v-if="oneContact.id" class="pl-2 pb-2">Modifier Carrière</span>
+            <span v-else class="pl-2 pb-2">Ajouter contact</span
             >
           </b-button>
           <Button
@@ -229,6 +239,7 @@ export default {
       "updateContactWithoutFile",
       "resetStateContact"
     ]),
+    //Create a url with the file add in the input-file to display it
     showPreview(event) {
       const file = event.target.files[0];
       if (file) {
@@ -238,6 +249,8 @@ export default {
         };
       }
     },
+    //Submit the form content after validation
+    //In case it's a new contact or a modification of a existing contact
     onSubmit() {
       if (this.methodAction == "create") {
         this.loading = true;
@@ -246,6 +259,7 @@ export default {
             this.loading = false;
             return;
           }
+          //Create the formData in a external services
           let fd = this.setFormWithFile(this.contact.icon, this.contact);
           this.addContact(fd)
             .then(() => {
@@ -253,8 +267,6 @@ export default {
               document.getElementById("alert").scrollIntoView();
               this.loading = false;
               this.errorMessage = "";
-
-              this.resetStateContact();
               this.resetForm();
             })
             .catch(error => {
@@ -285,7 +297,6 @@ export default {
                   "Le contact " + this.oneContact.id + " a été modifié";
                 this.loading = false;
                 this.errorMessage = "";
-
                 this.resetForm();
                 document.getElementById("alert").scrollIntoView();
               })
@@ -298,6 +309,7 @@ export default {
                 this.successMessage = "";
               });
           } else {
+            console.log(this.oneContact.id)
             let fd = this.setFormWithFile(this.contact.icon, this.contact);
             this.updateContactWithFile({
               id: this.oneContact.id,
@@ -308,7 +320,6 @@ export default {
                   "Le contact " + this.oneContact.id + " a été modifié";
                 this.loading = false;
                 this.errorMessage = "";
-
                 this.resetForm();
                 document.getElementById("alert").scrollIntoView();
               })
@@ -324,10 +335,12 @@ export default {
         });
       }
     },
+    //Erase the alert message
     onReturn() {
       this.successMessage = "";
       this.errorMessage = "";
     },
+    //Reset all the form data
     resetForm() {
       this.$refs.contactForm.reset();
       this.loading = false;
@@ -337,21 +350,20 @@ export default {
       this.oldIcon = "";
       this.currentTitle = "";
     },
+    //Format the date in an external service
     formatDate(date) {
       return formatDate(date);
     }
   },
   mounted() {
-    console.log(this.methodAction);
-    console.log(this.oneContact);
+    //According to the method received, fill in the form data
     if (this.methodAction == "update" && this.oneContact) {
-      this.contact = this.oneContact;
+      this.contact.title = this.oneContact.title;
+      this.contact.link = this.oneContact.link;
       this.currentTitle = this.oneContact.title;
       this.oldIcon = this.oneContact.icon;
       this.contact.icon = null;
-    } else {
-      this.resetForm();
-    }
+    } 
   }
 };
 </script>
@@ -383,11 +395,6 @@ export default {
 }
 .row {
   height: unset;
-}
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
 }
 .form-group {
   margin-bottom: 2rem;
@@ -423,5 +430,29 @@ form {
 .tabs {
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
+}
+@media (min-width: 320px) {
+  form {
+    width: 100%;
+    margin: auto;
+  }
+  .contact-form-title {
+    font-size: 1.2rem;
+  }
+}
+@media (min-width: 576px) {
+  .contact-form-title {
+    font-size: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  form {
+    width: 100%;
+    margin: auto;
+    padding: 1.5rem;
+  }
+  .contact-form-title {
+    font-size: 2rem;
+  }
 }
 </style>

@@ -4,6 +4,7 @@ import authHeader from "../../services/authHeader";
 
 const headers = { "Content-Type": "application/json" };
 
+//Two state for all project and one projects
 const state = () => ({
   projects: [],
   project: ""
@@ -15,6 +16,7 @@ const getters = {
 };
 
 const actions = {
+  //Get all projects present on bdd
   getAllProjects({ commit }) {
     axios
       .get(process.env.VUE_APP_API_URL + "/projects", {
@@ -27,6 +29,7 @@ const actions = {
         errorRedirection(error);
       });
   },
+  //Get a unique contact defined by his id
   getProject({ commit }, id) {
     return axios
       .get(process.env.VUE_APP_API_URL + `/projects/${id}`, {
@@ -39,6 +42,7 @@ const actions = {
         return Promise.reject(error.response);
       });
   },
+  //Add a new project
   addProject({ commit }, formData) {
     return axios
       .post(process.env.VUE_APP_API_URL + "/projects", formData, {
@@ -52,6 +56,8 @@ const actions = {
         return Promise.reject(error.response);
       });
   },
+  //This function treat request with file. A parameter "_method: "PUT" set with a POST method 
+  //due to an issue with Symfony to receive and treat a formData on PUT method
   updateProjectWithFile({ commit }, { id, formData }) {
     return axios
       .post(process.env.VUE_APP_API_URL + `/projects/${id}`, formData, {
@@ -68,6 +74,7 @@ const actions = {
         return Promise.reject(error.response);
       });
   },
+  //Classic PUT request to send a form with content-type: Application/json
   updateProjectWithoutFile({ commit }, { id, form }) {
     return axios
       .put(process.env.VUE_APP_API_URL + `/projects/${id}`, form, {
@@ -81,6 +88,7 @@ const actions = {
         return Promise.reject(error.response);
       });
   },
+  //Delete a project defined by his id
   deleteProject({ commit }, id) {
     return axios
       .delete(process.env.VUE_APP_API_URL + `/projects/${id}`, {
@@ -94,11 +102,13 @@ const actions = {
         return Promise.reject(error.response);
       });
   },
+  //Reset the oneProject state
   resetStateProject({ commit }) {
     commit("RESET_STATE_PROJECT");
   }
 };
 
+//Mutations applied to the desired state related to the above actions 
 const mutations = {
   SET_ALL_PROJECT(state, projects) {
     state.projects = projects;

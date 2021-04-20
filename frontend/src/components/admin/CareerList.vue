@@ -1,6 +1,6 @@
 <template>
   <b-row class="justify-content-center mt-5">
-    <b-col cols md="12" lg="8">
+    <b-col cols md="10" lg="9" class="padding-col-md">
       <b-tabs
         active-nav-item-class="font-weight-bold text-uppercase text-success"
         active-tab-class="text-left text-white"
@@ -8,6 +8,7 @@
         class="mt-5"
         fill
         v-model="tabIndex"
+        small
       >
         <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
@@ -17,16 +18,18 @@
               >étapes de carrière</span
             >
           </template>
-          <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+          <h2 id="tab-title" class="text-center fw-bold my-5 tab-career-title">
             Toutes les
             <span class="font-weight-bold font-style-italic"
               >Étape de carrière</span
             >
           </h2>
           <div>
-            <b-button @click="refreshTab" variant="info" class="m-2 btn-add">
-              <font-awesome-icon icon="sync" class="mr-2" spin />Rafraichir
-            </b-button>
+            <div class="btn-refresh-position">
+              <b-button @click="refreshTab" variant="info" class="m-2 btn-add">
+                <font-awesome-icon icon="sync" class="mr-2" spin />Rafraichir
+              </b-button>
+            </div>
             <div id="alertModify">
               <AlertForm
                 v-if="successMessage"
@@ -39,7 +42,7 @@
                 variant="danger"
               />
             </div>
-            <div class="text-right mb-4">
+            <div class="btn-add-position mb-4">
               <Button
                 action="Ajouter Carrière"
                 :color="careerColor"
@@ -50,11 +53,10 @@
             <b-table
               responsive
               hover
-              no-collpase
-              bordered
               dark
               :items="allCareerStages"
               :fields="fields"
+              stacked="sm"
             >
               <template #cell(startDate)="data">
                 {{ formatDate(data.value) }}
@@ -112,7 +114,7 @@
           </div>
         </b-tab>
         <b-tab class="mt-5 justify-content-center" lazy>
-          <template v-if="!careerId" #title>
+          <template v-if="!oneCareer.id" #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2" />
             <span>Ajouter une nouvelle étape de carrière</span>
           </template>
@@ -122,7 +124,7 @@
           </template>
           <CareerForm
             :methodAction="methodAction"
-            v-on:onAction="refreshTab"
+            v-on:onAction="showCareerStage"
             v-on:onCancel="onCancel"
             v-on:onReturn="returnToList"
           />
@@ -200,16 +202,16 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    //Refresh button to reset page, form data and retrieve the new data added
     refreshTab() {
       this.$store.dispatch("getAllCareerStage");
       this.successMessage = "";
       this.errorMessage = "";
-      // setTimeout(() => {
-      //   this.tabIndex = 0;
-      // }, 5000);
-      // this.errorMessage = '';
-      // this.successMessage = '';
+      this.resetStateCareerStage()
+      this.methodAction = ''
+      this.careerId = ''
     },
+    //Delete the career stage defined by the id
     onDelete(id) {
       this.deleteCareerStage(id)
         .then(() => {
@@ -229,7 +231,10 @@ export default {
           this.successMessage = "";
         });
     },
+    //Render the career stage form according to the method action = 'create' ou 'update'
+    //In case of update the id of the career stage, in case of create career stage id set to null
     toCareerForm(data, methodAction) {
+      this.resetStateCareerStage()
       this.careerId = data;
       this.methodAction = methodAction;
       if (methodAction == "create") {
@@ -252,9 +257,15 @@ export default {
     returnToList() {
       this.tabIndex = 0;
     },
-    showModifyCareerStage() {
+    //On action of the career form button, reset or update some data
+    showCareerStage() {
       this.$store.dispatch("getAllCareerStage");
+      this.successMessage = "";
+      this.errorMessage = "";
+      this.methodAction = ''
+      this.careerId = ''
     },
+    //On action of the career form button, reset some data
     onCancel() {
       this.tabIndex = 0;
       this.resetStateCareerStage();
@@ -291,39 +302,6 @@ export default {
 .row {
   height: unset;
 }
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
-}
-.form-group {
-  margin-bottom: 2rem;
-}
-.custom-file-label {
-  background-color: transparent !important;
-  color: $white;
-  border: unset;
-  border-bottom: 1px solid $white;
-  border-radius: unset;
-  &:focus {
-    @include box_shadow(0px, 0px, 5px, $purple);
-    background-color: transparent;
-    border-bottom: 1px solid $purple;
-  }
-}
-.form-control {
-  background-color: transparent;
-  color: $white;
-  border: unset;
-  border-bottom: 1px solid $white;
-  border-radius: unset;
-  &:focus {
-    @include box_shadow(0px, 0px, 5px, $purple);
-    background-color: transparent;
-    border-bottom: 1px solid $purple;
-    color: $white;
-  }
-}
 .nav-link {
   color: $white !important;
 }
@@ -331,4 +309,68 @@ form {
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
 }
+@media (min-width: 320px) {
+  .btn {
+    &-refresh {
+      &-position {
+        text-align: center;
+      }
+    }
+    &-add {
+      &-position {
+        text-align: center;
+      }
+    }
+  }
+  .padding-col-md {
+    padding-right: 2.1rem;
+    padding-left: 2.1rem;
+  }
+  .tab-career-title {
+    font-size: 1.2rem;
+  }
+}
+@media (min-width: 576px) {
+  .btn {
+    &-refresh {
+      &-position {
+        text-align: left;
+      }
+    }
+    &-add {
+      &-position {
+        text-align: right;
+      }
+    }
+  }
+  .padding-col-md {
+    padding-right: 2.1rem;
+    padding-left: 2.1rem;
+  }
+  .tab-career-title {
+    font-size: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .btn {
+    &-refresh {
+      &-position {
+        text-align: left;
+      }
+    }
+    &-add {
+      &-position {
+        text-align: right;
+      }
+    }
+  }
+  .padding-col-md {
+    padding-right: inherit;
+    padding-left: inherit;
+  }
+  .tab-career-title {
+    font-size: 2rem;
+  }
+}
+
 </style>

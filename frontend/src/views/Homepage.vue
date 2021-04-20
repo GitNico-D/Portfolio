@@ -108,6 +108,7 @@ export default {
     }
   },
   computed: {
+    //Verifying if a user loggedIn 
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
     }

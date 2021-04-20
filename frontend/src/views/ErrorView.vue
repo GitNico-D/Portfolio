@@ -31,6 +31,7 @@ export default {
     BackgroundPage,
     Header
   },
+  //Return the last error message set in error module vuex
   computed: {
     ...mapGetters(["lastErrorMessage"])
   }

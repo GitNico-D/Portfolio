@@ -15,7 +15,7 @@
     </b-col>
     <b-col cols="12" md="6">
       <h2 class="">
-        <span>{{ formatStartDate }}</span> - <span>{{ formatEndDate }}</span>
+        <span>{{ formatDate(startDate) }}</span> - <span>{{ formatDate(endDate) }}</span>
       </h2>
     </b-col>
   </b-row>
@@ -33,23 +33,16 @@ export default {
     color: String,
     parity: String
   },
-  computed: {
-    formatStartDate() {
+  methods: {
+    // Format date to return the year of the date passed in paremeter
+    formatDate(date) {
       const options = { year: "numeric" };
-      let formatDate = new Date(this.startDate).toLocaleDateString(
+      let formatDate = new Date(date).toLocaleDateString(
         undefined,
         options
       );
       return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
     },
-    formatEndDate() {
-      const options = { year: "numeric" };
-      let formatDate = new Date(this.endDate).toLocaleDateString(
-        undefined,
-        options
-      );
-      return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
-    }
   }
 };
 </script>
@@ -168,7 +161,6 @@ h2 {
         color: $white;
         background-color: var(--color);
         box-shadow: 5px 7px 2px $white, 0px 0px 15px var(--color);
-        // transform: translate(-5%, -50%) rotateZ(0deg);
       }
     }
     h2 {
@@ -225,7 +217,6 @@ h2 {
         color: $white;
         background-color: var(--color);
         box-shadow: -5px 7px 2px $white, 0px 0px 15px var(--color);
-        // transform: translate(10%, -50%) rotateZ(0deg);
       }
       &-body {
         transition: all 0.2s ease;

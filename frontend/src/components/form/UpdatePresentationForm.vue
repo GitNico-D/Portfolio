@@ -40,7 +40,7 @@
         pour sélectionné le présentation que vous souhaitez modifier.
       </p>
     </h2>
-    <h2 v-else id="modifyForm-title" class="text-center fw-bold my-5">
+    <h2 v-else id="modifyForm-title" class="text-center fw-bold my-5 presentation-form-title">
       Modification de la présentation
     </h2>
     <p class="mt-4 text-left" v-show="onePresentation.id">
@@ -343,12 +343,12 @@
             </b-alert>
           </b-form-group>
         </ValidationProvider>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center flex-wrap">
           <b-button
             type="submit"
             class="m-3 p-3 btn-modify"
             :disabled="loading"
-            @click="$emit('showModifyPresentation')"
+            @click="$emit('onAction')"
           >
             <b-spinner
               v-show="loading"
@@ -499,6 +499,7 @@ export default {
     }
   },
   mounted() {
+    console.log("Mounted presentationForm")
     if (this.onePresentation.id) {
       this.modifyPresentation = this.onePresentation;
       this.oldPicture = this.onePresentation.picture;
@@ -545,11 +546,6 @@ export default {
     border-bottom: 1px solid $purple;
   }
 }
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
-}
 .form-group {
   label {
     font-size: 1.3rem;
@@ -582,5 +578,30 @@ hr {
 .tabs {
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
+}
+@media(min-width: 320px){
+  form {
+    width: 100%;
+    margin: auto;
+  }
+  .presentation-form-title {
+    font-size: 1.2rem;
+  }
+}
+@media(min-width: 576px)
+{
+  .presentation-form-title {
+    font-size: 1.5rem;
+  }
+}
+@media(min-width: 768px){
+  form {
+    width: 100%;
+    margin: auto;
+    padding: 1.5rem;
+  }
+  .presentation-form-title {
+    font-size: 2rem;
+  }
 }
 </style>

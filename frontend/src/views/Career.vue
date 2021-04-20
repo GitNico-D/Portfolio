@@ -15,12 +15,12 @@
       color="#00a1ba"
       :parity="index % 2 ? (parity = 'even') : (parity = 'odd')"
     />
-    <b-row class="bottom">
+    <b-row class="position-relative bottom">
       <HomePageLink
         action="Retour"
         url="/"
         direction="animated-arrowRtl"
-        class="link link-bottom"
+        class="position-absolute link link-bottom"
         textColor="#00a1ba"
       />
     </b-row>
@@ -50,6 +50,7 @@ export default {
     };
   },
   methods: {
+    // Start transition effect and hide it after 1.3s
     actionTransition() {
       this.showTransition = true;
       setTimeout(() => {
@@ -66,6 +67,7 @@ export default {
       this.showTransition = false;
     }, 1300);
   },
+  //Dispatch all career stage contains in career vuex module
   mounted() {
     this.$store.dispatch("getAllCareerStage");
   }
@@ -77,16 +79,10 @@ export default {
   background-color: $dark-gray;
   position: relative;
   perspective: 1000px;
+  min-height: 100vh
 }
 .bottom {
-  height: 16vh !important;
-  position: relative;
-  .link-bottom {
-    position: absolute;
-    bottom: 50%;
-    left: 50%;
-    transform: translate(-50%, 50%) rotate(90deg) scale(0.8);
-  }
+  height: 15vh;
 }
 .even,
 .odd {
@@ -106,9 +102,9 @@ export default {
   animation: scale-up-ver-top 2s cubic-bezier(0.39, 0.575, 0.565, 1) 0.5s both;
   z-index: -1;
 }
-.row {
-  height: unset;
-}
+// .row {
+//   height: unset;
+// }
 @keyframes scale-up-ver-top {
   0% {
     transform: scaleY(0);
@@ -126,23 +122,35 @@ export default {
     .line {
       display: none;
     }
+    .link {
+      &-bottom {
+        bottom: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(90deg) scale(0.6);
+      }
+    }
   }
 }
 @media (min-width: 768px) {
   .container-fluid {
     .line {
       display: initial;
-      height: 77%;
-      top: 11%;
+      height: 75%;
+      top: 12%;
+    }
+    .link {
+      &-bottom {
+        transform: translate(-50%, -50%) rotate(90deg) scale(0.8);
+      }
     }
   }
 }
 @media (min-width: 1200px) {
   .container-fluid {
-    .line {
-      display: initial;
-      height: 77%;
-      top: 12%;
+    .link {
+      &-bottom {
+        transform: translate(-50%, -50%) rotate(90deg) scale(1);
+      }
     }
   }
 }

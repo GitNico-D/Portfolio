@@ -1,6 +1,6 @@
 <template>
   <b-row class="justify-content-center mt-5">
-    <b-col cols md="12" lg="8">
+    <b-col cols md="10" lg="9" class="padding-col-md">
       <b-tabs
         active-nav-item-class="font-weight-bold text-uppercase text-success"
         active-tab-class="text-left text-white"
@@ -8,20 +8,23 @@
         class="mt-5"
         fill
         v-model="tabIndex"
+        small
       >
         <b-tab class="mt-5 justify-content-center" lazy>
           <template #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2" />
             <span>Listes des compétences</span>
           </template>
-          <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+          <h2 id="modifyForm-title" class="text-center fw-bold my-5 tab-skill-title">
             Toutes les
             <span class="font-weight-bold font-style-italic">compétences</span>
           </h2>
           <!-- <div> -->
-          <b-button @click="refreshTab" variant="info" class="m-2 btn-add">
-            <font-awesome-icon icon="sync" class="mr-2" spin />Rafraichir
-          </b-button>
+          <div class="btn-refresh-position">
+            <b-button @click="refreshTab" variant="info" class="m-2 btn-add">
+              <font-awesome-icon icon="sync" class="mr-2" spin />Rafraichir
+            </b-button>
+          </div>
           <div id="alertModify">
             <AlertForm
               v-if="successMessage"
@@ -44,12 +47,14 @@
                 :action="'Compétence ' + category.name"
                 :color="skillColor"
                 icon="plus"
+                class="mb-1"
                 v-on:action="toSkillForm(null, category.id, 'create')"
               />
               <Button
                 :action="'Logiciel ' + category.name"
                 :color="skillColor"
                 icon="plus"
+                class="mb-1"
                 v-on:action="toSoftwareForm(null, category.id, 'create')"
               />
             </div>
@@ -64,6 +69,7 @@
               dark
               :items="category.skills"
               :fields="fields"
+              stacked="sm"
             >
               <b-thead class="p-5"></b-thead>
               <template #cell(level)="data">
@@ -139,6 +145,7 @@
               dark
               :items="category.softwares"
               :fields="fields"
+              stacked="sm"
             >
               <b-thead class="p-5"></b-thead>
               <template #cell(level)="data">
@@ -207,12 +214,13 @@
                 </b-card>
               </template>
             </b-table>
+            <hr class="mt-5">
             <!-- </span> -->
           </div>
           <!-- </div> -->
         </b-tab>
         <b-tab class="mt-5 justify-content-center" lazy>
-          <template v-if="!skillId" #title>
+          <template v-if="!oneSkill.id" #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2" />
             <span>Ajouter une nouvelle compétence</span>
           </template>
@@ -223,12 +231,12 @@
           <SkillForm
             :methodAction="methodAction"
             v-on:onCancel="onCancel"
-            v-on:showModifySkill="showModifySkill"
+            v-on:onAction="showSkills"
             v-on:onReturn="returnToList"
           />
         </b-tab>
         <b-tab class="mt-5 justify-content-center" lazy>
-          <template v-if="!softwareId" #title>
+          <template v-if="!oneSoftware.id" #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2" />
             <span>Ajouter un nouveau logiciel</span>
           </template>
@@ -239,7 +247,7 @@
           <SoftwareForm
             :methodAction="methodAction"
             v-on:onCancel="onCancel"
-            v-on:showModifySkill="showModifySkill"
+            v-on:onAction="showSoftwares"
             v-on:onReturn="returnToList"
           />
         </b-tab>
@@ -337,18 +345,19 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    //Refresh button to reset page, form data and retrieve the new data added
     refreshTab() {
       this.$store.dispatch("getAllCategories");
       this.$store.dispatch("getAllSkills");
       this.$store.dispatch("getAllSoftwares");
       this.successMessage = "";
       this.errorMessage = "";
-      // setTimeout(() => {
-      //   this.tabIndex = 0;
-      // }, 5000);
-      // this.errorMessage = '';
-      // this.successMessage = '';
+      this.resetStateSkill()
+      this.resetStateSoftware()
+      this.methodAction = ''
+      this.careerId = ''
     },
+    //Delete the skill defined by the id
     onDeleteSkill(id) {
       this.deleteSkill(id)
         .then(() => {
@@ -367,6 +376,7 @@ export default {
           this.successMessage = "";
         });
     },
+    //Delete the software defined by the id
     onDeleteSoftware(id) {
       this.deleteSoftware(id)
         .then(() => {
@@ -385,7 +395,11 @@ export default {
           this.successMessage = "";
         });
     },
+    //Render the software form according to the method action = 'create' ou 'update'
+    //Send the associate category and in case of update the 
+    //id of the skill, in case of create skill id set to null
     toSkillForm(skillId, categoryId, methodAction) {
+      this.resetStateSkill()
       this.skillId = skillId;
       this.methodAction = methodAction;
       if (methodAction == "create") {
@@ -418,7 +432,11 @@ export default {
           });
       }
     },
+    //Render the software form according to the method action = 'create' ou 'update'
+    //Send the associate category and in case of update the 
+    //id of the software, in case of create software id set to null
     toSoftwareForm(softwareId, categoryId, methodAction) {
+      this.resetStateSoftware()
       this.softwareId = softwareId;
       this.methodAction = methodAction;
       if (methodAction == "create") {
@@ -438,7 +456,7 @@ export default {
         this.getSoftware(softwareId)
           .then(() => {
             this.getCategory(categoryId).then(() => {
-              this.tabIndex = 1;
+              this.tabIndex = 2;
               this.successMessage = "";
             });
           })
@@ -451,12 +469,25 @@ export default {
           });
       }
     },
-    showModifySkill() {
+    //On action of the skill form button, reset or update some data
+    showSkills() {
       this.$store.dispatch("getAllSkills");
+      this.$store.dispatch("getAllCategories");
+      this.successMessage = "";
+      this.errorMessage = "";
+      this.methodAction = ''
+      this.careerId = ''
     },
-    showModifySoftware() {
+    //On action of the skill form button, reset or update some data
+    showSoftwares() {
       this.$store.dispatch("getAllSoftwares");
+      this.$store.dispatch("getAllCategories");
+      this.successMessage = "";
+      this.errorMessage = "";
+      this.methodAction = ''
+      this.careerId = ''
     },
+    //On action of the skill form button, reset some data
     onCancel() {
       this.tabIndex = 0;
       this.skillId = "";
@@ -515,38 +546,8 @@ table {
 .row {
   height: unset;
 }
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
-}
-.form-group {
-  margin-bottom: 2rem;
-}
-.custom-file-label {
-  background-color: transparent !important;
-  color: $white;
-  border: unset;
-  border-bottom: 1px solid $white;
-  border-radius: unset;
-  &:focus {
-    @include box_shadow(0px, 0px, 5px, $purple);
-    background-color: transparent;
-    border-bottom: 1px solid $purple;
-  }
-}
-.form-control {
-  background-color: transparent;
-  color: $white;
-  border: unset;
-  border-bottom: 1px solid $white;
-  border-radius: unset;
-  &:focus {
-    @include box_shadow(0px, 0px, 5px, $purple);
-    background-color: transparent;
-    border-bottom: 1px solid $purple;
-    color: $white;
-  }
+hr {
+  background-color: $green;
 }
 .nav-link {
   color: $white !important;
@@ -554,5 +555,68 @@ form {
 .tabs {
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
+}
+@media (min-width: 320px) {
+  .btn {
+    &-refresh {
+      &-position {
+        text-align: center;
+      }
+    }
+    &-add {
+      &-position {
+        text-align: center;
+      }
+    }
+  }
+  .padding-col-md {
+    padding-right: 2.1rem;
+    padding-left: 2.1rem;
+  }
+  .tab-skill-title, h3 {
+    font-size: 1.2rem;
+  }
+}
+@media (min-width: 576px) {
+  .btn {
+    &-refresh {
+      &-position {
+        text-align: left;
+      }
+    }
+    &-add {
+      &-position {
+        text-align: right;
+      }
+    }
+  }
+  .padding-col-md, h3 {
+    padding-right: 2.1rem;
+    padding-left: 2.1rem;
+  }
+  .tab-skill-title, h3 {
+    font-size: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .btn {
+    &-refresh {
+      &-position {
+        text-align: left;
+      }
+    }
+    &-add {
+      &-position {
+        text-align: right;
+      }
+    }
+  }
+  .padding-col-md {
+    padding-right: inherit;
+    padding-left: inherit;
+  }
+  .tab-skill-title, h3 {
+    font-size: 2rem;
+  }
 }
 </style>

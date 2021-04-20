@@ -179,7 +179,6 @@ export default {
   position: relative;
   min-height: 100vh;
 }
-
 .card {
   border: 1px solid $white;
   background: $dark-gray;
@@ -206,14 +205,27 @@ export default {
 hr {
   background: $white;
 }
-.link {
-  &-back {
-    position: absolute;
-    bottom: -15%;
-    transform: translateX(-50%) scale(0.8);
+.row {
+  min-height: 100vh;
+}
+@media(min-width: 320px){
+  .card{
+    margin: 1rem;
+  }
+  .link {
+    &-back {
+      position: absolute;
+      bottom: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+    }
   }
 }
-.row {
-  height: 100vh;
+@media(min-width: 768px) {
+  .link {
+    &-back {
+      bottom: -15%;
+    transform: translateX(-50%) scale(0.8);
+    }
+  }
 }
 </style>

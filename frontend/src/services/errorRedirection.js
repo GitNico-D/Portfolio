@@ -1,8 +1,8 @@
 import router from "../router";
 import store from "../store";
 
+//Redirection when user go to wrong or unknown page
 export default function errorRedirection(error) {
-  console.log(error);
   if (error.response) {
     let errors = JSON.parse(JSON.stringify(error.response.data));
     store.commit("ADD_ERROR", errors.message);

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+//Authentification service permit to verified user credentials. 
+//If it's good return a jwt token and save it in local Storage  
 class AuthServices {
   login(user) {
     console.log(user);
@@ -15,7 +17,7 @@ class AuthServices {
         return response.data;
       });
   }
-
+  //When logout remove the item contains the token
   logout() {
     localStorage.removeItem("user");
   }
