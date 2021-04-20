@@ -98,10 +98,10 @@ class CustomHateoasLinks
             if (isset($controllersList[self::CONTROLLER]) && (!str_contains($controllersList[self::CONTROLLER], "nelmio"))) {
                 $controllerAction = explode("::", $controllersList[self::CONTROLLER]);
                 $action = $controllerAction[1];
-                if ((!str_contains($action, "List")) && (!str_contains($action, "create"))) {
-                    if (str_contains($route, $entityName)) {
+                if ((!str_contains($action, "List create")) && (str_contains($route, $entityName))) {
+                    // if (str_contains($route, $entityName)) {
                         $routesList [] = $route;
-                    }
+                    // }
                 }
             }
         }
