@@ -7,7 +7,6 @@ use ReflectionException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Creating custom Hateoas Links
@@ -99,9 +98,7 @@ class CustomHateoasLinks
                 $controllerAction = explode("::", $controllersList[self::CONTROLLER]);
                 $action = $controllerAction[1];
                 if ((!str_contains($action, "List create")) && (str_contains($route, $entityName))) {
-                    // if (str_contains($route, $entityName)) {
                         $routesList [] = $route;
-                    // }
                 }
             }
         }
