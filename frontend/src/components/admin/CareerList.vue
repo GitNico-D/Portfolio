@@ -124,7 +124,7 @@
           </template>
           <CareerForm
             :methodAction="methodAction"
-            v-on:onAction="refreshTab"
+            v-on:onAction="showCareerStage"
             v-on:onCancel="onCancel"
             v-on:onReturn="returnToList"
           />
@@ -202,6 +202,7 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    //Refresh button to reset page, form data and retrieve the new data added
     refreshTab() {
       this.$store.dispatch("getAllCareerStage");
       this.successMessage = "";
@@ -209,12 +210,8 @@ export default {
       this.resetStateCareerStage()
       this.methodAction = ''
       this.careerId = ''
-      // setTimeout(() => {
-      //   this.tabIndex = 0;
-      // }, 5000);
-      // this.errorMessage = '';
-      // this.successMessage = '';
     },
+    //Delete the career stage defined by the id
     onDelete(id) {
       this.deleteCareerStage(id)
         .then(() => {
@@ -234,6 +231,8 @@ export default {
           this.successMessage = "";
         });
     },
+    //Render the career stage form according to the method action = 'create' ou 'update'
+    //In case of update the id of the career stage, in case of create career stage id set to null
     toCareerForm(data, methodAction) {
       this.resetStateCareerStage()
       this.careerId = data;
@@ -258,9 +257,15 @@ export default {
     returnToList() {
       this.tabIndex = 0;
     },
-    showModifyCareerStage() {
+    //On action of the career form button, reset or update some data
+    showCareerStage() {
       this.$store.dispatch("getAllCareerStage");
+      this.successMessage = "";
+      this.errorMessage = "";
+      this.methodAction = ''
+      this.careerId = ''
     },
+    //On action of the career form button, reset some data
     onCancel() {
       this.tabIndex = 0;
       this.resetStateCareerStage();

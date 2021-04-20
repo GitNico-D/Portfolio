@@ -18,13 +18,13 @@
       />
     </div>
     <div v-if="!oneSoftware.id">
-      <h2 id="addForm-title" class="text-center fw-bold my-5">
+      <h2 id="addForm-title" class="text-center fw-bold my-5 software-form-title">
         Remplisser le formulaire ci-dessous pour ajouter un nouveau
         <span class="font-weight-bold font-style-italic">Logiciel !</span>
       </h2>
     </div>
     <div v-else>
-      <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+      <h2 id="modifyForm-title" class="text-center fw-bold my-5 software-form-title">
         Modification du Logiciel
         <p class="my-2">
           <span class="font-weight-bold font-style-italic"
@@ -32,9 +32,9 @@
           >
         </p>
       </h2>
-      <p class="mt-4 text-left" v-show="oneSkill.id">
+      <p class="mt-4 text-left" v-show="oneSoftware.id">
         ID du <span class="text-uppercase font-weight-bold">Logiciel : </span>
-        {{ oneSkill.id }}
+        {{ oneSoftware.id }}
       </p>
     </div>
     <ValidationObserver ref="softwareForm" v-slot="{ handleSubmit }">
@@ -92,7 +92,7 @@
             </b-alert>
           </b-form-group>
         </ValidationProvider>
-        <div>
+        <div v-if="!oneSoftware.id || oldIcon">
           <h5
             v-show="!software.icon && oldIcon"
             class="text-left text-uppercase"
@@ -106,6 +106,9 @@
             class="mt-1"
             v-show="!software.icon && oldIcon"
           ></b-img>
+        </div>
+        <div v-else>
+          <p><span class="font-weight-bold">Aucune ancienne image trouvée</span></p>
         </div>
         <ValidationProvider
           ref="icon"
@@ -177,7 +180,7 @@
             </b-alert>
           </b-form-group>
         </ValidationProvider>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center flex-wrap">
           <b-button
             type="submit"
             class="m-3 p-3 btn-add"
@@ -209,9 +212,6 @@
             v-on:action="$emit('onCancel'), resetForm()"
           />
         </div>
-        <b-card class="mt-3" header="Form Data Result">
-          <pre class="m-0">{{ software }}</pre>
-        </b-card>
       </b-form>
     </ValidationObserver>
   </div>
@@ -279,6 +279,7 @@ export default {
     setCategory() {
       return (this.software.category = this.selected);
     },
+    //Create a url with the file add in the input-file to display it
     showPreview(event) {
       const file = event.target.files[0];
       if (file) {
@@ -288,6 +289,8 @@ export default {
         };
       }
     },
+    //Submit the form content after validation
+    //In case it's a new contact or a modification of a existing contact
     onSubmit() {
       if (this.methodAction == "create") {
         this.loading = true;
@@ -368,6 +371,7 @@ export default {
         });
       }
     },
+    //Reset all the form data and the specific page data
     resetForm() {
       this.$refs.softwareForm.reset();
       this.loading = false;
@@ -377,6 +381,7 @@ export default {
       this.oldIcon = "";
       this.currentName = "";
     },
+    //Erase the alert message
     onReturn() {
       this.successMessage = "";
       this.errorMessage = "";
@@ -386,16 +391,17 @@ export default {
     }
   },
   mounted() {
-    console.log(this.methodAction);
+    //According to the method received, fill in the form data
+    this.selected = null;
     if (this.methodAction == "update") {
-      this.software = this.oneSoftware;
+      this.software.name = this.oneSoftware.name;
+      this.software.level = this.oneSoftware.level;
       this.currentName = this.oneSoftware.name;
       this.oldIcon = this.oneSoftware.icon;
       this.software.icon = null;
       this.selected = this.oneCategory.id;
       this.software.category = this.oneCategory.id;
     } else {
-      this.resetForm();
       this.selected = 0;
       this.selected = this.oneCategory.id;
       this.software.category = this.oneCategory.id;
@@ -433,11 +439,6 @@ export default {
 .row {
   height: unset;
 }
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
-}
 .form-group {
   margin-bottom: 2rem;
 }
@@ -472,5 +473,30 @@ form {
 .tabs {
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
+}
+@media(min-width: 320px){
+  form {
+    width: 100%;
+    margin: auto;
+  }
+  .software-form-title {
+    font-size: 1.2rem;
+  }
+}
+@media(min-width: 576px)
+{
+  .software-form-title {
+    font-size: 1.5rem;
+  }
+}
+@media(min-width: 768px){
+  form {
+    width: 100%;
+    margin: auto;
+    padding: 1.5rem;
+  }
+  .software-form-title {
+    font-size: 2rem;
+  }
 }
 </style>

@@ -4,6 +4,7 @@ import authHeader from "../../services/authHeader";
 
 const headers = { "Content-Type": "application/json" };
 
+//Two state for all career stage and one career stage
 const state = () => ({
   careerStages: [],
   careerStage: ""
@@ -15,6 +16,7 @@ const getters = {
 };
 
 const actions = {
+  //Get all career stages present on bdd
   getAllCareerStage({ commit }) {
     axios
       .get(process.env.VUE_APP_API_URL + "/experiences", {
@@ -27,6 +29,7 @@ const actions = {
         errorRedirection(error);
       });
   },
+  //Get a unique career stage defined by his id
   getCareerStage({ commit }, id) {
     return axios
       .get(process.env.VUE_APP_API_URL + `/experiences/${id}`, {
@@ -40,6 +43,7 @@ const actions = {
         return Promise.reject(error.response.data);
       });
   },
+  //Add a new career stage 
   addCareerStage({ commit }, formData) {
     return axios
       .post(process.env.VUE_APP_API_URL + "/experiences", formData, {
@@ -53,6 +57,8 @@ const actions = {
         return Promise.reject(error.response);
       });
   },
+  //This function treat request with file. A parameter "_method: "PUT" set with a POST method 
+  //due to an issue with Symfony to receive and treat a formData on PUT method
   updateCareerStageWithFile({ commit }, { id, formData }) {
     return axios
       .post(process.env.VUE_APP_API_URL + `/experiences/${id}`, formData, {
@@ -69,6 +75,7 @@ const actions = {
         return Promise.reject(error.response);
       });
   },
+  //Classic PUT request to send a form with content-type: Application/json
   updateCareerStageWithoutFile({ commit }, { id, form }) {
     return axios
       .put(process.env.VUE_APP_API_URL + `/experiences/${id}`, form, {
@@ -82,6 +89,7 @@ const actions = {
         return Promise.reject(error.response);
       });
   },
+  //Delete a career stage defined by his id
   deleteCareerStage({ commit }, id) {
     return axios
       .delete(process.env.VUE_APP_API_URL + `/experiences/${id}`, {
@@ -96,11 +104,13 @@ const actions = {
         return Promise.reject(error.response);
       });
   },
+  //Reset the oneCareerStage state
   resetStateCareerStage({ commit }) {
     commit("RESET_STATE_CAREER_STAGE");
   }
 };
 
+//Mutations applied to the desired state related to the above actions 
 const mutations = {
   SET_ALL_CAREER_STAGE(state, careerStages) {
     state.careerStages = careerStages;

@@ -129,7 +129,7 @@
           </template>
           <ProjectForm
             :methodAction="methodAction"
-            v-on:onAction="refreshTab"
+            v-on:onAction="showProjects"
             v-on:onCancel="onCancel"
             v-on:onReturn="returnToList"
           />
@@ -207,17 +207,16 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    //Refresh button to reset page, form data and retrieve the new data added
     refreshTab() {
       this.$store.dispatch("getAllProjects");
       this.successMessage = "";
       this.errorMessage = "";
-      // this.resetStateProject()
-      // setTimeout(() => {
-      //   this.tabIndex = 0;
-      // }, 5000);
-      // this.errorMessage = '';
-      // this.successMessage = '';
+      this.resetStateProject()
+      this.methodAction = ''
+      this.projectId = ''
     },
+    //Delete the project defined by the id
     onDelete(id) {
       this.deleteProject(id)
         .then(() => {
@@ -236,6 +235,8 @@ export default {
           this.successMessage = "";
         });
     },
+    //Render the project form according to the method action = 'create' ou 'update'
+    //In case of update the id of the project, in case of create project id set to null
     toProjectForm(id, methodAction) {
       this.projectId = id;
       this.methodAction = methodAction;
@@ -256,12 +257,19 @@ export default {
           });
       }
     },
+    //On action of the project form button, return to the tab project list
     returnToList() {
       this.tabIndex = 0;
     },
-    showModifyProject() {
+    //On action of the project form button, reset or update some data
+    showProjects() {
       this.$store.dispatch("getAllProjects");
+      this.successMessage = "";
+      this.errorMessage = "";
+      this.methodAction = ''
+      this.projectId = ''
     },
+    //On action of the project form button, reset some data
     onCancel() {
       this.tabIndex = 0;
       this.projectId = "";

@@ -4,6 +4,7 @@ import authHeader from "../../services/authHeader";
 
 const headers = { "Content-Type": "application/json" };
 
+//Two state for all contact and one contacts
 const state = () => ({
   contacts: [],
   contact: ""
@@ -15,6 +16,7 @@ const getters = {
 };
 
 const actions = {
+  //Get all contacts present on bdd
   getAllContacts({ commit }) {
     axios
       .get(process.env.VUE_APP_API_URL + "/contacts", {
@@ -27,6 +29,7 @@ const actions = {
         errorRedirection(error);
       });
   },
+  //Get a unique contact defined by his id
   getContact({ commit }, id) {
     return axios
       .get(process.env.VUE_APP_API_URL + `/contacts/${id}`, {
@@ -40,6 +43,7 @@ const actions = {
         return Promise.reject(error.response.data);
       });
   },
+  //Add a new contact
   addContact({ commit }, formData) {
     return axios
       .post(process.env.VUE_APP_API_URL + "/contacts", formData, {
@@ -53,6 +57,8 @@ const actions = {
         return Promise.reject(error.response.data);
       });
   },
+  //This function treat request with file. A parameter "_method: "PUT" set with a POST method 
+  //due to an issue with Symfony to receive and treat a formData on PUT method
   updateContactWithFile({ commit }, { id, formData }) {
     return axios
       .post(process.env.VUE_APP_API_URL + `/contacts/${id}`, formData, {
@@ -69,6 +75,7 @@ const actions = {
         return Promise.reject(error.response.data);
       });
   },
+  //Classic PUT request to send a form with content-type: Application/json
   updateContactWithoutFile({ commit }, { id, form }) {
     return axios
       .put(process.env.VUE_APP_API_URL + `/contacts/${id}`, form, {
@@ -82,6 +89,7 @@ const actions = {
         return Promise.reject(error.response.data);
       });
   },
+  //Delete a contact defined by his id
   deleteContact({ commit }, id) {
     return axios
       .delete(process.env.VUE_APP_API_URL + `/contacts/${id}`, {
@@ -95,11 +103,13 @@ const actions = {
         return Promise.reject(error.response.data);
       });
   },
+  //Reset the oneContact state
   resetStateContact({ commit }) {
     commit("RESET_STATE_CONTACT");
   }
 };
 
+//Mutations applied to the desired state related to the above actions 
 const mutations = {
   SET_ALL_CONTACT(state, contacts) {
     state.contacts = contacts;

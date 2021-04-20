@@ -1,3 +1,4 @@
+//FormatDate to display Day Date Month 
 export default function formatDate(date) {
   const options = {
     weekday: "long",

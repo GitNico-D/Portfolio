@@ -4,6 +4,7 @@ import authHeader from "../../services/authHeader";
 
 const headers = { "Content-Type": "application/json" };
 
+//Two state for all presentation and one presentations
 const state = () => ({
   presentations: [],
   presentation: ""
@@ -15,6 +16,7 @@ const getters = {
 };
 
 const actions = {
+  //Get all contacts presentation on bdd
   getAllPresentations({ commit }) {
     axios
       .get(process.env.VUE_APP_API_URL + "/presentations", {
@@ -27,6 +29,7 @@ const actions = {
         errorRedirection(error);
       });
   },
+  //Get a unique presentation defined by his id
   getPresentation({ commit }) {
     return axios
       .get(process.env.VUE_APP_API_URL + `/presentations/1`, {
@@ -40,19 +43,8 @@ const actions = {
         return Promise.reject(error.response.data);
       });
   },
-  addPresentation({ commit }, formData) {
-    return axios
-      .post(process.env.VUE_APP_API_URL + "/presentations", formData, {
-        headers: authHeader()
-      })
-      .then(formData => {
-        commit("NEW_PRESENTATION", formData);
-        return Promise.resolve(formData);
-      })
-      .catch(error => {
-        return Promise.reject(error.response);
-      });
-  },
+  //This function treat request with file. A parameter "_method: "PUT" set with a POST method 
+  //due to an issue with Symfony to receive and treat a formData on PUT method
   updatePresentationWithFile({ commit }, { id, formData }) {
     return axios
       .post(process.env.VUE_APP_API_URL + `/presentations/${id}`, formData, {
@@ -69,6 +61,7 @@ const actions = {
         return Promise.reject(error.response.data);
       });
   },
+  //Classic PUT request to send a form with content-type: Application/json
   updatePresentationWithoutFile({ commit }, { id, form }) {
     return axios
       .put(process.env.VUE_APP_API_URL + `/presentations/${id}`, form, {
@@ -82,24 +75,9 @@ const actions = {
         return Promise.reject(error.response.data);
       });
   },
-  deletePresentation({ commit }, id) {
-    return axios
-      .delete(process.env.VUE_APP_API_URL + `/presentations/${id}`, {
-        headers: authHeader()
-      })
-      .then(response => {
-        commit("DELETE_PRESENTATION", response.data);
-        return Promise.resolve(response.data);
-      })
-      .catch(error => {
-        return Promise.reject(error.response.data);
-      });
-  },
-  resetStatePresentation({ commit }) {
-    commit("RESET_STATE_PRESENTATION");
-  }
 };
 
+//Mutations applied to the desired state related to the above actions 
 const mutations = {
   SET_ALL_PRESENTATION(state, presentations) {
     state.presentations = presentations;

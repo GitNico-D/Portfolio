@@ -11,7 +11,7 @@
     </b-card>
     <b-card class="backcard">
       <b-card-text>
-        <p class="card-text-date">{{ formatDate }}</p>
+        <p class="card-text-date">{{ formatDate(date) }}</p>
         <p class="card-text-content">{{ content }}</p>
       </b-card-text>
       <b-link :href="url" class="btn">Vers le site</b-link>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import formatDate from "../services/formatDate";
+
 export default {
   name: "Project",
   props: {
@@ -31,21 +33,11 @@ export default {
     imgAlt: String,
     date: String
   },
-  computed: {
-    formatDate() {
-      const options = {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      };
-      let formatDate = new Date(this.date).toLocaleDateString(
-        undefined,
-        options
-      );
-      return formatDate.charAt(0).toUpperCase() + formatDate.slice(1);
+  methods: {
+    formatDate(date){
+      return formatDate(date)
     }
-  }
+  },
 };
 </script>
 

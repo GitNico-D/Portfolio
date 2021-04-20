@@ -220,7 +220,7 @@
           <!-- </div> -->
         </b-tab>
         <b-tab class="mt-5 justify-content-center" lazy>
-          <template v-if="!skillId" #title>
+          <template v-if="!oneSkill.id" #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2" />
             <span>Ajouter une nouvelle compétence</span>
           </template>
@@ -231,12 +231,12 @@
           <SkillForm
             :methodAction="methodAction"
             v-on:onCancel="onCancel"
-            v-on:showModifySkill="showModifySkill"
+            v-on:onAction="showSkills"
             v-on:onReturn="returnToList"
           />
         </b-tab>
         <b-tab class="mt-5 justify-content-center" lazy>
-          <template v-if="!softwareId" #title>
+          <template v-if="!oneSoftware.id" #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2" />
             <span>Ajouter un nouveau logiciel</span>
           </template>
@@ -247,7 +247,7 @@
           <SoftwareForm
             :methodAction="methodAction"
             v-on:onCancel="onCancel"
-            v-on:showModifySkill="showModifySkill"
+            v-on:onAction="showSoftwares"
             v-on:onReturn="returnToList"
           />
         </b-tab>
@@ -345,18 +345,19 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    //Refresh button to reset page, form data and retrieve the new data added
     refreshTab() {
       this.$store.dispatch("getAllCategories");
       this.$store.dispatch("getAllSkills");
       this.$store.dispatch("getAllSoftwares");
       this.successMessage = "";
       this.errorMessage = "";
-      // setTimeout(() => {
-      //   this.tabIndex = 0;
-      // }, 5000);
-      // this.errorMessage = '';
-      // this.successMessage = '';
+      this.resetStateSkill()
+      this.resetStateSoftware()
+      this.methodAction = ''
+      this.careerId = ''
     },
+    //Delete the skill defined by the id
     onDeleteSkill(id) {
       this.deleteSkill(id)
         .then(() => {
@@ -375,6 +376,7 @@ export default {
           this.successMessage = "";
         });
     },
+    //Delete the software defined by the id
     onDeleteSoftware(id) {
       this.deleteSoftware(id)
         .then(() => {
@@ -393,7 +395,11 @@ export default {
           this.successMessage = "";
         });
     },
+    //Render the software form according to the method action = 'create' ou 'update'
+    //Send the associate category and in case of update the 
+    //id of the skill, in case of create skill id set to null
     toSkillForm(skillId, categoryId, methodAction) {
+      this.resetStateSkill()
       this.skillId = skillId;
       this.methodAction = methodAction;
       if (methodAction == "create") {
@@ -426,7 +432,11 @@ export default {
           });
       }
     },
+    //Render the software form according to the method action = 'create' ou 'update'
+    //Send the associate category and in case of update the 
+    //id of the software, in case of create software id set to null
     toSoftwareForm(softwareId, categoryId, methodAction) {
+      this.resetStateSoftware()
       this.softwareId = softwareId;
       this.methodAction = methodAction;
       if (methodAction == "create") {
@@ -446,7 +456,7 @@ export default {
         this.getSoftware(softwareId)
           .then(() => {
             this.getCategory(categoryId).then(() => {
-              this.tabIndex = 1;
+              this.tabIndex = 2;
               this.successMessage = "";
             });
           })
@@ -459,12 +469,25 @@ export default {
           });
       }
     },
-    showModifySkill() {
+    //On action of the skill form button, reset or update some data
+    showSkills() {
       this.$store.dispatch("getAllSkills");
+      this.$store.dispatch("getAllCategories");
+      this.successMessage = "";
+      this.errorMessage = "";
+      this.methodAction = ''
+      this.careerId = ''
     },
-    showModifySoftware() {
+    //On action of the skill form button, reset or update some data
+    showSoftwares() {
       this.$store.dispatch("getAllSoftwares");
+      this.$store.dispatch("getAllCategories");
+      this.successMessage = "";
+      this.errorMessage = "";
+      this.methodAction = ''
+      this.careerId = ''
     },
+    //On action of the skill form button, reset some data
     onCancel() {
       this.tabIndex = 0;
       this.skillId = "";

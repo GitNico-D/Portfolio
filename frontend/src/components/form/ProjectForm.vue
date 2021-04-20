@@ -124,7 +124,7 @@
             </b-alert>
           </b-form-group>
         </ValidationProvider>
-        <div>
+        <div v-if="!oneProject.id || oldImgStatic">
           <h5
             v-show="!project.imgStatic && oldImgStatic"
             class="text-left text-uppercase"
@@ -139,6 +139,9 @@
             class="mt-1"
             v-show="!project.imgStatic && oldImgStatic"
           ></b-img>
+        </div>
+        <div v-else>
+          <p><span class="font-weight-bold">Aucune ancienne image trouvée</span></p>
         </div>
         <ValidationProvider
           ref="imgStatic"
@@ -190,7 +193,7 @@
           name="Description de l'image"
           v-slot="{ errors }"
         >
-          <b-form-group id="altStatic" class="mt-5 text">
+          <b-form-group id="altStatic" class="mt-5">
             <label
               v-if="oneProject.id"
               for="input-altStatic"
@@ -345,6 +348,7 @@ export default {
       "updateProjectWithoutFile",
       "resetStateProject"
     ]),
+    //Create a url with the file add in the input-file to display it
     showPreview(event) {
       const file = event.target.files[0];
       if (file) {
@@ -354,8 +358,9 @@ export default {
         };
       }
     },
+    //Submit the form content after validation
+    //In case it's a new contact or a modification of a existing contact
     onSubmit() {
-      console.log(this.methodAction);
       if (this.methodAction == "create") {
         this.loading = true;
         this.$refs.projectForm.validate().then(isValid => {
@@ -438,6 +443,7 @@ export default {
         });
       }
     },
+    //Reset all the form data and the specific page data
     resetForm() {
       this.$refs.projectForm.reset();
       this.loading = false;
@@ -450,6 +456,7 @@ export default {
       this.oldImgStatic = "";
       this.previewImgStaticUrl = "";
     },
+    //Erase the alert message
     onReturn() {
       this.successMessage = "";
       this.errorMessage = "";
@@ -459,17 +466,17 @@ export default {
     }
   },
   mounted() {
-    console.log(this.methodAction);
-    console.log(this.oneProject);
-    if (this.methodAction == "update" && this.oneProject) {
-      this.project = this.oneProject;
-      console.log(this.project);
+    //According to the method received, fill in the form data
+    if (this.methodAction == "update") {
+      this.project.name = this.oneProject.name;
+      this.project.description = this.oneProject.description;
+      this.project.url = this.oneProject.url;
+      this.project.altStatic = this.oneProject.altStatic;
+      this.project.creationDate = this.oneProject.creationDate;
       this.currentName = this.oneProject.name;
       this.oldImgStatic = this.oneProject.imgStatic;
       this.project.imgStatic = null;
-    } else {
-      this.resetForm();
-    }
+    } 
   }
 };
 </script>

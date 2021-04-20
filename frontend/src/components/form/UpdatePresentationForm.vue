@@ -348,7 +348,7 @@
             type="submit"
             class="m-3 p-3 btn-modify"
             :disabled="loading"
-            @click="$emit('showModifyPresentation')"
+            @click="$emit('onAction')"
           >
             <b-spinner
               v-show="loading"

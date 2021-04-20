@@ -1,27 +1,25 @@
 <template>
   <b-container fluid>
-    <Header title="Presentation" color="#485DA6" class="header" />
+    <Header title="Presentation" color="#485DA6"/>
     <BackgroundPage circleColor="#485DA6" />
     <Transition v-show="showTransition" directionAnimation="left" />
     <b-row
       class="presentation justify-content-center"
-      v-for="presentation in presentations"
-      :key="presentation.id"
     >
       <b-col cols="10" md="5" xl="3">
-        <b-card :img-src="presentation.picture" img-top>
-          <b-card-title class="text-uppercase">
-            <p class="card-title-first">{{ presentation.lastName }}</p>
+        <b-card :img-src="onePresentation.picture" img-top>
+          <b-card-title class="text-uppercase text-center">
+            <p class="card-title-first">{{ onePresentation.lastName }}</p>
             <p class="card-title-last font-weight-bold">
-              {{ presentation.firstName }}
+              {{ onePresentation.firstName }}
             </p>
           </b-card-title>
           <hr />
           <b-card-text>
-            {{ presentation.quote }}
+            {{ onePresentation.quote }}
             <div class="d-flex flex-wrap justify-content-around my-4">
               <ContactButton
-                v-for="(contact, index) in presentation.contacts"
+                v-for="(contact, index) in onePresentation.contacts"
                 :key="contact.id"
                 :name="contact.title"
                 :href="contact.link"
@@ -41,24 +39,24 @@
       <b-col cols="12" md="6" xl="5" class="presentation-text">
         <div>
           <h5 class="text-right text-uppercase">
-            {{ presentation.titleFirstText }}
+            {{ onePresentation.titleFirstText }}
           </h5>
           <p class="presentation-text-first text-justify">
-            {{ presentation.firstText }}
+            {{ onePresentation.firstText }}
           </p>
           <div class="presentation-text-separator"></div>
           <h5 class="text-left text-uppercase pt-4">
-            {{ presentation.titleSecondText }}
+            {{ onePresentation.titleSecondText }}
           </h5>
           <p class="presentation-text-second text-justify">
-            {{ presentation.secondText }}
+            {{ onePresentation.secondText }}
           </p>
           <div class="presentation-text-separator"></div>
           <h5 class="text-right text-uppercase pt-4">
-            {{ presentation.titleThirdText }}
+            {{ onePresentation.titleThirdText }}
           </h5>
           <p class="presentation-text-third text-justify">
-            {{ presentation.thirdText }}
+            {{ onePresentation.thirdText }}
           </p>
         </div>
       </b-col>
@@ -68,7 +66,7 @@
         action="Retour"
         url="/"
         direction="animated-arrowRtl"
-        class="link link-right"
+        class="position-absolute link link-right"
         textColor="#485DA6"
       />
     </b-row>
@@ -81,7 +79,7 @@ import Header from "@/components/Header.vue";
 import HomePageLink from "@/components/HomePageLink.vue";
 import Transition from "@/components/Transition.vue";
 import ContactButton from "@/components/ContactButton.vue";
-import errorRedirection from "@/services/errorRedirection";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
@@ -94,10 +92,13 @@ export default {
   data() {
     return {
       showTransition: true,
-      presentations: null
-    };
+    }
+  },
+  computed: {
+    ...mapGetters(["onePresentation"])
   },
   methods: {
+    ...mapActions(["getPresentation"]),
     actionTransition() {
       this.showTransition = true;
       setTimeout(() => {
@@ -109,21 +110,10 @@ export default {
     setTimeout(() => {
       this.showTransition = false;
     }, 1300);
-    this.axios
-      .get(process.env.VUE_APP_API_URL + "/presentations", {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(response => {
-        this.presentations = response.data;
-        return Promise.resolve(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-        errorRedirection(error);
-      });
-  }
+  },
+  mounted() {
+    this.$store.dispatch("getPresentation")
+  },
 };
 </script>
 
@@ -132,12 +122,10 @@ export default {
   background-color: $dark-gray;
   perspective: 1000px;
   position: relative;
-}
-.header {
-  height: 12vh;
+  min-height: 100vh;
 }
 .presentation {
-  padding-top: 14rem;
+  padding-top: 8rem;
   height: unset;
   .card {
     animation: text-focus-in 0.7s cubic-bezier(0.55, 0.085, 0.68, 0.53) 1s both;
@@ -146,11 +134,9 @@ export default {
       font-size: 2.5rem;
       &-first {
         color: $blue;
-        margin-right: 5rem;
       }
       &-last {
         color: $orange;
-        margin-left: 5rem;
       }
     }
     &-body {
@@ -220,9 +206,6 @@ export default {
 }
 .bottom {
   height: 8vh;
-  &-right {
-    position: absolute;
-  }
 }
 @keyframes tilt-in-fwd-tl {
   0% {
@@ -296,7 +279,6 @@ export default {
       }
       &-title {
         font-size: 1.5rem;
-        padding-top: 1rem;
       }
       &-border-back {
         height: 100%;
@@ -309,8 +291,7 @@ export default {
   .bottom {
     .link {
       &-right {
-        position: absolute;
-        transform: translateX(5%) scale(0.7);
+        transform: translate(50%) scale(0.7);
         right: 50%;
         bottom: 50%;
       }
@@ -325,11 +306,7 @@ export default {
       }
       &-title {
         font-size: 1.5rem;
-        padding-top: 1.5rem;
-        &-first,
-        &-last {
-          margin: unset;
-        }
+        padding-top: 3rem;
       }
     }
     &-text {
@@ -346,6 +323,15 @@ export default {
       }
       &-border-back {
         height: 31%;
+      }
+    }
+  }
+}
+@media (min-width: 768px) {
+  .presentation {
+    .card {
+      &-title {
+        padding-top: 1.5rem;
       }
     }
   }

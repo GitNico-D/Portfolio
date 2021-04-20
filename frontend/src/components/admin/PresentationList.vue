@@ -130,12 +130,12 @@
           </template>
           <UpdatePresentationForm
             v-on:onCancel="onCancel"
-            v-on:showModifyPresentation="showModifyPresentation"
+            v-on:onAction="showPresentation"
             v-on:onReturn="returnToList"
           />
         </b-tab>
         <b-tab lazy>
-          <template v-if="!contactId" #title>
+          <template v-if="!oneContact.id" #title>
             <font-awesome-icon icon="folder-plus" size="2x" class="pt-2 pr-2" />
             <span>Ajouter un Contact</span>
           </template>
@@ -145,7 +145,7 @@
           </template>
           <ContactForm
             :methodAction="methodAction"
-            v-on:onAction="refreshTab"
+            v-on:onAction="showContacts"
             v-on:onCancel="onCancel"
             v-on:onReturn="returnToList"
           />
@@ -214,12 +214,15 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    //Refresh button to reset page, form data and retrieve the new data added
     refreshTab() {
       this.$store.dispatch("getPresentation");
       this.successMessage = "";
       this.errorMessage = "";
+      this.resetStateContact()
       this.contactId = "";
     },
+    //Render the update presentation form 
     toUpdatePresentationForm(data) {
       this.presentationId = data;
       this.getPresentation(this.presentationId)
@@ -235,7 +238,10 @@ export default {
           }
         });
     },
+    //Render the contact form according to the method action = 'create' ou 'update'
+    //In case of update the id of the contact, in case of create contact id set to null
     toContactForm(contactId, methodAction) {
+      this.resetStateContact()
       this.contactId = contactId;
       this.methodAction = methodAction;
       if (methodAction == "create") {
@@ -257,6 +263,7 @@ export default {
           });
       }
     },
+    //Delete the contact defined by the id
     onDeleteContact(id, contactName) {
       this.deleteContact(id)
         .then(() => {
@@ -275,12 +282,23 @@ export default {
           this.successMessage = "";
         });
     },
-    showModifyPresentation() {
+    //On action of the presentation form button, reset or update some data
+    showPresentation() {
       this.$store.dispatch("getPresentation");
     },
+    //On action of the contact form button, reset or update some data
+    showContacts() {
+      this.$store.dispatch("getPresentation");
+      this.$store.dispatch("getPresentation");
+      this.successMessage = "";
+      this.errorMessage = "";
+      this.contactId = "";
+    },
+    //On action of the contact form button, return to the tab contact list
     returnToList() {
       this.tabIndex = 0;
     },
+    //On action of the contact form button, reset some data
     onCancel() {
       this.tabIndex = 0;
       this.contactId = "";
@@ -289,7 +307,6 @@ export default {
     }
   },
   mounted() {
-    this.resetStateContact();
     this.$store.dispatch("getPresentation");
   }
 };

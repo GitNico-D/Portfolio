@@ -18,7 +18,7 @@
       />
     </div>
     <div v-if="!oneCareer.id">
-      <h2 id="modifyForm-title" class="text-center fw-bold my-5 tab-career-title">
+      <h2 id="modifyForm-title" class="text-center fw-bold my-5 career-form-title">
         Remplisser le formulaire ci-dessous pour ajouter une nouvelle
         <span class="font-weight-bold font-style-italic"
           >Étape de carrière !</span
@@ -26,7 +26,7 @@
       </h2>
     </div>
     <div v-else>
-      <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+      <h2 id="modifyForm-title" class="text-center fw-bold my-5 career-form-title">
         Modification du CareerStage
         <p class="my-2">
           <span class="font-weight-bold font-style-italic"
@@ -53,7 +53,7 @@
           name="Titre"
           v-slot="{ errors }"
         >
-          <b-form-group id="name">
+          <b-form-group id="name" class="mb-5">
             <label v-if="oneCareer.id" for="input-name" class="text-uppercase"
               >Nouveau titre de l'étape de carrière
             </label>
@@ -76,7 +76,7 @@
           name="Description"
           v-slot="{ errors }"
         >
-          <b-form-group id="textarea">
+          <b-form-group id="textarea" class="mb-5">
             <label v-if="oneCareer.id" for="input-name" class="text-uppercase"
               >Nouvelle description de l'étape de carrière</label
             >
@@ -132,7 +132,7 @@
             </b-alert>
           </b-form-group>
         </ValidationProvider>
-        <div>
+        <div v-if="!oneCareer.id || oldLogoCompany">
           <h5
             v-show="!career.logoCompany && oldLogoCompany"
             class="text-left text-uppercase"
@@ -147,13 +147,16 @@
             v-show="!career.logoCompany && oldLogoCompany"
           ></b-img>
         </div>
+        <div v-else>
+          <p><span class="font-weight-bold">Aucune ancienne image trouvée</span></p>
+        </div> 
         <ValidationProvider
           ref="logo-company"
           :rules="!oneCareer.id ? 'required' : ''"
           name="Logo"
           v-slot="{ errors }"
         >
-          <b-form-group id="logo-company" class="mt-3 mb-5">
+          <b-form-group id="logo-company" class="mb-5">
             <label
               v-if="oneCareer.id"
               for="input-logoCompany"
@@ -239,7 +242,10 @@
           v-slot="{ errors }"
         >
           <b-form-group id="end-date" class="mt-4">
-            <label for="input-end-date" class="text-uppercase"
+            <label v-if="oneCareer.id" for="input-end-date" class="text-uppercase"
+              >Nouvelle date de fin de l'étape de carrière</label
+            >
+            <label v-else for="input-end-date" class="text-uppercase"
               >Date de fin de l'étape de carrière</label
             >
             <b-form-datepicker
@@ -262,7 +268,7 @@
             <p v-else>Date de fin: '{{ career.endDate }}'</p>
           </b-form-group>
         </ValidationProvider>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center flex-wrap">
           <b-button
             type="submit"
             class="m-3 p-3 btn-add"
@@ -354,6 +360,7 @@ export default {
       "updateCareerStageWithoutFile",
       "resetStateCareerStage"
     ]),
+    //Create a url with the file add in the input-file to display it
     showPreview(event) {
       const file = event.target.files[0];
       if (file) {
@@ -363,8 +370,9 @@ export default {
         };
       }
     },
-    onSubmit() {
-      console.log(this.methodAction);
+    //Submit the form content after validation
+    //In case it's a new career stage or a modification of a existing career stage
+    onSubmit() {    
       if (this.methodAction == "create") {
         this.loading = true;
         console.log(this.career);
@@ -373,6 +381,7 @@ export default {
             this.loading = false;
             return;
           }
+          //Create the formData in a external services
           let fd = this.setFormWithFile(this.career.logoCompany, this.career);
           this.addCareerStage(fd)
             .then(() => {
@@ -450,6 +459,7 @@ export default {
         });
       }
     },
+    //Reset all the form data
     resetForm() {
       this.$refs.careerForm.reset();
       this.loading = false;
@@ -462,26 +472,30 @@ export default {
       this.oldLogoCompany = "";
       this.previewLogoCompanyUrl = "";
     },
+    //Erase the alert message
     onReturn() {
       this.successMessage = "";
       this.errorMessage = "";
     },
+    //Format the date in an external service
     formatDate(date) {
       return formatDate(date);
     }
   },
   mounted() {
-    console.log(this.methodAction);
+    //According to the method received, fill in the form data
     if (this.methodAction == "update") {
-      this.career = this.oneCareer;
-      this.currentName = this.oneCareer.name;
+      this.career.name = this.oneCareer.name;
+      this.career.description = this.oneCareer.description;
+      this.career.company = this.oneCareer.company;
+      this.career.startDate = this.oneCareer.startDate;
+      this.career.endDate = this.oneCareer.endDate;
       this.oldLogoCompany = this.oneCareer.logoCompany;
+      this.currentName = this.oneCareer.name;
       this.career.logoCompany = null;
-    } else {
-      this.resetForm();
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -511,11 +525,6 @@ export default {
 }
 .row {
   height: unset;
-}
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
 }
 .form-group {
   margin-bottom: 2rem;
@@ -553,17 +562,26 @@ form {
   letter-spacing: 1px;
 }
 @media (min-width: 320px) {
-  .tab-career-title {
+  form {
+    width: 100%;
+    margin: auto;
+  }
+  .career-form-title {
     font-size: 1.2rem;
   }
 }
 @media (min-width: 576px) {
-  .tab-career-title {
+  .career-form-title {
     font-size: 1.5rem;
   }
 }
 @media (min-width: 768px) {
-  .tab-career-title {
+  form {
+    width: 100%;
+    margin: auto;
+    padding: 1.5rem;
+  }
+  .career-form-title {
     font-size: 2rem;
   }
 }

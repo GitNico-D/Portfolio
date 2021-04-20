@@ -1,6 +1,5 @@
 <template>
-<b-row>
-  <b-col cols md="12" lg="9">
+  <div>
     <div id="alert">
       <AlertForm
         v-if="successMessage"
@@ -19,13 +18,13 @@
       />
     </div>
     <div v-if="!oneSkill.id">
-      <h2 id="addForm-title" class="text-center fw-bold my-5">
+      <h2 id="addForm-title" class="text-center fw-bold my-5 skill-form-title">
         Remplisser le formulaire ci-dessous pour ajouter une nouvelle
         <span class="font-weight-bold font-style-italic">Compétence !</span>
       </h2>
     </div>
     <div v-else>
-      <h2 id="modifyForm-title" class="text-center fw-bold my-5">
+      <h2 id="modifyForm-title" class="text-center fw-bold my-5 skill-form-title">
         Modification de la compétence
         <p class="my-2">
           <span class="font-weight-bold font-style-italic"
@@ -118,7 +117,7 @@
             </b-alert>
           </b-form-group>
         </ValidationProvider>
-        <div>
+        <div v-if="!oneSkill.id || oldIcon">
           <h5 v-show="!skill.icon && oldIcon" class="text-left text-uppercase">
             Icone de la compétence
           </h5>
@@ -130,6 +129,9 @@
             v-show="!skill.icon && oldIcon"
           ></b-img>
         </div>
+        <div v-else>
+          <p><span class="font-weight-bold">Aucune ancienne image trouvée</span></p>
+        </div> 
         <ValidationProvider
           ref="icon"
           :rules="!oneSkill.id ? 'required' : ''"
@@ -190,7 +192,7 @@
             </b-alert>
           </b-form-group>
         </ValidationProvider>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center flex-wrap">
           <b-button
             type="submit"
             class="m-3 p-3 btn-add"
@@ -202,8 +204,10 @@
               label="Spinning"
               class="pt-4 pl-2"
             ></b-spinner>
-            <font-awesome-icon icon="folder-plus" /><span class="pl-2 pb-2"
-              >Ajouter compétence</span
+            
+            <font-awesome-icon icon="folder-plus" />
+            <span v-if="oneSkill.id" class="pl-2 pb-2">Modifier Compétence</span>
+            <span v-else class="pl-2 pb-2">Ajouter compétence</span
             >
           </b-button>
           <Button
@@ -224,8 +228,8 @@
         </div>
       </b-form>
     </ValidationObserver>
-  </b-col>
-  <b-row>
+  </div>
+  <!-- <b-row> -->
 </template>
 
 <script>
@@ -292,6 +296,7 @@ export default {
     setCategory() {
       return (this.skill.category = this.selected);
     },
+    //Create a url with the file add in the input-file to display it
     showPreview(event) {
       const file = event.target.files[0];
       if (file) {
@@ -301,6 +306,8 @@ export default {
         };
       }
     },
+    //Submit the form content after validation
+    //In case it's a new contact or a modification of a existing contact
     onSubmit() {
       if (this.methodAction == "create") {
         this.loading = true;
@@ -377,6 +384,7 @@ export default {
         });
       }
     },
+    //Reset all the form data and the specific page data
     resetForm() {
       this.$refs.skillForm.reset();
       this.loading = false;
@@ -387,6 +395,7 @@ export default {
       this.oldIcon = "";
       this.previewIconUrl = "";
     },
+    //Erase the alert message
     onReturn() {
       this.successMessage = "";
       this.errorMessage = "";
@@ -396,16 +405,19 @@ export default {
     }
   },
   mounted() {
-    console.log(this.methodAction);
+    //According to the method received, fill in the form data
+    this.selected = null;
     if (this.methodAction == "update") {
-      this.skill = this.oneSkill;
+      this.skill.name = this.oneSkill.name;
+      this.skill.description = this.oneSkill.description;
+      this.skill.level = this.oneSkill.level;
       this.currentName = this.oneSkill.name;
       this.oldIcon = this.oneSkill.icon;
       this.skill.icon = null;
       this.selected = this.oneCategory.id;
       this.skill.category = this.oneCategory.id;
     } else {
-      this.selected = 0;
+      // this.selected = null;
       this.selected = this.oneCategory.id;
       this.skill.category = this.oneCategory.id;
     }
@@ -454,11 +466,6 @@ export default {
     border-bottom: 1px solid $purple;
   }
 }
-form {
-  width: 90%;
-  margin: auto;
-  padding: 1.5rem;
-}
 .form-control {
   background-color: transparent;
   color: $white;
@@ -481,5 +488,30 @@ form {
 .tabs {
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
+}
+@media(min-width: 320px){
+  form {
+    width: 100%;
+    margin: auto;
+  }
+  .skill-form-title {
+    font-size: 1.2rem;
+  }
+}
+@media(min-width: 576px)
+{
+  .skill-form-title {
+    font-size: 1.5rem;
+  }
+}
+@media(min-width: 768px){
+  form {
+    width: 100%;
+    margin: auto;
+    padding: 1.5rem;
+  }
+  .skill-form-title {
+    font-size: 2rem;
+  }
 }
 </style>

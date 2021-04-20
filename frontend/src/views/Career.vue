@@ -50,6 +50,7 @@ export default {
     };
   },
   methods: {
+    // Start transition effect and hide it after 1.3s
     actionTransition() {
       this.showTransition = true;
       setTimeout(() => {
@@ -66,6 +67,7 @@ export default {
       this.showTransition = false;
     }, 1300);
   },
+  //Dispatch all career stage contains in career vuex module
   mounted() {
     this.$store.dispatch("getAllCareerStage");
   }
@@ -81,13 +83,6 @@ export default {
 }
 .bottom {
   height: 15vh;
-  // .link {
-  //   &-bottom {
-  //     bottom: 50%;
-  //     left: 50%;
-  //     transform: translate(-50%, 50%) rotate(90deg) scale(0.8);
-  //   }
-  // }
 }
 .even,
 .odd {
@@ -140,8 +135,8 @@ export default {
   .container-fluid {
     .line {
       display: initial;
-      height: 82%;
-      top: 9%;
+      height: 75%;
+      top: 12%;
     }
     .link {
       &-bottom {
@@ -152,11 +147,6 @@ export default {
 }
 @media (min-width: 1200px) {
   .container-fluid {
-    .line {
-      display: initial;
-      height: 84%;
-      top: 7%;
-    }
     .link {
       &-bottom {
         transform: translate(-50%, -50%) rotate(90deg) scale(1);
