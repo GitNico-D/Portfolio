@@ -42,7 +42,7 @@ class ContactController extends AbstractController
      * GET a Contacts resource
      *
      * @Route("/contacts/{id}", name="get_contact", methods={"GET"})
-     * @ParamConverter("contact", class="App:contact")
+     * @ParamConverter("contact", class="App:Contact")
      * @param Contact $contact
      * @param CustomHateoasLinks $customLink
      * @return JsonResponse
@@ -118,7 +118,7 @@ class ContactController extends AbstractController
      * DELETE an existing Contact resource
      *
      * @Route("/contacts/{id}", name="delete_contact", methods={"DELETE"})
-     * @ParamConverter("contact", class="App:contact")
+     * @ParamConverter("contact", class="App:Contact")
      * @IsGranted("ROLE_ADMIN")
      * @param Contact $contact
      * @param EntityManagerInterface $em

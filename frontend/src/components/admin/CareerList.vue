@@ -83,16 +83,17 @@
               <template #row-details="row">
                 <b-card
                   :title="row.item.name"
-                  :img-src="row.item.logoCompany"
-                  img-top
                   class="mt-2 text-dark text-center"
                 >
+                <div class="d-flex justify-content-center my-4">
+                  <b-img :src="row.item.logoCompany" width="480"></b-img>
+                </div>
                   <b-card-body class="text-left fst-italic">
                     <p>Ajouté le : {{ formatDate(row.item.createdAt) }}</p>
                     <p>Mise à jour le : {{ formatDate(row.item.updatedAt) }}</p>
                   </b-card-body>
                   <b-card-text>
-                    {{ oneCareer.description }}
+                    <p class="my-4">{{ row.item.description }}</p>
                   </b-card-text>
                   <Button
                     action="Modifier"

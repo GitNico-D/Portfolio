@@ -42,7 +42,7 @@ class ProjectController extends AbstractController
      * GET a Project resource
      *
      * @Route("/projects/{id}", name="get_project", methods={"GET"})
-     * @ParamConverter("project", class="App:project")
+     * @ParamConverter("project", class="App:Project")
      * @param Project $project
      * @param CustomHateoasLinks $customLink
      * @return JsonResponse

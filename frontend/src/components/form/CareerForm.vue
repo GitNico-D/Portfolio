@@ -55,10 +55,10 @@
         >
           <b-form-group id="name" class="mb-5">
             <label v-if="oneCareer.id" for="input-name" class="text-uppercase"
-              >Nouveau titre de l'étape de carrière
+              >Nouvelle intitulé de l'étape de carrière
             </label>
             <label v-else for="input-name" class="text-uppercase"
-              >Titre de l'étape de carrière</label
+              >Intitulé de l'étape de carrière</label
             >
             <b-form-input
               id="input-name"

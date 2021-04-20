@@ -43,7 +43,7 @@ class ExperienceController extends AbstractController
      * GET an Experience resource
      *
      * @Route("/experiences/{id}", name="get_experience", methods={"GET"})
-     * @ParamConverter("experience", class="App:experience")
+     * @ParamConverter("experience", class="App:Experience")
      * @param Experience $experience
      * @param CustomHateoasLinks $customLink
      * @return JsonResponse
@@ -118,7 +118,7 @@ class ExperienceController extends AbstractController
      * DELETE an existing Experience resource
      *
      * @Route("/experiences/{id}", name="delete_experience", methods={"DELETE"})
-     * @ParamConverter("experience", class="App:experience")
+     * @ParamConverter("experience", class="App:Experience")
      * @IsGranted("ROLE_ADMIN")
      * @param Experience $experience
      * @param EntityManagerInterface $em

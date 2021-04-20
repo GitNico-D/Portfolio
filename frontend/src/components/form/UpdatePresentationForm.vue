@@ -178,9 +178,10 @@
               }}
             </div>
             <b-img
-              thumbnail
-              fluid
+              thumbnail  
+              fluid            
               id="previewPicture"
+              width="576"
               v-show="previewPictureUrl && modifyPresentation.picture"
               :src="previewPictureUrl"
             ></b-img>
