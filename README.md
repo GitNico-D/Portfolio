@@ -54,7 +54,8 @@ Clone this repository. Then run through the following explanations.
 If there is any error with the serve command, please try the following line:
 
     `npm run lint`
-
+    
+3. In .env change VUE_APP_API_URL with your virtual host adress api
 
 ## DEMONSTRATION ##
 You can connect account with the following : 
