@@ -23,7 +23,7 @@ const actions = {
         headers: headers
       })
       .then(response => {
-        commit("ADD_SKILL", response.data);
+        commit("SET_ALL_SKILL", response.data);
       })
       .catch(error => {
         errorRedirection(error);
@@ -110,7 +110,7 @@ const actions = {
 
 //Mutations applied to the desired state related to the above actions 
 const mutations = {
-  ADD_SKILL(state, skills) {
+  SET_ALL_SKILL(state, skills) {
     state.skills = skills;
   },
   SET_ONE_SKILL(state, skill) {

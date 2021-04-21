@@ -145,13 +145,4 @@ export default {
     }
   }
 }
-@media (min-width: 1200px) {
-  .container-fluid {
-    .link {
-      &-bottom {
-        transform: translate(-50%, -50%) rotate(90deg) scale(1);
-      }
-    }
-  }
-}
 </style>

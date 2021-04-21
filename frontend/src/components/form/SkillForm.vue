@@ -346,10 +346,10 @@ export default {
               .then(() => {
                 this.successMessage =
                   "La compétence " + this.oneSkill.id + " a été modifier";
+                document.getElementById("alert").scrollIntoView();
                 this.loading = false;
                 this.errorMessage = "";
                 this.resetForm();
-                document.getElementById("alert").scrollIntoView();
               })
               .catch(error => {
                 if (error.data[0]) {
@@ -367,10 +367,10 @@ export default {
               .then(() => {
                 this.successMessage =
                   "La compétence " + this.oneSkill.id + " a été modifier";
+                document.getElementById("alert").scrollIntoView();
                 this.loading = false;
                 this.errorMessage = "";
                 this.resetForm();
-                document.getElementById("alert").scrollIntoView();
               })
               .catch(error => {
                 if (error.data[0]) {

@@ -21,7 +21,7 @@ const actions = {
         headers: headers
       })
       .then(response => {
-        commit("ADD_CATEGORIES", response.data);
+        commit("SET_ALL_CATEGORIES", response.data);
       })
       .catch(error => {
         errorRedirection(error);
@@ -100,7 +100,7 @@ const actions = {
 };
 
 const mutations = {
-  ADD_CATEGORIES(state, categories) {
+  SET_ALL_CATEGORIES(state, categories) {
     state.categories = categories;
   },
   SET_ONE_CATEGORY(state, category) {

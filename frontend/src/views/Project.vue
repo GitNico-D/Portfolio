@@ -147,7 +147,7 @@ export default {
     .back {
       .link {
         &-left {
-          transform: translate(-50%, 0) scale(1);
+          transform: translate(-50%, 0) scale(0.8);
         }
       }
     }

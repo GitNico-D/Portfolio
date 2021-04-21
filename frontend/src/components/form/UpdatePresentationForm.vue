@@ -3,13 +3,11 @@
     <div id="alert">
       <AlertForm
         v-if="successMessage"
-        v-show="onePresentation.id"
         :message="successMessage"
         variant="success"
       />
       <AlertForm
         v-if="errorMessage"
-        v-show="onePresentation.id"
         :message="errorMessage"
         variant="danger"
       />
@@ -455,8 +453,8 @@ export default {
               document.getElementById("alert").scrollIntoView();
             })
             .catch(error => {
-              if (error.data[0]) {
-                this.errorMessage = error.data[0].message;
+              if (error.data) {
+                this.errorMessage = error.data;
               } else {
                 this.errorMessage = error;
               }
@@ -480,8 +478,8 @@ export default {
               document.getElementById("alert").scrollIntoView();
             })
             .catch(error => {
-              if (error.data[0]) {
-                this.errorMessage = error.data[0].message;
+              if (error.data) {
+                this.errorMessage = error.data;
               } else {
                 this.errorMessage = error;
               }
@@ -500,7 +498,15 @@ export default {
   },
   mounted() {
     if (this.onePresentation.id) {
-      this.modifyPresentation = this.onePresentation;
+      this.modifyPresentation.firstName = this.onePresentation.firstName;
+      this.modifyPresentation.lastName = this.onePresentation.lastName;
+      this.modifyPresentation.quote = this.onePresentation.quote;
+      this.modifyPresentation.titleFirstText = this.onePresentation.titleFirstText;
+      this.modifyPresentation.firstText = this.onePresentation.firstText;
+      this.modifyPresentation.titleSecondText = this.onePresentation.titleSecondText;
+      this.modifyPresentation.secondText = this.onePresentation.secondText;
+      this.modifyPresentation.titleThirdText = this.onePresentation.titleThirdText;
+      this.modifyPresentation.thirdText = this.onePresentation.thirdText;
       this.oldPicture = this.onePresentation.picture;
       this.modifyPresentation.picture = null;
     }

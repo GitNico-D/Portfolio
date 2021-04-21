@@ -41,7 +41,6 @@
       <b-form
         @submit.prevent="handleSubmit(onSubmit)"
         :methodAction="methodAction"
-        v-if="oneProject || (methodAction == 'create')"
       >
         <ValidationProvider
           ref="name"
@@ -255,7 +254,7 @@
                 formatDate(project.creationDate)
               }}'
             </p>
-            <p v-else>Date de création: '{{ project.creationDate }}'</p>
+            <p v-else>Date de création: '{{ project.creationDate ? formatDate(project.creationDate) : '' }}'</p>
           </b-form-group>
         </ValidationProvider>
         <div class="d-flex justify-content-center flex-wrap">
@@ -384,10 +383,9 @@ export default {
               } else {
                 this.errorMessage = error;
               }
-              this.successMessage = "";
               document.getElementById("alert").scrollIntoView();
-              this.loading = false;
               this.successMessage = "";
+              this.loading = false;
             });
         });
       } else {
@@ -456,6 +454,7 @@ export default {
       this.project.creationDate = "";
       this.oldImgStatic = "";
       this.previewImgStaticUrl = "";
+      this.currentName = ""
     },
     //Erase the alert message
     onReturn() {
@@ -466,7 +465,7 @@ export default {
       return formatDate(date);
     }
   },
-  mounted() {
+  updated() {
     console.log('mounted ')
     //According to the method received, fill in the form data
     if (this.methodAction == "update") {
