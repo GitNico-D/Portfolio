@@ -38,7 +38,7 @@ Clone this repository. Then run through the following explanations.
     
     `composer install`
 
-2. Copy .env to .env.local and set DATABASE_URL informations and TOKEN_SECRET
+2. Copy .env to .env.local and set DATABASE_URL informations and JWT_PASSPHRASE
     
 ### Frontend ###
 1. Run the following command in your terminal
