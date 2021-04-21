@@ -103,6 +103,7 @@ import Transition from "@/components/Transition.vue";
 import HomePageLink from "@/components/HomePageLink.vue";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { mapActions } from "vuex";
+import errorRedirection from "../services/errorRedirection";
 
 export default {
   name: "Login",
@@ -151,10 +152,11 @@ export default {
               this.$router.push("/admin");
             })
             .catch((error) => {
-              console.log(error);
-              if(error.data.code == 401) {
+              if(error.response) {
                 this.loading = false;
                 this.message = "Identifiants invalides !";
+              } else if(error.request) {
+                errorRedirection(error);
               }
             });
         }

@@ -1,6 +1,6 @@
 <template>
   <b-row class="justify-content-center mt-5">
-    <b-col cols md="10" lg="9" class="padding-col-md">
+    <b-col cols md="10" lg="9" class="padding-col-md" v-if="allSkills">
       <b-tabs
         active-nav-item-class="font-weight-bold text-uppercase text-success"
         active-tab-class="text-left text-white"
@@ -255,6 +255,22 @@
         </b-tab>
       </b-tabs>
     </b-col>
+    <b-col v-else>
+      <b-jumbotron 
+        header="Une erreur est survenue" 
+        lead="Aucune données n'a pu être récupéré du serveur"
+        class="m-5"
+      >
+        <p>Veuillez ressayer ultérieurement ou contactez un administrateur</p>
+        <Button
+          :color="skillColor"
+          action="Retour tableau de bord"
+          icon="arrow-left"
+          class="m-3 p-3"
+          v-on:action="$emit('returnOverview')"
+        />
+      </b-jumbotron>
+    </b-col>
   </b-row>
 </template>
 
@@ -473,7 +489,6 @@ export default {
     },
     //On action of the skill form button, reset or update some data
     showSkills() {
-      this.$store.dispatch("getAllSkills");
       this.$store.dispatch("getAllCategories");
       this.successMessage = "";
       this.errorMessage = "";
@@ -482,7 +497,6 @@ export default {
     },
     //On action of the skill form button, reset or update some data
     showSoftwares() {
-      this.$store.dispatch("getAllSoftwares");
       this.$store.dispatch("getAllCategories");
       this.successMessage = "";
       this.errorMessage = "";
@@ -550,6 +564,9 @@ table {
 }
 hr {
   background-color: $green;
+}
+.jumbotron {
+  background-color: transparent;
 }
 .nav-link {
   color: $white !important;

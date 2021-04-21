@@ -232,7 +232,7 @@
             <p v-if="oneCareer.id">
               Nouvelle date de début: '{{ formatDate(career.startDate) }}'
             </p>
-            <p v-else>Date de début: '{{ career.startDate }}'</p>
+            <p v-else>Date de début: '{{ career.startDate ? formatDate(career.startDate) : '' }}'</p>
           </b-form-group>
         </ValidationProvider>
         <ValidationProvider
@@ -265,7 +265,7 @@
             <p v-if="oneCareer.id">
               Nouvelle date de fin: '{{ formatDate(career.endDate) }}'
             </p>
-            <p v-else>Date de fin: '{{ career.endDate }}'</p>
+            <p v-else>Date de fin: '{{ career.endDate ? formatDate(career.endDate) : '' }}'</p>
           </b-form-group>
         </ValidationProvider>
         <div class="d-flex justify-content-center flex-wrap">
@@ -373,6 +373,7 @@ export default {
     //Submit the form content after validation
     //In case it's a new career stage or a modification of a existing career stage
     onSubmit() {    
+      console.log(this.methodAction)
       if (this.methodAction == "create") {
         this.loading = true;
         this.$refs.careerForm.validate().then(isValid => {
@@ -385,10 +386,10 @@ export default {
           this.addCareerStage(fd)
             .then(() => {
               this.successMessage = "L'étape de carrière a été ajoutée !";
-              document.getElementById("alert").scrollIntoView();
               this.loading = false;
               this.errorMessage = "";
               this.resetForm();
+              document.getElementById("alert").scrollIntoView();
             })
             .catch(error => {
               if (error.data[0]) {
@@ -397,9 +398,9 @@ export default {
                 this.errorMessage = error;
               }
               this.successMessage = "";
-              document.getElementById("alert").scrollIntoView();
               this.loading = false;
               this.successMessage = "";
+              document.getElementById("alert").scrollIntoView();
             });
         });
       } else {
@@ -470,6 +471,7 @@ export default {
       this.career.endDate = "";
       this.oldLogoCompany = "";
       this.previewLogoCompanyUrl = "";
+      this.currentName = "";
     },
     //Erase the alert message
     onReturn() {

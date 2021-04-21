@@ -6,8 +6,7 @@ export default {
         if (
           value !== null &&
           value !== "" &&
-          key !== "id" &&
-          key !== "contacts"
+          key !== "id"
         ) {
           formData.append(`${key}`, value);
         }

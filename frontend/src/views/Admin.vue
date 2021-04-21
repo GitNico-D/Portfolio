@@ -11,10 +11,10 @@
       v-on:showPresentationForm="showPresentationForm"
       v-on:returnToOverview="returnToOverview"
     />
-    <ProjectList v-show="displayProjectForm" />
-    <CareerList v-show="displayCareerForm" />
-    <SkillList v-show="displaySkillForm" />
-    <PresentationList v-show="displayPresentationForm" />
+    <ProjectList v-show="displayProjectForm" v-on:returnOverview="returnToOverview"/>
+    <CareerList v-show="displayCareerForm" v-on:returnOverview="returnToOverview"/>
+    <SkillList v-show="displaySkillForm" v-on:returnOverview="returnToOverview"/>
+    <PresentationList v-show="displayPresentationForm" v-on:returnOverview="returnToOverview"/>
     <h2
       class="text-center text-white mb-4 text-uppercase font-weight-bold"
       v-show="showOverview"
