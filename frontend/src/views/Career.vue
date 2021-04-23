@@ -70,7 +70,10 @@ export default {
   //Dispatch all career stage contains in career vuex module
   mounted() {
     this.$store.dispatch("getAllCareerStage");
-  }
+  },
+  updated() {
+    this.getAllCareerStage();
+  },
 };
 </script>
 
@@ -102,9 +105,6 @@ export default {
   animation: scale-up-ver-top 2s cubic-bezier(0.39, 0.575, 0.565, 1) 0.5s both;
   z-index: -1;
 }
-// .row {
-//   height: unset;
-// }
 @keyframes scale-up-ver-top {
   0% {
     transform: scaleY(0);

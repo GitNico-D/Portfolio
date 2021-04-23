@@ -204,10 +204,6 @@ export default {
       }
     }
   }
-  // .div-button {
-  //   left: 50%;
-  //   transform: translateX(-50%);
-  // }
 }
 @keyframes slideH1 {
   0% {

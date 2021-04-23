@@ -19,7 +19,6 @@
             Toutes les
             <span class="font-weight-bold font-style-italic">compétences</span>
           </h2>
-          <!-- <div> -->
           <div class="btn-refresh-position">
             <b-button @click="refreshTab" variant="info" class="m-2 btn-add">
               <font-awesome-icon icon="sync" class="mr-2" spin />Rafraichir
@@ -58,7 +57,6 @@
                 v-on:action="toSoftwareForm(null, category.id, 'create')"
               />
             </div>
-            <!-- <span v-for="skill in allSkills" :key="skill.id"> -->
             <h4 class="m-3">Compétences</h4>
             <b-table
               id="table-list"
@@ -366,13 +364,13 @@ export default {
     //Refresh button to reset page, form data and retrieve the new data added
     refreshTab() {
       this.$store.dispatch("getAllCategories");
-      this.$store.dispatch("getAllSkills");
-      this.$store.dispatch("getAllSoftwares");
+      this.getAllSkills();
+      this.getAllSoftwares();
       this.successMessage = "";
       this.errorMessage = "";
       this.resetStateSkill()
       this.resetStateSoftware()
-      this.methodAction = ''
+      this.methodAction = 'create'
       this.careerId = ''
     },
     //Delete the skill defined by the id
@@ -515,6 +513,9 @@ export default {
     returnToList() {
       this.tabIndex = 0;
     }
+  },
+  mounted() {
+    this.methodAction = 'create';
   }
 };
 </script>

@@ -103,7 +103,10 @@ export default {
   mounted() {
     // Dispatch all categories contains in the vuex state.projects
     this.$store.dispatch("getAllCategories");
-  }
+  },
+  updated() {
+    this.getAllCategories();
+  },
 };
 </script>
 

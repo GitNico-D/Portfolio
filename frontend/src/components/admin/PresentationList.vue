@@ -236,8 +236,9 @@ export default {
       this.$store.dispatch("getPresentation");
       this.successMessage = "";
       this.errorMessage = "";
-      this.resetStateContact()
+      this.resetStateContact();
       this.contactId = "";
+      this.methodAction = "create"
     },
     //Render the update presentation form 
     toUpdatePresentationForm(data) {
@@ -324,6 +325,7 @@ export default {
     }
   },
   mounted() {
+    this.methodAction = 'create';
     this.$store.dispatch("getPresentation");
   }
 };

@@ -381,7 +381,7 @@ export default {
               if (error.data[0]) {
                 this.errorMessage = error.data[0].message;
               } else {
-                this.errorMessage = error;
+                this.errorMessage = error.data.message;
               }
               document.getElementById("alert").scrollIntoView();
               this.successMessage = "";
@@ -412,7 +412,7 @@ export default {
                 if (error.data[0]) {
                   this.errorMessage = error.data[0].message;
                 } else {
-                  this.errorMessage = error;
+                  this.errorMessage = error.data.message;
                 }
                 this.successMessage = "";
               });
@@ -434,7 +434,7 @@ export default {
                 if (error.data[0]) {
                   this.errorMessage = error.data[0].message;
                 } else {
-                  this.errorMessage = error;
+                  this.errorMessage = error.data.message;
                 }
                 this.successMessage = "";
               });
@@ -466,7 +466,6 @@ export default {
     }
   },
   updated() {
-    console.log('mounted ')
     //According to the method received, fill in the form data
     if (this.methodAction == "update") {
       this.project.name = this.oneProject.name;
