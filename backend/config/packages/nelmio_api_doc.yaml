@@ -53,7 +53,7 @@ nelmio_api_doc:
                                         $ref: '#/components/schemas/Error400'
             /categories/{id}:
                 get:
-                    summary: Return a Categories by his ID
+                    summary: Return a Category by his ID
                     tags: 
                         - Categories
                     parameters:
@@ -165,12 +165,9 @@ nelmio_api_doc:
                     requestBody:
                         description: "**Project** that need to be added"
                         content: 
-                            application/json: 
-                                schema:
-                                    $ref: '#/components/schemas/Project_post'
                             multipart/form-data:
                                 schema:
-                                    $ref: '#/components/schemas/Project_form_data'       
+                                    $ref: '#/components/schemas/Project_post_form_data'       
                         required: true
                     responses:
                         '201':
@@ -199,7 +196,7 @@ nelmio_api_doc:
                     parameters:
                         - name: id
                           in: path 
-                          description: "**ID** of project resource. *Example: 5,11.*"
+                          description: "**ID** of Project resource. *Example: 5,11.*"
                           required: true
                           schema:
                             type: integer
@@ -216,6 +213,47 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Error404'
+                post:
+                    summary: Updated an existing Project by his {id} with File upload
+                    tags: 
+                        - Projects
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Project resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                        - name: _method
+                          in: query 
+                          required: true
+                          description: "**Enter PUT for the value of this field**"
+                    requestBody:
+                        description: Project that need to be updated
+                        content:
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Project_put_form_data'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Project'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated an existing Project by his {id}
                     tags: 
@@ -223,7 +261,7 @@ nelmio_api_doc:
                     parameters:
                         - name: id
                           in: path 
-                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          description: "**ID** of Project resource. *Example: 5,11.*"
                           required: true
                           schema:
                             type: integer   
@@ -233,9 +271,6 @@ nelmio_api_doc:
                             application/json: 
                                 schema:
                                     $ref: '#/components/schemas/Project'
-                            multipart/form-data:
-                                schema:
-                                    $ref: '#/components/schemas/Project_form_data' 
                         required: true
                     responses:
                         '200':
@@ -308,12 +343,9 @@ nelmio_api_doc:
                     requestBody:
                         description: "**Experience** that need to be added"
                         content: 
-                            application/json: 
-                                schema:
-                                    $ref: '#/components/schemas/Experience'
                             multipart/form-data:
                                 schema:
-                                    $ref: '#/components/schemas/Experience_form_data'
+                                    $ref: '#/components/schemas/Experience_post_form_data'
                         required: true
                     responses:
                         '201':
@@ -359,6 +391,47 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Error404'
+                post:
+                    summary: Updated an existing Experience by his {id} with File upload
+                    tags: 
+                        - Experiences
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                        - name: _method
+                          in: query 
+                          required: true
+                          description: "**Enter PUT for the value of this field**"
+                    requestBody:
+                        description: Experience that need to be updated
+                        content:
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Experience_put_form_data'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Experience'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated an existing Experience by his {id}
                     tags: 
@@ -366,7 +439,7 @@ nelmio_api_doc:
                     parameters:
                         - name: id
                           in: path 
-                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          description: "**ID** of Experience resource. *Example: 5,11.*"
                           required: true
                           schema:
                             type: integer    
@@ -376,9 +449,6 @@ nelmio_api_doc:
                             application/json: 
                                 schema:
                                     $ref: '#/components/schemas/Experience'
-                            multipart/form-data:
-                                schema:
-                                    $ref: '#/components/schemas/Experience_form_data'
                         required: true
                     responses:
                         '200':
@@ -451,12 +521,9 @@ nelmio_api_doc:
                     requestBody:
                         description: "**Skill** that need to be added"
                         content: 
-                            application/json: 
-                                schema:
-                                    $ref: '#/components/schemas/Skill'
                             multipart/form-data:
                                 schema:
-                                    $ref: '#/components/schemas/Skill_form_data'
+                                    $ref: '#/components/schemas/Skill_post_form_data'
                         required: true
                     responses:
                         '201':
@@ -488,7 +555,7 @@ nelmio_api_doc:
                           description: "**ID** of Skill resource. *Example: 5,11.*"
                           required: true
                           schema:
-                            type: integer
+                            type: integer 
                     responses:
                         '200':
                             description: Successful response
@@ -502,8 +569,49 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Error404'
+                post:
+                    summary: Updated an existing Skill by his {id} with File upload
+                    tags: 
+                        - Skills
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Skill resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                        - name: _method
+                          in: query 
+                          required: true
+                          description: "**Enter PUT for the value of this field**"
+                    requestBody:
+                        description: Skill that need to be updated
+                        content:
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Skill_put_form_data'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Skill'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
                 put:
-                    summary: Updated an existing Skill by his {id}
+                    summary: Updated an existing Skill by his {id} without File upload
                     tags: 
                         - Skills
                     parameters:
@@ -512,16 +620,13 @@ nelmio_api_doc:
                           description: "**ID** of Category resource. *Example: 5,11.*"
                           required: true
                           schema:
-                            type: integer
+                            type: integer 
                     requestBody:
                         description: Skill that need to be updated
                         content: 
                             application/json: 
                                 schema:
                                     $ref: '#/components/schemas/Skill'
-                            multipart/form-data:
-                                schema:
-                                    $ref: '#/components/schemas/Skill_form_data'
                         required: true
                     responses:
                         '200':
@@ -594,12 +699,9 @@ nelmio_api_doc:
                     requestBody:
                         description: "**Software** that need to be added"
                         content: 
-                            application/json: 
-                                schema:
-                                    $ref: '#/components/schemas/Software'
                             multipart/form-data:
                                 schema:
-                                    $ref: '#/components/schemas/Software_form_data'
+                                    $ref: '#/components/schemas/Software_post_form_data'
                         required: true
                     responses:
                         '201':
@@ -645,6 +747,47 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Error404'
+                post:
+                    summary: Updated an existing Software by his {id} with File upload
+                    tags: 
+                        - Softwares
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Software resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                        - name: _method
+                          in: query 
+                          required: true
+                          description: "**Enter PUT for the value of this field**"
+                    requestBody:
+                        description: Software that need to be updated
+                        content:
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Software_put_form_data'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Software'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated an existing Software by his {id}
                     tags: 
@@ -652,7 +795,7 @@ nelmio_api_doc:
                     parameters:
                         - name: id
                           in: path 
-                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          description: "**ID** of Software resource. *Example: 5,11.*"
                           required: true
                           schema:
                             type: integer
@@ -761,6 +904,47 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Error404'
+                post:
+                    summary: Updated an existing Presentation by his {id} with File upload
+                    tags: 
+                        - Presentations
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Presentation resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                        - name: _method
+                          in: query 
+                          required: true
+                          description: "**Enter PUT for the value of this field**"
+                    requestBody:
+                        description: Presentation that need to be updated
+                        content:
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Presentation_put_form_data'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Presentation'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated the presentation 1
                     tags: 
@@ -820,12 +1004,9 @@ nelmio_api_doc:
                     requestBody:
                         description: "**Contact** that need to be added"
                         content: 
-                            application/json: 
-                                schema:
-                                    $ref: '#/components/schemas/Contact'
                             multipart/form-data:
                                 schema:
-                                    $ref: '#/components/schemas/Contact_form_data'
+                                    $ref: '#/components/schemas/Contact_post_form_data'
                         required: true
                     responses:
                         '201':
@@ -871,6 +1052,47 @@ nelmio_api_doc:
                                 application/json: 
                                     schema:
                                         $ref: '#/components/schemas/Error404'
+                post:
+                    summary: Updated an existing Contact by his {id} with File upload
+                    tags: 
+                        - Contacts
+                    parameters:
+                        - name: id
+                          in: path 
+                          description: "**ID** of Contact resource. *Example: 5,11.*"
+                          required: true
+                          schema:
+                            type: integer
+                        - name: _method
+                          in: query 
+                          required: true
+                          description: "**Enter PUT for the value of this field**"
+                    requestBody:
+                        description: Contact that need to be updated
+                        content:
+                            multipart/form-data:
+                                schema:
+                                    $ref: '#/components/schemas/Contact_put_form_data'
+                        required: true
+                    responses:
+                        '200':
+                            description: Successful response
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Contact'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error401'                
+                        '404':
+                            description: Resource not found
+                            content:
+                                application/json: 
+                                    schema:
+                                        $ref: '#/components/schemas/Error404'
                 put:
                     summary: Updated an existing Contact by his {id}
                     tags: 
@@ -878,7 +1100,7 @@ nelmio_api_doc:
                     parameters:
                         - name: id
                           in: path 
-                          description: "**ID** of Category resource. *Example: 5,11.*"
+                          description: "**ID** of Contact resource. *Example: 5,11.*"
                           required: true
                           schema:
                             type: integer
@@ -888,9 +1110,6 @@ nelmio_api_doc:
                             application/json: 
                                 schema:
                                     $ref: '#/components/schemas/Contact'
-                            multipart/form-data:
-                                schema:
-                                    $ref: '#/components/schemas/Contact_form_data'
                         required: true
                     responses:
                         '200':
@@ -966,7 +1185,7 @@ nelmio_api_doc:
                             type: string
                         creation_date:
                             type: string
-                            format: date-time
+                            # format: date-time
                     required:
                         - id
                         - name 
@@ -990,7 +1209,7 @@ nelmio_api_doc:
                             type: string
                         creation_date:
                             type: string
-                            format: date-time
+                            # format: date-time
                     required:
                         - id
                         - name 
@@ -999,7 +1218,7 @@ nelmio_api_doc:
                         - img_static
                         - alt_static
                         - creation_date 
-                Project_form_data: 
+                Project_post_form_data: 
                     properties:
                         name:
                             type: string
@@ -1014,7 +1233,32 @@ nelmio_api_doc:
                             type: string
                         creation_date:
                             type: string
-                            format: date-time
+                            # format: date-time
+                    required:
+                        - name 
+                        - description
+                        - url
+                        - img_static
+                        - alt_static
+                        - creation_date
+                Project_put_form_data: 
+                    properties:
+                        id: 
+                            type: integer
+                        name:
+                            type: string
+                        description:
+                            type: string
+                        url: 
+                            type: string
+                        img_static:
+                            type: string
+                            format: binary
+                        alt_static:
+                            type: string
+                        creation_date:
+                            type: string
+                            # format: date-time
                     required:
                         - id
                         - name 
@@ -1038,10 +1282,10 @@ nelmio_api_doc:
                             type: string
                         start_date:
                             type: string
-                            format: date-time                            
+                            # format: date-time                            
                         end_date:
                             type: string
-                            format: date-time
+                            # format: date-time
                     required:
                         - id
                         - name 
@@ -1050,7 +1294,32 @@ nelmio_api_doc:
                         - logo_company
                         - start_date
                         - end_date
-                Experience_form_data:
+                Experience_post_form_data:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                        description:
+                            type: string
+                        company: 
+                            type: string
+                        logo_company:
+                            type: string
+                            format: binary
+                        start_date:
+                            type: string
+                            # format: date-time                            
+                        end_date:
+                            type: string
+                            # format: date-time
+                    required:
+                        - name 
+                        - description
+                        - company
+                        - logo_company
+                        - start_date
+                        - end_date
+                Experience_put_form_data:
                     type: object
                     properties:
                         id:
@@ -1066,10 +1335,10 @@ nelmio_api_doc:
                             format: binary
                         start_date:
                             type: string
-                            format: date-time                            
+                            # format: date-time                            
                         end_date:
                             type: string
-                            format: date-time
+                            # format: date-time
                     required:
                         - id
                         - name 
@@ -1101,17 +1370,18 @@ nelmio_api_doc:
                             type: string
                         level: 
                             type: integer
+                        category: 
+                            type: integer
+                            example: 1, 2 or 3
                     required:
                         - id
                         - name
                         - icon
                         - description
                         - level
-                Skill_form_data:
+                Skill_put_form_data:
                     type: object
                     properties:
-                        id:
-                            type: integer
                         name:
                             type: string
                         icon:
@@ -1121,12 +1391,35 @@ nelmio_api_doc:
                             type: string
                         level: 
                             type: integer
+                        category: 
+                            type: integer
+                            example: 1, 2 or 3
                     required:
-                        - id
                         - name
                         - icon
                         - description
-                        - level        
+                        - level
+                Skill_post_form_data:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                        icon:
+                            type: string
+                            format: binary
+                        description:
+                            type: string
+                        level: 
+                            type: integer
+                        category: 
+                            type: integer
+                            example: 1, 2 or 3
+                    required:
+                        - name
+                        - icon
+                        - description
+                        - level  
+                        - category               
                 Software:
                     type: object
                     properties:
@@ -1138,12 +1431,34 @@ nelmio_api_doc:
                             type: string
                         level:
                             type: string
+                        category: 
+                            type: integer
+                            example: 1, 2 or 3
                     required:
                         - id
                         - name
                         - icon
                         - level
-                Software_form_data:
+                        - category
+                Software_post_form_data:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                        icon:
+                            type: string
+                            format: binary
+                        level:
+                            type: string
+                        category: 
+                            type: integer
+                            example: 1, 2 or 3 
+                    required:
+                        - name
+                        - icon
+                        - level
+                        - category
+                Software_put_form_data:
                     type: object
                     properties:
                         id:
@@ -1155,6 +1470,9 @@ nelmio_api_doc:
                             format: binary
                         level:
                             type: string
+                        category: 
+                            type: integer
+                            example: 1, 2 or 3 
                     required:
                         - id
                         - name
@@ -1185,6 +1503,54 @@ nelmio_api_doc:
                             type: string
                         third_text:
                             type: string 
+                    required:
+                        - id
+                        - first_name
+                        - last_name
+                        - quote
+                        - title_first_text
+                        - first_text
+                        - title_second_text
+                        - second_text
+                        - title_third_text
+                        - third_text
+                Presentation_put_form_data: 
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        first_name:
+                            type: string
+                        last_name:
+                            type: string
+                        picture:
+                            type: string
+                        quote:
+                            type: string
+                        title_first_text:
+                            type: string
+                        first_text:
+                            type: string
+                        title_second_text:
+                            type: string
+                        second_text:
+                            type: string
+                        title_third_text:
+                            type: string
+                        third_text:
+                            type: string
+                    required:
+                        - id
+                        - first_name
+                        - last_name
+                        - picture
+                        - quote
+                        - title_first_text
+                        - first_text
+                        - title_second_text
+                        - second_text
+                        - title_third_text
+                        - third_text        
                 Contact: 
                     type: object
                     properties:
@@ -1202,7 +1568,24 @@ nelmio_api_doc:
                         - title
                         - link
                         - icon
-                Contact_form_data: 
+                Contact_post_form_data: 
+                    type: object
+                    properties:
+                        id: 
+                            type: integer
+                        title:
+                            type: string
+                        link:
+                            type: string
+                            format: url
+                        icon:
+                            type: string
+                            format: binary
+                    required:
+                        - title
+                        - link
+                        - icon
+                Contact_put_form_data: 
                     type: object
                     properties:
                         id: 

@@ -373,7 +373,6 @@ export default {
     //Submit the form content after validation
     //In case it's a new career stage or a modification of a existing career stage
     onSubmit() {    
-      console.log(this.methodAction)
       if (this.methodAction == "create") {
         this.loading = true;
         this.$refs.careerForm.validate().then(isValid => {

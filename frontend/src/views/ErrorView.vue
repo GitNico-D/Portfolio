@@ -47,7 +47,6 @@ export default {
 }
 .jumbotron {
   position: relative;
-  // background: url("../assets/404-error.png") center no-repeat;
   font-family: "MontSerrat", sans-serif;
   color: white;
   border: none;

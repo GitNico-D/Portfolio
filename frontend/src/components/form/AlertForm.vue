@@ -14,7 +14,6 @@ export default {
       type: [String, Object]
     },
     variant: String
-    // successMessage: String
   }
 };
 </script>

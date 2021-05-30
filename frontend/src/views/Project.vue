@@ -71,7 +71,10 @@ export default {
   mounted() {
     // Dispatch all projets contains in the vuex state.projects
     this.$store.dispatch("getAllProjects");
-  }
+  },
+  updated() {
+    this.$store.dispatch("getAllProjects");
+  },
 };
 </script>
 

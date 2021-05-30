@@ -165,7 +165,7 @@ export default {
     }
     .navbar {
       padding: unset;
-      button { //Center navbar collapse 
+      button {  
         margin: auto !important;
         margin-top: 1rem !important;
       }

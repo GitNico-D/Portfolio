@@ -225,7 +225,7 @@ export default {
       this.successMessage = "";
       this.errorMessage = "";
       this.resetStateCareerStage()
-      this.methodAction = ''
+      this.methodAction = 'create'
       this.careerId = ''
     },
     //Delete the career stage defined by the id
@@ -288,6 +288,9 @@ export default {
       this.careerId = ''
       this.resetStateCareerStage();
     }
+  },
+  mounted() {
+    this.methodAction = 'create';
   }
 }
 </script>

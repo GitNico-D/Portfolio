@@ -225,11 +225,11 @@ export default {
     },
     //Refresh button to reset page, form data and retrieve the new data added
     refreshTab() {
-      this.$store.dispatch("getAllProjects");
+      this.getAllProjects();
       this.successMessage = "";
       this.errorMessage = "";
       this.resetStateProject()
-      this.methodAction = ''
+      this.methodAction = 'create'
       this.projectId = ''
     },
     //Delete the project defined by the id
@@ -277,6 +277,7 @@ export default {
     //On action of the project form button, return to the tab project list
     returnToList() {
       this.tabIndex = 0;
+      this.getAllProjects();
     },
     //On action of the project form button, reset or update some data
     showProjects() {
@@ -292,6 +293,10 @@ export default {
       this.projectId = "";
       this.resetStateProject();
     }
+  }, 
+  mounted() {
+    this.methodAction = 'create';
+    this.getAllProjects();
   }
 }
 </script>
