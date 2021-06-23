@@ -53,7 +53,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/login", name="login", methods={"POST"})
+     * @Route("/login", name="login_check", methods={"POST"})
      * @ParamConverter("user", converter="create_entity_Converter")
      * @param User $user
      * @return JsonResponse
@@ -61,8 +61,21 @@ class SecurityController extends AbstractController
     public function login(User $user)
     {
         return $this->json([
-            'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
             'roles' => $user->getRoles()
         ]);
+    }
+
+    /**
+     * @Route("/users", name="get_all_users", methods={"GET"})
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function readUsersList()
+    {
+        $users = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->findAll();
+        return $this->json($users, JsonResponse::HTTP_OK);
     }
 }

@@ -24,23 +24,25 @@ const actions = {
       })
       .then(response => {
         commit("SET_ALL_Presentation", response.data);
+        return Promise.resolve(response.data);
       })
       .catch(error => {
         errorRedirection(error);
+        return Promise.reject(error.response.data);
       });
   },
   //Get a unique presentation defined by his id
-  getPresentation({ commit }) {
-    return axios
-      .get(process.env.VUE_APP_API_URL + `/presentations/1`, {
-        headers: headers
-      })
-      .then(response => {
-        commit("SET_ONE_PRESENTATION", response.data);
-      })
-      .catch(error => {
-        return Promise.reject(error.response.data);
-      });
+  async getPresentation({ commit }) {
+    try {
+      const response = await axios
+        .get(process.env.VUE_APP_API_URL + `/presentations/1`, {
+          headers: headers
+        });
+      commit("SET_ONE_PRESENTATION", response.data);
+      return await Promise.resolve(response.data);
+    } catch (error) {
+      return await Promise.reject(error.response.data);
+    }
   },
   //This function treat request with file. A parameter "_method: "PUT" set with a POST method 
   //due to an issue with Symfony to receive and treat a formData on PUT method
