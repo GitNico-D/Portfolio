@@ -25,7 +25,6 @@
             :key="skill.id"
             :title="skill.name"
             :urlIcon="skill.icon"
-            :value="skill.level"
             color="#36C486"
           />
         </div>
@@ -41,7 +40,6 @@
             :key="software.id"
             :title="software.name"
             :urlIcon="software.icon"
-            :value="software.level"
             color="#36C486"
           />
         </div>
@@ -103,10 +101,7 @@ export default {
   mounted() {
     // Dispatch all categories contains in the vuex state.projects
     this.$store.dispatch("getAllCategories");
-  },
-  updated() {
-    this.getAllCategories();
-  },
+  }
 };
 </script>
 

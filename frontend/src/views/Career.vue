@@ -70,10 +70,7 @@ export default {
   //Dispatch all career stage contains in career vuex module
   mounted() {
     this.$store.dispatch("getAllCareerStage");
-  },
-  updated() {
-    this.getAllCareerStage();
-  },
+  }
 };
 </script>
 

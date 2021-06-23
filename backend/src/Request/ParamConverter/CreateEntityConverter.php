@@ -66,7 +66,7 @@ class CreateEntityConverter implements ParamConverterInterface
             $configuration->getClass(),
             'json'
         );
-        if($request->files) {
+        if($request->files->count() !== 0) {
             $uploadFile = $this->fileUploader->getUploadFile($request->files, $configuration->getName());
             $this->fileUploader->setUploadFile($uploadFile, $entity, $configuration);                
         }

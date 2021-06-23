@@ -113,10 +113,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getPresentation")
-  },
-  updated() {
-    this.getPresentation();
-  },
+  }
 };
 </script>
 
