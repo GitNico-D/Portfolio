@@ -1,8 +1,8 @@
 <template>
   <b-container fluid>
     <Header title="Parcours" color="#00a1ba" class="header" />
-    <BackgroundPage circleColor="#00a1ba" />
-    <Transition v-show="showTransition" directionAnimation="down" />
+    <CircleBackground circleColor="#00a1ba"/>
+    <Transition v-show="showTransition" directionAnimation="down" colorSlideOne="#00a1ba"/>
     <CareerStage
       v-for="(careerStage, index) in allCareerStages"
       :key="careerStage.id"
@@ -30,19 +30,19 @@
 
 <script>
 import HomePageLink from "@/components/HomePageLink.vue";
-import BackgroundPage from "@/components/BackgroundPage.vue";
 import Header from "@/components/Header.vue";
 import CareerStage from "@/components/CareerStage.vue";
 import Transition from "@/components/Transition.vue";
+import CircleBackground from "@/components/CircleBackground.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
     HomePageLink,
-    BackgroundPage,
     Header,
     CareerStage,
-    Transition
+    Transition,
+    CircleBackground
   },
   data() {
     return {
@@ -79,7 +79,8 @@ export default {
   background-color: $dark-gray;
   position: relative;
   perspective: 1000px;
-  min-height: 100vh
+  min-height: 100vh;
+  overflow: hidden;
 }
 .bottom {
   height: 15vh;

@@ -2,8 +2,8 @@
 <template>
   <b-container fluid>
     <Header title="Projets" color="#6d327c" />
-    <BackgroundPage circleColor="#6d327c" />
-    <Transition v-show="showTransition" directionAnimation="right" />
+    <CircleBackground circleColor="#6d327c"/>
+    <Transition v-show="showTransition" directionAnimation="right" colorSlideOne="#6d327c"/>
     <b-row class="cards m-auto">
       <ProjectCard
         v-for="project in allProjects"
@@ -31,18 +31,18 @@
 <script>
 import ProjectCard from "@/components/ProjectCard.vue";
 import HomePageLink from "@/components/HomePageLink.vue";
-import BackgroundPage from "@/components/BackgroundPage.vue";
 import Header from "@/components/Header.vue";
 import Transition from "@/components/Transition.vue";
+import CircleBackground from '@/components/CircleBackground.vue'
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
     ProjectCard,
     Header,
-    BackgroundPage,
     HomePageLink,
-    Transition
+    Transition,
+    CircleBackground
   },
   data() {
     return {
@@ -81,12 +81,14 @@ export default {
   background-color: $dark-gray;
   perspective: 1000px;
   min-height: 100vh;
+  overflow: hidden;
   .back {
     height: 15vh;
   }
   .cards {
     justify-content: space-around;
     height: unset;
+    z-index: 31;
     .cardflip {
       animation: slide-in-blurred-right 0.8s cubic-bezier(0.23, 1, 0.32, 1) both;
       &:nth-child(1) {
