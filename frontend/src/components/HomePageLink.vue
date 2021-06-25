@@ -2,7 +2,7 @@
   <router-link
     :to="url"
     :class="direction"
-    :style="{ '--text-color': textColor }"
+    :style="{ '--text-color': textColor, '--hover-color': hoverColor }"
   >
     <span class="the-arrow">
       <span class="shaft"></span>
@@ -23,7 +23,8 @@ export default {
     action: String,
     url: String,
     direction: String,
-    textColor: String
+    textColor: String,
+    hoverColor: String
   }
 };
 </script>
@@ -45,22 +46,24 @@ export default {
       line-height: 1;
       letter-spacing: 3px;
       @include text_shadow;
-      &:hover {
-        @include text_shadow_hover;
-      }
+      // &:hover {
+      //   @include text_shadow_hover(0px, 0px, 2px, var(--hover-color));
+      // }
     }
     .the-arrow {
       position: relative;
     }
   }
   &:hover {
-    color: $white;
+    color: var(--hover-color);
     .main {
       transform: translateX($shaft-width + $text-arrow-space);
       .the-arrow.-right {
         .shaft {
           width: 0;
           transform: translateX(200%);
+          background-color: var(--hover-color);
+          @include box_shadow;
           &:before,
           &:after {
             width: 0;
@@ -72,6 +75,15 @@ export default {
           &:after {
             transform: rotate(0);
           }
+        }
+      }
+      .text {
+        @include text_shadow_hover(0px, 0px, 2px, var(--hover-color));
+      }
+      .the-arrow {
+        .shaft {
+          @include box_shadow;
+          background-color: var(--hover-color);
         }
       }
     }
@@ -105,6 +117,7 @@ export default {
       transition: all 0.2s;
       will-change: transform;
       &:hover {
+        background-color: var(--hover-color);
         @include box_shadow;
       }
       &:before,
@@ -154,7 +167,7 @@ export default {
     }
   }
   &:hover {
-    color: $white;
+    color: var(--hover-color);
     .main {
       transform: translateX(-($shaft-width + $text-arrow-space));
       .the-arrow.-right {

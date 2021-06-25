@@ -24,7 +24,7 @@ export default {
   height: 45vw;
   @include box_shadow(0px, 0px, 55px, var(--circle-color));
   animation: scale-up-center 0.8s cubic-bezier(0.39, 0.575, 0.565, 1) 1.2s both;
-  z-index: -1;
+  z-index: 100;
 }
 @keyframes scale-up-center {
   0% {

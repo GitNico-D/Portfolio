@@ -1,10 +1,10 @@
 <template>
   <div :class="directionAnimation">
     <div class="slider-green">
-      <div class="slider-purple"></div>
+      <div class="slider-purple" :style="{'--color-slide-one': colorSlideOne}"></div>
     </div>
     <div class="slider-green">
-      <div class="slider-purple"></div>
+      <div class="slider-purple" :style="{'--color-slide-one': colorSlideOne}"></div>
     </div>
   </div>
 </template>
@@ -13,7 +13,8 @@
 export default {
   name: "Transition",
   props: {
-    directionAnimation: String
+    directionAnimation: String,
+    colorSlideOne: String
   }
 };
 </script>
@@ -21,7 +22,7 @@ export default {
 <style lang="scss">
 .slider {
   &-green {
-    background: $green;
+    background: $white;
     position: fixed;
     top: 0;
     left: 0;
@@ -30,7 +31,7 @@ export default {
     z-index: 255;
   }
   &-purple {
-    background: $purple;
+    background: var(--color-slide-one);
     position: fixed;
     width: 100%;
     height: 100%;
@@ -48,7 +49,7 @@ export default {
   @keyframes slideUpGreen {
     from {
       transform: translateY(0%);
-      filter: blur(5px);
+      filter: blur(15px);
     }
     to {
       transform: translateY(-110%);
@@ -59,7 +60,7 @@ export default {
     from {
       transform: translateY(100%);
       height: 100%;
-      filter: blur(10px);
+      filter: blur(15px);
     }
     to {
       transform: translateY(-110%);
@@ -80,7 +81,7 @@ export default {
     @keyframes slideRightGreen {
       from {
         transform: translateX(0%);
-        filter: blur(5px);
+        filter: blur(15px);
       }
       to {
         transform: translateX(-110%);
@@ -90,7 +91,7 @@ export default {
     @keyframes slideRightPurple {
       from {
         transform: translateX(100%);
-        filter: blur(10px);
+        filter: blur(15px);
       }
       to {
         transform: translateX(-110%);
@@ -111,7 +112,7 @@ export default {
     @keyframes slideLeftGreen {
       from {
         transform: translateX(0%);
-        filter: blur(5px);
+        filter: blur(15px);
       }
       to {
         transform: translateX(110%);
@@ -121,7 +122,7 @@ export default {
     @keyframes slideLeftPurple {
       from {
         transform: translateX(-110%);
-        filter: blur(10px);
+        filter: blur(15px);
       }
       to {
         transform: translateX(100%);
@@ -141,7 +142,7 @@ export default {
   @keyframes slideDownGreen {
     from {
       transform: translateY(0%);
-      filter: blur(5px);
+      filter: blur(15px);
     }
     to {
       transform: translateY(110%);
@@ -152,7 +153,7 @@ export default {
     from {
       transform: translateY(-100%);
       height: 100%;
-      filter: blur(10px);
+      filter: blur(15px);
     }
     to {
       transform: translateY(110%);

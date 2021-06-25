@@ -1,8 +1,8 @@
 <template>
   <b-container fluid>
     <Header title="Compétences" color="#36C486" />
-    <BackgroundPage circleColor="#36C486" />
-    <Transition v-show="showTransition" directionAnimation="up" />
+    <CircleBackground circleColor="#36C486"/>
+    <Transition v-show="showTransition" directionAnimation="up" colorSlideOne="#36C486"/>
     <b-row class="skill-title m-3 p-3">
       <b-button
         v-for="categories in allCategories"
@@ -60,18 +60,18 @@
 <script>
 import HomePageLink from "@/components/HomePageLink.vue";
 import Header from "@/components/Header.vue";
-import BackgroundPage from "@/components/BackgroundPage.vue";
 import ProgressBarCard from "@/components/ProgressBarCard.vue";
 import Transition from "@/components/Transition.vue";
+import CircleBackground from '@/components/CircleBackground.vue'
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
     HomePageLink,
     Header,
-    BackgroundPage,
     ProgressBarCard,
-    Transition
+    Transition,
+    CircleBackground
   },
   data() {
     return {
@@ -111,6 +111,7 @@ export default {
   perspective: 1000px;
   position: relative;
   min-height: 100vh;
+  overflow: hidden;
   .back {
     height: 15vh;
   }

@@ -45,7 +45,7 @@
         <h1>Développeur Web</h1>
       </div>
     </b-row>
-    <Transition v-show="showTransition" directionAnimation="up" />
+    <Transition v-show="showTransition" directionAnimation="up" colorSlideOne="#36C486"/>
     <HomePageLink
       @click="actionTransition"
       action="Projets"
@@ -53,6 +53,7 @@
       direction="animated-arrowRtl"
       class="link link-right"
       textColor="#36C486"
+      hoverColor="#6d327c"
     />
     <HomePageLink
       action="Presentation"

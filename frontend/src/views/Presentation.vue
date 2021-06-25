@@ -1,8 +1,8 @@
 <template>
   <b-container fluid>
     <Header title="Presentation" color="#485DA6"/>
-    <BackgroundPage circleColor="#485DA6" />
-    <Transition v-show="showTransition" directionAnimation="left" />
+    <CircleBackground circleColor="#485DA6"/>
+    <Transition v-show="showTransition" directionAnimation="left" colorSlideOne="#485DA6"/>
     <b-row
       class="presentation justify-content-center"
     >
@@ -74,20 +74,20 @@
 </template>
 
 <script>
-import BackgroundPage from "@/components/BackgroundPage.vue";
 import Header from "@/components/Header.vue";
 import HomePageLink from "@/components/HomePageLink.vue";
 import Transition from "@/components/Transition.vue";
 import ContactButton from "@/components/ContactButton.vue";
+import CircleBackground from '@/components/CircleBackground.vue'
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
-    BackgroundPage,
     Header,
     HomePageLink,
     Transition,
-    ContactButton
+    ContactButton,
+    CircleBackground
   },
   data() {
     return {
@@ -123,6 +123,7 @@ export default {
   perspective: 1000px;
   position: relative;
   min-height: 100vh;
+  overflow: hidden;
 }
 .presentation {
   padding-top: 8rem;
@@ -322,7 +323,7 @@ export default {
         padding-top: unset;
       }
       &-border-back {
-        height: 31%;
+        height: 36%;
       }
     }
   }
@@ -351,7 +352,7 @@ export default {
         font-size: 1.2rem;
       }
       &-border-back {
-        height: 45%;
+        height: 50%;
       }
     }
   }
