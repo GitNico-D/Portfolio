@@ -323,7 +323,7 @@ export default {
         padding-top: unset;
       }
       &-border-back {
-        height: 31%;
+        height: 36%;
       }
     }
   }
@@ -352,7 +352,7 @@ export default {
         font-size: 1.2rem;
       }
       &-border-back {
-        height: 45%;
+        height: 50%;
       }
     }
   }
